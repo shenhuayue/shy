@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>报修单添加</title>
+    <!-- 这里要配置参数key,将其值设置为高德官网开发者获取的key -->
+    <script src="http://webapi.amap.com/maps?v=1.3&key=1e7ce268607a7319fdfe6b430761cbcb"></script>
+    <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css"/>
+    <script src="http://cache.amap.com/lbs/static/es5.min.js"></script>
+    <script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
+
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/dsaleCenter.js"></script>
+    <script src="js/dcommon.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <script src="jquery-ui-1.12.1/jquery-ui.min.js"></script>
+    <link href="jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet"/>
+    <script src="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.js"></script>
+    <script type="text/javascript" src="jQuery-Timepicker/dist/i18n/jquery-ui-timepicker-zh-CN.js"></script>
+    <link href="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.css" rel="stylesheet" />
+</head>
+<body class="reset">
+
+<div style="height: auto">
+    <div id="status_switch" class="status_box">
+        <div class="flt_l newStatusBox">
+            <span id="text1" class="status_text fontGreen">报修</span>
+            <div id="status1" class="status_on_special" onclick="to_rpt_400()"></div>
+            <span id="time1" class="time flt_l"></span>
+        </div>
+        <div id="line1" class="line flt_l"></div>
+        <div class="flt_l newStatusBox">
+            <span id="text2" class="status_text">派工</span>
+            <div id="status2" class="status_off"></div>
+            <span id="time2" class="time flt_l"></span>
+        </div>
+        <div id="line2" class="line flt_l"></div>
+        <div class="flt_l newStatusBox">
+            <span id="text3" class="status_text">接单</span>
+            <div id="status3" class="status_off"></div>
+            <span id="time3" class="time flt_l"></span>
+        </div>
+        <div id="line3" class="line flt_l"></div>
+        <div class="flt_l newStatusBox">
+            <span id="text4" class="status_text">出发</span>
+            <div id="status4" class="status_off"></div>
+            <span id="time4" class="time flt_l"></span>
+        </div>
+        <div id="line4" class="line flt_l"></div>
+        <div class="flt_l newStatusBox">
+            <span id="text5" class="status_text">到达</span>
+            <div id="status5" class="status_off"></div>
+            <span id="time5" class="time flt_l"></span>
+        </div>
+        <div id="line5" class="line flt_l"></div>
+        <div class="flt_l newStatusBox">
+            <span id="text6" class="status_text">初审</span>
+            <div id="status6" class="status_off"></div>
+            <span id="time6" class="time flt_l"></span>
+        </div>
+        <div id="line6" class="line flt_l"></div>
+        <div class="flt_l newStatusBox">
+            <span id="text7" class="status_text">终审</span>
+            <div id="status7" class="status_off"></div>
+            <span id="time7" class="time flt_l"></span>
+        </div>
+        <div id="line7" class="line flt_l"></div>
+        <div class="flt_l newStatusBox">
+            <span id="text8" class="status_text">完成</span>
+            <div id="status8" class="status_off"></div>
+            <span id="time8" class="time flt_l"></span>
+        </div>
+
+        <input type="hidden" id="rpt_400" name="reportId">
+        <input type="hidden" id="proId" name="proId">
+        <input type="hidden" id="cityId" name="cityId">
+        <input type="hidden" id="machine_address" name="machineAddress">
+        <input type="hidden" id="repair_type" name="repairType">
+    </div>
+    <div id="detail_frame" class="rpt_cont">
+        <div>
+            <div class="title_box">
+                <img src="img/status_warning.png" class="status_warning">
+                <span id="status_describe" class="status_info">当前状态：创建报修单</span>
+            </div>
+            <div class="rpt_detail">
+                <div class="tit_msg1">
+                    <img src="img/tit_pic.png" class="tit_pic">
+                    <span>报修产品&nbsp;&nbsp;</span>
+                    <select id="dgjselect" class="select_area">
+                        <option id="zhengji" value="1"  >整机</option>
+                        <option id="dongli" value="2" >动力</option>
+                    </select>
+                </div>
+            </div>
+            <script>
+                $('#dgjselect').change(function(){
+                    var selectedValue=$(this).val();
+                    if(selectedValue==2){
+                        $("#dgjnj1").hide();
+                        $("#dgjnj2").hide();
+                        $("#dgjnj2").hide();
+                        $("#dgjfangshi").hide();
+                        $('#peitao').css('display','block')
+                    }
+                    if(selectedValue==1){
+                        $("#dgjnj1").show();
+                        $("#dgjnj2").show();
+                        $("#dgjnj2").show();
+                        $("#dgjfangshi").show();
+                        $('#peitao').css('display','none')
+                    }
+                    })
+            
+            </script>
+            <div class="rpt_detail">
+                <div class="tit_msg">
+                    <img src="img/tit_pic.png" class="tit_pic">
+                    <span>报修人信息</span>
+                </div>
+                <div>
+                    <table id="reporterInfo" class="rpt_detail_tab txt_center">
+                        <tr>
+                            <td class="head_td"  height="46px;">来电号码</td>
+                            <td class="head_td">来电姓名</td>
+                            <td class="head_td">用户电话</td>
+                            <td class="head_td">用户姓名</td>
+                            <!--<td class="head_td">来电日期</td>-->
+                            <!--<td class="head_td">接线员</td>-->
+                            <td class="head_td">客户类别</td>
+                        </tr>
+                        <tr>
+                            <td class="body_td" height="46px">
+                                <input type="text" id="callMobile" class="new_name" value="" placeholder="输入来电号码">
+                            </td>
+                            <td class="body_td">
+                                <input type="text" id="callName" class="new_name" value="" placeholder="输入来电姓名">
+                            </td>
+                            <td class="body_td">
+                                <input type="text" id="createMobile" class="new_name" placeholder="输入用户电话">
+                            </td>
+                            <td class="body_td">
+                                <input type="text" id="name" class="new_name" placeholder="输入用户姓名">
+                            </td>
+                            <!--<td class="body_td">无</td>-->
+                            <!--<td class="body_td">无</td>-->
+                            <td class="body_td">
+                                <select id="customerType" class="new">
+                                    <option value="1">终端用户</option>
+                                    <option value="2">经销商</option>
+                                    <option value="3">社会化服务站</option>
+                                    <!--<option value="4">配套厂</option>-->
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="tit_msg">
+                    <img src="img/tit_pic.png" class="tit_pic">
+                    <span>农机信息</span>
+                </div>
+                <div style="margin-left: 5%;">
+                    <span class="font_normal">服务类型：</span>
+
+                    <input type="radio" id="outRepairthis" class="radio_style" name="repairType" value="1" onclick="repairType_choose()">
+                    <label for="outRepairthis" class="font_normal">外出(本地用户)</label>
+
+                    <input type="radio" id="shopRepairthis" class="radio_style" name="repairType" value="2" onclick="repairType_choose()">
+                    <label for="shopRepairthis" class="font_normal">到店(本地用户)</label>
+                <span id="dgjnj1">
+                    <input type="radio" id="outRepairthat" class="radio_style" name="repairType" value="4" onclick="repairType_choose()">
+                    <label for="outRepairthat" class="font_normal">外出(跨区用户)</label>
+                </span>
+                <span id="dgjnj2">
+                    <input type="radio" id="shopRepairthat" class="radio_style" name="repairType" value="5" onclick="repairType_choose()">
+                    <label for="shopRepairthat" class="font_normal">到店(跨区用户)</label>
+                </span>
+
+                    <input type="radio" id="storeRepair" class="radio_style" name="repairType" value="3" onclick="repairType_choose()">
+                    <label for="storeRepair" class="font_normal">库存车维修</label>
+                </div>
+                
+                <div style="margin-left: 5%;margin-top: 20px;" id="dgjfangshi">
+                    <span class="font_normal">报修方式：</span>
+
+                    <input type="radio" id="jingque" class="radio_style" name="rpt" value="1" onclick="chooseJqRpt()">
+                    <label for="jingque" class="font_normal">精确报修</label>
+
+                    <input type="radio" id="mohu" class="radio_style" name="rpt" value="2" onclick="chooseMhRpt()">
+                    <label for="mohu" class="font_normal">模糊报修</label>
+                </div>
+                
+                <div id="insertFactoryNum" style="margin-left: 5%;margin-top: 20px;">
+                    <span class="font_normal">出厂编码：</span>
+                    <input type="text" id="factoryNum" class="select">
+                    <span class="font_normal" style="margin-left: 2%">农机条码：</span>
+                    <input type="text" id="barCode" class="select">
+                    <button class="query_btn_big" onclick="queryMachineList()"></button>
+                    <span class="font_normal" style="margin-left: 2%">(二选一即可)</span>
+                </div>
+                <div id="exitFactoryNum" style="margin-top: 20px;display: none;">
+                    <table  class="rpt_detail_tab txt_center">
+                        <tr>
+                            <td class="head_td" height="46px">图片</td>
+                            <td class="head_td">产品线</td>
+                            <td class="head_td">产品系列</td>
+                            <td class="head_td">产品型号</td>
+                            <td class="head_td">购买时间</td>
+                            <td class="head_td">出厂编号</td>
+                            <td class="head_td">位置</td>
+                            <td class="head_td">状态</td>
+                            <td class="head_td">选择</td>
+                        </tr>
+                        <tbody id="machineInfo">
+
+                        </tbody>
+                    </table>
+                </div>
+                <div id="noFactoryNum" style="margin-left: 5%;margin-top: 20px;">
+                    <span class="font_normal">报修农机：</span>
+                    <select id="lineNum" class="select_400"></select>
+                    <select id="seriesNum" class="select_400"></select>
+                    <select id="modelNum" class="select_model"></select>
+                </div>
+                <div style="margin-left: 5%;margin-top: 20px;">
+                    <span id="machineTime" class="font_normal">购买时间：</span>
+                    <input id="date_yy-mm-dd" class="select_time mg-r30" placeholder="购买时间">
+
+                    <span id="engineBrand" class="font_normal" style="display:none">发动机品牌：</span><span id="brand" class="font_normal mg-r30" style="display:none"></span>
+                    <span id="engineNum" class="font_normal" style="display:none">发动机编号：</span><span id="number" class="font_normal mg-r30" style="display:none"></span>
+
+                    <span id="expectDis" class="font_normal">预估里程：</span>
+                    <input id="createDistance" type="text" class="new_distance" placeholder="非必填"><span id="backPlus">公里</span>
+                </div>
+
+                <div id="machineAddress" style="margin-left: 5%;margin-top: 20px;">
+                    <span class="font_normal">农机位置：</span>
+                    <select id="province" class="select_area"></select>
+                    <select id="city" class="select_area"></select>
+                    <select id="country" class="select_area"></select>
+                    <input type="text" id="zhen" class="select_address" placeholder="输入乡镇等详细地址">
+                    <!--<img src="img/map.jpg" style="width: 40px;height: 40px;vertical-align: middle;margin-left: 20px;" onclick="openMap()">-->
+                </div>
+                <div id="peitao" style="margin-left: 5%;margin-top: 20px;" style="display:none;">
+                    <div style="display:inline-block">
+                        <span class="font_normal">配套用途：</span>
+                        <select id="yongtu" class="select_area"><!--<option value="">整机</option><option value="">动力</option>--></select>
+                    </div>
+                    <div style="display:inline-block">
+                            <span class="font_normal">配套类型：</span>
+                            <select id="leixing" class="select_area"><!--<option value="">整机</option><option value="">动力</option>--></select>
+                        </div>
+                    <div style="display:inline-block">
+                        <span class="font_normal">配套品牌：</span>
+                        <select id="pinpai" class="select_area"><!--<option value="">整机</option><option value="">动力</option>--></select>
+                    </div>
+                </div>
+
+                <div class="tit_msg">
+                    <img src="img/tit_pic.png" class="tit_pic">
+                    <span>故障信息</span>
+                </div>
+                <div class="mg_b50">
+                    <table id="errInfo" class="rpt_detail_tab">
+                        <tr>
+                            <td class="head_td txt_center" height="46px" width="150px">故障描述</td>
+                            <td class='body_td'>
+                                <input type="text" id="error_d" class="errInfo" style="margin-left: -3px;">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="tit_msg">
+                    <img src="img/tit_pic.png" class="tit_pic">
+                    <span>报修历史信息</span>
+                    <img src="img/refresh.png" class="mg-r30 flt_r" id="f5" onclick="rpt_history()">
+                </div>
+                <div>
+                    <table class="rpt_detail_tab txt_center mg_b50">
+                        <tr>
+                            <td class="head_td" height="46px">用户姓名</td>
+                            <td class="head_td">报修电话</td>
+                            <td class="head_td">报修时间</td>
+                            <td class="head_td">农机型号</td>
+                            <td class="head_td">故障描述</td>
+                            <td class="head_td">状态</td>
+                        </tr>
+                        <tbody id="adminTbody">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="next_status" class="next">
+                <img src="img/next.png" onclick="dispatch_400()">
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    window.onload = function() {
+        jQuery.support.cors = true;
+        toTop();
+        $("#outRepairthis").click();
+        $("#mohu").click();
+        $.datepicker.regional['zh-CN'] = {
+            changeMonth: true,
+            changeYear: true,
+            clearText: '清除',
+            clearStatus: '清除已选日期',
+            closeText: '关闭',
+            closeStatus: '不改变当前选择',
+            prevText: '<上月',
+            prevStatus: '显示上月',
+            prevBigText: '<<',
+            prevBigStatus: '显示上一年',
+            nextText: '下月>',
+            nextStatus: '显示下月',
+            nextBigText: '>>',
+            nextBigStatus: '显示下一年',
+            currentText: '今天',
+            currentStatus: '显示本月',
+            monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            monthNamesShort: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+            monthStatus: '选择月份',
+            yearStatus: '选择年份',
+            weekHeader: '周',
+            weekStatus: '年内周次',
+            dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+            dayNamesShort: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+            dayNamesMin: ['日', '一', '二', '三', '四', '五', '六'],
+            dayStatus: '设置 DD 为一周起始',
+            dateStatus: '选择 m月 d日, DD',
+            dateFormat: 'yy-mm-dd',
+            firstDay: 1,
+            initStatus: '请选择日期',
+            isRTL: false
+        };
+        $.datepicker.setDefaults($.datepicker.regional['zh-CN']);
+        $("#date_yy-mm-dd").datepicker({maxDate:new Date()});
+        $("#date_yy-mm-dd").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            onClose: function(selectedDate) {
+            }
+        });
+        //选择省
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/place/getProvince.do",
+            dataType : "json",
+            success : function (data) {
+                
+                $("#province").append("<option value='"+ 0 +"'>全部</option>");
+                for(var i=0;i<data['body']['resultList']['length'];i++){
+                    $("#province").append("<option value='"+ data['body']['resultList'][i]['id'] +"'>"+data['body']['resultList'][i]['name']+"</option>");
+                }
+                $("#province").unbind();
+            }
+        });
+
+        //选择市
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/place/getCity.do",
+            data : {
+                parentId : $("#province option:selected").val(),
+            },
+            dataType : "json",
+            success : function (data) {
+                
+                $("#city").append("<option value=''>全部</option>");
+                for(var i=0;i<data['body']['resultList']['length'];i++){
+                    $("#city").append("<option value='"+ data['body']['resultList'][i]['id'] +"'>"+data['body']['resultList'][i]['name']+"</option>");
+                }
+                $("#city").unbind();
+                
+            }
+        });
+
+        //选择区
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/place/getCountry.do",
+            data : {
+                parentId : $("#city option:selected").val(),
+            },
+            dataType : "json",
+            success : function (data) {
+             
+                $("#country").append("<option value=''>全部</option>");
+                for(var i=0;i<data['body']['resultList']['length'];i++){
+                    $("#country").append("<option value='"+ data['body']['resultList'][i]['id'] +"'>"+data['body']['resultList'][i]['name']+"</option>");
+                }
+                $("#country").unbind();
+            }
+        });
+        
+
+        $("#province").change(function () {
+            $("#zhen").val("");
+            $("#city").empty();
+            if ($("#province option:selected").val() == "") {
+                $("#city").empty();
+                $("#city").append("<option value=''>全部</option>");
+                $.ajax({
+                    type : "post",
+                    async : false,
+                    url : ip_path+"/changfa_system/place/getCountry.do",
+                    data : {
+                        parentId : $("#city option:selected").val(),
+                    },
+                    dataType : "json",
+                    success : function (data) {
+                        $("#country").empty();
+                        $("#country").append("<option value=''>全部</option>");
+                        for(var i=0;i<data['body']['resultList']['length'];i++){
+                            $("#country").append("<option value='"+ data['body']['resultList'][i]['id'] +"'>"+data['body']['resultList'][i]['name']+"</option>");
+                        }
+                        $("#country").unbind();
+                    }
+                });
+            } else {
+                $.ajax({
+                    type: "post",
+                    async: false,
+                    url: ip_path + "/changfa_system/place/getCity.do",
+                    data: {
+                        parentId: $("#province option:selected").val(),
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        $("#city").empty();
+                        $("#city").append("<option value=''>全部</option>");
+                        for (var i = 0; i < data['body']['resultList']['length']; i++) {
+                            $("#city").append("<option value='" + data['body']['resultList'][i]['id'] + "'>" + data['body']['resultList'][i]['name'] + "</option>");
+                        }
+                        $("#city").unbind();
+                    }
+                });
+                $.ajax({
+                    type : "post",
+                    async : false,
+                    url : ip_path+"/changfa_system/place/getCountry.do",
+                    data : {
+                        parentId : $("#city option:selected").val(),
+                    },
+                    dataType : "json",
+                    success : function (data) {
+                        $("#country").empty();
+                        $("#country").append("<option value=''>全部</option>");
+                        for(var i=0;i<data['body']['resultList']['length'];i++){
+                            $("#country").append("<option value='"+ data['body']['resultList'][i]['id'] +"'>"+data['body']['resultList'][i]['name']+"</option>");
+                        }
+                        $("#country").unbind();
+                    }
+                });
+
+                $("#city").change(function () {
+                    $("#zhen").val("");
+                    $("#country").empty();
+                    if($("#city option:selected").val() == ""){
+                        $("#country").append("<option value=''>全部</option>");
+                    }else {
+                        $.ajax({
+                            type : "post",
+                            async : false,
+                            url : ip_path+"/changfa_system/place/getCountry.do",
+                            data : {
+                                parentId : $("#city option:selected").val(),
+                            },
+                            dataType : "json",
+                            success : function (data) {
+                                $("#country").append("<option value=''>全部</option>");
+                                for(var i=0;i<data['body']['resultList']['length'];i++){
+                                    $("#country").append("<option value='"+ data['body']['resultList'][i]['id'] +"'>"+data['body']['resultList'][i]['name']+"</option>");
+                                }
+                                $("#country").unbind();
+                            }
+                        });
+                    }
+                });
+            }
+        });
+
+        $("#city").change(function () {
+            $("#zhen").val("");
+            $("#country").empty();
+            if($("#city option:selected").val() == ""){
+                $("#country").append("<option value=''>全部</option>");
+            }else {
+                $.ajax({
+                    type : "post",
+                    async : false,
+                    url : ip_path+"/changfa_system/place/getCountry.do",
+                    data : {
+                        parentId : $("#city option:selected").val(),
+                    },
+                    dataType : "json",
+                    success : function (data) {
+                        $("#country").append("<option value=''>全部</option>");
+                        for(var i=0;i<data['body']['resultList']['length'];i++){
+                            $("#country").append("<option value='"+ data['body']['resultList'][i]['id'] +"'>"+data['body']['resultList'][i]['name']+"</option>");
+                        }
+                        $("#country").unbind();
+                    }
+                });
+            }
+        });
+
+        $("#country").change(function () {
+            $("#zhen").val("");
+        });
+
+        ajax_getLineNum();
+        ajax_getSeriesNum();
+        ajax_getModelNum();
+        
+        //报修农机
+        $("#lineNum").change(function () {
+            $("#seriesNum").empty();
+            ajax_getSeriesNum();
+            if($("#seriesNum").change()){
+                $("#modelNum").empty();
+                ajax_getModelNum();
+            }
+
+            $("#seriesNum").change(function () {
+                $("#modelNum").empty();
+                ajax_getModelNum();
+            });
+        });
+        $("#seriesNum").change(function () {
+            $("#modelNum").empty();
+            ajax_getModelNum();
+        });
+
+        ajax_getyongtu();
+        ajax_getleixing();
+        ajax_getpinpai();
+        $("#yongtu").change(function () {
+            $("#leixing").empty();
+            ajax_getleixing();
+            if($("#leixing").change()){
+                $("#pinpai").empty();
+                ajax_getpinpai();
+            }
+
+            $("#leixing").change(function () {
+                $("#pinpai").empty();
+                ajax_getpinpai();
+            });
+        });
+        $("#leixing").change(function () {
+            $("#pinpai").empty();
+            ajax_getpinpai();
+        });
+        
+        //报修产品
+        //$("#zhengji").change(function () {
+        //    $("#seriesNum").empty();
+        //    ajax_getSeriesNum();
+        //   if($("#seriesNum").change()){
+        //        $("#modelNum").empty();
+        //        ajax_getModelNum();
+        //    }
+
+        //    $("#dongli").change(function () {
+        //        $("#modelNum").empty();
+        //        ajax_getModelNum();
+        //    });
+        //});
+        //$("#seriesNum").change(function () {
+        //    $("#modelNum").empty();
+        //    ajax_getModelNum();
+        //});
+
+        $("#callMobile").keyup(function () {
+            //var myreg=/^(13[0-9]|14[1|4|5|6|7|8]|15[0|1|2|3|5|6|7|8|9]|166|17[0|1|3|5|6|7|8]|18[0-9]|19[1|8|9])\d{8}$/;
+            var myreg=/^1[3456789]\d{9}$/;
+            var reg_0519 = /0\d{2,3}-\d{7,8}/;
+            if(myreg.test($("#callMobile").val()) || reg_0519.test($("#callMobile").val())){
+                ajax_user_call();
+            }else{
+                $("#callName").val("");
+            }
+        });
+
+        $("#createMobile").keyup(function () {
+            //var myreg=/^(13[0-9]|14[1|4|5|6|7|8]|15[0|1|2|3|5|6|7|8|9]|166|17[0|1|3|5|6|7|8]|18[0-9]|19[1|8|9])\d{8}$/;
+            var myreg=/^1[3456789]\d{9}$/;
+            var reg_0519 = /0\d{2,3}-\d{7,8}/;
+            if(myreg.test($("#createMobile").val()) || reg_0519.test($("#createMobile").val())){
+                ajax_user();
+            }else{
+                $("#name").val("");
+            }
+        });
+
+    };
+</script>
+</html>

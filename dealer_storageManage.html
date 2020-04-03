@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>仓库管理</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/userCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <script src="https://a.amap.com/jsapi_demos/static/demo-center/js/demoutils.js"></script>
+    <!-- 这里要配置参数key,将其值设置为高德官网开发者获取的key -->
+    <!--<script src="http://webapi.amap.com/maps?v=1.3&key=1e7ce268607a7319fdfe6b430761cbcb"></script>-->
+    <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=1e7ce268607a7319fdfe6b430761cbcb&plugin=AMap.Geocoder"></script>
+</head>
+<body class="reset" style="background: #F9F9F9;">
+<div id="addStorage" class="addTopic outShadow" style="display: none;">
+    <div class="dealer_title">
+        <span>添加地址</span>
+        <img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeAddStorage()">
+    </div>
+    <div style="width: 100%;height: auto;border: 1px solid #E4E4E4;border-top: none;">
+        <div class="tit_msg">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>地址信息</span>
+        </div>
+        <div>
+            <table class="rpt_detail_tab txt_center">
+                <tr>
+                    <td class='head_td' width='136px' height='46px'>类型</td>
+                    <td class='body_td txt_left' width='383px'>
+                        <select id="createStorageType" style="width: 200px;height: 35px;">
+                            <option value="1">一级商</option>
+                            <option value="2">服务站</option>
+                            <option value="3">二级商</option>
+                            <option value="4">仓库</option>
+                            <option value="5">直营店</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class='head_td' width='136px' height='46px'>经纬度</td>
+                    <td class='body_td txt_left' width='383px'>
+                        <input type="text" id="createStorageLocation" class="userInfo" placeholder="经度，纬度（经度73-136，纬度3-54，最多6位小数）">
+                    </td>
+                </tr>
+                <tr>
+                    <td class='head_td' width='136px' height='46px'>地址</td>
+                    <td class='body_td txt_left' width='383px'>
+                            <input type="text" id="createStorageAddress" onclick="regeoCode()" class="userInfo">
+                    </td>
+                </tr>
+                <tr>
+                    <td class='head_td' width='136px' height='46px'>名称</td>
+                    <td class='body_td txt_left' width='383px'>
+                        <input type="text" id="createStorageName" class="userInfo">
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="mg_b50" style="width: 100%;text-align: center">
+            <button class="waves submit_btn mg-t30" onclick="createNewStorage()">提交</button>
+        </div>
+    </div>
+</div>
+
+<div id="addFence" class="addTopic outShadow" style="display: none;">
+    <div class="dealer_title">
+        <span>设置电子围栏</span>
+        <img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeAddFence()">
+    </div>
+    <div style="width: 100%;height: auto;border: 1px solid #E4E4E4;border-top: none;">
+        <div class="tit_msg">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>围栏信息</span>
+        </div>
+        <div>
+            <table class="rpt_detail_tab txt_center">
+                <tr>
+                    <td class='head_td' width='136px' height='46px'>围栏半径</td>
+                    <td class='body_td txt_left' width='383px'>
+                        <select id="fence" style="width: 200px;height: 35px;">
+                            <option value="100">100米</option>
+                            <option value="200">200米</option>
+                            <option value="500">500米</option>
+                            <option value="1000">1000米</option>
+                            <option value="2000">2000米</option>
+                            <option value="3000">3000米</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="mg_b50" style="width: 100%;text-align: center">
+            <button class="waves submit_btn mg-t30" onclick="createFence()">提交</button>
+        </div>
+    </div>
+</div>
+
+<div id="editStorage" class="addTopic outShadow" style="display: none;">
+    <div class="dealer_title">
+        <span>编辑仓库信息</span>
+        <img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeUpdateStorage()">
+    </div>
+    <div style="width: 100%;height: auto;border: 1px solid #E4E4E4;border-top: none;">
+        <div class="tit_msg">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>产品系列信息</span>
+        </div>
+        <div>
+            <table class="rpt_detail_tab txt_center">
+                <tr>
+                    <td class='head_td' width='136px' height='46px'>类型</td>
+                    <td class='body_td txt_left' width='383px'>
+                        <select id="editStorageType" style="width: 200px;height: 35px;">
+                            <option value="1">一级商</option>
+                            <option value="2">服务站</option>
+                            <option value="3">二级商</option>
+                            <option value="4">仓库</option>
+                            <option value="5">直营店</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class='head_td' width='136px' height='46px'>经纬度</td>
+                    <td class='body_td txt_left' width='383px'>
+                        <input type="text" id="editStorageLngLat" class="userInfo" placeholder="经度，纬度（经度73-136，纬度3-54，最多6位小数）">
+                        <input type="hidden" id="id">
+                    </td>
+                </tr>
+                <tr>
+                    <td class='head_td' width='136px' height='46px'>地址位置</td>
+                    <td class='body_td txt_left' width='383px'>
+                            <input type="text" id="editStorageAddress" onclick="regeoCodebj()" class="userInfo">
+                    </td>
+                </tr>
+                <tr>
+                    <td class='head_td' width='136px' height='46px'>名称</td>
+                    <td class='body_td txt_left' width='383px'>
+                        <input type="text" id="editStorageName" class="userInfo">
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="mg_b50" style="width: 100%;text-align: center">
+            <button class="waves submit_btn mg-t30" onclick="updateStorage()">提交</button>
+        </div>
+    </div>
+</div>
+<div>
+    <div class="dealer_title txt_center">
+        <input type="button" class="add_btn flt_r" value="创建" onclick="addStorage()">
+    </div>
+</div>
+<div>
+    <table style="border-collapse: collapse;width : 100%;">
+        <tr>
+            <td class="head_td txt_center" height="40px">类型</td>
+            <td class="head_td txt_center">名称</td>
+            <td class="head_td txt_center">经纬度</td>
+            <td class="head_td txt_center">仓库地址</td>
+            <td class="head_td txt_center">更新时间</td>
+            <td class="head_td txt_center">更多</td>
+        </tr>
+        <tbody id="adminTbody">
+
+        </tbody>
+    </table>
+    <div id="barcon" class="barcon" >
+        <div id="barcon1" class="barcon1"></div>
+        <div id="barcon2" class="barcon2">
+            <ul>
+                <li><button id="firstPage" class="page_btn">首页</button></li>
+                <li><button id="prePage" class="page_btn">上一页</button></li>
+                <li><button id="nextPage" class="page_btn">下一页</button></li>
+                <li><button id="lastPage" class="page_btn">尾页</button></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div style="margin-left: 20px;">
+
+</div>
+</body>
+<script>
+    window.onload = function () {
+        //经纬度转化
+    var map = new AMap.Map("container", {
+        resizeEnable: true
+    });  
+    var geocoder = new AMap.Geocoder({
+        city: "010", //城市设为北京，默认：“全国”
+        radius: 1000 //范围，默认：500
+    });
+    //var marker = new AMap.Marker();
+    function regeoCode() {
+        var createStorageLocation  = document.getElementById('createStorageLocation').value.split(',');
+        //map.add(marker);
+        //marker.setPosition(createStorageLocation);   
+        geocoder.getAddress(createStorageLocation, function(status, result) {
+            if (status === 'complete'&&result.regeocode) {
+                var createStorageAddress = result.regeocode.formattedAddress;
+                document.getElementById('createStorageAddress').value = createStorageAddress;
+            }else{
+                alert('根据经纬度查询地址失败')
+            }
+        });
+
+    }
+    $('#createStorageAddress').on('click',function(e){
+        //document.getElementById('createStorageLocation').value = e.createStorageLocation;
+        regeoCode();
+    })
+    document.getElementById("createStorageAddress").onclick = regeoCode;
+
+    function regeoCodebj(){
+        var editStorageLngLat  = document.getElementById('editStorageLngLat').value.split(',');
+        geocoder.getAddress(editStorageLngLat, function(status, result) {
+            if (status === 'complete'&&result.regeocode) {
+                var editStorageAddress = result.regeocode.formattedAddress;
+                document.getElementById('editStorageAddress').value = editStorageAddress;
+            }else{
+                alert('根据经纬度查询地址失败')
+            }
+        });
+    }
+   
+    $('#editStorageAddress').on('click',function(e){
+        //document.getElementById('createStorageLocation').value = e.createStorageLocation;
+        regeoCodebj();
+    })
+
+    document.getElementById("editStorageAddress").onclick = regeoCodebj;
+
+
+
+
+        jQuery.support.cors = true;
+        currentPage = 1;
+        $('#firstPage').attr('disabled',true);
+        $('#prePage').attr('disabled',true);
+        $("#firstPage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = 1;
+            $('#firstPage').attr('disabled',true);
+            $('#prePage').attr('disabled',true);
+            ajax_dealer_storageM();
+        });
+        $("#lastPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = totalPage;
+            $('#lastPage').attr('disabled',true);
+            $('#nextPage').attr('disabled',true);
+            ajax_dealer_storageM();
+        });
+        $("#nextPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = currentPage+1;
+            if(currentPage == totalPage){
+                $('#lastPage').attr('disabled',true);
+                $('#nextPage').attr('disabled',true);
+            }else{
+                $('#lastPage').removeAttr('disabled');
+                $('#nextPage').removeAttr('disabled');
+            }
+            ajax_dealer_storageM();
+        });
+        $("#prePage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = currentPage-1;
+            if(currentPage == 1){
+                $('#firstPage').attr('disabled',true);
+                $('#prePage').attr('disabled',true);
+            }else{
+                $('#firstPage').removeAttr('disabled');
+                $('#prePage').removeAttr('disabled');
+            }
+            ajax_dealer_storageM();
+        });
+        ajax_dealer_storageM();
+    }
+</script>
+</html>

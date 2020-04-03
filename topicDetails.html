@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>话题详情</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/runningCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+</head>
+<body class="reset">
+
+<div style="width: 80%;margin-left: 10%">
+    <div>
+        <table class="txt_center mg-t50" style="width: 100%;border-collapse: collapse;">
+            <tr>
+                <td class="head_td" height="46px">话题名</td>
+                <td class="head_td">话题内容</td>
+                <td class="head_td">话题背景</td>
+                <td class="head_td">创建时间</td>
+                <td class="head_td">内容数量</td>
+                <td class="head_td">排序</td>
+            </tr>
+            <tbody id="topic_tab">
+
+            </tbody>
+        </table>
+    </div>
+    <div id="commentContent">
+
+    </div>
+    <div id="barcon" class="barcon" >
+        <div id="barcon1" class="barcon1"></div>
+        <div id="barcon2" class="barcon2">
+            <ul>
+                <li><button id="firstPage" class="page_btn">首页</button></li>
+                <li><button id="prePage" class="page_btn">上一页</button></li>
+                <li><button id="nextPage" class="page_btn">下一页</button></li>
+                <li><button id="lastPage" class="page_btn">尾页</button></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/topic/selectById.do",
+            data : {
+                id  : $(window.parent.document).find("input[name='topicId']").val()
+            },
+            dataType : "json",
+            success : function (data) {
+                if(data['head']['code'] == 200){
+                    $("#topic_tab").html(
+                        '<td class="body_td" height="46px">'+ data['body']['result']['name'] + '</td>' +
+                        '<td class="body_td">' + data['body']['result']['des'] + ' </td>' +
+                        '<td class="body_td"><img src="' + data['body']['result']['filePath'] + '" style="height: 40px;width: 60px;" onclick="topicLarge(this)"></td>' +
+                        '<td class="body_td">' + data['body']['result']['createTime'] + ' </td>' +
+                        '<td class="body_td">' + data['body']['result']['postCount'] + '</td>' +
+                        '<td class="body_td">' +
+                        '<input type="radio" id="like" class="choose_radio" name="sort" onclick="sortTopic()"><label for="like" class="mg-r50">按点赞数</label>' +
+                        '<input type="radio" id="comment" class="choose_radio" name="sort" onclick="sortTopic()"><label for="comment">按评论数</label>' +
+                        '</td>'
+                    );
+                }else{
+                    alert(data['head']['message']);
+                }
+            }
+        });
+
+        currentPage = 1;
+        $('#firstPage').attr('disabled',true);
+        $('#prePage').attr('disabled',true);
+        $("#firstPage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = 1;
+            $('#firstPage').attr('disabled',true);
+            $('#prePage').attr('disabled',true);
+            ajax_topicSendDetails();
+        });
+        $("#lastPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = totalPage;
+            $('#lastPage').attr('disabled',true);
+            $('#nextPage').attr('disabled',true);
+            ajax_topicSendDetails();
+        });
+        $("#nextPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = currentPage+1;
+            if(currentPage == totalPage){
+                $('#lastPage').attr('disabled',true);
+                $('#nextPage').attr('disabled',true);
+            }else{
+                $('#lastPage').removeAttr('disabled');
+                $('#nextPage').removeAttr('disabled');
+            }
+            ajax_topicSendDetails();
+        });
+        $("#prePage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = currentPage-1;
+            if(currentPage == 1){
+                $('#firstPage').attr('disabled',true);
+                $('#prePage').attr('disabled',true);
+            }else{
+                $('#firstPage').removeAttr('disabled');
+                $('#prePage').removeAttr('disabled');
+            }
+            ajax_topicSendDetails();
+        });
+
+        ajax_topicSendDetails();
+
+    }
+
+    function topicLarge(event) {
+        window.parent.pic_makeLarge(event);
+    }
+</script>
+</html>

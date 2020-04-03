@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>结算单详情页</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+        <script src="js/closeAccount.js"></script>
+    <script src="js/saleCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/index.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <!--<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">-->
+    <!--<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>-->
+    <!--<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
+    <script src="jquery-ui-1.12.1/jquery-ui.min.js"></script>
+    <link href="jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet" />
+    <script src="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.js"></script>
+    <script type="text/javascript" src="jQuery-Timepicker/dist/i18n/jquery-ui-timepicker-zh-CN.js"></script>
+    <link href="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.css" rel="stylesheet" />
+</head>
+<body class="reset">
+
+<div class="mg-t30">
+    <div class="tit">
+        <span class="flt_l">筛选查询</span>
+        <input type="button" class="add_btn flt_r" value="清空" onclick="clearDate()">
+    </div>
+    <div class="account_cont2">
+        <span class="describ mg_l30">产品线：</span>
+        <select id="product" class="product_line mg-r30"></select>
+
+        <span class="describ">创建日期：</span>
+        <input id="date_start" class="timeChoose" placeholder="起始">
+        <span>-</span>
+        <input id="date_end" class="timeChoose" placeholder="截止">
+
+        <span class="describ mg_l30">状态：</span>
+        <select id="status" class="area_choose">
+            <option value="">全部</option>
+            <option value="0">待复核</option>
+            <option value="2">已驳回</option>
+            <option value="1">已复核</option>
+            <option value="3">未付款</option>
+            <option value="4">部分付款</option>
+            <option value="5">待付尾款</option>
+            <option value="6">全部付款</option>
+        </select>
+    </div>
+    <div style="height: 140px;"></div>
+
+    <div class="tit mg-t30">
+        <span>结算单列表</span>
+    </div>
+    <div class="account_cont" style="font-size: 0.9em;">
+        <div class="txt_left mg-t30">
+            <span class="describ mg_l30" style="margin-left: 5%;">企业编号：</span>
+            <span id="dealerNum" class="describ"></span>
+
+            <span class="describ mg_l30">企业名称：</span>
+            <span id="dealerName" class="describ"></span>
+        </div>
+        <table width="100%" cellpadding="0" cellspacing="0" class="table2" align="center">
+            <thead>
+            <tr align="center">
+                <th class="th2" height="33">产品线</th>
+                <th class="th2">时间</th>
+                <th class="th2">费用（￥）</th>
+                <th class="th2">状态</th>
+                <th class="th2">更多</th>
+            </tr>
+            </thead>
+            <tbody id="adminTbody">
+
+            </tbody>
+        </table>
+
+        <div id="barcon" class="barcon" >
+            <div id="barcon1" class="barcon1"></div>
+            <div id="barcon2" class="barcon2">
+                <ul>
+                    <li><button id="firstPage" class="page_btn">首页</button></li>
+                    <li><button id="prePage" class="page_btn">上一页</button></li>
+                    <li><button id="nextPage" class="page_btn">下一页</button></li>
+                    <li><button id="lastPage" class="page_btn">尾页</button></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+
+        $.datepicker.regional['zh-CN'] = {
+            changeMonth: true,
+            changeYear: true,
+            clearText: '清除',
+            clearStatus: '清除已选日期',
+            closeText: '关闭',
+            closeStatus: '不改变当前选择',
+            prevText: '<上月',
+            prevStatus: '显示上月',
+            prevBigText: '<<',
+            prevBigStatus: '显示上一年',
+            nextText: '下月>',
+            nextStatus: '显示下月',
+            nextBigText: '>>',
+            nextBigStatus: '显示下一年',
+            currentText: '今天',
+            currentStatus: '显示本月',
+            monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            monthNamesShort: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+            monthStatus: '选择月份',
+            yearStatus: '选择年份',
+            weekHeader: '周',
+            weekStatus: '年内周次',
+            dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+            dayNamesShort: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+            dayNamesMin: ['日', '一', '二', '三', '四', '五', '六'],
+            dayStatus: '设置 DD 为一周起始',
+            dateStatus: '选择 m月 d日, DD',
+            dateFormat: 'yy-mm-dd',
+            firstDay: 1,
+            initStatus: '请选择日期',
+            isRTL: false
+        };
+
+        $.datepicker.setDefaults($.datepicker.regional['zh-CN']);
+        $("#date_start").datepicker({maxDate:new Date()});
+        $("#date_end").datepicker({maxDate:new Date()});
+        $("#defult").datetimepicker();
+        $("#date_start").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            clear : "qingkong",
+            onClose: function(selectedDate) {
+                $("#date_end").datepicker("option", "minDate", selectedDate);
+            }
+        });
+
+        $("#date_end").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            onClose: function(selectedDate) {
+                $("#date_start").datepicker("option", "maxDate", selectedDate);
+                $("#date_end").val($(this).val());
+            }
+        });
+
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/user/getServiceLineAndLevel.do",
+            data : {
+                workNum : $(window.parent.document).find("input[name='dealerId']").val()
+            },
+            dataType : "json",
+            success : function (data) {
+                $("#dealerNum").text($(window.parent.document).find("input[name='dealerId']").val());
+                $("#dealerName").text(data['body']['result']['company']);
+                $("#product").append("<option value=''>全部</option>");
+                for(var i=0;i<data['body']['result']['array']['length'];i++){
+                    $("#product").append("<option value='"+ data['body']['result']['array'][i]['lineNo'] +"'>"+data['body']['result']['array'][i]['lineName']+"</option>");
+                }
+                // $("#product").unbind();
+            }
+        });
+
+        var date=new Date;
+        var year=date.getFullYear();
+        var month=date.getMonth()+1;
+        $("#year").html("<option value=''>全部</option>");
+        for(var i=2018;i<=year;i++){
+            $("#year").append("<option value='"+ i +"'>"+ i +"</option>");
+        }
+        $("#month").html("<option value=''>全部</option>");
+
+        if($(window.parent.document).find("input[name='roleId']").val() == 6){
+            $('#status').html(            
+            '<option value="">全部</option>'+
+            '<option value="0">待复核</option>'+
+            '<option value="2">已驳回</option>'+
+            '<option value="1">已复核</option>'+
+            '<option value="3">未付款</option>'+
+            '<option value="4">全部付款</option>'
+            )
+        }
+        
+
+        currentPage = 1;
+        $('#firstPage').attr('disabled',true);
+        $('#prePage').attr('disabled',true);
+        $("#firstPage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = 1;
+            $('#firstPage').attr('disabled',true);
+            $('#prePage').attr('disabled',true);
+            ajax_costSum_detail();
+        });
+        $("#lastPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = totalPage;
+            $('#lastPage').attr('disabled',true);
+            $('#nextPage').attr('disabled',true);
+            ajax_costSum_detail();
+        });
+        $("#nextPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = currentPage+1;
+            if(currentPage == totalPage){
+                $('#lastPage').attr('disabled',true);
+                $('#nextPage').attr('disabled',true);
+            }else{
+                $('#lastPage').removeAttr('disabled');
+                $('#nextPage').removeAttr('disabled');
+            }
+            ajax_costSum_detail();
+        });
+        $("#prePage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = currentPage-1;
+            if(currentPage == 1){
+                $('#firstPage').attr('disabled',true);
+                $('#prePage').attr('disabled',true);
+            }else{
+                $('#firstPage').removeAttr('disabled');
+                $('#prePage').removeAttr('disabled');
+            }
+            ajax_costSum_detail();
+        });
+
+        //初始化
+        ajax_costSum_detail();
+
+        $("#year").change(function () {
+            if($("#year option:selected").val() != ""){
+                if($("#year option:selected").val() != year){
+                    $("#month").html("<option value=''>全部</option>");
+                    for(var i=1;i<=12;i++){
+                        $("#month").append("<option value='"+ i +"'>"+ i +"</option>");
+                    }
+                }else{
+                    $("#month").html("<option value=''>全部</option>");
+                    for(var i=1;i<month;i++){
+                        $("#month").append("<option value='"+ i +"'>"+ i +"</option>");
+                    }
+                }
+            }else{
+                $("#month").html("<option value=''>全部</option>");
+            }
+            ajax_costSum_detail();
+        });
+
+        //时间
+        $("#date_start").change(function () {
+            if($("#date_start").val() != "" && $("#date_end").val() != ""){
+                currentPage = 1;
+                ajax_costSum_detail();
+            }
+        });
+        $("#date_end").change(function () {
+            if($("#date_start").val() != "" && $("#date_end").val() != ""){
+                currentPage = 1;
+                ajax_costSum_detail();
+            }
+        });
+
+        $("#product").change(function () {
+            ajax_costSum_detail();
+        });
+
+        $("#status").change(function () {
+            ajax_costSum_detail();
+        });
+    }
+</script>
+</html>

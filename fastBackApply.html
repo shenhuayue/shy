@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>待审核</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/saleCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/index.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <script src="jquery-ui-1.12.1/jquery-ui.min.js"></script>
+    <link href="jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet" />
+    <script src="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.js"></script>
+    <script type="text/javascript" src="jQuery-Timepicker/dist/i18n/jquery-ui-timepicker-zh-CN.js"></script>
+    <link href="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.css" rel="stylesheet" />
+
+</head>
+<body class="reset">
+    <div class="mg-t50">
+        <div class="tit">
+            <span class="flt_l">筛选查询</span>
+            <input type="button" class="add_btn flt_r" value="清空" onclick="clearDate()">
+        </div>
+        <div class="account_cont2">
+            <select id="meb_item" class="rep_guy_info">
+                <option value="dealerNum">企业编号</option>
+                <option value="dealerName">企业名称</option>
+                <option value="factoryNum">出厂编号</option>
+                <option value="barCode">条码号</option>
+            </select>
+            <input type="text" id="meb_info" class="product_line" style="border-left: none">
+            <button class="query_btn_big" style="margin-left: -4%;margin-right: 4%" onclick="queryForCheck()"></button>
+            <span class="describ">类型：</span>
+            <select id="type" class="product_line">
+                <option value="">全部</option>
+                <option value="3">调拨</option>
+                <option value="4">退货</option>
+                <option value="5">返厂</option>
+                <!--<option value="6">出售</option>-->
+            </select>
+        </div>
+    </div>
+    <div>
+        <div class="tit mg-t50">
+            <span class="flt_l">退货、调拨、返厂待审核</span>
+            <!--<input type="button" class="add_btn flt_r" value="创建" onclick="addRepairNeed()">-->
+        </div>
+        <div class="account_cont">
+            <table width="100%" cellpadding="0" cellspacing="0" class="table2" align="center">
+                <thead>
+                <tr align="center">
+                    <th height="33" class="th2">经销商名称</th>
+                    <th class="th2">企业编号</th>
+                    <th class="th2">联系人</th>
+                    <th class="th2">电话</th>
+                    <th class="th2">产品线</th>
+                    <th class="th2">产品系列</th>
+                    <th class="th2">产品型号</th>
+                    <th class="th2">出厂编号</th>
+                    <th class="th2">类型</th>
+                    <th class="th2">状态</th>
+                    <th class="th2">更多</th>
+                </tr>
+                </thead>
+                <tbody id="adminTbody">
+
+                </tbody>
+            </table>
+            <div id="barcon" class="barcon" >
+                <div id="barcon1" class="barcon1"></div>
+                <div id="barcon2" class="barcon2">
+                    <ul>
+                        <li><button id="firstPage" class="page_btn">首页</button></li>
+                        <li><button id="prePage" class="page_btn">上一页</button></li>
+                        <li><button id="nextPage" class="page_btn">下一页</button></li>
+                        <li><button id="lastPage" class="page_btn">尾页</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+        currentPage = 1;
+        $('#firstPage').attr('disabled',true);
+        $('#prePage').attr('disabled',true);
+        $("#firstPage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = 1;
+            $('#firstPage').attr('disabled',true);
+            $('#prePage').attr('disabled',true);
+            ajax_fastBackM();
+        });
+        $("#lastPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = totalPage;
+            $('#lastPage').attr('disabled',true);
+            $('#nextPage').attr('disabled',true);
+            ajax_fastBackM();
+        });
+        $("#nextPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = currentPage+1;
+            if(currentPage == totalPage){
+                $('#lastPage').attr('disabled',true);
+                $('#nextPage').attr('disabled',true);
+            }else{
+                $('#lastPage').removeAttr('disabled');
+                $('#nextPage').removeAttr('disabled');
+            }
+            ajax_fastBackM();
+        });
+        $("#prePage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = currentPage-1;
+            if(currentPage == 1){
+                $('#firstPage').attr('disabled',true);
+                $('#prePage').attr('disabled',true);
+            }else{
+                $('#firstPage').removeAttr('disabled');
+                $('#prePage').removeAttr('disabled');
+            }
+            ajax_fastBackM();
+        });
+
+        //初始化列表
+        ajax_fastBackM();
+
+        //类型
+        $("#type").change(function () {
+            // $("#factoryNum").val("");
+            // $("#status").html(
+            //     '<option value="">全部</option>' +
+            //     '<option value="0">待审核</option>' +
+            //     '<option value="1">已完成</option>' +
+            //     '<option value="-1">已关闭</option>'
+            // );
+            currentPage = 1;
+            ajax_fastBackM();
+        });
+
+        $("#meb_item").change(function () {
+            $("#meb_info").val("");
+        });
+    }
+</script>
+</html>

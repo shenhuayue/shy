@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>报修单详情</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <link rel="stylesheet" href="css/photo.css">
+    <script src="js/dsaleCenter.js"></script>
+    <script src="js/dcommon.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <script src="js/audio.min.js"></script>
+    <script src="js/voice-2.0.js"></script>
+    <script src="js/photo.js"></script>
+    <script src="js/jquery.rotate.min.js"></script>
+    <!--<link type="text/css" href="css/lrtk.css" rel="stylesheet" />-->
+    <!--<link type="text/css" href="css/prettyPhoto.css" rel="stylesheet" />-->
+    <!--<script type="text/javascript" src="js/jquery.prettyPhoto.js"></script>-->
+    <!--<script type="text/javascript" src="js/lrtk.js"></script>-->
+
+</head>
+<body class="reset">
+    <div>
+        <div class="title_box">
+            <img src="img/status_warning.png" class="status_warning">
+            <span id="status_describe" class="status_info">当前状态：</span>
+        </div>
+        <div class="rpt_detail">
+            <div class="tit_msg">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>报修单号</span>
+            </div>
+            <div id="rptNum" class="dis_detail_tab"></div>
+
+            <div id="400">
+                <div class="tit_msg">
+                    <img src="img/tit_pic.png" class="tit_pic">
+                    <span>来电信息</span>
+                </div>
+                <div>
+                    <table id="machineUserInfo" class="rpt_detail_tab txt_center">
+
+                    </table>
+                </div>
+            </div>
+
+            <div class="tit_msg">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>用户信息</span>
+            </div>
+            <div>
+                <table id="reporterInfo" class="rpt_detail_tab txt_center">
+
+                </table>
+            </div>
+
+            <div id="threeServer_only">
+                <div class="tit_msg">
+                    <img src="img/tit_pic.png" class="tit_pic">
+                    <span>报修单创建人信息</span>
+                </div>
+                <div>
+                    <table id="createrInfo" class="rpt_detail_tab txt_center">
+                        <tr>
+                            <td class="head_td" height="46px">创建人身份</td>
+                            <td class="head_td">姓名</td>
+                            <td class="head_td">电话</td>
+                            <td class="head_td">所属公司</td>
+                        </tr>
+
+                    </table>
+                </div>
+            </div>
+
+            <div class="tit_msg">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>报修农机信息</span>
+            </div>
+            <div>
+                <table id="machineInfo" class="rpt_detail_tab txt_center">
+                    <tr>
+                        <td class="head_td" height="46px;">图片</td>
+                        <td class="head_td">产品线</td>
+                        <td class="head_td">产品系列</td>
+                        <td class="head_td" width="100px">产品型号</td>
+                        <td class="head_td">出厂编码</td>
+                        <td class="head_td">购买时间</td>
+                        <td class="head_td">农机位置</td>
+                        <td class="head_td">预估里程（单程）</td>
+                        <td class="head_td">维修类型</td>
+                    </tr>
+
+                </table>
+            </div>
+            <!--配套用途-->
+            <div class="tit_msg">
+                    <img src="img/tit_pic.png" class="tit_pic">
+                    <span>配套用途</span>
+            </div>
+            <div>
+                    <table id="machineInfo1" class="rpt_detail_tab txt_center">
+                        <tr>
+                            <!--
+                            <td class="head_td" height="46px;">用途</td>
+                            <td class="head_td">类型</td>
+                            <td class="head_td">品牌</td>
+                            -->
+                            <td class="head_td" height="46px;">使用分类</td>
+                            <td class="head_td">配套类型</td>
+                            <td class="head_td">销售类型</td>
+                            <td class="head_td">配套品牌</td>
+                            
+                        </tr>
+    
+                    </table>
+                </div>
+
+            <div class="tit_msg">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>故障信息</span>
+            </div>
+            <div>
+                <table id="errInfo" class="rpt_detail_tab">
+
+                </table>
+            </div>
+
+            <div class="tit_msg">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>报修历史信息</span>
+                <!--<img src="img/refresh.png" class="mg-r30 flt_r" onclick="F5()">-->
+            </div>
+            <div class="mg_b50">
+                <table class="rpt_detail_tab txt_center">
+                    <tr>
+                        <td class="head_td" height="46px">用户姓名</td>
+                        <td class="head_td">报修电话</td>
+                        <td class="head_td">报修时间</td>
+                        <td class="head_td">农机型号</td>
+                        <td class="head_td">故障描述</td>
+                        <td class="head_td">状态</td>
+                        <td class="head_td">更多</td>
+                    </tr>
+                    <tbody id="adminTbody">
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div id="next_status" class="next">
+        <a><img src="img/next.png" id="next" onclick="dis_next_detail()"></a>
+    </div>
+</body>
+<script>
+    var mobile;
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+        
+        //判断经销商
+        if(appRoleList.indexOf($(window.parent.parent.document).find("input[name='roleId']").val()) != -1){
+            $("#next_status").hide();
+        }
+
+        //报修单详情
+        $.ajax({
+            type : "post",
+            async : false,
+            //url : ip_path+"/changfa_system/reportRepair/getReportInfoById.do",
+            url : ip_path+"/changfa_system/powerReport/getPowerReportInfoById.do",
+            data : {
+                reportId : $(window.parent.parent.document).find("input[name='reportId']").val()
+                //reportId : $(window.parent.document).find("input[name='reportId']").val()
+                
+            },
+            dataType : "json",
+            success : function (param) {
+                console.log(param)
+                $("#rptNum").html(param['body']['result']['reportNum']);
+                $(window.parent.parent.document).find("input[name='reportTypeForUnpass']").val(param['body']['result']['reportType']);
+                if(param['body']['result']['mobile']){
+                    mobile = param['body']['result']['mobile'].trim();
+                }
+
+                var path = "";
+                if(param['body']['result']['lineNum'] == 611 || param['body']['result']['lineNum'] == 61101 || param['body']['result']['lineNum'] == 61102){
+                    path="img/chayangji.png";
+                }else if(param['body']['result']['lineNum'] == 601){
+                    path="img/tuolaji.png";
+                }else if(param['body']['result']['lineNum'] == 612 || param['body']['result']['lineNum'] == 615 || param['body']['result']['lineNum'] == 622 || param['body']['result']['lineNum'] == 628){
+                    path="img/shougeji.png";
+                }else {
+                    path = "";
+                }
+                if(param['body']['result']['reportType'] == 0){
+                    document.getElementById("threeServer_only").style.display = "none";
+                }else{
+                    $("#createrInfo").append(
+                        "<tr>" +
+                        "<td class='body_td' height='59px'>" + param['body']['result']['creatorRoleName'] + "</td>" +
+                        "<td class='body_td'>" + param['body']['result']['creatorName'] + "</td>" +
+                        "<td class='body_td'>" + param['body']['result']['creatorMobile'] + "</td>" +
+                        "<td class='body_td'><a href='###'>" + param['body']['result']['creatorCompany'] + "</a></td>" +
+                        "</tr>"
+                    );
+                }
+               
+                if(param['body']['result']['reportType'] == 0){
+                    
+                    $("#errInfo").append(
+                        "<tr>" +
+                        "<td class='head_td txt_center' width='160px' height='80px'>故障描述：</td>" +
+                        "<td class='body_td_2' width='875px' style='word-break:break-all'>" + param['body']['result']['discription'] + "</td>" +
+                        "</tr>"
+                    );
+                    
+                }else if(param['body']['result']['videoPath'] == '' && param['body']['result']['voicePath']== ''){
+                    $("#errInfo").append(
+                        "<tr id='user_only'>" +
+                        "<td class='head_td txt_center' width='160px' height='80px'>农机故障图片：</td>" +
+                        "<td id='pic' class='body_td'>" +
+                        "</td>" +
+                        "</tr>" +
+                        "<tr>" +
+                        "<td class='head_td txt_center' width='160px' height='80px'>故障描述：</td>" +
+                        "<td class='body_td_2' width='875px' style='word-break:break-all'>" + param['body']['result']['discription'] + "</td>" +
+                        "</tr>"+
+                        "<tr>" +
+                        "<td class='head_td txt_center' width='160px' height='80px'>语音：</td>" +
+                        "<td class='head_td txt_left'>"+
+                        "</td>"+
+                        "</tr>"+
+                        "<tr>" +
+                        "<td class='head_td txt_center' width='160px' height='80px'>视频：</td>" +
+                        "<td class='body_td_2' id='source' width='875px'>"  + 
+                        "</td>" +
+    
+                        "</tr>"
+                    );
+
+                }else if(param['body']['result']['videoPath'] == ''){
+                    $("#errInfo").append(
+                        "<tr id='user_only'>" +
+                        "<td class='head_td txt_center' width='160px' height='80px'>农机故障图片：</td>" +
+                        "<td id='pic' class='body_td'>" +
+                        "</td>" +
+                        "</tr>" +
+                        "<tr>" +
+                        "<td class='head_td txt_center' width='160px' height='80px'>故障描述：</td>" +
+                        "<td class='body_td_2' width='875px' style='word-break:break-all'>" + param['body']['result']['discription'] + "</td>" +
+                        "</tr>"+
+                        "<tr>" +
+                        "<td class='head_td txt_center' width='160px' height='80px'>语音：</td>" +
+                        "<td class='head_td txt_left'>"+
+                            '<audio controls="controls">'+
+                                
+                                '<source src="'+ param['body']['result']['voicePath'] +'" type="audio/ogg">'+
+                                '<source src="'+ param['body']['result']['voicePath'] +'" type="audio/mpeg">'+
+                                '<source src="'+ param['body']['result']['voicePath'] +'" type="audio/Wav">'+
+                                '<source src="'+ param['body']['result']['voicePath'] +'" type="audio/mp3">'+
+                                '<source src="'+ param['body']['result']['voicePath'] +'" type="audio/amr">'+
+    
+                            '</audio>'+
+                        "</td>"+
+                        "</tr>"+
+                        "<tr>" +
+                        "<td class='head_td txt_center' width='160px' height='80px'>视频：</td>" +
+                        "<td class='body_td_2' id='source' width='875px'>"  + 
+                        "</td>" +
+    
+                        "</tr>"
+                    );
+                }
+                else if(param['body']['result']['voicePath'] == ''){
+                    $("#errInfo").append(
+                        "<tr id='user_only'>" +
+                        "<td class='head_td txt_center' width='160px' height='80px'>农机故障图片：</td>" +
+                        "<td id='pic' class='body_td'>" +
+                        "</td>" +
+                        "</tr>" +
+                        "<tr>" +
+                        "<td class='head_td txt_center' width='160px' height='80px'>故障描述：</td>" +
+                        "<td class='body_td_2' width='875px' style='word-break:break-all'>" + param['body']['result']['discription'] + "</td>" +
+                        "</tr>"+
+                        "<tr>" +
+                        "<td class='head_td txt_center' width='160px' height='80px'>语音：</td>" +
+                        "<td class='head_td txt_left'>"+
+                        "</td>"+
+                        "</tr>"+
+                        "<tr>" +
+                        "<td class='head_td txt_center' width='160px' height='80px'>视频：</td>" +
+                        "<td class='body_td_2' id='source' width='875px'>"  + 
+                            '<video controls="controls" style="height:150px;width:300px;" class="video">'+ 
+                                '<source src="'+param['body']['result']['videoPath']+'" type="video/mov" controls="controls" webkit-playsinline="true" playsinline="true" x5-playsinline="true" x-webkit-airplay="allow"  >'+
+                                '<source src="'+param['body']['result']['videoPath']+'" type="video/ogg" codecs="theora,vorbis" controls="controls" webkit-playsinline="true" playsinline="true" x5-playsinline="true" x-webkit-airplay="allow"  >'+
+                                '<source src="'+param['body']['result']['videoPath']+'" type="video/mp4" codecs="avc1.42E01E,mp4a.40.2" controls="controls" webkit-playsinline="true" playsinline="true" x5-playsinline="true" x-webkit-airplay="allow"  >'+
+                                
+                            '</video>' + 
+                        "</td>" +
+    
+                        "</tr>"
+                    );
+
+                }
+                else {
+                    $("#errInfo").append(
+                        "<tr id='user_only'>" +
+                        "<td class='head_td txt_center' width='160px' height='80px'>农机故障图片：</td>" +
+                        "<td id='pic' class='body_td'>" +
+                        "</td>" +
+                        "</tr>" +
+                        "<tr>" +
+                        "<td class='head_td txt_center' width='160px' height='80px'>故障描述：</td>" +
+                        "<td class='body_td_2' width='875px' style='word-break:break-all'>" + param['body']['result']['discription'] + "</td>" +
+                        "</tr>"+
+                        "<tr>" +
+                        "<td class='head_td txt_center' width='160px' height='80px'>语音：</td>" +
+                        //"<td class='head_td txt_center'>"+
+                        //    '<audio preload="auto" hidden="false"><source src="'+ param['body']['result']['voicePath'] +'" type="audio/mpeg"></audio>'+
+                        //"</td>"+
+                        "<td class='head_td txt_left'>"+
+                            '<audio controls="controls">'+
+                                
+                                '<source src="'+ param['body']['result']['voicePath'] +'" type="audio/ogg">'+
+                                '<source src="'+ param['body']['result']['voicePath'] +'" type="audio/mpeg">'+
+                                '<source src="'+ param['body']['result']['voicePath'] +'" type="audio/Wav">'+
+                                '<source src="'+ param['body']['result']['voicePath'] +'" type="audio/mp3">'+
+                                '<source src="'+ param['body']['result']['voicePath'] +'" type="audio/amr">'+
+    
+                            '</audio>'+
+                            //'<audio src="'+ param['body']['result']['voicePath'] +'" type="audio/mpeg" controls="controls"></audio>'+
+                            //'<div id="" class="yuyin fl" style="width:auto" audioSize="auto">'+
+                            //    '<span class="yuyin_txt yy_txt_l">'+'</span>'+
+                            //    '<audio preload="auto" hidden="true">'+
+                            ///    '<source src="'+ param['body']['result']['voicePath'] +'" type="audio/mpeg">'+
+                            //    '</audio>'+
+                            //    '<span class="yuyin_img yuyin_img_r"></span>'+
+                            //'</div> '+
+                        "</td>"+
+
+                        //"<td class='body_td_2' width='875px' style='word-break:break-all'>" +
+                        //    '<div style="width:100px;height:100px;">'+'<a href="' + param['body']['result']['voicePath']+'" alt="语音" >' + '</a>' + '</div>' +
+                        //"</td>" +
+                        //"<td class='body_td_2'>" + '<input type="button" value="play" id="playId"/>' + '<input type="button" value="stop" id="stopId"/>' +"</td>" +
+                        
+                        //"<td class='body_td_2'>" + '<input type="file" name="" id="upload" value="" οnchange="get_voices()"/>' +"</td>" +
+                        "</tr>"+
+                        "<tr>" +
+                        "<td class='head_td txt_center' width='160px' height='80px'>视频：</td>" +
+                        "<td class='body_td_2' id='source' width='875px'>"  + 
+                            '<video controls="controls" style="height:150px;width:300px;" class="video">'+ 
+                                '<source src="'+param['body']['result']['videoPath']+'" type="video/mov" controls="controls" webkit-playsinline="true" playsinline="true" x5-playsinline="true" x-webkit-airplay="allow"  >'+
+                                '<source src="'+param['body']['result']['videoPath']+'" type="video/ogg" codecs="theora,vorbis" controls="controls" webkit-playsinline="true" playsinline="true" x5-playsinline="true" x-webkit-airplay="allow"  >'+
+                                '<source src="'+param['body']['result']['videoPath']+'" type="video/mp4" codecs="avc1.42E01E,mp4a.40.2" controls="controls" webkit-playsinline="true" playsinline="true" x5-playsinline="true" x-webkit-airplay="allow"  >'+
+                                
+                            '</video>' + 
+                        "</td>" +
+                        //'<video controls="" style="height:150px;width:auto;" src="'+param['body']['result']['videoPath']+'" class="video" type="video/mov">'+ "</video>"+
+                        //"<td class='body_td_2' id='source' width='875px'>"  + '<video controls="controls" style="height:150px;width:auto;" src="'+param['body']['result']['videoPath']+'" class="video" type="video/mov">'+ '</video>' + "</td>" +
+                        //"<td class='body_td_2' width='875px' style='word-break:break-all'>" + param['body']['result']['discription'] + "</td>" +
+                        "</tr>"
+                    );
+                }
+                //audiojs.events.ready(function () {
+                //    var as = audiojs.createAll();
+                //});
+                RongIMLib.RongIMVoice.init();
+                function get_voices() {
+                    $.ajax({
+                        url: ip_path+"/changfa_system/powerReport/getPowerReportInfoById.do", // 请求后台，后台把amr文件进行base64编码后直接返回
+                        dataType: 'text', // 注意：因为是返回base64字符串，所以要用‘text’类型
+                        
+                        success: function (res) {
+                        RongIMLib.RongIMVoice.play(res) // 同样道理，直接播放该base64字符串
+                        },
+                    error: function (res) {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        
+                    console.log(res)
+            }
+        })
+    }
+
+                $("#reporterInfo").append(
+                    "<tr>" +
+                    "<td class='head_td' width='136px' height='46px'>姓名</td>" +
+                    "<td class='body_td' width='383px'>" + param['body']['result']['userName'] + "</td>" +
+                    "<td class='head_td' width='136px'>电话</td>" +
+                    "<td class='body_td' width='383px'>" + param['body']['result']['mobile'] + "</td>" +
+                    "</tr>"
+                );
+
+                var customerType;
+                switch (param['body']['result']['customerType']){
+                    case 0:
+                        customerType = "";
+                        break;
+                    case 1:
+                        customerType = "终端用户";
+                        break;
+                    case 2:
+                        customerType = "经销商";
+                        break;
+                    case 3:
+                        customerType = "社会化服务站";
+                        break;
+                }
+                $("#machineUserInfo").append(
+                    "<tr>" +
+                    "<td class='head_td' width='136px' height='46px'>客户类别</td>" +
+                    "<td class='body_td' width='383px'>" + customerType + "</td>" +
+                    "<td class='head_td' width='136px' height='46px'>姓名</td>" +
+                    "<td class='body_td' width='383px'>" + param['body']['result']['masterUserName'] + "</td>" +
+                    "<td class='head_td' width='136px'>电话</td>" +
+                    "<td class='body_td' width='383px'>" + param['body']['result']['masterUserMobile'] + "</td>" +
+                    "</tr>"
+                );
+
+                var repairType;
+                if(param['body']['result']['repairType'] == 1){
+                    repairType = "外出(本地用户)";
+                }else if(param['body']['result']['repairType'] == 2){
+                    repairType = "到店(本地用户)";
+                }else if(param['body']['result']['repairType'] == 3){
+                    repairType = "库存车维修";
+                }else if(param['body']['result']['repairType'] == 4){
+                    repairType = "外出(跨区用户)";
+                }else if(param['body']['result']['repairType'] == 5){
+                    repairType = "到店(跨区用户)";
+                }else if(param['body']['result']['repairType'] == 6){
+                    repairType = "寄件维修";
+                }
+
+                $(window.parent.document).find("input[name='repairType']").val(param['body']['result']['repairType']);
+
+                $("#machineInfo").append(
+                    "<tr>" +
+                    //"<td class='body_td' width='120px' height='94px'><img src='"+ path +"'></td>" +
+                    "<td class='body_td' width='120px' height='94px'><img src='http://app-file.changfanz.net:6588/changfa_file/dgjimg.png'></td>" +
+                    "<td class='body_td'>" + param['body']['result']['machineLine'] + "</td>" +
+                    "<td class='body_td'>" + param['body']['result']['seriesName'] + "</td>" +
+                    "<td class='body_td'>" + param['body']['result']['machineModel'] + "</td>" +
+                    "<td class='body_td'>" + param['body']['result']['factoryNum'] + "</td>" +
+                    "<td class='body_td'>" + param['body']['result']['buyTime'] + "</td>" +
+                    "<td class='body_td' id='machineAddress'>" + param['body']['result']['address'] + "</td>" +
+                    "<td class='body_td'>" + param['body']['result']['expectedMileage'] + "</td>" +
+                    "<td class='body_td'>" + repairType + "</td>" +
+                    "</tr>"
+                );
+
+                $("#machineInfo1").append(
+                    "<tr>" +
+                    "<td class='body_td' style='height:50px;'>" + param['body']['result']['useTypeName'] + "</td>" +
+                    "<td class='body_td' style='height:50px;'>" + param['body']['result']['matchMachineName'] + "</td>" +
+                    "<td class='body_td' style='height:50px;'>" + param['body']['result']['saleModelName'] + "</td>" +
+                    "<td class='body_td' style='height:50px;'>" + param['body']['result']['machineBrandName'] + "</td>" +
+//                     "<td class='body_td' style='height:50px;'>" + param['body']['result']['saleModelName'] + "</td>" +
+//                     "<td class='body_td' style='height:50px;'>" + param['body']['result']['machineBrandName'] + "</td>" +
+                    "</tr>"
+                );
+                
+                for(var i =0;i<param['body']['result']['filePath'].length;i++){
+                    $("#pic").append(
+                        '<a href="javascript:void(0)" data-magnify="gallery" data-group="g1" data-src="'+ param['body']['result']['filePath'][i] +'" data-caption="显示图片">'+
+                        '<img src="'+param['body']['result']['filePath'][i]+'" class="err_pic" >'+
+                        '</a>'
+                    );
+                }
+                if(param['body']['result']['status'] != 1){
+                    $("#next_status").html("");
+                }
+                if(param['body']['result']['status'] == 0){
+                    $("#status_describe").html("当前状态：已关闭");
+                }else if(param['body']['result']['status'] == 1){
+                    $("#status_describe").html("当前状态：待派工");
+                }else if(param['body']['result']['status'] == -1){
+                    $("#status_describe").html("当前状态：驳回待处理");
+                }else{
+                    $("#status_describe").html("当前状态：已派工");
+                }
+            }
+        });
+        F5();
+
+        if($(window.parent.parent.document).find("input[name='history_mark']").val() == ""){
+            if($(window.parent.parent.document).find("input[name='history_400_mark']").val() != ""){
+                $("#next_status").html('<img src="img/front.png" onclick="to_lastReport_400()">');
+            }
+        }else{
+            $("#next_status").html('<img src="img/front.png" onclick="to_lastReport()">');
+        }
+
+        //语音
+        //audio事件监听--改变动画
+        //$('audio').bind('play', function() {
+        //    $(this).next().css('animation-play-state', 'running');
+        //});
+        //$('audio').bind('ended', function() {
+        //    $(this).next().css('animation-play-state', 'paused');
+        //});
+        //$('audio').bind('pause', function() {
+        //    $(this).next().css('animation-play-state', 'paused');
+        //});
+
+        //控制播放暂停
+
+        //var curPlayId = null; // 当前播放语音标识
+        //function addAudioEvent() {
+        //    $('.yuyin').click(function () {
+  	    //    var $this = $(this); 
+        //    var $audio = $this.children("audio")[0];
+  	    //if (curPlayId == null) {
+        //    $audio.play();
+  	    //    curPlayId = $this.attr('id');
+  	    //} else {
+  	    //if ($this.attr('id') == curPlayId) { // 点击当前播放中的语音，暂停播放
+        //    $audio.pause();
+        //    curPlayId = null;
+  	    //}	else {
+  	  	    // 先暂停当前播放语音 
+        //    $('#' + curPlayId).children("audio")[0].pause();
+  	  	    // 播放点击语音
+        //    $audio.play();
+  	  	//    curPlayId = $this.attr('id');
+  	  //} 	
+  	//} 	
+  //});
+
+
+        //}
+        $('[data-magnify]').Magnify({
+                    Toolbar: [
+                        'prev',
+                        'next',
+                        'rotateLeft',
+                        'rotateRight',
+                        'zoomIn',
+                        'actualSize',
+                        'zoomOut'
+                    ],
+                    keyboard:true,
+                    draggable:true,
+                    movable:true,
+                    modalSize:[800,600],
+                    beforeOpen:function (obj,data) {
+                        console.log('beforeOpen')
+                    },
+                    opened:function (obj,data) {
+                        console.log('opened')
+                    },
+                    beforeClose:function (obj,data) {
+                        console.log('beforeClose')
+                    },
+                    closed:function (obj,data) {
+                        console.log('closed')
+                    },
+                    beforeChange:function (obj,data) {
+                        console.log('beforeChange')
+                    },
+                    changed:function (obj,data) {
+                        console.log('changed')
+                    }
+                });
+    }
+</script>
+</html>

@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>销售计划管理</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/saleCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <link href="layer/mobile/need/layer.css" type="text/css" rel="stylesheet"/>
+    <script src="layer/layer.js"></script>
+    <script src="jquery-ui-1.12.1/jquery-ui.min.js"></script>
+    <link href="jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet" />
+    <script src="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.js"></script>
+    <script type="text/javascript" src="jQuery-Timepicker/dist/i18n/jquery-ui-timepicker-zh-CN.js"></script>
+    <link href="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.css" rel="stylesheet" />
+</head>
+<body class="reset">
+    <div class="mg-t50">
+        <div class="tit">
+            <span class="flt_l">筛选查询</span>
+            <input type="button" class="add_btn flt_r" value="清空" onclick="clearDate()">
+            <!--<input type="button" class="add_btn flt_r" value="查询" onclick="queryDealer()">-->
+        </div>
+        <div class="account_cont2">
+            <select id="order_item" class="rep_guy_info">
+                <option value="planNo">计划编号</option>
+                <option value="dealerNum">企业编号</option>
+                <option value="dealerName">企业名称</option>
+            </select>
+            <input type="text" id="order_info" class="product_line" style="border-left: none;">
+        
+
+            <span class="describ mg_l-15">产品线：</span>
+            <select id="line" class="product_line">
+                
+            </select>
+            
+            <span class="describ" style="margin-left:-30px;">状态：</span>
+            <select id="status" class="area_choose">
+                <option value="">全部</option>
+                <option value="0">待初审</option>
+                <option value="-1">初审驳回</option>
+                <option value="1">待终审</option>
+                <option value="-2">终审驳回</option>
+                <option value="2">终审通过</option>
+            </select>
+
+            <span class="describ mg_l30">要货日期：</span>
+            <input id="date_start" class="timeChoose" placeholder="起始">
+            <span>-</span>
+            <input id="date_end" class="timeChoose" placeholder="截止">
+            <div>
+                <span class="describ mg_l30">提交日期：</span>
+                <input id="create_date_start" class="timeChoose" placeholder="起始">
+                <span>-</span>
+                <input id="create_date_end" class="timeChoose" placeholder="截止">
+            </div>
+            
+        </div>
+    </div>
+    <div>
+        
+    </div>
+    <div>
+        <div class="tit mg-t50">
+            <span class="flt_l">计划订单列表</span>
+            
+            <form id="form" method="post">
+                <input type="hidden" name="startTime">
+                <input type="hidden" name="endTime">
+                <input type="hidden" name="startTime1">
+                <input type="hidden" name="endTime1">
+                <input type="hidden" name="lineNum">
+                <input type="hidden" name="chooseItem">
+                <input type="hidden" name="itemCont">
+                <input type="hidden" name="status">
+                <input type="hidden" name="userId">
+                <input type="button" id="outputBtn" class="add_btn flt_r" value="导出">
+            </form>
+
+            <input type="button" class="add_btn flt_r" value="查询" onclick="querySalePlans()">
+        </div>
+        <div class="account_cont">
+            <table width="100%" cellpadding="0" cellspacing="0" class="table2" align="center">
+                <thead>
+                <tr align="center">
+                    <th height="33" class="th2">计划编号</th>
+                    <th class="th2">产品线</th>
+                    <th class="th2">企业编号</th>
+                    <th class="th2">企业名称</th>
+                    <th class="th2">要货日期</th>
+                    <th class="th2">提交日期</th>
+                    <th class="th2">状态</th>
+                    <th class="th2">更多</th>
+                </tr>
+                </thead>
+                <tbody id="adminTbody">
+                    
+                </tbody>
+            </table>
+            <div id="barcon" class="barcon" >
+                <div id="barcon1" class="barcon1"></div>
+                <div id="barcon2" class="barcon2">
+                    <ul>
+                        <li><button id="firstPage" class="page_btn">首页</button></li>
+                        <li><button id="prePage" class="page_btn">上一页</button></li>
+                        <li><button id="nextPage" class="page_btn">下一页</button></li>
+                        <li><button id="lastPage" class="page_btn">尾页</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+
+    //判断经销商
+    if($(window.parent.document).find("input[name='roleId']").val() == 6 || $(window.parent.document).find("input[name='roleId']").val() == 9){
+        $("#order_item").html(
+          '<option value="planNo">计划编号</option>'
+        );
+    }
+
+        $.datepicker.regional['zh-CN'] = {
+            changeMonth: true,
+            changeYear: true,
+            clearText: '清除',
+            clearStatus: '清除已选日期',
+            closeText: '关闭',
+            closeStatus: '不改变当前选择',
+            prevText: '<上月',
+            prevStatus: '显示上月',
+            prevBigText: '<<',
+            prevBigStatus: '显示上一年',
+            nextText: '下月>',
+            nextStatus: '显示下月',
+            nextBigText: '>>',
+            nextBigStatus: '显示下一年',
+            currentText: '今天',
+            currentStatus: '显示本月',
+            monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            monthNamesShort: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+            monthStatus: '选择月份',
+            yearStatus: '选择年份',
+            weekHeader: '周',
+            weekStatus: '年内周次',
+            dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+            dayNamesShort: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+            dayNamesMin: ['日', '一', '二', '三', '四', '五', '六'],
+            dayStatus: '设置 DD 为一周起始',
+            dateStatus: '选择 m月 d日, DD',
+            dateFormat: 'yy-mm-dd',
+            firstDay: 1,
+            initStatus: '请选择日期',
+            isRTL: false
+        };
+
+        $.datepicker.setDefaults($.datepicker.regional['zh-CN']);
+        $("#create_date_start").datepicker({maxDate:new Date()});
+        $("#create_date_end").datepicker({maxDate:new Date()});
+        $("#defult").datetimepicker();
+        $("#create_date_start").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            clear : "qingkong",
+            onClose: function(selectedDate) {
+                $("#create_date_end").datepicker("option", "minDate", selectedDate);
+            }
+        });
+
+        $("#create_date_end").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            onClose: function(selectedDate) {
+                $("#create_date_start").datepicker("option", "maxDate", selectedDate);
+                $("#create_date_end").val($(this).val());
+            }
+        });
+
+        $("#date_start").datepicker({maxDate:new Date()});
+        $("#date_end").datepicker({maxDate:new Date()});
+        $("#defult").datetimepicker();
+        $("#date_start").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            clear : "qingkong",
+            onClose: function(selectedDate) {
+                $("#date_end").datepicker("option", "minDate", selectedDate);
+            }
+        });
+
+        $("#date_end").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            onClose: function(selectedDate) {
+                $("#date_start").datepicker("option", "maxDate", selectedDate);
+                $("#date_end").val($(this).val());
+            }
+        });
+
+        $("#date_start").change(function () {
+            
+            if ($("#date_start").val() != "" && $("#date_end").val() != "") {
+                currentPage = 1;
+                ajax_salePlanM();
+            }
+        });
+
+        $("#date_end").change(function () {
+           
+            if ($("#date_start").val() != "" && $("#date_end").val() != "") {
+                currentPage = 1;
+                ajax_salePlanM();
+            }
+        });
+
+        $("#create_date_start").change(function () {
+            
+            if ($("#create_date_start").val() != "" && $("#create_date_end").val() != "") {
+                currentPage = 1;
+                ajax_salePlanM();
+            }
+        });
+
+        $("#create_date_end").change(function () {
+           
+            if ($("#create_date_start").val() != "" && $("#create_date_end").val() != "") {
+                currentPage = 1;
+                ajax_salePlanM();
+            }
+        });
+
+        $("#status").change(function () {
+            ajax_salePlanM();
+       });
+
+       $("#line").change(function () {
+        ajax_salePlanM();
+       });
+
+        $("#repair_start").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            clear : "qingkong",
+            onClose: function(selectedDate) {
+                $("#repair_end").datepicker("option", "minDate", selectedDate);
+            }
+        });
+
+        $("#repair_end").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            onClose: function(selectedDate) {
+                $("#repair_start").datepicker("option", "maxDate", selectedDate);
+                $("#repair_end").val($(this).val());
+            }
+        });
+
+        $.ajax({
+            type : "post",
+            url : ip_path+"/changfa_system/productCatalog/selectByParentNumAndLevel.do",
+            data: {
+                level:1,
+                parentNum:'',
+                type:''
+            },
+            dataType : "json",
+            success : function (data) {
+                $("#line").append("<option value=''>全部</option>");
+                for(var i=0;i<data['body']['resultList']['length'];i++){
+                    $("#line").append("<option value='"+ data['body']['resultList'][i]['number'] +"'>"+data['body']['resultList'][i]['name']+"</option>");
+                }
+            }
+        });
+
+        currentPage = 1;
+        $('#firstPage').attr('disabled',true);
+        $('#prePage').attr('disabled',true);
+        $("#firstPage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = 1;
+            $('#firstPage').attr('disabled',true);
+            $('#prePage').attr('disabled',true);
+            ajax_salePlanM();
+        });
+        $("#lastPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = totalPage;
+            $('#lastPage').attr('disabled',true);
+            $('#nextPage').attr('disabled',true);
+            ajax_salePlanM();
+        });
+        $("#nextPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = currentPage+1;
+            if(currentPage == totalPage){
+                $('#lastPage').attr('disabled',true);
+                $('#nextPage').attr('disabled',true);
+            }else{
+                $('#lastPage').removeAttr('disabled');
+                $('#nextPage').removeAttr('disabled');
+            }
+            ajax_salePlanM();
+        });
+        $("#prePage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = currentPage-1;
+            if(currentPage == 1){
+                $('#firstPage').attr('disabled',true);
+                $('#prePage').attr('disabled',true);
+            }else{
+                $('#firstPage').removeAttr('disabled');
+                $('#prePage').removeAttr('disabled');
+            }
+            ajax_salePlanM();
+        });
+
+        //初始化
+        ajax_salePlanM();
+        $("#outputBtn").click(function () {
+
+              //判断经销商
+              var url;
+            if(appRoleList.indexOf($(window.parent.document).find("input[name='roleId']").val()) != -1){
+                url = "/changfa_system/config/salePlanExportForDealer.do";
+            }else{
+                url = "/changfa_system/config/salePlanExport.do";
+            }
+
+            $("input[name='chooseItem']").val($("#order_item option:selected").val());
+            $("input[name='itemCont']").val($("#order_info").val());
+            $("input[name='lineNum']").val($("#line option:selected").val());
+            $("input[name='status']").val($("#status").val());
+            $("input[name='startTime']").val($("#date_start").val());
+            $("input[name='endTime']").val($("#date_end").val());
+            $("input[name='startTime1']").val($("#create_date_start").val());
+            $("input[name='endTime1']").val($("#create_date_end").val());
+            $("input[name='userId']").val($(window.parent.document).find("input[name='userId']").val());
+            $("#form").attr("action",ip_path + url);
+            $("#form").submit();
+        });
+    }
+</script>
+</html>

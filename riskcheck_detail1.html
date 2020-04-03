@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>车辆报警详情</title>
+  <link href="css/cf_web.css" type="text/css" rel="stylesheet" />
+  <script src="js/dsaleCenter.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/jquery-1.8.2.min.js"></script>
+  <script src="jqueryTagsInput/jquery.tagsinput.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="jqueryTagsInput/jquery.tagsinput.min.css" />
+  <!-- 这里要配置参数key,将其值设置为高德官网开发者获取的key -->
+  <script src="http://webapi.amap.com/maps?v=1.3&key=3e74281cf91fedbc4cecfa6d75ab9fbb"></script>
+  <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css" />
+  <script src="http://cache.amap.com/lbs/static/es5.min.js"></script>
+  <script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
+  <script src="jquery-ui-1.12.1/jquery-ui.min.js"></script>
+  <link href="jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet" />
+  <script src="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.js"></script>
+  <script type="text/javascript" src="jQuery-Timepicker/dist/i18n/jquery-ui-timepicker-zh-CN.js"></script>
+  <link href="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.css" rel="stylesheet" />
+</head>
+
+<body class="reset" style="margin-top:100px;"><input type="text" id="focus" size="1" style="display: none;">
+  <div id="addLine" class="addTopic outShadow" style="display: none;position: fixed">
+    <div class="dealer_title">
+      <span>查看位置</span>
+      <img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeAddLine()">
+    </div>
+    <div style="width: 100%;height: auto;border: 1px solid #E4E4E4;border-top: none;">
+      <table id='lastTime' class="rpt_detail_tab txt_center" style='margin-bottom: 10px;margin-top: 20px;'>
+        <tr>
+          <td class='head_td' width='50%' height='59px'>最近时间</td>
+        </tr>
+      </table>
+      <div id="machine_map" class="flt_l mg-t30 mg_l50" style="width: 90%;height: 500px;margin-bottom: 20px;">
+      </div>
+      <table id='machinery' class="rpt_detail_tab txt_center" style='margin-bottom: 20px;'>
+        <tr>
+          <td class='head_td' width='136px' height='30px'>IMEI号</td>
+          <td class='head_td'>农机油压</td>
+          <td class='head_td'>农机水温</td>
+          <td class='head_td'>农机转速</td>
+          <td class='head_td'>蓄电池电压</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="all_clear" style="display: none;" id="jingbao">
+    <span style="line-height: 40px;margin-left: 10px;">解除警报</span>
+    <span id="radio" class="radio_red"></span>
+  </div>
+
+  <div>
+    <div class="title_box">
+      <img src="img/status_warning.png" class="status_warning">
+      <span id="status_describe" class="status_info">当前状态：</span>
+    </div>
+    <div class="rpt_detail">
+      <!-- <div id="threeServer_only">
+                <div class="tit_msg">
+                    <img src="img/tit_pic.png" class="tit_pic">
+                    <span>类型</span>
+                </div>
+                <div  style="margin-left: 35px;">
+                    <div class="car-type">类型</div>
+                    <div id="car-type" class="car-type" style="background:rgba(255,255,255,1);">
+                        <span></span>
+                    </div>
+                </div>
+            </div> -->
+      <div class="tit_msg" style="clear: both;">
+        <img src="img/tit_pic.png" class="tit_pic">
+        <span>标记类型</span>
+        <!--<img src="img/refresh.png" class="mg-r30 flt_r" onclick="F5()">-->
+      </div>
+      <div>
+        <table id="tag_type" class="rpt_detail_tab txt_center">
+          <tr>
+            <td class="head_td" height="46px" width="50%">初次标记</td>
+            <td class="head_td">最终标记</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="tit_msg" style="clear: both;">
+        <img src="img/tit_pic.png" class="tit_pic">
+        <span>农机信息</span>
+        <!--<img src="img/refresh.png" class="mg-r30 flt_r" onclick="F5()">-->
+      </div>
+      <div>
+        <table id="agricultural" class="rpt_detail_tab txt_center">
+          <tr>
+            <td class="head_td" height="46px">图片</td>
+            <td class="head_td">产品线</td>
+            <td class="head_td">产品系列</td>
+            <td class="head_td">产品型号</td>
+            <td class="head_td">条码</td>
+            <td class="head_td">出厂编号</td>
+            <td class="head_td">农机状态</td>
+            <td class="head_td">所属仓库</td>
+            <td class="head_td">查看位置</td>
+          </tr>
+        </table>
+      </div>
+
+      <div id='exhibition_time' style="display: none;">
+        <div class="tit_msg" style="clear: both;">
+          <img src="img/tit_pic.png" class="tit_pic">
+          <span>外出参展时间</span>
+          <!--<img src="img/refresh.png" class="mg-r30 flt_r" onclick="F5()">-->
+        </div>
+        <div>
+          <table id="exhibition" class="rpt_detail_tab txt_center">
+            <tr>
+              <td class="head_td" height="46px">开始时间</td>
+              <td class="head_td">结束时间</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- <div class="tit_msg">
+                <img src="img/tit_pic.png" class="tit_pic" >
+                <span>申请理由</span>
+            </div>
+            <div >
+            <textarea id="describe" class="checke_discribe" disabled="true"></textarea>
+            </div>
+
+            <div class="tit_msg">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>附件上传</span>
+            </div>
+            <div class="mg_b50">
+            <textarea id="describe" class="checke_discribe" placeholder="输入驳回说明"></textarea>
+            </div> -->
+    </div>
+
+  </div>
+  <div id="next_status" class="next" style="display: none">
+    <a><img src="img/yes.png" id="next" onclick="getfinalStatus()"></a>
+
+  </div>
+
+</body>
+<script>
+  window.onload = function () {
+    jQuery.support.cors = true;
+    toTop();
+
+
+    $('#radio').click(function () {
+      $(this).toggleClass('radio_green');
+      if ($(this).hasClass('radio_green')) {
+        alert('当前选择了解除警报');
+      } else {
+        alert('当前选择了继续警报');
+      }
+    })
+
+    $.ajax({
+      type: "post",
+      async: false,
+      url: ip_path + "/changfa_system/machineFlow/getMachineInfo.do",
+      data: {
+        barCode: $(window.parent.document).find("input[name='machineFlowId']").val()
+      },
+      dataType: "json",
+      success: function (param) {
+        if (param['head']['code'] == 200) {
+          //console.log(param);
+          //return false;
+          $(window.parent.document).find("input[name='type']").val(param['body']['result']['type']);
+          $(window.parent.document).find("input[name='changeNum']").val(param['body']['result'][
+            'newDealerNum'
+          ]);
+          var path = "";
+          if (param['body']['result']['lineNum'] == 611 || param['body']['result']['lineNum'] == 61101 || param[
+              'body']['result']['lineNum'] == 61102) {
+            path = "img/chayangji.png";
+          } else if (param['body']['result']['lineNum'] == 601) {
+            path = "img/tuolaji.png";
+          } else if (param['body']['result']['lineNum'] == 612 || param['body']['result']['lineNum'] == 615 ||
+            param['body']['result']['lineNum'] == 622 || param['body']['result']['lineNum'] == 628) {
+            path = "img/shougeji.png";
+          } else {
+            path = "";
+          }
+
+          var status;
+          switch (param['body']['result']['status']) {
+            case 1:
+              status = '已发货';
+              break;
+            case 2:
+              status = '在库中';
+              break;
+            case 3:
+              status = '调拨';
+              break;
+            case 4:
+              status = '退货';
+              break;
+            case 5:
+              status = '返厂';
+              break;
+            case 6:
+              status = '已销售';
+              break;
+            case 10:
+              status = '外出参展';
+              break;
+            case 11:
+              status = '锁车';
+              break;
+            case 12:
+              status = '解锁';
+              break;
+          }
+
+          // var type;
+          // switch (param['body']['result']['type']) {
+          //     case 10:
+          //         type = '类型：申请外出参展';
+          //         break;
+          //     case 11:
+          //         type = '类型：申请锁车';
+          //         break;
+          //     case 12:
+          //         type = '类型：申请解锁';
+          //         break;
+          // }
+
+          $('#status_describe').html($('#status_describe').html() + $(window.parent.document).find(
+            "input[name='alarm']").val());
+
+          //$('.car-type span').html(status);
+          $('#describe').val(param['body']['result']['description'])
+
+          $("#agricultural").append(
+            "<tr>" +
+            "<td class='body_td' height='59px'><img src='" + path + "' alt=''></td>" +
+            "<td class='body_td'>" + param['body']['result']['lineName'] + "</td>" +
+            "<td class='body_td'>" + param['body']['result']['seriesName'] + "</td>" +
+            "<td class='body_td' height='59px'>" + param['body']['result']['modelName'] + "</td>" +
+            "<td class='body_td'>" + param['body']['result']['barCode'] + "</td>" +
+            "<td class='body_td'>" + param['body']['result']['factoryNum'] + "</td>" +
+            "<td class='body_td' height='59px'>" + status + "</td>" +
+            "<td class='body_td'>" + param['body']['result']['dealerName'] + "</td>" +
+            "<td class='body_td'><a href='#' onclick='addLine(" + param['body']['result']['imei'] +
+            ")'>查看详情</a></td>" +
+            "</tr>"
+          );
+
+          $('#machinery').append(
+            "<tr>" +
+            "<td class='body_td' height='30px'>" + param['body']['result']['imei'] + "</td>" +
+            "<td class='body_td'>" + param['body']['result']['hydraulic'] + "</td>" +
+            "<td class='body_td' height='59px'>" + param['body']['result']['temperature'] + "</td>" +
+            "<td class='body_td'>" + param['body']['result']['speed'] + "</td>" +
+            "<td class='body_td'>" + param['body']['result']['voltage'] + "</td>" +
+            "</tr>"
+          )
+          $('#lastTime tr').append(
+            "<td class='head_td' style='background-color:#ffffff'>" + param['body']['result']['lastTime'] +
+            "</td>"
+          )
+
+          if (param['body']['result']['type'] == 10) {
+            $('#exhibition_time').show();
+            $('#exhibition').append(
+              "<tr>" +
+              "<td class='body_td' height='59px'>" + param['body']['result']['beginTime'].split(" ")[0] +
+              "</td>" +
+              "<td class='body_td'>" + param['body']['result']['endTime'].split(" ")[0] + "</td>" +
+              "</tr>"
+            )
+          }
+
+          // <input type='text' style='width: 100%;height: 58px;margin-left: -10px;' value='"+param['body']['result']['buyTime']+"'>
+
+          if (param['body']['result']['location'] != '') {
+            map = new AMap.Map("machine_map", {
+              resizeEnable: true,
+              center: [param['body']['result']['location'].split(',')[0], param['body']['result'][
+                'location'
+              ].split(',')[1]],
+              zoom: 9
+            });
+
+            if(param['body']['result']['storeInfoList']){
+              param['body']['result']['storeInfoList'].forEach(elem => {
+                
+                  if ( elem['location'] != null && elem['location'] !="") {
+                  var circle = new AMap.Circle({
+                    center: [elem['location'].split(',')[0],
+                      elem['location'].split(',')[1]
+                    ],
+                    radius: elem['radius'], //半径
+                    borderWeight: 3,
+                    strokeColor: "#FF33FF",
+                    strokeOpacity: 1,
+                    strokeWeight: 6,
+                    strokeOpacity: 0.2,
+                    fillOpacity: 0.4,
+                    strokeStyle: 'dashed',
+                    strokeDasharray: [10, 10],
+                    // 线样式还支持 'dashed'
+                    fillColor: '#1791fc',
+                    zIndex: 50,
+                  })
+
+                  var marker_machine2 = new AMap.Marker({
+                    position: new AMap.LngLat(elem['location'].split(',')[0],
+                      elem['location'].split(',')[1]),
+                    offset: new AMap.Pixel(-16, -45),
+                    icon: new AMap.Icon({
+                      image: 'img/cangku.png',
+                      size: new AMap.Size(52, 52), //图标大小
+                      imageSize: new AMap.Size(30, 30)
+                    })
+                  });
+                  map.add(marker_machine2);
+                  circle.setMap(map);
+                }
+              });
+
+            }
+
+            var marker_machine = new AMap.Marker({
+              position: new AMap.LngLat(param['body']['result']['location'].split(',')[0], param['body'][
+                'result'
+              ]['location'].split(',')[1]),
+              offset: new AMap.Pixel(-16, -45),
+              icon: 'img/machine.png',
+            });
+            
+            var msg_label = param['body']['result']['locationAddress'];
+            marker_machine.setTitle(msg_label);
+            map.add(marker_machine);
+          }
+
+        } else {
+          alert(param['head']['message']);
+        }
+      }
+    });
+
+
+
+    if ($(window.parent.document).find("input[name='finalStatus']").val() != '') {
+      $("#tag_type").append(
+        "<tr>" +
+        "<td class='body_td' height='59px'>" + $(window.parent.document).find("input[name='firstStatus']").val() +
+        "</td>" +
+        "<td class='body_td'>" + $(window.parent.document).find("input[name='finalStatus']").val() + "</td>" +
+        "</tr>"
+      )
+      $('.all_clear').show();
+      $('#next_status').show();
+
+
+    } else {
+      $("#tag_type").append(
+        "<tr>" +
+        "<td class='body_td' height='59px'>" + $(window.parent.document).find("input[name='firstStatus']").val() +
+        "</td>" +
+        "<td class='body_td'>" +
+        "<select class='area_choose' id='alarmType'>" +
+        "<option value='1'>已销售</option>" +
+        "<option value='2'>未销售</option>" +
+        "<option value='3'>外出参展</option>" +
+        "</select>" +
+        "</td>" +
+        "</tr>"
+      )
+      $('.all_clear').show();
+      $('#next_status').show();
+    }
+
+        //根据农机状态判断是否有解除报警
+        /*if ($(window.parent.document).find("input[name='statusnj']").val() == '发往中'||$(window.parent.document).find("input[name='statusnj']").val() == '在库中'||$(window.parent.document).find("input[name='statusnj']").val() == '已销售') {
+          $("#tag_type").append(
+          "<tr>" +
+          "<td class='body_td' height='59px'>" + $(window.parent.document).find("input[name='firstStatus']").val() +
+          "</td>" +
+          "<td class='body_td'>" +
+          "<select class='area_choose' id='alarmType'>" +
+          "<option value='1'>已销售</option>" +
+          "<option value='2'>未销售</option>" +
+          "<option value='3'>外出参展</option>" +
+          "</select>" +
+          "</td>" +
+          "</tr>"
+        )
+
+            $('.all_clear').show();
+        }*/
+
+
+
+
+    //如果没有最终标记 说明 还没有操作 则有下一步指示
+    /*if (!$(window.parent.document).find("input[name='finalStatus']").val()||!$(window.parent.document).find("input[name='finalStatus']").val() == 1){
+      $('#next_status').show();
+    } else {
+      $('#next_status').hide();
+    }*/
+    if ($(window.parent.document).find("input[name='baojing']").val()=="解除报警" || appRoleList.indexOf($(window.parent.document).find("input[name='roleId']").val()) != -1){
+      $('#next_status').hide();
+      $('.all_clear').hide();
+    }
+
+    $.datepicker.regional['zh-CN'] = {
+      changeMonth: true,
+      changeYear: true,
+      clearText: '清除',
+      clearStatus: '清除已选日期',
+      closeText: '关闭',
+      closeStatus: '不改变当前选择',
+      prevText: '<上月',
+      prevStatus: '显示上月',
+      prevBigText: '<<',
+      prevBigStatus: '显示上一年',
+      nextText: '下月>',
+      nextStatus: '显示下月',
+      nextBigText: '>>',
+      nextBigStatus: '显示下一年',
+      currentText: '今天',
+      currentStatus: '显示本月',
+      monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+      monthNamesShort: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+      monthStatus: '选择月份',
+      yearStatus: '选择年份',
+      weekHeader: '周',
+      weekStatus: '年内周次',
+      dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+      dayNamesShort: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+      dayNamesMin: ['日', '一', '二', '三', '四', '五', '六'],
+      dayStatus: '设置 DD 为一周起始',
+      dateStatus: '选择 m月 d日, DD',
+      dateFormat: 'yy-mm-dd',
+      firstDay: 1,
+      initStatus: '请选择日期',
+      isRTL: false
+    };
+    $.datepicker.setDefaults($.datepicker.regional['zh-CN']);
+    $("#date_yy-mm-dd").datepicker({
+      maxDate: new Date()
+    });
+    $("#date_yy-mm-dd").prop("readonly", true).datepicker({
+      changeMonth: true,
+      dateFormat: "yy-mm-dd",
+      onClose: function (selectedDate) {}
+    });
+  }
+
+  function getfinalStatus() {
+    $.ajax({
+      type: "post",
+      async: false,
+      url: ip_path + "/changfa_system/machineFlow/updateAlert.do",
+      data: {
+        token: $(window.parent.document).find("input[name='token']").val(),
+        id: $(window.parent.document).find("input[name='alertId']").val(),
+        status: $('#alarmType').val(),
+        remove_alert: $('#radio').css('background-color') == 'rgb(255, 0, 0)' ? 0 : 1
+      },
+      dataType: "json",
+      success: function (param) {
+          
+        //$('#status_describe').html($('#status_describe').html() + $(window.parent.document).find("input[name='alarm']").val());
+        
+        if (param['head']['code'] == 200) {
+          //alert(123);
+          if($('#radio').hasClass('radio_green')){
+            $('#status_describe').html('当前状态：解除报警');
+          }
+          
+          //return false;
+          var status;
+          if ($('#alarmType').val() == 1) {
+            status = '已销售';
+          } else if ($('#alarmType').val() == 2) {
+            status = '未销售';
+          } else if ($('#alarmType').val() == 3) {
+            status = '外出参展';
+          }
+
+          $(window.parent.document).find("input[name='finalStatus']").val(status);
+          $(window.parent.document).find("input[name='approvalStage']").val(4);
+          //window.location.reload();
+        } else {
+          alert(param['head']['message'])
+        }
+      }
+    })
+  }
+</script>
+
+</html>

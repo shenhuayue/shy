@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>创建销售员</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/userCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <script src="jqueryTagsInput/jquery.tagsinput.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="jqueryTagsInput/jquery.tagsinput.min.css" />
+</head>
+<body class="reset">
+<div class="mg-t70" style="height: auto">
+    <div id="detail_frame" class="rpt_cont">
+        <div>
+            <div class="title_box">
+                <img src="img/status_warning.png" class="status_warning">
+                <span id="status_describe" class="status_info">当前状态：创建销售员</span>
+            </div>
+            <div class="rpt_detail">
+                <div class="tit_msg">
+                    <img src="img/tit_pic.png" class="tit_pic">
+                    <span>销售员信息</span>
+                </div>
+                <div>
+                    <table id="reporterInfo" class="rpt_detail_tab txt_center">
+                        <tr>
+                            <td class='head_td' width='136px' height='46px'>角色等级</td>
+                            <td class='body_td txt_left' width='383px'>
+                                <select id="role" class="addressInfo">
+                                    <option value="3">大区经理</option>
+                                    <option value="4">省经理</option>
+                                    <option value="5">业务员</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class='head_td' width='136px' height='46px'>姓名</td>
+                            <td class='body_td txt_left' width='383px'>
+                                <input type="text" id="createName" class="userInfo">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class='head_td' width='136px' height='46px'>工号</td>
+                            <td class='body_td txt_left' width='383px'>
+                                <input type="text" id="createWorkNo" class="userInfo">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class='head_td' width='136px' height='46px'>电话</td>
+                            <td class='body_td txt_left' width='383px'>
+                                <input type="text" id="createMobile" class="userInfo">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class='head_td' width='136px' height='46px'>业务范围</td>
+                            <td class='body_td txt_left'>
+
+                                <input id="tags_1" type="text" class="tagsinput" readonly="readonly"/>
+
+                                <div class="flt_l">
+                                    <select id="province1" class="addressInfo">
+                                        <option value="">添加省</option>
+                                        <option value="北京">北京</option>
+                                        <option value="安徽">安徽</option>
+                                        <option value="福建">福建</option>
+                                        <option value="甘肃">甘肃</option>
+                                        <option value="广东">广东</option>
+                                        <option value="广西">广西</option>
+                                        <option value="贵州">贵州</option>
+                                        <option value="海南">海南</option>
+                                        <option value="黑龙江">黑龙江</option>
+                                        <option value="湖北">湖北</option>
+                                        <option value="湖南">湖南</option>
+                                        <option value="吉林">吉林</option>
+                                        <option value="江苏">江苏</option>
+                                        <option value="江西">江西</option>
+                                        <option value="辽宁">辽宁</option>
+                                        <option value="内蒙古">内蒙古</option>
+                                        <option value="宁夏">宁夏</option>
+                                        <option value="青海">青海</option>
+                                        <option value="山东">山东</option>
+                                        <option value="山西">山西</option>
+                                        <option value="陕西">陕西</option>
+                                        <option value="上海">上海</option>
+                                        <option value="四川">四川</option>
+                                        <option value="天津">天津</option>
+                                        <option value="西藏">西藏</option>
+                                        <option value="新疆">新疆</option>
+                                        <option value="云南">云南</option>
+                                        <option value="浙江">浙江</option>
+                                        <option value="重庆">重庆</option>
+                                        <option value="香港">香港</option>
+                                        <option value="澳门">澳门</option>
+                                        <option value="台湾">台湾</option>
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class='head_td' width='136px' height='46px'>产品线范围</td>
+                            <td class='body_td txt_left'>
+
+                                <input id="tags_2" type="text" class="tagsinput" readonly="readonly"/>
+
+                                <div class="flt_l">
+                                    <select id="line" class="addressInfo">
+                                        <option value="">选择产品线</option>
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class='head_td' width='136px' height='46px'>所属公司</td>
+                            <td class='body_td txt_left' width='383px'>
+                                <input type="text" id="createCompany" class="userInfo" value="常州常发农业机械营销有限公司" disabled="true">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="mg_b50" style="width: 90%;margin-left: 5%;text-align: center;">
+                    <button class="waves submit_btn mg-t30" onclick="createSaler()">提交</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/machineModel/getMachineModels.do",
+            dataType : "json",
+            success : function (data) {
+                for(var i=0;i<data['body']['resultList']['length'];i++){
+                    $("#line").append("<option value='"+ data['body']['resultList'][i]['number'] +"'>"+data['body']['resultList'][i]['name']+"</option>");
+                }
+                $("#line").unbind();
+            }
+        });
+
+        $("#province1").change(function () {
+            if($("#province1 option:selected").val() != ""){
+                add();
+            }
+        });
+
+        $(function(){
+            $('#tags_1').tagsInput({width:'auto'});//这样做的目的是，使tags_1能够变成标签。
+        });
+
+        function add(){
+            var tags = $("#province1 option:selected").val();
+            if (!$('#tags_1').tagExist(tags)){
+                $("#tags_1").addTag(tags,{focus:false,callback:false});
+            }else{
+                alert("该选项已存在！");
+            }
+            $("#province1").html(
+                '<option value="">添加省</option>' +
+                '<option value="北京">北京</option>' +
+                '<option value="安徽">安徽</option>' +
+                '<option value="福建">福建</option>' +
+                '<option value="甘肃">甘肃</option>' +
+                '<option value="广东">广东</option>' +
+                '<option value="广西">广西</option>' +
+                '<option value="贵州">贵州</option>' +
+                '<option value="海南">海南</option>' +
+                '<option value="黑龙江">黑龙江</option>' +
+                '<option value="湖北">湖北</option>' +
+                '<option value="湖南">湖南</option>' +
+                '<option value="吉林">吉林</option>' +
+                '<option value="江苏">江苏</option>' +
+                '<option value="江西">江西</option>' +
+                '<option value="辽宁">辽宁</option>' +
+                '<option value="内蒙古">内蒙古</option>' +
+                '<option value="宁夏">宁夏</option>' +
+                '<option value="青海">青海</option>' +
+                '<option value="山东">山东</option>' +
+                '<option value="山西">山西</option>' +
+                '<option value="陕西">陕西</option>' +
+                '<option value="上海">上海</option>' +
+                '<option value="四川">四川</option>' +
+                '<option value="天津">天津</option>' +
+                '<option value="西藏">西藏</option>' +
+                '<option value="新疆">新疆</option>' +
+                '<option value="云南">云南</option>' +
+                '<option value="浙江">浙江</option>' +
+                '<option value="重庆">重庆</option>' +
+                '<option value="香港">香港</option>' +
+                '<option value="澳门">澳门</option>' +
+                '<option value="台湾">台湾</option>'
+            );
+        }
+
+        $("#line").change(function () {
+            if($("#line option:selected").val() != ""){
+                add_line();
+            }
+        });
+
+        $(function(){
+            $('#tags_2').tagsInput({width:'auto'});//这样做的目的是，使tags_1能够变成标签。
+        });
+
+        function add_line(){
+            var tags = $("#line option:selected").text();
+            if (!$('#tags_2').tagExist(tags)){
+                $("#tags_2").addTag(tags,{focus:false,callback:false});
+            }else{
+                alert("该选项已存在！");
+            }
+        }
+    }
+</script>
+</html>

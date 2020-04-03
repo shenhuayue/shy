@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户档案详情</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/dsaleCenter.js"></script>
+    <script src="js/userCenter.js"></script>
+    <script src="js/dcommon.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <script src="jqueryTagsInput/jquery.tagsinput.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="jqueryTagsInput/jquery.tagsinput.min.css" />
+    <!-- 这里要配置参数key,将其值设置为高德官网开发者获取的key -->
+    <script src="http://webapi.amap.com/maps?v=1.3&key=1e7ce268607a7319fdfe6b430761cbcb"></script>
+    <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css"/>
+    <script src="http://cache.amap.com/lbs/static/es5.min.js"></script>
+    <script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
+    <link href="layer/mobile/need/layer.css" type="text/css" rel="stylesheet"/>
+    <script src="layer/layer.js"></script>
+    <script src="js/jquery-2.1.1.js"></script>
+    <script src="jquery-ui-1.12.1/jquery-ui.min.js"></script>
+    <link href="jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet" />
+    <script src="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.js"></script>
+    <script type="text/javascript" src="jQuery-Timepicker/dist/i18n/jquery-ui-timepicker-zh-CN.js"></script>
+    <link href="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.css" rel="stylesheet" />
+</head>
+<body class="reset">
+
+<div id="editMachineInfo" class="addTopic outShadow" style="display: none;">
+    <div class="dealer_title">
+        <span>编辑农机信息</span>
+        <img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeEditMachineInfo()">
+    </div>
+    <div style="width: 100%;height: auto;border: 1px solid #E4E4E4;border-top: none;">
+        <div class="tit_msg">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>农机信息</span>
+        </div>
+        <div>
+            <table class="rpt_detail_tab txt_center">
+                <tr>
+                    <td class='head_td' width='136px' height='46px'>产品线</td>
+                    <td class='body_td txt_left' width='383px'>
+                        <select id="updateLine" class="userInfo"></select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class='head_td' width='136px' height='46px'>产品系列</td>
+                    <td class='body_td txt_left' width='383px'>
+                        <select id="updateSeries" class="userInfo"></select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class='head_td' width='136px' height='46px'>产品型号</td>
+                    <td class='body_td txt_left' width='383px'>
+                        <select id="updateModel" class="userInfo"></select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class='head_td' width='136px' height='46px'>出厂编号</td>
+                    <td class='body_td txt_left' width='383px'>
+                        <input type="text" id="updateFactoryNum" class="userInfo">
+                    </td>
+                </tr>
+                <tr>
+                    <td class='head_td' width='136px' height='46px'>IMEI号</td>
+                    <td class='body_td txt_left' width='383px'>
+                        <input type="text" id="updateImei" class="userInfo">
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="mg_b50" style="width: 100%;text-align: center">
+            <button class="waves submit_btn mg-t30" onclick="updateMachineInfo()">提交</button>
+        </div>
+    </div>
+</div>
+<div style="width: 90%;margin-left: 5%">
+    <div class="dealerInfo" style="height: 160px;">
+        <div class="flt_l">
+            <img id="user_head" class="dealer_head" src="" style="margin-top: 30px;">
+        </div>
+        <div class="flt_l">
+            <p class="color_5e">姓&nbsp;&nbsp;&nbsp;&nbsp;名&nbsp;&nbsp;&nbsp;：<span class="color_66 size_14" id="name"></span></p>
+            <p class="color_5e">身份证号：<span class="color_66 size_14" id="idCard"></span></p>
+            <p class="color_5e">联系电话：<span class="color_66 size_14" id="mobile"></span></p>
+            <p class="color_5e">家庭住址：<span class="color_66 size_14" id="address"></span></p>
+        </div>
+
+    </div>
+
+    <!--<div style="width: 100%;">-->
+        <!--<div class="dealer_title">农机数量：<span id="machineTotal"></span>&nbsp;&nbsp;台</div>-->
+        <!--<div class="machine_auto" style="height: 200px;">-->
+            <!--<div class="toogle_machine_div flt_l">-->
+                <!--<img src="img/machine_left.png" id="pre" class="toogle_machine" onclick="pre3()">-->
+            <!--</div>-->
+            <!--<div id="machineList" class="flt_l" style="height: 200px;width: 90%">-->
+                <!--<div id="tag0" class="machine_mark flt_l" onclick="chooseIt(this)">-->
+                    <!--<div class="flt_l mg-t30 mg_l30">-->
+                        <!--<img id="machine_pic0" class="pic_machine" src="">-->
+                    <!--</div>-->
+                    <!--<div class="flt_l" style="font-size: 0.875em;margin-left: 7%">-->
+                        <!--<p id="modelName0" class="txt_left" style="width: 150px;word-break: break-all"></p>-->
+                        <!--<p id="factoryNum0" class="txt_left" style="width: 150px;word-break: break-all"></p>-->
+                        <!--<p id="barCode0" class="txt_left" style="width: 150px;word-break: break-all"></p>-->
+                        <!--<input type="hidden" id="machineId0" value="">-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div id="tag1" class="machine_mark flt_l mg_l15" onclick="chooseIt(this)">-->
+                    <!--<div class="flt_l mg-t30 mg_l30">-->
+                        <!--<img id="machine_pic1" class="pic_machine" src="">-->
+                    <!--</div>-->
+                    <!--<div class="flt_l" style="font-size: 0.875em;margin-left: 7%">-->
+                        <!--<p id="modelName1" class="txt_left" style="width: 150px;word-break: break-all"></p>-->
+                        <!--<p id="factoryNum1" class="txt_left" style="width: 150px;word-break: break-all"></p>-->
+                        <!--<p id="barCode1" class="txt_left" style="width: 150px;word-break: break-all"></p>-->
+                        <!--<input type="hidden" id="machineId1" value="">-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div id="tag2" class="machine_mark flt_l mg_l15" onclick="chooseIt(this)">-->
+                    <!--<div class="flt_l mg-t30 mg_l30">-->
+                        <!--<img id="machine_pic2" class="pic_machine" src="">-->
+                    <!--</div>-->
+                    <!--<div class="flt_l" style="font-size: 0.875em;margin-left: 7%">-->
+                        <!--<p id="modelName2" class="txt_left" style="width: 150px;word-break: break-all"></p>-->
+                        <!--<p id="factoryNum2" class="txt_left" style="width: 150px;word-break: break-all"></p>-->
+                        <!--<p id="barCode2" class="txt_left" style="width: 150px;word-break: break-all"></p>-->
+                        <!--<input type="hidden" id="machineId2" value="">-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="toogle_machine_div flt_l">-->
+                <!--<img src="img/machine_right.png" id="next" class="toogle_machine" onclick="next3()">-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+
+    <!--<div style="height: 20px;"></div>-->
+
+    <div class="dealerInfo" style="height: 250px;">
+        <div class="flt_l">
+            <img id="machine_head" class="dealer_head" src="" style="margin-top: 70px;">
+        </div>
+        <div class="flt_l" style="width:30%">
+            <p class="color_5e">产&nbsp;品&nbsp;线&nbsp;：<span class="color_66 size_14" id="line"></span></p>
+            <p class="color_5e">产品系列：<span class="color_66 size_14" id="series"></span></p>
+            <p class="color_5e">产品型号：<span class="color_66 size_14" id="model"></span></p>
+            <p class="color_5e">出厂编号：<span class="color_66 size_14" id="factoryNum"></span></p>
+            <p class="color_5e">条&nbsp;码&nbsp;号&nbsp;：<span class="color_66 size_14" id="barCode"></span></p>
+            <p class="color_5e">购买日期：<span class="color_66 size_14" id="buyTime"></span></p>
+            <p><input type="hidden" id="lineNum"></p>
+            <p><input type="hidden" id="seriesNum"></p>
+            <p><input type="hidden" id="modelNum"></p>
+            <p><input type="hidden" id="configDes"></p>
+        </div>
+        <div class="flt_l">
+            <p class="color_5e">经&nbsp;销&nbsp;商&nbsp;：<span class="color_66 size_14" id="dealer"></span></p>
+            <p class="color_5e">三&nbsp;包&nbsp;期&nbsp;：<span class="color_66 size_14" id="serviceDate"></span></p>
+            <p class="color_5e">发动机号：<span class="color_66 size_14" id="engineNum"></span></p>
+            <p class="color_5e">发动机类：<span class="color_66 size_14" id="engineBrand"></span></p>
+            <p class="color_5e">配置描述：<span class="color_66 size_14" style="text-decoration : underline" id="shortDes" onclick="viewConfiguration()"></span></p>
+        </div>
+        <div class="flt_r mg-r50 mg-t20">
+            <div class="flt_r" style="margin-top: 5px;">
+                
+                <!-- <span class="mg-r20">编辑</span><img src="img/edit.png" style="vertical-align: middle" onclick="editMachineInfo()"> -->
+                <input type="button" class="submit_btn flt_r mg_l30" value="编辑" onclick="editMachineInfo()">
+                <input id="payBtn" type="button" class="submit_btn flt_r" value="回款" onclick="payMoney()" style="display: none;">
+                
+            </div>
+        </div>
+    </div>
+
+    <div class="dealerInfo" style="height: 500px;" id="imeishow">
+        <div class="flt_l">
+            <img id="machine_head" class="dealer_head" src="img/userMachineLocation.png" style="margin-top: 200px;">
+        </div>
+        <div class="flt_l" style="width:35%;margin-left: -50px;">
+            <div style="margin-left:4%">
+                <span id="locksetspan">是否锁车：</span>
+                <img id="lockset" src="http://test.app.changfanz.net:3588/changfa_file/onon.png" class="mg-t5" onclick="toogle_lock(this)" style='top: 14px;position: relative;margin-right: 10px;height: 40px;width: auto;border-radius: 5px;'>
+                <input id="alarm" type="button" class="submit_btn" value="解除报警" onclick="removealarm()" >
+                <p class="color_5e">IMEI&nbsp;号&nbsp;：<span class="color_66 size_14" id="imei"></span></p>
+                <p class="color_5e">农机位置：<span class="color_66 size_14" id="location"></span></p>
+                <p class="color_5e">回款情况：<span class="color_66 size_14" id="payStatus"></span></p>
+                <span class="describ mg_l30">轨迹时间：</span>
+                <input id="date_start" class="timeChoose" placeholder="起始" style="width:100px">
+                <span>-</span>
+                <input id="date_end" class="timeChoose" placeholder="截止" style="width:100px">
+            </div>
+            <table cellpadding="0" cellspacing="0" class="table2" align="center" style="width:100%">
+                <thead>
+                <tr align="center">
+                    <th height="33" class="th2">日期</th>
+                    <th class="th2">工作里程</th>
+                    <th class="th2">工作时长</th>
+                    <th class="th2">更多</th>
+                </tr>
+                </thead>
+                <tbody id="workList">
+                    
+                </tbody>
+            </table>
+            <div id="barcon_s" class="barcon" >
+                <div id="barcon1_s" class="barcon1"></div>
+                <div id="barcon2_s" class="barcon2">
+                    <ul>
+                        <li><button id="firstPage_s" class="page_btn">首页</button></li>
+                        <li><button id="prePage_s" class="page_btn">上一页</button></li>
+                        <li><button id="nextPage_s" class="page_btn">下一页</button></li>
+                        <li><button id="lastPage_s" class="page_btn">尾页</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="machine_map" class="flt_l mg-t30 mg_l50" style="width: 45%;height: 400px;">
+
+        </div>
+        <div id="barcon_d" class="barcon" >
+            <div id="barcon1_d" class="barcon1" style="margin-left: 50%"></div>
+            <div id="barcon2_d" class="barcon2" style="display: none;">
+                <ul>
+                    <li><button id="firstPage_d" class="page_btn">首页</button></li>
+                    <li><button id="prePage_d" class="page_btn">上一页</button></li>
+                    <li><button id="nextPage_d" class="page_btn">下一页</button></li>
+                    <li><button id="lastPage_d" class="page_btn">尾页</button></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="dealerInfo" style="height: 400px;">
+        <div class="flt_l">
+            <img id="machine_head" class="dealer_head" src="img/userMachineRepHistory.png" style="margin-top: 150px;">
+        </div>
+        <div class="flt_l" style="width:80%;">
+            <table cellpadding="0" cellspacing="0" class="table2" align="center" style="width:100%">
+                <thead>
+                <tr align="center">
+                    <th height="33" class="th2">报修人电话</th>
+                    <th class="th2">姓名</th>
+                    <th class="th2">故障描述</th>
+                    <th class="th2">里程</th>
+                    <th class="th2">工时</th>
+                    <th class="th2">更多</th>
+                </tr>
+                </thead>
+                <tbody id="repList">
+                    
+                </tbody>
+            </table>
+            <div id="barcon" class="barcon" >
+                <div id="barcon1" class="barcon1"></div>
+                <div id="barcon2" class="barcon2">
+                    <ul>
+                        <li><button id="firstPage" class="page_btn">首页</button></li>
+                        <li><button id="prePage" class="page_btn">上一页</button></li>
+                        <li><button id="nextPage" class="page_btn">下一页</button></li>
+                        <li><button id="lastPage" class="page_btn">尾页</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/user/getUsersByUserId.do",
+            data : {
+                userId : $(window.parent.document).find("input[name='userArchivesId']").val()
+            },
+            dataType : "json",
+            success : function (data) {
+                if(data['head']['isSuccess']){
+                    if(data['body']['result']['headUrl'] != ""){
+                        $("#user_head").attr("src",data['body']['result']['headUrl']);
+                    }else {
+                        $("#user_head").attr("src","http://app.changfanz.net:3588/changfa_file/head.png");
+                    }
+
+                    $("#name").text(data['body']['result']['userName']);
+                    $("#mobile").text(data['body']['result']['mobile']);
+                    $("#idCard").text(data['body']['result']['idCard']);
+                    $("#address").text(data['body']['result']['address']);
+
+
+                }else{
+                    alert(data['head']['message']);
+                }
+            }
+        });
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/userMachine/queryMachineById.do",
+            data : {
+                userId : $(window.parent.document).find("input[name='userArchivesId']").val(),
+                machineId : $(window.parent.document).find("input[name='machineId']").val()
+            },
+            dataType : "json",
+            success : function (data) {
+                if(data['head']['code'] == 200){
+                    var path = "";
+                    if(data['body']['result']['lineNum'] == 611 || data['body']['result']['lineNum'] == 61101 || data['body']['result']['lineNum'] == 61102){
+                        path="img/chayangji.png";
+                    }else if(data['body']['result']['lineNum'] == 601){
+                        path="img/tuolaji.png";
+                    }else if(data['body']['result']['lineNum'] == 612 || data['body']['result']['lineNum'] == 615 || data['body']['result']['lineNum'] == 622 || data['body']['result']['lineNum'] == 628){
+                        path="img/shougeji.png";
+                    }else {
+                        path = "";
+                    }
+                    $("#machine_head").attr("src",path);
+                    $("#line").text(data['body']['result']['lineName']);
+                    $("#series").text(data['body']['result']['seriesName']);
+                    $("#model").text(data['body']['result']['modelName']);
+                    $("#factoryNum").text(data['body']['result']['factoryNum']);
+                    $("#barCode").text(data['body']['result']['barCode']);
+                    $(window.parent.document).find("input[name='barCode']").val(data['body']['result']['barCode']);
+                    if(data['body']['result']['imei']){
+                        $("#imei").text(data['body']['result']['imei']);
+                        $.ajax({
+                            type : "post",
+                            async : false,
+                            url : ip_path + "/changfa_system/api/getLockState.do",
+                            data : {
+                                bar_code:$(window.parent.document).find("input[name='barCode']").val(),
+                                token:$(window.parent.document).find("input[name='token']").val()
+                            },
+                            dataType : "json",
+                            success : function (data) {
+                                if(data.head.code == 200){
+                                    if(data.body.result == 1){
+                                        $('#lockset').attr('src','http://test.app.changfanz.net:3588/changfa_file/offoff.png');
+                                    }else{
+                                        $('#lockset').attr('src','http://test.app.changfanz.net:3588/changfa_file/onon.png');
+                                    }
+                                }else if(data.head.code == 505){
+                                    alert(data['head']['message']);
+                                    window.open("login.html","_parent");
+                                }else{
+                                    alert('锁车:'+data['head']['message']);
+                                }
+                            }
+                        });
+
+                        $.ajax({
+                            type : "post",
+                            async : false,
+                            url : ip_path + "/changfa_system/api/getAlertState.do",
+                            data : {
+                                bar_code:$(window.parent.document).find("input[name='barCode']").val(),
+                            },
+                            dataType : "json",
+                            success : function (data) {
+                                if(data.head.code == 200){
+                                    if(data.body.result == 1){
+                                        $('#alarm').show();
+                                    }else{
+                                        $('#alarm').hide();
+                                    }
+                                }else{
+                                    $('#alarm').hide();
+                                    alert('解除报警:'+data['head']['message'])
+                                }
+                            }
+                        })
+                    }else{
+                        $("#imeishow").hide();
+                    }
+                    $("#buyTime").text(data['body']['result']['buyTime']);
+                    $("#dealer").text(data['body']['result']['company']);
+                    $("#serviceDate").text(data['body']['result']['serviceDate']);
+                    $("#location").text(data['body']['result']['address']);
+                    $("#lineNum").val(data['body']['result']['lineNum']);
+                    $("#seriesNum").val(data['body']['result']['seriesNum']);
+                    $("#modelNum").val(data['body']['result']['modelNum']);
+                    $("#engineNum").text(data['body']['result']['engineNum']);
+                    $("#engineBrand").text(data['body']['result']['engineBrand']);
+                    $("#configDes").val(data['body']['result']['des']);
+                    if(data['body']['result']['des'] != ""){
+                        $("#shortDes").text(data['body']['result']['des'].substr(0,21) + "...");
+                    }
+                    
+                    var payStatus;
+                    if(data['body']['result']['isGetMoney'] == 0){
+                        payStatus = "未回款";
+                        $("#payBtn").show();
+                    }else if(data['body']['result']['isGetMoney'] == 1){
+                        payStatus = "已回款";
+                    }
+                    $("#payStatus").text(payStatus);
+
+                    if(data['body']['result']['lng'] != "" && data['body']['result']['lng'] != ""){
+                        map = new AMap.Map("machine_map",{
+                            resizeEnable: true,
+                            center:[data['body']['result']['lng'],data['body']['result']['lat']]
+                        });
+                        var marker_machine = new AMap.Marker({
+                            position: new AMap.LngLat(data['body']['result']['lng'],data['body']['result']['lat']),
+                            offset: new AMap.Pixel(-16, -45),
+                            icon: 'img/machine.png',
+                        });
+                        map.add(marker_machine);
+                        var msg_label = data['body']['result']['address'] ;
+                        marker_machine.setTitle(msg_label);
+                    }
+                    // }else{
+                    //     $("#machine_map").hide();
+                    // }
+                }else{
+                    alert(data['head']['message']);
+                }
+            }
+        });
+
+        
+
+        $.datepicker.regional['zh-CN'] = {
+            changeMonth: true,
+            changeYear: true,
+            clearText: '清除',
+            clearStatus: '清除已选日期',
+            closeText: '关闭',
+            closeStatus: '不改变当前选择',
+            prevText: '<上月',
+            prevStatus: '显示上月',
+            prevBigText: '<<',
+            prevBigStatus: '显示上一年',
+            nextText: '下月>',
+            nextStatus: '显示下月',
+            nextBigText: '>>',
+            nextBigStatus: '显示下一年',
+            currentText: '今天',
+            currentStatus: '显示本月',
+            monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            monthNamesShort: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+            monthStatus: '选择月份',
+            yearStatus: '选择年份',
+            weekHeader: '周',
+            weekStatus: '年内周次',
+            dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+            dayNamesShort: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+            dayNamesMin: ['日', '一', '二', '三', '四', '五', '六'],
+            dayStatus: '设置 DD 为一周起始',
+            dateStatus: '选择 m月 d日, DD',
+            dateFormat: 'yy-mm-dd',
+            firstDay: 1,
+            initStatus: '请选择日期',
+            isRTL: false
+        };
+
+        $.datepicker.setDefaults($.datepicker.regional['zh-CN']);
+        $("#date_start").datepicker({maxDate:new Date()});
+        $("#date_end").datepicker({maxDate:new Date()});
+        $("#defult").datetimepicker();
+        $("#date_start").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            clear : "qingkong",
+            onClose: function(selectedDate) {
+                $("#date_end").datepicker("option", "minDate", selectedDate);
+            }
+        });
+
+        $("#date_end").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            onClose: function(selectedDate) {
+                $("#date_start").datepicker("option", "maxDate", selectedDate);
+                $("#date_end").val($(this).val());
+            }
+        });
+
+        $("#date_start").change(function () {
+            if($("#date_start").val() != "" && $("#date_end").val() != ""){
+                page_work = 1;
+                ajax_machineWorkM();
+            }
+        });
+        $("#date_end").change(function () {
+            if($("#date_start").val() != "" && $("#date_end").val() != ""){
+                page_work = 1;
+                ajax_machineWorkM();
+            }
+        });
+
+        page_work = 1;
+        $('#firstPage_s').attr('disabled',true);
+        $('#prePage_s').attr('disabled',true);
+        $("#firstPage_s").click(function () {
+            $('#lastPage_s').removeAttr('disabled');
+            $('#nextPage_s').removeAttr('disabled');
+            page_work = 1;
+            $('#firstPage_s').attr('disabled',true);
+            $('#prePage_s').attr('disabled',true);
+            ajax_machineWorkM();
+        });
+        $("#lastPage_s").click(function () {
+            $('#firstPage_s').removeAttr('disabled');
+            $('#prePage_s').removeAttr('disabled');
+            page_work = totalPage_work;
+            $('#lastPage_s').attr('disabled',true);
+            $('#nextPage_s').attr('disabled',true);
+            ajax_machineWorkM();
+        });
+        $("#nextPage_s").click(function () {
+            $('#firstPage_s').removeAttr('disabled');
+            $('#prePage_s').removeAttr('disabled');
+            page_work = page_work+1;
+            if(page_work == totalPage_work){
+                $('#lastPage_s').attr('disabled',true);
+                $('#nextPage_s').attr('disabled',true);
+            }else{
+                $('#lastPage_s').removeAttr('disabled');
+                $('#nextPage_s').removeAttr('disabled');
+            }
+            ajax_machineWorkM();
+        });
+        $("#prePage_s").click(function () {
+            $('#lastPage_s').removeAttr('disabled');
+            $('#nextPage_s').removeAttr('disabled');
+            page_work = page_work-1;
+            if(page_work == 1){
+                $('#firstPage_s').attr('disabled',true);
+                $('#prePage_s').attr('disabled',true);
+            }else{
+                $('#firstPage_s').removeAttr('disabled');
+                $('#prePage_s').removeAttr('disabled');
+            }
+            ajax_machineWorkM();
+        });
+
+        ajax_machineWorkM();
+
+        pag_dev = 1;
+        $('#firstPage_d').attr('disabled',true);
+        $('#prePage_d').attr('disabled',true);
+        $("#firstPage_d").click(function () {
+            $('#lastPage_d').removeAttr('disabled');
+            $('#nextPage_d').removeAttr('disabled');
+            pag_dev = 1;
+            $('#firstPage_d').attr('disabled',true);
+            $('#prePage_d').attr('disabled',true);
+            showMachineMove();
+        });
+        $("#lastPage_d").click(function () {
+            $('#firstPage_d').removeAttr('disabled');
+            $('#prePage_d').removeAttr('disabled');
+            pag_dev = totalPage_dev;
+            $('#lastPage_d').attr('disabled',true);
+            $('#nextPage_d').attr('disabled',true);
+            showMachineMove();
+        });
+        $("#nextPage_d").click(function () {
+            $('#firstPage_d').removeAttr('disabled');
+            $('#prePage_d').removeAttr('disabled');
+            pag_dev = pag_dev+1;
+            if(pag_dev == totalPage_dev){
+                $('#lastPage_d').attr('disabled',true);
+                $('#nextPage_d').attr('disabled',true);
+            }else{
+                $('#lastPage_d').removeAttr('disabled');
+                $('#nextPage_d').removeAttr('disabled');
+            }
+            showMachineMove();
+        });
+        $("#prePage_d").click(function () {
+            $('#lastPage_d').removeAttr('disabled');
+            $('#nextPage_d').removeAttr('disabled');
+            pag_dev = pag_dev-1;
+            if(pag_dev == 1){
+                $('#firstPage_d').attr('disabled',true);
+                $('#prePage_d').attr('disabled',true);
+            }else{
+                $('#firstPage_d').removeAttr('disabled');
+                $('#prePage_d').removeAttr('disabled');
+            }
+            showMachineMove();
+        });
+
+        currentPage = 1;
+        $('#firstPage').attr('disabled',true);
+        $('#prePage').attr('disabled',true);
+        $("#firstPage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = 1;
+            $('#firstPage').attr('disabled',true);
+            $('#prePage').attr('disabled',true);
+            ajax_machineRepHistory();
+        });
+        $("#lastPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = currentPage;
+            $('#lastPage').attr('disabled',true);
+            $('#nextPage').attr('disabled',true);
+            ajax_machineRepHistory();
+        });
+        $("#nextPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = currentPage+1;
+            if(currentPage == currentPage){
+                $('#lastPage').attr('disabled',true);
+                $('#nextPage').attr('disabled',true);
+            }else{
+                $('#lastPage').removeAttr('disabled');
+                $('#nextPage').removeAttr('disabled');
+            }
+            ajax_machineRepHistory();
+        });
+        $("#prePage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = currentPage-1;
+            if(currentPage == 1){
+                $('#firstPage').attr('disabled',true);
+                $('#prePage').attr('disabled',true);
+            }else{
+                $('#firstPage').removeAttr('disabled');
+                $('#prePage').removeAttr('disabled');
+            }
+            ajax_machineRepHistory();
+        });
+
+        ajax_machineRepHistory();
+    }
+</script>
+</html>

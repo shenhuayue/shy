@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>物流竞标</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/saleCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/changfachenhao.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <script src="jquery-ui-1.12.1/jquery-ui.min.js"></script>
+    <link href="jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet" />
+    <script src="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.js"></script>
+    <script type="text/javascript" src="jQuery-Timepicker/dist/i18n/jquery-ui-timepicker-zh-CN.js"></script>
+    
+    <link href="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.css" rel="stylesheet" />
+   
+</head>
+<body class="reset">
+    <div class="mg-t50">
+        <div class="tit">
+            <span class="flt_l">筛选查询</span>
+            <input type="button" class="add_btn flt_r" value="清空" onclick="clearDate()">
+            <input type="button" class="add_btn flt_r" value="查询" onclick="queryLogisticsBidding()">
+            <!--<input type="button" class="add_btn flt_r" value="查询" onclick="queryDealer()">-->
+        </div>
+        <div class="account_cont2">
+            <!-- <select id="logistics_item" class="rep_guy_info">
+                <option value="logisticsNum">物流单号</option>
+                <option value="dealerName">中标公司</option>
+                <option value="startAddress">出发地</option>
+                <option value="endAddress">目的地</option>
+            </select>
+            <input type="text" id="logistics_info" class="product_line" style="border-left: none;"> -->
+
+            <span class="describ mg_l30">中标公司：</span>
+            <input type="text" class=" product_line" id="dealerName">
+
+            <span class="describ mg_l50">选择时间：</span>
+                <input id="startTime" class="timeChoose" placeholder="起始">
+                <span>-</span>
+            <input id="endTime" class="timeChoose" placeholder="截止" onclick="queryLogisticsBidding()">
+
+         <br>
+
+        </div>
+    </div>
+    <div>
+        <!-- 
+        <div class="tit mg-t50">
+            <span class="flt_l">竞标列表</span>
+            
+            <form id="form" action="" method="post">
+                <input type="hidden" name="dealerName" value="">
+                <input type="hidden" name="startTime" value="">
+                <input type="hidden" name="endTime" value="">
+                <input type="hidden" name="pageNum" value="currentPage">
+                <input type="hidden" name="pageSize" value="1">
+                <input type="button" id="logisticsOutputs" class="output_btn flt_r" value="导出">
+            </form>
+            
+    
+        </div>
+       -->
+        <div class="account_cont">
+            <table width="100%" cellpadding="0" cellspacing="0" class="table2" align="center">
+                <thead>
+                <tr align="center">
+                    <th height="33"  width="25%" class="th2">物流公司名称</th>
+                    <th class="th2" width="15%">报价次数</th>
+                    <th class="th2" width="15%">已中标次数</th>
+                    <th class="th2" width="15%">中标率</th>
+                    <th class="th2" width="15%">参于率</th>
+                    <th class="th2" width="15%">中标费用</th>
+                   
+                    
+                </tr>
+                </thead>
+                <tbody id="adminTbody">
+                
+                </tbody>
+            </table>
+            <div id="barcon" class="barcon" >
+                <div id="barcon1" class="barcon1"></div>
+                <div id="barcon2" class="barcon2">
+                    <ul>
+                        <li><button id="firstPage" class="page_btn">首页</button></li>
+                        <li><button id="prePage" class="page_btn">上一页</button></li>
+                        <li><button id="nextPage" class="page_btn">下一页</button></li>
+                        <li><button id="lastPage" class="page_btn">尾页</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+   window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+        $.datepicker.regional['zh-CN'] = {
+            changeMonth: true,
+            changeYear: true,
+            clearText: '清除',
+            clearStatus: '清除已选日期',
+            closeText: '关闭',
+            closeStatus: '不改变当前选择',
+            prevText: '<上月',
+            prevStatus: '显示上月',
+            prevBigText: '<<',
+            prevBigStatus: '显示上一年',
+            nextText: '下月>',
+            nextStatus: '显示下月',
+            nextBigText: '>>',
+            nextBigStatus: '显示下一年',
+            currentText: '今天',
+            currentStatus: '显示本月',
+            monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            monthNamesShort: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+            monthStatus: '选择月份',
+            yearStatus: '选择年份',
+            weekHeader: '周',
+            weekStatus: '年内周次',
+            dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+            dayNamesShort: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+            dayNamesMin: ['日', '一', '二', '三', '四', '五', '六'],
+            dayStatus: '设置 DD 为一周起始',
+            dateStatus: '选择 m月 d日, DD',
+            dateFormat: 'yy-mm-dd',
+            firstDay: 1,
+            initStatus: '请选择日期',
+            isRTL: false
+        };
+
+        $.datepicker.setDefaults($.datepicker.regional['zh-CN']);
+        $("#defult").datetimepicker();
+        $("#startTime").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            onClose: function(selectedDate) {
+                $("#endTime").datepicker("option", "minDate", selectedDate);
+            }
+        });
+
+        $("#endTime").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            onClose: function(selectedDate) {
+                $("#startTime").datepicker("option", "maxDate", selectedDate);
+                $("#endTime").val($(this).val());
+            }
+        });
+
+        currentPage = 1;
+        $('#firstPage').attr('disabled',true);
+        $('#prePage').attr('disabled',true);
+        $("#firstPage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = 1;
+            $('#firstPage').attr('disabled',true);
+            $('#prePage').attr('disabled',true);
+            ajax_logibidding();
+        });
+        $("#lastPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = totalPage;
+            $('#lastPage').attr('disabled',true);
+            $('#nextPage').attr('disabled',true);
+            ajax_logibidding();
+        });
+        $("#nextPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = currentPage+1;
+            if(currentPage == totalPage){
+                $('#lastPage').attr('disabled',true);
+                $('#nextPage').attr('disabled',true);
+            }else{
+                $('#lastPage').removeAttr('disabled');
+                $('#nextPage').removeAttr('disabled');
+            }
+            ajax_logibidding();
+        });
+        $("#prePage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = currentPage-1;
+            if(currentPage == 1){
+                $('#firstPage').attr('disabled',true);
+                $('#prePage').attr('disabled',true);
+            }else{
+                $('#firstPage').removeAttr('disabled');
+                $('#prePage').removeAttr('disabled');
+            }
+            ajax_logibidding();
+        });
+        //初始化
+        ajax_logibidding();
+
+        $("#logisticsOutputs").click(function () {
+            $("input[name='dealerName']").val($("#dealerName").val());
+            $("input[name='startTime']").val($("#startTime").val());
+            $("input[name='endTime']").val($("#endTime").val());
+            $("input[name='pageNum']").val($("#pageNum").val());
+            $("input[name='pageSize']").val($("#pageSize").val());
+            $("#form").attr("action",ip_path + "/changfa_system/logistics/getLogisticBiddingRateWeb.do");
+            $("#form").submit();
+        });
+    }
+
+    function addLogisticsBidding() {  
+        window.open("addLogisticsBidding.html","_self");
+    }
+
+    function queryLogisticsBidding() {  
+        currentPage = 1;
+        ajax_logibidding();
+    }
+
+    $('.timeChoose').datepicker({ onSelect: function() {
+        currentPage = 1;
+        ajax_logibidding();
+     }
+     });
+
+    function showLogisticsBiddingDetails(param) {  
+        $(window.parent.document).find("input[name='logisticsBiddingId']").val(param.parentNode.parentNode.id);
+        window.open("logisticsBiddingDetails.html","_self");
+    }
+</script>
+</html>

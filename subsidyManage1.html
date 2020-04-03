@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>产品维护</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <link href="css/threePackspolicy.css" type="text/css" rel="stylesheet"/>
+    <script src="js/jquery-1.9.1.js"></script>
+    <script src="jquery-ui-1.12.1/jquery-ui.min.js"></script>
+    <link href="jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet" />
+    <script src="js/subsidybt.js"></script>
+    <script src="js/dcommon.js"></script>
+    <script src="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.js"></script>
+    <script type="text/javascript" src="jQuery-Timepicker/dist/i18n/jquery-ui-timepicker-zh-CN.js"></script>
+    <link href="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.css" rel="stylesheet" />
+</head>
+<body class="reset">
+    <style>
+        .radio_type{
+            width: 20px;
+            height: 20px;
+            appearance: none;
+            position: relative;
+        }
+        .radio_type:before{
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: 1px solid #cfcfcf;
+            background:#cfcfcf;
+            display: inline-block;
+            border-radius: 50%;   
+            vertical-align: middle;
+        }
+        .radio_type:after{
+            content: '';
+            width: 10px;
+            height:5px;
+            border: 2px solid white;
+            border-top: transparent;
+            border-right: transparent;
+            text-align: center;
+            display: block;
+            position: absolute;
+            top: 6px;
+            left:5px;
+            vertical-align: middle;
+            transform: rotate(-45deg);
+        }
+        .radio_type.radio_types:before{
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: 1px solid #1ABC9C;
+            background:#1ABC9C;
+            display: inline-block;
+            border-radius: 50%;
+            vertical-align: middle;
+        }
+        .radio_type:checked:after{
+            content: '';
+            width: 10px;
+            height:5px;
+            border: 2px solid white;
+            border-top: transparent;
+            border-right: transparent;
+            text-align: center;
+            display: block;
+            position: absolute;
+            top: 6px;
+            left:5px;
+            vertical-align: middle;
+            transform: rotate(-45deg);
+        }
+        
+        </style>
+    <div>
+        <div class="tit mg-t50">
+            <span class="flt_l">补贴数据维护</span>
+            
+        </div>
+        
+        <div class="account_cont" style="box-shadow:none;">
+            <div class="account_cont" style="box-shadow:none;">
+                <div class="flt_l" style="text-align:left;width:32%;">
+                    <p class="color_5e">年份:<span style="margin-left:20px;"><input type="text" id="year" class="product_linea color_66 size_14" value="" style="width:150px;"></span></p>
+                    <p class="color_5e">省份:<span style="margin-left:20px;"><input type="text" id="province" class="product_linea color_66 size_14" value="" style="width:150px;"></span></p>
+                    <p class="color_5e">市:<span style="margin-left:20px;"><input type="text" id="city" class="product_linea color_66 size_14" value="" style="width:150px;"></span></p>
+                    <p class="color_5e">区:<span style="margin-left:20px;"><input type="text" id="county" class="product_linea color_66 size_14" value="" style="width:150px;"></span></p>
+                    <p class="color_5e">所在乡（镇）:<span style="margin-left:20px;"><input type="text" id="town" class="product_linea color_66 size_14" value="" style="width:150px;"></span></p>
+                    <p class="color_5e">地址:<span style="margin-left:20px;"><input type="text" id="address" class="product_linea color_66 size_14" value="" style="width:150px;"></span></p>
+                    <p class="color_5e">购买者名称:<span style="margin-left:20px;"><input type="text" id="name" class="product_linea color_66 size_14" value="" style="width:150px;"></span></p>
+                    <p class="color_5e">产品线:<span style="margin-left:20px;"><input type="text" id="line" class="product_linea color_66 size_14" value="" style="width:250px;"></span></p>
+                    
+
+                </div>
+                <div class="flt_l" style="text-align:left;width:32%;">
+                    <p class="color_5e">生产厂家:<span style="margin-left:20px;"><input type="text" id="factory" class="product_linea color_66 size_14" value="" style="width:150px;"></span></p>
+                    <p class="color_5e">产品系列:<span style="margin-left:20px;"><input type="text" id="series" class="product_linea color_66 size_14" value="" style="width:150px;"></span></p>
+                    <p class="color_5e">产品型号:<span style="margin-left:20px;"><input type="text" id="model" class="product_linea color_66 size_14" value="" style="width:150px;"></span></p>
+                    <p class="color_5e">购买数量（台）:<span style="margin-left:20px;"><input type="text" id="count" class="product_linea color_66 size_14" value="" style="width:150px;"></span></p>
+                    <p class="color_5e">经销商:<span style="margin-left:20px;"><input type="text" id="dis" class="product_linea color_66 size_14" value="" style="width:250px;"></span></p>
+                    <p class="color_5e">单台销售价格:<span style="margin-left:20px;"><input type="text" id="price" class="product_linea color_66 size_14" value="" style="width:150px;"></span></p>
+                    <p class="color_5e">单台补贴额（国家）:<span style="margin-left:20px;"><input type="text" id="sub" class="product_linea color_66 size_14" value="" style="width:150px;"></span></p>
+                    <p class="color_5e">总补贴额:<span style="margin-left:20px;"><input type="text" id="total" class="product_linea color_66 size_14" value="" style="width:150px;"></span></p>
+                    
+                </div>
+            </div>
+            <br/>
+            <br/>
+            <div class="account_cont" style="box-shadow:none;">
+            <p style="text-align:center;padding-top:50px;padding-bottom:50px;"><img src="img/yes.png" onclick="addSubprobutie()" style="width:50px;"></p>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+    window.onload = function () {
+
+        jQuery.support.cors = true;
+        toTop();
+        ajax_getbutiemessage();
+        
+
+
+        
+    }
+</script>
+</html>

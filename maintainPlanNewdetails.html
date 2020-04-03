@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>计划详情</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/userCenter.js"></script>
+    <script src="js/dcommon.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <script src="js/maintainby.js"></script>
+</head>
+<body class="reset">
+    <style>
+        input[type="radio"] {
+            position:absolute;
+            clip:rect(0,0,0,0);
+        }
+        input[type="radio"] + label::after {
+            content:'';
+            background:#fff;
+            border:2px solid #A3A3A3;
+            width:10px;
+            height:10px;
+            border-radius:50%;
+            float:right;
+            margin-right:6px;
+            margin-top:2px;
+        }
+        input[type="radio"]:checked + label::after {
+            width:6px;
+            height:6px;
+            background:#1ABC9C;
+            background-clip:content-box;
+            border:2px solid #1ABC9C;
+            padding:2px;
+        }
+    </style>
+    
+    <!--新增保养计划-->
+    <div>
+        <div class="tit mg-t50">
+            <span class="flt_l"></span>
+            <!--<input type="button" class="add_btn flt_r" value="创建" onclick="addThreeServer()">-->
+        </div>
+        <div class="account_cont">
+            <div class="rpt_detail" style="width:100%;margin-left:0;text-align:left;">
+                <div class="tit_msg1" style="padding-top:27px;">
+                    <img src="img/tit_pic.png" class="tit_pic">
+                    <span style="color:#5E5E5E;">保养计划&nbsp;&nbsp;</span>
+                    <input type="text" id="byname" class="new_name" value="" placeholder="" style="width:175px;height:26px;border:1px solid #BFBFBF;">
+                    <input type="button" class="savebtn" value="保存" onclick="savebytable1()" style="margin-left:182px;">
+                </div>
+                <div class="tit_msg1" style=margin-top:33px;>
+                        <img src="img/tit_pic.png" class="tit_pic">
+                        <span style="color:#5E5E5E;">产品系列：&nbsp;&nbsp;</span>
+                        <input type="button" class="delbtn" value="删除" onclick="deleteseries()" style="margin-left:250px;margin-right:15px;">
+                        <input type="button" class="add_btn" value="添加" onclick="addseries()"style="margin-top:0px;">
+                        <div class="flychanp" style="display:none;">
+                            <span class="linecp" style="display:inline-block;color:#5E5E5E;">产&nbsp;品&nbsp;线&nbsp;&nbsp;：
+                                <select id="process_cpx" class="product_line baoyangp">
+                                    <!--<option value="0">全部</option>
+                                    <option value="1">待派工</option>-->
+                                </select>
+                            </span>
+                            <span class="linecp" style="display:inline-block;color:#5E5E5E;">产品系列&nbsp;：
+                                    <select id="process_cpxl" class="product_line baoyangp">
+                                        <!--<option value="0">全部</option>
+                                        <option value="1">待派工</option>-->
+                                    </select>
+                            </span>
+                            <input type="button" onclick="baocuntk()" class="add_btn" value="保存" style="margin-left:87px;">
+                        </div>
+                </div>
+                <div id="xlecontent" id="error_d" class="">
+                </div>
+                <div class="tit_msg1" style=margin-top:33px;>
+                        <img src="img/tit_pic.png" class="tit_pic">
+                        <span style="color:#5E5E5E;">保养间隔：&nbsp;&nbsp;</span>
+                        <!--<input type="button" class="editbtn" value="编辑" onclick="" style="margin-left:250px;margin-right:15px;">-->
+                        <input type="button" class="delbtn" value="删除" onclick="deletejiange()" style="margin-left:250px;margin-right:15px;">
+                        <input type="button" class="add_btn" value="添加" onclick="jiangeadd()" style="margin-top:0px;">
+                        <div class="baoyangchanp" style="margin-left:611px;display:none">
+                            <span style="margin-left:20px;margin-top:21px;font-size:.8em;display:inline-block;color:#5E5E5E;float:left;">工作小时：</span>
+                            <input type="text" id="hour" class="linecp" value="" style="margin-top:16px;text-align:center;width: 67px;height:25px;border: 1px solid rgba(228,228,228,1);background: rgba(242,242,242,1);float:left;margin-left: 10px;">
+                            <input type="button" value="保存" onclick="bysj()" class="add_btn" style="width: 70px;
+                                height: 28px;
+                                float: left;
+                                margin-left: 10px;
+                                margin-top: 15px;
+                                margin-right:10px;">
+                        </div>
+
+                </div>
+                <div id="xlecontent2" type="text" id="error_d" class="">
+                    
+                </div>
+                <div class="byprocess">
+                    <div class="tit_msg1" style="margin-top:33px;margin-bottom:20px;">
+                        <img src="img/tit_pic.png" class="tit_pic">
+                        <span style="color:#5E5E5E;">保养项目&nbsp;&nbsp;</span>
+                        <input type="button" class="add_btn" value="添加" onclick="addxiangmu()" style="float:right;margin-top:0px;">
+                        <!--<input type="button" class="add_btn" value="删除" onclick="shanchuxiangmu()" style="float:right;margin-top:0px;">-->
+                    </div>
+                    <div>
+                        <table class="rpt_detail_tab1 txt_center mg_b50">
+                            <tr>
+                                <td class="head_td" height="46px">大项目名称</td>
+                                <td class="head_td">是否首保</td>
+                                <td class="head_td">是否必做</td>
+                                <td class="head_td">操作</td>
+                            </tr>
+                            <tbody id="adminTbody">
+                                <!--
+                                <tr>
+                                    <td class="body_td" height="46px">二零一九年第一次保养计划</td>
+                                    <td class="body_td true">是</td>
+                                    <td class="body_td showdetail" onclick="showbydetails()">查看详情</td>
+                                </tr>
+                                <tr>
+                                    <td class="body_td" height="46px">二零一九年第一次保养计划</td>
+                                    <td class="body_td false">否</td>
+                                    <td class="body_td showdetail" onclick="showbydetails()">查看详情</td>
+                                </tr>
+                                <tr>
+                                    <td class="body_td" height="46px">二零一九年第一次保养计划</td>
+                                    <td class="body_td">是</td>
+                                    <td class="body_td showdetail" onclick="showbydetails()">查看详情</td>
+                                </tr>-->
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+        
+        </div>
+    </div>
+</body>
+<!--弹框-->
+<div class="byskip" style="display:none;">
+    
+        <div class="byskip_content">
+            <div class="byskip_tit">
+                保养项目
+                <img src="img/byclose.png" style="float:right;padding:10px;cursor:pointer;" onclick="byclose()" >
+            </div>
+            <div class="byskip_nr">
+                    <input name="typeId" type="hidden"/>
+                <!--添加-->
+                <div class="tit_msg1 bigpro">
+                    <img src="img/tit_pic.png" class="tit_pic" style="width:13px;">
+                    <span style="color:#666;font-size:.8em;">大项目名称&nbsp;&nbsp;</span>
+                    <input type="text" value="" class="byinput" id="bytit1">
+                    <input type="button" value="保存" class="byinput" onclick="bybaocun()" id="bybaocun" style="width:100px;border-radius:5px;">
+                    <img src="img/add.png" class="btnzengjia" onclick="addbigprocess()" style="width:12px;display:none;">
+                </div>
+                <p style="font-size:.5em;color:#666;margin-top:10px;padding-left:52px;">
+                    <!--
+                    <span>
+                        <input class="radio" type="radio" name="tableType" id="historyInvoice" value="0">
+                        <label for="historyInvoice" style="float:left;">&nbsp;是否首保&nbsp;</label>
+                    </span>
+                    <span>
+                        <input class="radio" type="radio" name="tableType1" id="orderInvoice value="0">
+                        <label for="orderInvoice" style="float:left;">是否必做&nbsp;</label>
+                    </span>
+                    -->
+                    <span>
+                        <label for="checkin8">是否首保</label>
+                        <input name="fittype" type="checkbox"  value="8" id="checkin8" style="vertical-align: middle;"/>
+                    </span>
+                    <span>
+                        <label for="checkin9">是否必做</label>
+                        <input name="fittype" type="checkbox" value="8" id="checkin9" style="vertical-align: middle;"/>
+                    </span>
+                </p>
+                
+                <!--大项目点加号-->
+                <!--<div class="tit_msg1 bigpro"id="addbigprocess"  style="display:none;">
+                    <div class="tflse">
+                        <p style="font-size:.5em;color:#666;margin-bottom:0;margin-top:10px;">
+                            &nbsp;项目名称：
+                            <input type="text" value="" id="procontent" class="tflse1" style="width:84px;border:1px solid rgba(228,228,228,1);background:rgba(242,242,242,1);">
+                        </p>
+                        <p style="font-size:.5em;color:#666;margin-top:7px;">
+                            <input type="radio" name="tableType" id="historyInvoice" value="是否首保">
+                            <label for="historyInvoice" style="float:left;">&nbsp;是否首保&nbsp;</label>
+                            <input type="radio" name="tableType1" id="orderInvoice" value="是否必做">
+                            <label for="orderInvoice" style="float:left;">是否必做&nbsp;</label>
+                        </p>
+                    </div>
+                </div>-->
+                <div class="tit_msg1 smallpro" style="margin-top:30px;">
+                    <img src="img/tit_pic.png" class="tit_pic" style="width:13px;">
+                    <span style="color:#666;font-size:.8em;">小项目名称及内容&nbsp;&nbsp;</span>
+                    <img src="img/add.png"  onclick="smproclick()" style="width:12px;">
+                </div>
+                <!--小项目点加号-->
+                <div class="tit_msg1 bigpro"id="addsmallprocess"  style="display:none;">
+                        <div class="tflse" style="margin-left:195px;height:125px;">
+
+                            <p style="font-size:.5em;color:#666;margin-bottom:0;margin-top:10px;padding-left:10px;">
+                                &nbsp;项目名称：
+                                <input type="text" value="" id="xmmc" class="tflse1" style="height:20px;width:169px;border:1px solid rgba(228,228,228,1);background:rgba(242,242,242,1);">
+                            </p>
+                            <p style="font-size:.5em;color:#666;margin-bottom:0;margin-top:10px;padding-left:10px;">
+                                    &nbsp;项目内容：
+                                    <input type="text" value="" id="xmnr" class="tflse1" style="height:20px;width:169px;border:1px solid rgba(228,228,228,1);background:rgba(242,242,242,1);">
+                            </p>
+                            <input type="text" value="保存" onclick="smpro(this)" data-name="0" data-id="0" data-orderid="0" class="tflse1 tflse123" style="text-align:center;margin-top:15px;margin-left:79px;width:100px;height:20px;border:1px solid rgba(228,228,228,1);background:rgba(242,242,242,1);">
+                        </div>
+                </div>
+                    <!--小项删除-->
+                    <input type="button" value="删除" id="xiaoxiangdd" onclick="delxiaoxiang()" class="byinput" style="display:none;float: left;position: absolute;margin-top: -22px;width: 69px;margin-left: 455px;">
+    
+                    <!--添加保养时间-->
+                    <div class="tit_msg1 bigpro"id="addprocesstime"  style="display:none;">
+                            <div class="tflse" style="margin-left:138px;margin-top:148px;width:164px;height:37px;">
+                                <p style="font-size:.5em;color:#666;margin-bottom:0;margin-top:10px;">
+                                    &nbsp;工作时间：
+                                    <select id="process_shijian" class="product_line baoyangp" style="width:79px;margin-top:-3px;">
+                                            <!--<option value="0">全部</option>
+                                            <option value="1">待派工</option>-->
+                                    </select>
+                                    <!--<input type="text" value="" class="tflse1" style="width:84px;border:1px solid rgba(228,228,228,1);background:rgba(242,242,242,1);">-->
+                                </p>
+                            </div>
+                    </div>
+                    <input type="button" value="删除" onclick="delshijian()" class="byinput shijiansc" style="float: left;position: absolute;margin-top: 155px;width: 69px;margin-left:456px;">
+                
+                <div class="byinput sminput"id="sminput" style="text-indent:0;">
+                    <!--<span id="xm1" style="float:left;">50</span><span for="xm1" id="xm1" style="float:left;">100</span>-->
+                </div>
+                <div class="tit_msg1 protime" style="margin-top:20px;">
+                        <img src="img/tit_pic.png" class="tit_pic" style="width:13px;">
+                        <span style="color:#666;font-size:.8em;">保养时间&nbsp;&nbsp;</span>
+                        <img src="img/add.png" id="addtime"  onclick="addtime()" style="width:12px;">
+                </div>
+                <div class="byinput sminput" id="timeinput"></div>
+                <!--<input type="button" class="save_btn" value="保存" onclick="bysave1()" style="margin-left:160px;margin-top:14px;">-->
+            </div>
+        </div>
+    </div>
+
+<input type="hidden" class="jlcs" value="1" />
+<input type="hidden" class="jlbgcs" value="1" />
+<input type="hidden" class="jlbgcs11" value="1" />
+<input type="hidden" class="jlbgcs17" value="1" />
+<input type="hidden" class="jlbgcs12" value="1" />
+<input type="hidden" class="time11" value="1" />
+<input type="hidden" class="byxmid" value="" />
+<input type="hidden" class="xiugaidaxiang" value="1" />
+<script>
+    var now;
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+        currentPage = 1;
+        $('#firstPage').attr('disabled',true);
+        $('#prePage').attr('disabled',true);
+        $("#firstPage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = 1;
+            $('#firstPage').attr('disabled',true);
+            $('#prePage').attr('disabled',true);
+            ajax_cf_serverM();
+        });
+        $("#lastPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = totalPage;
+            $('#lastPage').attr('disabled',true);
+            $('#nextPage').attr('disabled',true);
+            ajax_cf_serverM();
+        });
+        $("#nextPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = currentPage+1;
+            if(currentPage == totalPage){
+                $('#lastPage').attr('disabled',true);
+                $('#nextPage').attr('disabled',true);
+            }else{
+                $('#lastPage').removeAttr('disabled');
+                $('#nextPage').removeAttr('disabled');
+            }
+            ajax_cf_serverM();
+        });
+        $("#prePage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = currentPage-1;
+            if(currentPage == 1){
+                $('#firstPage').attr('disabled',true);
+                $('#prePage').attr('disabled',true);
+            }else{
+                $('#firstPage').removeAttr('disabled');
+                $('#prePage').removeAttr('disabled');
+            }
+            ajax_cf_serverM();
+        });
+
+        //选择省
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/place/getProvince.do",
+            dataType : "json",
+            success : function (data) {
+                $("#taskAddress").append("<option value=''>全部</option>");
+                for(var i=0;i<data['body']['resultList']['length'];i++){
+                    $("#taskAddress").append("<option value='"+ data['body']['resultList'][i]['id'] +"'>"+data['body']['resultList'][i]['name']+"</option>");
+                }
+            }
+        });
+        
+        $.ajax({
+            type : "post",
+            url : ip_path+"/changfa_system/machineModel/getMachineModels.do",
+            dataType : "json",
+
+            success : function (data) {
+                $("#taskLine").append("<option value=''>全部</option>");
+                for(var i=0;i<data['body']['resultList']['length'];i++){
+                    $("#taskLine").append("<option value='"+ data['body']['resultList'][i]['number'] +"'>"+data['body']['resultList'][i]['name']+"</option>");
+                }
+            }
+        });
+
+        
+        //产品线
+        $.ajax({
+            type : "post",
+            url : ip_path+"/changfa_system/machineModel/getMachineModels.do",
+            dataType : "json",
+            data:{
+                type: 1,
+            },
+            success : function (data) {
+                process_bm = $("#process_cpxl").find("option:selected").val()
+                //console.log(data)
+                $("#process_cpx").append("<option value=''>全部</option>");
+                for(var i=0;i<data['body']['resultList']['length'];i++){
+                    //console.log(process_bm)
+                    $("#process_cpx").append("<option value='"+ data['body']['resultList'][i]['number'] +"'>"+data['body']['resultList'][i]['name']+"</option>");
+                }
+                
+            }
+        });
+        //产品系列
+        $('#process_cpx').change(function(){
+            $("#process_cpxl").empty();
+            if($("#process_cpx option:selected").val() != ""){
+                $.ajax({
+                type : "post",
+                url : ip_path+"/changfa_system/product/getProducts.do",
+                dataType : "json",
+                data:{
+                    machineModelNum:$("#process_cpx option:selected").val(),
+                },
+                success : function (data) {
+                    //console.log(data)
+                    $("#process_cpxl").append("<option value=''>全部</option>");
+                    for(var i=0;i<data['body']['resultList']['length'];i++){
+                        $("#process_cpxl").append("<option value='"+ data['body']['resultList'][i]['number'] +"'>"+data['body']['resultList'][i]['name']+"</option>");
+                    }
+                    $("#country").unbind();
+                }
+                });
+            }
+            
+        })
+
+        //查看详情
+        var chapxilie = $("#process_cpxl option:selected").val();;
+        $.ajax({
+            type : "get",
+            url : ip_path+"/changfa_system/maintenanceInfo/get.do",
+            dataType : "json",
+            data:{
+                token: $(window.parent.document).find("input[name='token']").val(),
+                maintenanceId:$(window.parent.document).find("input[name='jihuasaw']").val(),
+            },
+            success : function (data) {
+                
+                //console.log(data)
+                $('#byname').val(data['body']['result']['name']);
+            }
+
+        })
+        //查询时间
+        $.ajax({
+            type : "get",
+            url : ip_path+"/changfa_system/maintenanceManualTime/list.do",
+            dataType : "json",
+            data:{
+                token: $(window.parent.document).find("input[name='token']").val(),
+                maintenanceId:$(window.parent.document).find("input[name='jihuasaw']").val(),
+            },
+            success : function (data) {
+                //console.log(data)
+                for(i=0;i<data['body']['result']['length'];i++){
+                    $('#xlecontent2').append(
+                        '<span class="xl_item" data-order='+data['body']['result'][i]['order']+' data-id='+data['body']['result'][i]['timeId']+' onclick="delproxlhour(this)" >'+ data['body']['result'][i]['workHour'] +'</span>'
+                    )
+                }
+                
+            }
+        })
+        //查询项目
+        var isFirst;
+        var isMust;
+        $.ajax({
+            type : "get",
+            url : ip_path+"/changfa_system/maintenanceManualType/list.do",
+            dataType : "json",
+            data:{
+                token: $(window.parent.document).find("input[name='token']").val(),
+                maintenanceId:$(window.parent.document).find("input[name='jihuasaw']").val(),
+            },
+            success : function (data) {
+                //console.log(data)
+                for(i=0;i<data['body']['result']['length'];i++){
+                    isFirst = data['body']['result'][i]['isFirst'];
+                    isMust = data['body']['result'][i]['isMust'];
+                    let html='<tr>'+
+                    '<td id="typeName_'+data['body']['result'][i]['typeId']+'" class="body_td"  height="46px">'+data['body']['result'][i]['typeName']+'</td>'
+                    if(isFirst == 1){
+                        html += '<td id="typetf_'+data['body']['result'][i]['typeId']+'" class="body_td true">是</td>';
+                    }else{
+                        html += '<td id="typetf_'+data['body']['result'][i]['typeId']+'" class="body_td false">否</td>';
+                    };
+                    if(isMust == 1){
+                        html += '<td id="typetf_'+data['body']['result'][i]['typeId']+'" class="body_td true">是</td>';
+                    }else{
+                        html += '<td id="typetf_'+data['body']['result'][i]['typeId']+'" class="body_td false">否</td>';
+                    };
+                    
+                    html += '<td class="body_td showdetail"  onclick="showbydetails('+data['body']['result'][i]['typeId']+')">'+'查看详情'+'</td>'+"</tr>";
+                    if(data['body']['result']==''){
+                        alert(123)
+                        $('#adminTbody').append(
+                            '<tr>' +
+                            '<td class="body_td" height="60px" colspan="3">暂无项目</td>' +
+                            '</tr>'
+                        );
+                        
+                    }else{
+                        $('#adminTbody').append(html);
+                    }
+                    
+                }
+                
+            }
+        })
+        //查询系列
+        $.ajax({
+            type : "get",
+            url : ip_path+"/changfa_system/maintenanceSeries/list.do",
+            dataType : "json",
+            data:{
+                token: $(window.parent.document).find("input[name='token']").val(),
+                maintenanceId:$(window.parent.document).find("input[name='jihuasaw']").val(),
+            },
+            success : function (data) {
+                //console.log(data)
+                for(i=0;i<data['body']['result']['length'];i++){
+                    $('#xlecontent').append(
+                    '<span class="xl_item"  data-id='+data['body']['result'][i]['id']+' onclick="delproxl(this)" >'+ data['body']['result'][i]['seriesName'] +'</span>'
+                    )
+                }
+                
+            }
+
+        })
+
+
+        
+
+
+    }
+
+ 
+</script>
+</html>

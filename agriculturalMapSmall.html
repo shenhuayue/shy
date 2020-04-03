@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>地图</title>
+<link rel="stylesheet" type="text/css" href="static2/css/main.css">
+<link rel="stylesheet" type="text/css" href="css/bigScreen.css">
+<script src="http://webapi.amap.com/maps?v=1.3&key=1e7ce268607a7319fdfe6b430761cbcb"></script>
+<script src="js/common.js"></script>
+<link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css"/>
+<script src="http://cache.amap.com/lbs/static/es5.min.js"></script>
+<script type="text/javascript" src="js/echarts.min.js"></script>
+<!-- 全国344个市、区、州对应的数字编号 -->
+<script type="text/javascript" src="static2/js/citymap.js"></script>
+</head>
+<body>
+
+    <div class="outModel">
+        <div class="headerLitle">
+            <div class="leftLitle"><span style="margin-left: 5px;">全国发货地图</span></div>
+    <div class="rightLitle">
+        <select id="line">
+    
+        </select>
+        <select id="dateType">
+            <option value="1">昨日</option>
+            <option value="2">今月</option>
+            <option value="3">今年</option>
+        </select>
+    </div>
+    <div style="clear: both;"></div>
+        <div id="main" style="width: 100%;height:500px;margin: 0 auto;"></div>
+
+
+
+        </div>
+    </div>
+<script type="text/javascript" src="static2/js/jquery.min.js"></script>
+<script type="text/javascript" src="static2/js/app.js"></script>
+<script>
+window.onload = function(){
+    jQuery.support.cors = true
+
+
+
+$.ajax({
+        type : "post",
+        url : ip_path+"/changfa_system/machineModel/getMachineModels.do",
+        dataType : "json",
+        success : function (data) {
+            $("#line").append("<option value=''>全部</option>");
+            for(var i=0;i<data['body']['resultList']['length'];i++){
+                $("#line").append("<option value='"+ data['body']['resultList'][i]['number'] +"'>"+data['body']['resultList'][i]['name']+"</option>");
+            }
+            // $("#product").unbind();
+        }
+    });
+
+    $('#line').change(function(){
+        if(onceArea){
+            $.getJSON('static2/map/province/'+ provinces[onceArea] +'.json', function(data){
+            echarts.registerMap(onceArea, data);
+            option.geo.map = onceArea;
+            $.ajax({
+                type : "post",
+                url : ip_path + "/changfa_system/screen/queryDevilerMap.do",
+                dataType : "json",
+                data:{
+                    adcode:provinces[onceArea],
+                    lineNum:$('#line').val(),
+                    type:2,
+                    dateType:$('#dateType').val()
+                },
+                success : function (param) {
+                    farmInfo=[];
+                    lines = [];
+                    param.body.result.dealerData.forEach(elem => {
+                        //console.log(elem,'123');
+                        var b = {
+                            name:elem.name,
+                            value:elem.value,
+                            coord:elem.coord
+                        }
+                        farmInfo.push(b);
+                    });
+                    
+                    provinceData = farmInfo;
+                    renderMap(onceArea,provinceData);
+                }
+            });
+            
+        });
+        }else{
+            getchina();
+        }
+        });
+
+    $('#dateType').change(function(){
+        if(onceArea){
+            $.getJSON('static2/map/province/'+ provinces[onceArea] +'.json', function(data){
+            echarts.registerMap(onceArea, data);
+            option.geo.map = onceArea;
+            $.ajax({
+                type : "post",
+                url : ip_path + "/changfa_system/screen/queryDevilerMap.do",
+                dataType : "json",
+                data:{
+                    adcode:provinces[onceArea],
+                    lineNum:$('#line').val(),
+                    type:2,
+                    dateType:$('#dateType').val()
+                },
+                success : function (param) {
+                    farmInfo=[];
+                    lines = [];
+                    param.body.result.dealerData.forEach(elem => {
+                        //console.log(elem,'123');
+                        var b = {
+                            name:elem.name,
+                            value:elem.value,
+                            coord:elem.coord
+                        }
+                        farmInfo.push(b);
+                    });
+                    
+                    provinceData = farmInfo;
+                    renderMap(onceArea,provinceData);
+                }
+            });
+            
+        });
+        }else{
+            getchina();
+        }
+
+    });
+}
+</script>
+</body>
+</html>

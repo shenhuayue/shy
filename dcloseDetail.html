@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>报修单关闭详情</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/dsaleCenter.js"></script>
+    <script src="js/dcommon.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+
+</head>
+<body class="reset">
+        <div>
+            <div class="title_box">
+                <img src="img/status_warning.png" class="status_warning">
+                <span id="status_describe" class="status_info">当前状态：已关闭</span>
+            </div>
+            <div class="rpt_detail">
+                <div class="tit_msg">
+                    <img src="img/tit_pic.png" class="tit_pic">
+                    <span>操作信息</span>
+                </div>
+                <div>
+                    <table class="rpt_detail_tab mg_b50">
+                        <tr>
+                            <td class="head_td txt_center" height="40px">操作人</td>
+                            <td class="head_td txt_center">内容</td>
+                            <td class="head_td txt_center">时间</td>
+                        </tr>
+                        <tbody id="opetationLog">
+    
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tit_msg">
+                    <img src="img/tit_pic.png" class="tit_pic">
+                    <span>原因描述</span>
+                </div>
+                <div>
+                    <table id="reporterInfo" class="rpt_detail_tab mg_b50">
+                        <tr>
+                            <td id="close_describe" class="body_td_2"  height="169px;"></td>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+            <div id="next_status" class="next">
+
+            </div>
+        </div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+        $("close").addClass("status_closed") ;
+        $.ajax({
+            type : "post",
+            //url : ip_path+"/changfa_system/reportRepair/getReportApprove.do",
+            url : ip_path+"/changfa_system/powerReport/getPowerReportApprove.do",
+            
+            data : {
+                
+                reportId : $(window.parent.parent.document).find("input[name='reportId']").val()
+            },
+            dataType : "json",
+            success : function (data) {
+                console.log(data)
+                if(data['head']['isSuccess']){
+                    $("#close_describe").html(data['body']['result']['approveReasonRemark']);
+                    $("#opetationLog").append(
+                        "<tr>" +
+                        "<td class='body_td txt_center' height='33px'>" + data['body']['result']['closeUserName'] + "</td>" +
+                        "<td class='body_td txt_center'>关闭</td>" +
+                        "<td class='body_td txt_center'>" + data['body']['result']['closeTime'] + "</td>" +
+                        "</tr>"
+                    );
+                }else{
+                    alert(data['head']['message']);
+                }
+            }
+        });
+        if($(window.parent.parent.document).find("input[name='history_mark']").val() == ""){
+            if($(window.parent.parent.document).find("input[name='history_400_mark']").val() != ""){
+                $("#next_status").html('<img src="img/front.png" onclick="to_lastReport_400()">');
+            }
+        }else{
+            $("#next_status").html('<img src="img/front.png" onclick="to_lastReport()">');
+        }
+    }
+</script>
+</html>

@@ -1,0 +1,87 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>报修单详情</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/saleCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <!--<link type="text/css" href="css/lrtk.css" rel="stylesheet" />-->
+    <!--<link type="text/css" href="css/prettyPhoto.css" rel="stylesheet" />-->
+    <!--<script type="text/javascript" src="js/jquery.prettyPhoto.js"></script>-->
+    <!--<script type="text/javascript" src="js/lrtk.js"></script>-->
+
+</head>
+<body class="reset">
+    <div>
+        <div class="title_box">
+            <img src="img/status_warning.png" class="status_warning">
+            <span id="status_describe" class="status_info">当前状态：</span>
+        </div>
+        <div class="rpt_detail">
+            <div id="threeServer_only">
+                <div class="tit_msg">
+                    <img src="img/tit_pic.png" class="tit_pic">
+                    <span>调出单位</span>
+                </div>
+                <div>
+                    <table id="createrInfo" class="rpt_detail_tab txt_center">
+                        <tr>
+                            <td class="head_td" height="46px">经销商名称</td>
+                            <td class="head_td">企业编号</td>
+                            <td class="head_td">调出仓库</td>
+                        </tr>
+
+                    </table>
+                </div>
+            </div>
+
+            <div class="tit_msg">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>调入单位</span>
+            </div>
+            <div>
+                <table id="machineInfo" class="rpt_detail_tab txt_center">
+                    <tr>
+                        <td class="head_td" height="46px;">经销商名称</td>
+                        <td class="head_td">企业编号</td>
+                        <td class="head_td">地址</td>
+                        <td class="head_td" width="100px">联系人</td>
+                        <td class="head_td">联系电话</td>
+                        <td class="head_td">业务范围</td>
+                    </tr>
+
+                </table>
+            </div>
+
+            <div class="tit_msg">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>农机信息</span>
+                <!--<img src="img/refresh.png" class="mg-r30 flt_r" onclick="F5()">-->
+            </div>
+            <div class="mg_b50">
+                <table class="rpt_detail_tab txt_center">
+                    <tr>
+                        <td class="head_td" height="46px">图片</td>
+                        <td class="head_td">产品线</td>
+                        <td class="head_td">产品系列</td>
+                        <td class="head_td">产品型号</td>
+                        <td class="head_td">条码</td>
+                        <td class="head_td">出厂编号</td>
+                        <td class="head_td">农机状态</td>
+                        <td class="head_td">查看位置</td>
+                    </tr>
+                    <tbody id="adminTbody">
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div id="next_status" class="next">
+        <a><img src="img/next.png" id="next" onclick="dis_next()"></a>
+    </div>
+</body>
+
+</html>

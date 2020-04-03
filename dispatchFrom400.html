@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>呼叫中心直接派工</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/saleCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <!-- 这里要配置参数key,将其值设置为高德官网开发者获取的key -->
+    <script src="http://webapi.amap.com/maps?v=1.3&key=1e7ce268607a7319fdfe6b430761cbcb"></script>
+    <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css"/>
+    <script src="http://cache.amap.com/lbs/static/es5.min.js"></script>
+    <script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
+</head>
+<body>
+<div id="dis_choosed" style="height: auto;">
+    <div style="margin-left: -8px;">
+        <div class="title_box">
+            <img src="img/status_warning.png" class="status_warning">
+            <span class="status_info">当前状态：派工</span>
+        </div>
+        <div id="machine_map" class="machine_address"></div>
+        <div class="dispatching">
+            <img src="img/dis_pass_select.png" class="check_pass" onclick="toogle_dis()">
+            <img src="img/check_unselect.png" class="check_unpass" onclick="toogle_dis_check()">
+        </div>
+        <div class="dispatching_select">
+            <span>选择经销商/三包员</span>
+            <span style="font-size: 16px;color: #666666;margin-left: 66%;">维修类型：</span>
+            <select id="repairType" class="new">
+                <option value="1">外出(本地用户)</option>
+                <option value="2">到店(本地用户)</option>
+                <option value="3">库存车维修</option>
+                <option value="4">外出(跨区用户)</option>
+                <option value="5">到店(跨区用户)</option>
+            </select>
+        </div>
+        <div class="choose_obj">
+            <table class="pro_choose" width="100%">
+                <colgroup>
+                    <col width="182">
+                    <col width="390">
+                    <col width="160">
+                    <col width="240">
+                    <col width="480">
+                    <col width="132">
+                </colgroup>
+                <tr>
+                    <td class="choose_td DivHeight60" colspan="6">
+                        <span class="describ mg_l30">省：</span><select id="province" class="area_choose"></select>
+                        <span class="describ mg_l30">市：</span><select id="city" class="area_choose"></select>
+
+                        <span class="describ mg_l30">角色：</span>
+                        <select id="role" class="area_choose">
+                            <option value="">全部</option>
+                            <option value="6">经销商</option>
+                            <option value="7">常发三包员</option>
+                            <option value="9">服务站</option>
+                        </select>
+
+                        <span class="mg_l30"></span>
+                        <select id="query" class="area_choose">
+                            <option value="company">单位</option>
+                            <option value="name">联系人</option>
+                            <option value="mobile">电话</option>
+                        </select>
+                        <input id="cont" type="text" class="query">
+                        <button class="query_btn" onclick="querybyAll()"></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="choose_td_bac txt_center DivHeight46">类型</td>
+                    <td class="choose_td txt_center">单位</td>
+                    <td class="choose_td txt_center">联系人</td>
+                    <td class="choose_td txt_center">电话</td>
+                    <td class="choose_td txt_center">维修区域</td>
+                    <td class="choose_td txt_center">选择</td>
+                </tr>
+                <tbody id="adminTbody">
+                <img src="img/advise.png" id="advise" class="position" style="display: none;">
+
+                </tbody>
+            </table>
+            <div id="barcon" class="barcon" >
+                <div id="barcon1" class="barcon1"></div>
+                <div id="barcon2" class="barcon2">
+                    <ul>
+                        <li><button id="firstPage" class="page_btn">首页</button></li>
+                        <li><button id="prePage" class="page_btn">上一页</button></li>
+                        <li><button id="nextPage" class="page_btn">下一页</button></li>
+                        <li><button id="lastPage" class="page_btn">尾页</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="btn_part mg_b50">
+        <img src="img/front.png" onclick="to_rptDetail()">
+        <img src="img/yes.png" id="dis_pass" class="mg_l50" onclick="dispatching_to()">
+    </div>
+</div>
+<div id="checkDis_choosed" style="display: none;height: auto;">
+    <div style="margin-left: -8px;">
+        <div class="title_box">
+            <img src="img/status_warning.png" class="status_warning">
+            <span class="status_info">当前状态：审核</span>
+        </div>
+        <div class="dispatching">
+            <img src="img/dis_pass_unselect.png" class="check_pass" onclick="toogle_dis()">
+            <img src="img/check_select.png" class="check_unpass" onclick="toogle_check()">
+        </div>
+        <div class="dispatching_select">
+            <span>选择驳回原因</span>
+            <select id="reason_select" class="checkNoPass_choose mg-t20 flt_r">
+                <option value="">请选择原因</option>
+                <option value="0">关闭报修</option>
+                <option value="1">联系人有误</option>
+                <option value="2">联系人号码有误</option>
+                <!--<option value="8">出厂编号有误</option>-->
+                <option value="3">农机地址有误</option>
+                <option value="7">预估里程有误</option>
+                <option value="6">购买时间有误</option>
+                <option value="5">农机产品信息有误</option>
+                <option value="4">故障描述有误</option>
+            </select>
+        </div>
+        <div class="check_return">
+            <div class="tit_msg">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>驳回描述</span>
+            </div>
+            <textarea id="describe" class="checke_discribe" placeholder="输入驳回说明"></textarea>
+        </div>
+    </div>
+    <div class="btn_part">
+        <img src="img/front.png" class="mg-t20" onclick="to_rptDetail()">
+        <img src="img/yes.png" id="dis_unpass" class="mg-t20 mg_l50" onclick="dis_check_unpass()">
+    </div>
+</div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+        var index;
+        var lng;
+        var lat;
+        var address = $(window.parent.document).find("input[name='machineAddress']").val();
+        var locationList;
+
+        if($(window.parent.parent.document).find("input[name='reportTypeForUnpass']").val() != 1){
+            $("#reason_select").html(
+                '<option value="">请选择原因</option>' +
+                '<option value="0">关闭报修</option>'
+            );
+        }
+
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/locationRecord/selectStore.do",
+            data : {
+                pageNum : 1,
+                pageSize : 1000000
+            },
+            dataType : "json",
+            success : function (data) {
+                if(data['head']['code'] == 200){
+                    locationList = data['body']['result']['data'];
+                }
+            }
+        });
+
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/place/getLocationAddress.do",
+            data : {
+                address : address,
+                reportId : $(window.parent.document).find("input[name='reportId']").val()
+            },
+            dataType : "json",
+            success : function (data) {
+                if(data['head']['code'] == 200){
+                    if(data['body']['result']['location'] != ""){
+                        if(data['body']['result']['addressLocation'] == ""){
+                            lng = data['body']['result']['location'].split(",")[0];
+                            lat = data['body']['result']['location'].split(",")[1];
+                            $("#machine_map").show();
+                            map = new AMap.Map("machine_map",{
+                                resizeEnable: true,
+                                center:[lng,lat]
+                            });
+                            var marker_machine = new AMap.Marker({
+                                position: new AMap.LngLat(lng,lat),
+                                offset: new AMap.Pixel(-16, -45),
+                                icon: 'img/machine.png', // 添加 Icon 图标 URL
+                            });
+                            map.add(marker_machine);
+
+                            for(var i=0;i<locationList.length;i++){
+                                if(locationList[i]['location'] != ""){
+                                    switch(locationList[i]['type']){
+                                        case 1:
+                                            var marker_storage = new AMap.Marker({
+                                                position: new AMap.LngLat(locationList[i]['location'].split(",")[0],locationList[i]['location'].split(",")[1]),
+                                                offset: new AMap.Pixel(-16, -45),
+                                                icon: 'img/dealer.png',
+                                            });
+                                            map.add(marker_storage);
+
+                                            index = i;
+                                            var msg_label = locationList[index]['dealerName'] ;
+                                            marker_storage.setTitle(msg_label);
+
+                                            break;
+                                        case 2:
+                                            var marker_storage = new AMap.Marker({
+                                                position: new AMap.LngLat(locationList[i]['location'].split(",")[0],locationList[i]['location'].split(",")[1]),
+                                                offset: new AMap.Pixel(-16, -45),
+                                                icon: 'img/service.png',
+                                            });
+                                            map.add(marker_storage);
+                                            index = i;
+                                            var msg_label = locationList[index]['dealerName'] ;
+                                            marker_storage.setTitle(msg_label);
+
+                                            break;
+                                        case 3:
+
+                                            break;
+                                        case 4:
+
+                                            break;
+                                    }
+                                }
+                            }
+                        }else{
+                            lng = data['body']['result']['addressLocation'].split(",")[0];
+                            lat = data['body']['result']['addressLocation'].split(",")[1];
+                            $("#machine_map").show();
+                            map = new AMap.Map("machine_map",{
+                                resizeEnable: true,
+                                center:[lng,lat]
+                            });
+                            var marker_machine = new AMap.Marker({
+                                position: new AMap.LngLat(lng,lat),
+                                offset: new AMap.Pixel(-16, -45),
+                                icon: 'img/machine.png', // 添加 Icon 图标 URL
+                            });
+                            map.add(marker_machine);
+
+                            for(var i=0;i<locationList.length;i++){
+                                if(locationList[i]['location'] != ""){
+                                    switch(locationList[i]['type']){
+                                        case 1:
+                                            var marker_storage = new AMap.Marker({
+                                                position: new AMap.LngLat(locationList[i]['location'].split(",")[0],locationList[i]['location'].split(",")[1]),
+                                                offset: new AMap.Pixel(-16, -45),
+                                                icon: 'img/dealer.png',
+                                            });
+                                            map.add(marker_storage);
+                                            index = i;
+                                            var msg_label = locationList[index]['dealerName'] ;
+                                            marker_storage.setTitle(msg_label);
+                                            break;
+                                        case 2:
+                                            var marker_storage = new AMap.Marker({
+                                                position: new AMap.LngLat(locationList[i]['location'].split(",")[0],locationList[i]['location'].split(",")[1]),
+                                                offset: new AMap.Pixel(-16, -45),
+                                                icon: 'img/service.png',
+                                            });
+                                            map.add(marker_storage);
+                                            index = i;
+                                            var msg_label = locationList[index]['dealerName'] ;
+                                            marker_storage.setTitle(msg_label);
+
+                                            break;
+                                        case 3:
+
+                                            break;
+                                        case 4:
+
+                                            break;
+                                    }
+                                }
+                            }
+                        }
+
+                    }else{
+                        map = new AMap.Map("machine_map",{
+                            resizeEnable: true
+                        });
+                    }
+                }
+            }
+        });
+
+
+        $("#dis_unpass").mousedown(function () {
+            $("#rep_unpass").attr("src","img/yes_clicked.png");
+        });
+        $("#dis_unpass").mouseup(function () {
+            $("#rep_unpass").attr("src","img/yes.png");
+        });
+        // $("html,body",window.parent.document).animate({scrollTop:0},1000);
+        // $("html,body",window.parent.parent.document).animate({scrollTop:0},1000);
+        // $(window.parent.parent.document).find("div[id='inner']").scrollTo(0,0);
+        // $(window.parent.document).find("div[id='detail_frame']").scrollTop = 0;
+
+        currentPage = 1;
+        $('#firstPage').attr('disabled',true);
+        $('#prePage').attr('disabled',true);
+        $("#firstPage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = 1;
+            $('#firstPage').attr('disabled',true);
+            $('#prePage').attr('disabled',true);
+            ajax_area();
+        });
+        $("#lastPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = totalPage;
+            $('#lastPage').attr('disabled',true);
+            $('#nextPage').attr('disabled',true);
+            ajax_area();
+        });
+        $("#nextPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = currentPage+1;
+            if(currentPage == totalPage){
+                $('#lastPage').attr('disabled',true);
+                $('#nextPage').attr('disabled',true);
+            }else{
+                $('#lastPage').removeAttr('disabled');
+                $('#nextPage').removeAttr('disabled');
+            }
+            ajax_area();
+        });
+        $("#prePage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = currentPage-1;
+            if(currentPage == 1){
+                $('#firstPage').attr('disabled',true);
+                $('#prePage').attr('disabled',true);
+            }else{
+                $('#firstPage').removeAttr('disabled');
+                $('#prePage').removeAttr('disabled');
+            }
+            ajax_area();
+        });
+
+        //选择省
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/place/getProvince.do",
+            dataType : "json",
+            success : function (data) {
+                $("#province").append("<option value='"+ 0 +"'>全部</option>");
+                for(var i=0;i<data['body']['resultList']['length'];i++){
+                    $("#province").append("<option value='"+ data['body']['resultList'][i]['id'] +"'>"+data['body']['resultList'][i]['name']+"</option>");
+                }
+                $("#province").unbind();
+            }
+        });
+
+        // if($(window.parent.document).find("input[name='proId']").val() == undefined || $(window.parent.document).find("input[name='proId']").val() == ""){
+        //     $("#province").val($(window.parent.parent.document).find("input[name='proId']").val());
+        // }else {
+        //     $("#province").val($(window.parent.document).find("input[name='proId']").val());
+        // }
+        //选择市
+        if($("#province").val() != ""){
+            // $("#cont").val("");
+            $("#city").empty();
+            if($("#province option:selected").val() == 0){
+                $("#city").append("<option value='"+ 0 +"'>全部</option>");
+            }else {
+                $.ajax({
+                    type : "post",
+                    async : false,
+                    url : ip_path+"/changfa_system/place/getCity.do",
+                    data : {
+                        parentId : $("#province option:selected").val(),
+                    },
+                    dataType : "json",
+                    success : function (data) {
+                        $("#city").append("<option value=''>全部</option>");
+                        for(var i=0;i<data['body']['resultList']['length'];i++){
+                            $("#city").append("<option value='"+ data['body']['resultList'][i]['id'] +"'>"+data['body']['resultList'][i]['name']+"</option>");
+                        }
+                        $("#city").unbind();
+                    }
+                });
+            }
+        }
+
+        // if($(window.parent.document).find("input[name='cityId']").val() == undefined || $(window.parent.document).find("input[name='cityId']").val() == ""){
+        //     $("#city").val($(window.parent.parent.document).find("input[name='cityId']").val());
+        // }else {
+        //     $("#city").val($(window.parent.document).find("input[name='cityId']").val());
+        // }
+
+        $("#province").change(function () {
+            currentPage = 1;
+            // $("#cont").val("");
+            $("#city").empty();
+            if($("#province option:selected").val() == 0){
+                $("#city").append("<option value='"+ 0 +"'>全部</option>");
+            }else {
+                $.ajax({
+                    type : "post",
+                    async : false,
+                    url : ip_path+"/changfa_system/place/getCity.do",
+                    data : {
+                        parentId : $("#province option:selected").val(),
+                    },
+                    dataType : "json",
+                    success : function (data) {
+                        $("#city").append("<option value=''>全部</option>");
+                        for(var i=0;i<data['body']['resultList']['length'];i++){
+                            $("#city").append("<option value='"+ data['body']['resultList'][i]['id'] +"'>"+data['body']['resultList'][i]['name']+"</option>");
+                        }
+                        $("#city").unbind();
+                    }
+                });
+            }
+            ajax_area();
+            //显示三包员
+            // if($("#city").val() != ""){
+            //     $("#cont").val("");
+            //     ajax_area();
+            // }
+            $("#city").change(function () {
+                currentPage = 1;
+                // $("#cont").val("");
+                ajax_area();
+            });
+
+        });
+
+        $("#role").change(function () {
+            currentPage = 1;
+            ajax_area();
+        });
+
+        ajax_area();
+
+        $("#repairType").val($(window.parent.document).find("input[name='repairType']").val());
+
+        $("#query").change(function () {
+            $("#cont").val(" ");
+        });
+
+        // if($(window.parent.parent.document).find("input[name='reportType']").val() == 0) {
+        //     $("#reason_select").html(
+        //         '<option value="0">关闭报修</option>'
+        //     );
+        // }
+    }
+</script>
+</html>

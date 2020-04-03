@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>结算单详情页</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+        <script src="js/closeAccount.js"></script>
+    <script src="js/saleCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/index.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <!--<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">-->
+    <!--<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>-->
+    <!--<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
+</head>
+<body class="reset">
+
+<div>
+
+    <div class="mg-t50">
+        <div class="tit">
+            <span class="flt_l">企业信息</span>
+        </div>
+        <div class="account_cont2">
+    
+                <div style="float: left;margin-top: 60px;margin-left: 20px;">
+                        <div style="width: 100px;height: 70px;" align="center">
+                            <img src="./img/cangku.png" alt="" id="headPath" style="width: 70px;height: 70px;border-radius: 50%;">
+                        </div>
+                        <!-- <div style="text-align: center;line-height:20px">   
+                                <span>结算方式</span><span id="roleId" class="describ"></span>
+                        </div> -->
+    
+                    </div>
+                <div style="float: left;width: 90%;">
+                        <div>
+                                <span class="describ mg_l30">企业编号：</span>
+                                <span id="dealerNum" class="describ"></span>
+                        </br>
+                                <span class="describ mg_l30">企业名称：</span>
+                                <span id="dealerName" class="describ"></span>
+                        </div>
+                
+                
+                        <span class="describ mg_l30">星级：</span>
+                        <span id="level" class="describ"></span>
+                        <span class="describ mg_l30">|</span>
+                        <span class="describ mg_l30">里程单价：</span>
+                        <span id="distabcePrice" class="describ"></span>
+                        <span class="describ mg_l30">|</span>
+                        <span class="describ mg_l30">工时单价：</span>
+                        <span id="timePrice" class="describ"></span>
+                </div>
+    
+        </div>
+    </div>
+
+    <div class="tit mg-t50">
+        <span>结算单复核</span>
+        <div style="display: inline-block;float: right;margin-right: 50px;">
+            <span class="describ mg_l30">时间：</span>
+            <span id="time" class="describ"></span>
+            <span class="describ mg_l30">|</span>
+            <span class="describ mg_l30">产品线：</span>
+            <span id="product" class="describ"></span>
+        </div>
+    </div>
+    <div class="account_cont">
+        <div id="scrollDiv">
+            <table id="table" cellpadding="0" cellspacing="0" class="table2" align="center"  style="font-size: 0.9em">
+                <thead>
+                <tr align="center">
+                    <th class="th2" height="33">型号</th>
+                    <th class="th2">里程（km）</th>
+                    <th class="th2">核准里程（km）</th>
+                    <th class="th2">里程费用（￥）</th>
+                    <th class="th2">工时（h）</th>
+                    <th class="th2">核准工时（h）</th>
+                    <th class="th2">工时费用（￥）</th>
+                    <th class="th2">其他费用（￥）</th>
+                    <th class="th2">核准其他费用（￥）</th>
+                    <th class="th2">考核（￥）</th>
+                    <th class="th2">考核原因</th>
+                    <th class="th2">合计（￥）</th>
+                    <th class="th2"><input type="checkbox" id="checkAllRepairs" class="choose_select" onclick="chooseAllOrNullRepairs()"></th>
+                </tr>
+                </thead>
+                <tbody id="adminTbody" style="width: 100%;">
+
+                </tbody>
+            </table>
+        </div>
+        <div class="txt_left mg-t20" style="margin-left: 5%">
+            <span class="describ">总计金额：</span><span id="costTotal" class="describ fontGreen"></span>
+        </div>
+
+        <div id="onlyForCheck" class="mg-t30" style="width: 90%;margin-left: 5%">
+            <div id="rep_choosed">
+                <div>
+                    <div class="check">
+                        <div>
+                            <img src="img/check_pass_select.png" class="check_pass" onclick="toogle_rep()">
+                            <img src="img/check_unpass_unselect.png" class="check_unpass" onclick="toogle_rep_check()">
+                        </div>
+                        <div class="pass">
+                            <img src="img/check_pass.png">
+                        </div>
+                        <div class="msg">
+                            <span>确定审核通过？</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="btn_part mg_b50">
+                    <img src="img/yes.png" id="rep_pass" class="mg-t20" onclick="checkCostSum_pass()">
+                </div>
+            </div>
+
+            <div id="checkRep_choosed" style="display: none;">
+                <div>
+                    <div class="dispatching" style="border-top: 1px solid #E4E4E4">
+                        <img src="img/check_pass_unselect.png" class="check_pass" onclick="toogle_rep()">
+                        <img src="img/check_unpass_select.png" class="check_unpass" onclick="toogle_rep_check()">
+                    </div>
+                    <div class="dispatching_select txt_left">
+                        <span>审核不通过原因</span>
+                    </div>
+                    <div class="check_return">
+                        <div class="tit_msg txt_left">
+                            <img src="img/tit_pic.png" class="tit_pic">
+                            <span>驳回描述</span>
+                        </div>
+                        <textarea id="describe" class="checke_discribe" placeholder="输入驳回说明"></textarea>
+                    </div>
+                </div>
+                <div class="btn_part mg_b50">
+                    <img src="img/yes.png" id="rep_unpass" class="mg-t20" onclick="checkCostSum_unpass()">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+
+        currentPage = 1;
+        $('#firstPage').attr('disabled',true);
+        $('#prePage').attr('disabled',true);
+        $("#firstPage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = 1;
+            $('#firstPage').attr('disabled',true);
+            $('#prePage').attr('disabled',true);
+            ajax_costCheckRepair_detail();
+        });
+        $("#lastPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = totalPage;
+            $('#lastPage').attr('disabled',true);
+            $('#nextPage').attr('disabled',true);
+            ajax_costCheckRepair_detail();
+        });
+        $("#nextPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = currentPage+1;
+            if(currentPage == totalPage){
+                $('#lastPage').attr('disabled',true);
+                $('#nextPage').attr('disabled',true);
+            }else{
+                $('#lastPage').removeAttr('disabled');
+                $('#nextPage').removeAttr('disabled');
+            }
+            ajax_costCheckRepair_detail();
+        });
+        $("#prePage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = currentPage-1;
+            if(currentPage == 1){
+                $('#firstPage').attr('disabled',true);
+                $('#prePage').attr('disabled',true);
+            }else{
+                $('#firstPage').removeAttr('disabled');
+                $('#prePage').removeAttr('disabled');
+            }
+            ajax_costCheckRepair_detail();
+        });
+
+        //初始化
+        ajax_costCheckRepair_detail();
+
+
+    }
+</script>
+</html>

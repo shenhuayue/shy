@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>维修单</title>
+
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <link rel="stylesheet" href="css/photo.css">
+    <script src="js/dsaleCenter.js"></script>
+    <script src="js/dcommon.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <script src="js/photo.js"></script>
+    <script src="js/jquery.rotate.min.js"></script>
+</head>
+<body class="reset">
+<div style="width: 100%;">
+    <div style="height: 2000px;overflow-y:auto;">
+        <div class="title_box">
+            <img src="img/status_warning.png" class="status_warning">
+            <span id="status_describe" class="status_info">当前状态：</span>
+        </div>
+        <div class="dis_detail">
+            <div class="tit_msg">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>维修单号</span>
+            </div>
+            <div id="repNum" class="dis_detail_tab"></div>
+            <div class="tit_msg">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>维修单详情</span>
+            </div>
+            <div class="rep_detail">
+                <table id="rep_tab" class="rep_detail_tab txt_center">
+                    <tr>
+                        <td class="head_td" width="30%" height="60px;">维修类型</td>
+                        <td class="body_td txt_left" colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <td class="head_td" width="30%" height="80px;">故障图片</td>
+                        <td id="err_pic" class="body_td txt_left" colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <td class="head_td" width="30%" height="80px;">人机合影</td>
+                        <td id="per_mac_pic" class="body_td txt_left" colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <td class="head_td" width="30%" height="60px;">农机信息</td>
+                        <td class="body_td txt_left" width="427px">车辆工作小时：&nbsp;&nbsp;小时</td>
+                        <td class="body_td txt_left" width="427px">行驶里程：&nbsp;&nbsp;公里</td>
+                    </tr>
+                    <!--<tr>-->
+                         <!--<td class="head_td" width="167px" height="126px;">出厂编号</td>-->
+                         <!--<td class="body_td txt_left" colspan="2" width="883px" style="word-break:break-all"></td>
+                        </tr>-->
+                    <tr>
+                        <td class="head_td" width="30%" height="126px;">农机用途说明</td>
+                        <td class="body_td txt_left" colspan="2" width="883px" style="word-break:break-all"></td>
+                    </tr>
+                    <tr>
+                        <td class="head_td" width="30%" height="auto;">农机故障说明</td>
+                        <td id="error_description" class="body_td txt_left" colspan="2" width="883px" style="word-break:break-all"></td>
+                    </tr>
+                    <tr>
+                        <td class="head_td" width="30%" height="126px;">客户意见</td>
+                        <td class="body_td txt_left" colspan="2" width="883px" style="word-break:break-all"></td>
+                    </tr>
+                    <tr>
+                        <td class="head_td" width="30%" height="126px;">处理意见</td>
+                        <td class="body_td txt_left" colspan="2" width="883px" style="word-break:break-all"></td>
+                    </tr>
+                    <tr>
+                        <td class="head_td" width="30%" height="60px;">里程（单程）</td>
+                        <td class="body_td txt_left" colspan="2">
+                            <div class="adviseDiv_cont flt_l" id="distance_real">&nbsp;&nbsp;公里</div>
+                            <div class="adviseDiv flt_l" style="height: 60px;width: 167px;">审核里程（单程）</div>
+                            <div class="adviseDiv_cont flt_l"></div>
+                            <div class="adviseDiv flt_l" style="height: 60px;width: 167px;">往返里程费</div>
+                            <div class="adviseDiv_cont flt_l"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="head_td" width="30%" height="60px;">工时</td>
+                        <td class="body_td txt_left" colspan="2">
+                            <div class="adviseDiv_cont flt_l" id="hour_real"></div>
+                            <div class="adviseDiv flt_l" style="height: 60px;width: 167px;">工时费用</div>
+                            <div class="adviseDiv_cont flt_l"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                            <td class="head_td" width="167px" height="60px;">天数</td>
+                            <td class="body_td_2 txt_left" colspan="2">
+                            <div class="adviseDiv_cont flt_l" id="hour_tianshu">&nbsp;&nbsp;天</div>
+                            <div class="adviseDiv flt_l" style="height: 60px;width: 20%;"></div>
+                            <div class="adviseDiv_cont flt_l" id="checkTime"></div>
+                            <div class="adviseDiv flt_l" style="height: 60px;width: 20%;"></div>
+                            <div class="adviseDiv_cont flt_l">&nbsp;&nbsp;<span id="butie_cost">&nbsp;&nbsp;元</div>
+                            </td>
+                            </tr> 
+                            <tr>
+                    <tr>
+                        <td class="head_td" width="30%" height="60px;">其他费用</td>
+                        <td class="body_td txt_left" colspan="2" width="883px" style="word-break:break-all"></td>
+                    </tr>
+                    <tr>
+                        <td class="head_td" width="30%" height="126px;">备注</td>
+                        <td class="body_td txt_left" colspan="2" width="883px" style="word-break:break-all"></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="tit_msg" style="margin-top: -50px;">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>操作记录</span>
+            </div>
+            <div>
+                <table class="rpt_detail_tab txt_center mg_b50">
+                    <tr>
+                        <td class="head_td" height="46px">操作人</td>
+                        <td class="head_td">操作内容</td>
+                        <td class="head_td">驳回原因</td>
+                        <td class="head_td">操作时间</td>
+                    </tr>
+                    <tbody id="opetationLog">
+
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+
+        <div id="rep_next" class="next">
+            <img src="img/next.png" onclick="rep_next()">
+        </div>
+    </div>
+
+</div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+        var statue;
+        var repairType;
+        var person;
+
+        var lineNum;
+        var seriesNum;
+        var modelNum;
+
+        //判断经销商
+        if(appRoleList.indexOf($(window.parent.parent.document).find("input[name='roleId']").val()) != -1){
+            $("#rep_next").hide();
+        }
+
+
+        //维修单详情
+        $.ajax({
+            type : "post",
+            async : false,
+            //url : ip_path+"/changfa_system/repair/getRepairInfo.do",
+            url : ip_path+"/changfa_system/powerRepair/getPowerRepairInfo.do",
+            data : {
+                repairId : $(window.parent.parent.document).find("input[name='repairId']").val()
+            },
+            dataType : "json",
+            success : function (data) {
+                console.log(data)
+                $("#repNum").html(data['body']['result']['repairNum']);
+                lineNum = data['body']['result']['lineNum'];
+                seriesNum = data['body']['result']['seriesNum'];
+                modelNum = data['body']['result']['modelNum'];
+
+                person = data['body']['result']['examineUserName'];
+                statue = data['body']['result']['status'];
+                if(data['body']['result']['repairType'] == 1){
+                    repairType = '外出(本地用户)';
+                }
+                if(data['body']['result']['repairType'] == 2){
+                    repairType = '到店(本地用户)';
+                }
+                if(data['body']['result']['repairType'] == 4){
+                    repairType = '外出(跨区用户)';
+                }
+                if(data['body']['result']['repairType'] == 5){
+                    repairType = '到店(跨区用户)';
+                }
+                if(data['body']['result']['repairType'] == 3){
+                    repairType = '库存车维修';
+                }
+                if(data['body']['result']['repairType'] == 6){
+                    repairType = '寄件维修';
+                }
+                $("#rep_tab").html(
+                    '<tr>' +
+                    '<td class="head_td" width="167px" height="60px;">维修类型</td>' +
+                    '<td id="repair_typ" class="body_td_2 txt_left" colspan="2">'+
+                    '</td>' +
+                    '</tr>' +
+
+                    '<tr>' +
+                    '<td class="head_td" width="167px" height="80px;">故障图片</td>' +
+                    '<td id="err_pic" class="body_td txt_left" colspan="2">' +
+
+                    '</td>' +
+                    '</tr>' +
+                    '<tr>' +
+                    '<td class="head_td" width="167px" height="80px;">人机合影</td>' +
+                    '<td id="per_mac_pic" class="body_td txt_left" colspan="2">' +
+
+                    '</td>' +
+                    '</tr>' +
+                    '<tr>' +
+                    '<td class="head_td" width="167px" height="60px;" rowspan="4">农机信息</td>' +
+                    '<td class="body_td_2 txt_left" colspan="2" style="padding-top: 10px;padding-bottom: 10px;">出厂编号：' + data['body']['result']['factoryNum'] + '</td>' +
+                    '</tr>' +
+                    '<tr>' +
+                    '<td class="body_td_2 txt_left" width="427px" style="padding-top: 10px;padding-bottom: 10px;">机主姓名：' + data['body']['result']['contactName']  + '</td>' +
+                    '<td class="body_td_2 txt_left" width="427px" style="padding-top: 10px;padding-bottom: 10px;">机主电话：' + data['body']['result']['contactMobile'] + '</td>' +
+                    '</tr>' +
+                    '<tr>' +
+                    '<td class="body_td_2 txt_left" width="427px" style="padding-top: 10px;padding-bottom: 10px;">农机信息：' + data['body']['result']['lineName'] +"-"+ data['body']['result']['seriesName'] +"-"+ data['body']['result']['modelName'] + '</td>' +
+                    '<td class="body_td_2 txt_left" width="427px" style="padding-top: 10px;padding-bottom: 10px;">销售日期：' + data['body']['result']['buyTime'] + '</td>' +
+                    '</tr>' +
+                    '<tr>' +
+                    //'<td class="body_td_2 txt_left" width="427px" style="padding-top: 10px;padding-bottom: 10px;">车辆工作小时：' + data['body']['result']['useTime'] + '&nbsp;&nbsp;小时</td>' +
+                    //'<td class="body_td_2 txt_left" width="427px" style="padding-top: 10px;padding-bottom: 10px;">行驶里程：' + data['body']['result']['driveDistance'] + '&nbsp;&nbsp;公里</td>' +
+                    '</tr>' +
+                    // '<tr>' +
+                    // '<td class="head_td" width="167px" height="126px;">出厂编号</td>' +
+                    // '<td class="body_td txt_left" colspan="2" width="883px" style="word-break:break-all">'+data['body']['result']['factoryNum']+'</td>' +
+                    // '</tr>' +
+                    '<tr>' +
+                    '<td class="head_td" width="167px" height="auto">配套用途</td>' +
+                    '<td class="body_td_2 txt_left" colspan="2" width="883px" style="padding-bottom: 10px;padding-top: 10px;word-break:break-all">' + data['body']['result']['useTypeName'] + '<span>&nbsp;&nbsp;</span>'+data['body']['result']['matchMachineName'] +'<span>&nbsp;&nbsp;</span>'+data['body']['result']['saleModelName'] +'<span>&nbsp;&nbsp;</span>'+ data['body']['result']['machineBrandName'] +'</td>' +
+
+                    //'<td class="body_td_2 txt_left" colspan="2" width="883px" style="padding-bottom: 10px;padding-top: 10px;word-break:break-all">' + data['body']['result']['useTypeName'] + '<span>&nbsp;&nbsp;</span>'+data['body']['result']['matchMachineName'] +'<span>&nbsp;&nbsp;</span>'+ data['body']['result']['machineBrandName'] +'</td>' +
+                    '</tr>' +
+                    '<tr>' +
+                    '<td class="head_td" width="167px" height="auto;">故障信息</td>' +
+                    '<td id="error_description" class="body_td_2 txt_left" colspan="2" width="883px" style="padding-bottom: 10px;padding-top: 10px;word-break:break-all"></td>' +
+                    '</tr>' +
+                    '<tr>' +
+                    '<td class="head_td" width="167px" height="auto">客户意见</td>' +
+                    '<td class="body_td_2 txt_left" colspan="2" width="883px" style="padding-bottom: 10px;padding-top: 10px;word-break:break-all">' + data['body']['result']['customerOpinion'] + '</td>' +
+                    '</tr>' +
+                    '<tr>' +
+                    '<td class="head_td" width="167px" height="auto">处理方式</td>' +
+                    '<td class="body_td_2 txt_left" colspan="2" width="883px" style="padding-bottom: 10px;padding-top: 10px;word-break:break-all">' + data['body']['result']['handleOpinion'] + '</td>' +
+                    '</tr>\n' +
+                    '<tr>' +
+                    '<td class="head_td" width="167px" height="60px;">里程（单程）</td>' +
+                    '<td class="body_td_2 txt_left" colspan="2">' +
+                    '<div class="adviseDiv_cont flt_l" id="distance_real">' + data['body']['result']['repairDistance'] + '&nbsp;&nbsp;公里</div>' +
+                    '<div class="adviseDiv flt_l" style="height: 60px;width: 20%;">审核里程（单程）</div>' +
+                    '<div class="adviseDiv_cont flt_l"><input type="text" id="checkDistance" style="width: 100px;height: 50px;font-weight: bold">&nbsp;&nbsp;公里</div>' +
+                    '<div class="adviseDiv flt_l" style="height: 60px;width: 20%;">往返里程费</div>' +
+                    '<div class="adviseDiv_cont flt_l" id="distance_cost">&nbsp;&nbsp;<span id="dis_cost"></span>&nbsp;&nbsp;元</div>' +
+                    '</td>' +
+                    '</tr>' +
+                    '<tr>' +
+                    '<td class="head_td" width="167px" height="60px;">工时</td>' +
+                    '<td class="body_td_2 txt_left" colspan="2">' +
+                    '<div class="adviseDiv_cont flt_l" id="hour_real">' + data['body']['result']['workTime'] + '&nbsp;&nbsp;工时</div>' +
+                    '<div class="adviseDiv flt_l" style="height: 60px;width: 20%;">审核工时</div>' +
+                    '<div class="adviseDiv_cont flt_l"><input type="text" id="checkHour" style="width: 100px;height: 50px;font-weight: bold">&nbsp;&nbsp;工时</div>' +
+                    '<div class="adviseDiv flt_l" style="height: 60px;width: 20%;">工时费</div>' +
+                    '<div class="adviseDiv_cont flt_l">&nbsp;&nbsp;<span id="hour_cost"></span>&nbsp;&nbsp;元</div>' +
+                    '</td>' +
+                    '</tr>' +
+                    '<tr>' +
+                    '<td class="head_td" width="167px" height="60px;">天数</td>' +
+                    '<td class="body_td_2 txt_left" colspan="2">' +
+                    '<div class="adviseDiv_cont flt_l" id="hour_tianshu">' + data['body']['result']['subsidyDays'] + '&nbsp;&nbsp;天</div>' +
+                    '<div class="adviseDiv flt_l" style="height: 60px;width: 20%;">审核天数</div>' +
+                    '<div class="adviseDiv_cont flt_l" id="checkTime"></div>' +
+                    '<div class="adviseDiv flt_l" style="height: 60px;width: 20%;">补贴费用</div>' +
+                    '<div class="adviseDiv_cont flt_l">&nbsp;&nbsp;<span id="butie_cost"></span>&nbsp;&nbsp;元</div>' +
+                   // '<div class="adviseDiv_cont flt_l">&nbsp;&nbsp;<span id="butie_cost"><input type="text" id="checkotherTime" style="width: 100px;height: 50px;font-weight: bold">&nbsp;&nbsp;元</div>' +
+                    '</td>' +
+                    '</tr>' +
+                    '<tr>' +
+                    '<td class="head_td" width="167px" height="60px;">其他费用</td>' +
+                    '<td class="body_td_2 txt_left" colspan="2" width="883px" style="word-break:break-all">' +
+                    '<div class="adviseDiv_cont flt_l">' + data['body']['result']['otherFee'] + '&nbsp;&nbsp;元</div>' +
+                    '<div class="adviseDiv flt_l" style="height: 60px;width: 20%;">其他费用审核</div>' +
+                    '<div class="adviseDiv_cont flt_l"><input type="text" id="check_otherCost" style="width: 100px;height: 50px;font-weight: bold">&nbsp;&nbsp;元</div>' +
+                    '<div id="makeCost" class="adviseDiv_cont flt_r"><img src="img/makeCost.png" onclick="makeCost()" style="vertical-align: middle;margin-left: -150px;"></div>' +
+                    '</td>' +
+                    '</tr>' +
+                    '<tr>' +
+                    '<td class="head_td" width="167px" height="auto">备注</td>' +
+                    '<td class="body_td_2 txt_left" colspan="2" width="883px" style="padding-bottom: 10px;padding-top:10px;word-break:break-all">' + data['body']['result']['remarks'] + '</td>' +
+                    '</tr>'
+                );
+                if(data['body']['result']['abnormal'] == '1'){
+                    $("#distance_real").append(
+                        '<div style="color:red;margin-left:40px;font-size:20px;display:inline-block">'+
+                        '<img src="./img/danger.png" alt="" style="width:30px;height:auto;margin-top:20px;">'+
+                        '</div>'
+                    )
+                }
+                
+                if(data['body']['result']['status'] == 14){
+                    $('#repair_typ').append(
+                    '<select id="repairtime" class="obj_choose" onchange="emptytext()">'+
+                                '<option value="1">外出(本地用户)</option>'+
+                                '<option value="2">到店(本地用户)</option>'+
+                                '<option value="4">外出(跨区用户)</option>'+
+                                '<option value="5">到店(跨区用户)</option>'+
+                                '<option value="3">库存车维修</option>'+
+                                '<option value="6">寄件维修</option>'+
+                    '</select>'
+                    );
+                    $('#repaircar').val(data['body']['result']['repairType']);
+                }else{
+                    $('#repair_typ').text(repairType);
+                }
+
+                //终审天数
+                if(data['body']['result']['status'] == 14){
+                    $('#checkTime').append(
+                        '<select id="repairday" class="obj_choose" style="width:106px;height:54px;border: 1px solid #999;">'+'</select>'+'&nbsp;&nbsp;天'
+                    )
+                    $.ajax({
+                        type : "post",
+                        async : false,
+                        url : ip_path+"/changfa_system/powerRepair/selectPowerDays.do",
+                        dataType : "json",
+                        success : function (data) {
+                        //console.log(data)
+                            for(var i=0;i<data['body']['resultList']['length'];i++){
+                                $("#repairday").append( 
+                                        "<option value='"+ data['body']['resultList'][i]['days'] +"'>"+data['body']['resultList'][i]['days']+"</option>"
+                                    );
+                            }
+                        $("#checkTime").unbind();
+                        }
+                    });
+                }else if(data['body']['result']['status'] == 15){
+                    $('#checkTime').append(
+                        '<input type="text"  id="tianshu" disabled = "disabled" value="'+ data['body']['result']['examineSubsidyDays']+'" style="width: 100px;height: 50px;font-weight: bold">'+'&nbsp;&nbsp;天'
+                    )
+                    $('#butie_cost').append(data['body']['result']['examineSubsidyCost'])
+                }else{
+                    $('#butie_cost').append(data['body']['result']['examineSubsidyCost'])
+
+                    $('#checkTime').append( 
+                        '<input type="text"  id="tianshu" disabled = "disabled" value="'+ data['body']['result']['subsidyDays']+'" style="width: 100px;height: 50px;font-weight: bold">'+'&nbsp;&nbsp;天'
+                    );
+                }
+                
+                $("#error_description").append(
+                    '<div class="txt_left" style="height: auto;width:100%;padding-bottom: 10px;margin-left: -10px;padding-left: 10px;border-bottom: 1px solid #E4E4E4;">' +
+                    '维修方式：' + data['body']['result']['faultTypeName'] + '' +
+                    '<span style="margin-left: 38%;">故障等级：</span><select id="qualityLevel">' +
+                    '<option value="A">A</option>' +
+                    '<option value="B">B</option>' +
+                    '<option value="C">C</option>' +
+                    '</select>' +
+                    '</div>'
+                );
+
+                for (var i = 0; i < data['body']['result']['firstFaults']['partFaults'].length; i++) {
+                    $("#error_description").append(
+                        '<div class="errPart_div">' +
+                        '<div class="xx txt_left flt_l"><div>祸首件编码：' + data['body']['result']['firstFaults']['partFaults'][i]['partNo'] + '</div><div>祸首件名称：' + data['body']['result']['firstFaults']['partFaults'][i]['partName'] + '</div></div>' +
+                        '<div class="xx txt_left flt_l"><div>故障系统：' + data['body']['result']['firstFaults']['partFaults'][i]['sysName'] + '</div><div>故障模式：' + data['body']['result']['firstFaults']['partFaults'][i]['faultName'] + '</div></div>' +
+                        '</div>'
+
+                        // '<div style="height: 65px;border-bottom: 1px solid #E4E4E4;margin-left: -10px;padding-left: 10px;padding-top: 10px;">' +
+                        // '<div class="txt_left flt_l"><div>祸首件编码：' + data['body']['result']['firstFaults']['partFaults'][i]['partNo'] + '</div><div>祸首件名称：' + data['body']['result']['firstFaults']['partFaults'][i]['partName'] + '</div><div>故障系统：' + data['body']['result']['firstFaults']['partFaults'][i]['sysName'] + '</div></div>' +
+                        // '</div>'
+                    );
+                }
+
+                if (data['body']['result']['faults']['partFaults'] != undefined && data['body']['result']['faults']['partFaults'] != "" && data['body']['result']['faults']['partFaults'] != null) {
+                    for (var i = 0; i < data['body']['result']['faults']['partFaults'].length; i++) {
+                        $("#error_description").append(
+                            '<div class="errPart_div">' +
+                            '<div class="xx txt_left flt_l"><div>更换件编码：' + data['body']['result']['faults']['partFaults'][i]['partNo'] + '</div><div>更换件名称：' + data['body']['result']['faults']['partFaults'][i]['partName'] + '</div></div>' +
+                            '<div class="xx txt_left flt_l"><div>数量：' + data['body']['result']['faults']['partFaults'][i]['count'] + '</div></div>' +
+                            '</div>'
+                        );
+                    }
+                }
+
+                $("#error_description").append(
+                    '<div class="txt_left" style="height: auto;width:100%;word-wrap:break-word; word-break:break-all;padding-top: 10px;">故障说明：' + data['body']['result']['faultInstruction'] + '</div>'
+                );
+
+                for (var i = 0; i < data['body']['result']['personFileInfo'].length; i++) {
+                    $("#per_mac_pic").append(
+                        '<a href="javascript:void(0)" data-magnify="gallery" data-group="g1" data-src="'+ data['body']['result']['personFileInfo'][i]['filePath'] +'" data-caption="显示图片">'+
+                        '<img src="' + data['body']['result']['personFileInfo'][i]['filePath'] + '" class="err_pic" >'+
+                        '</a>'
+                    );
+                }
+
+                for (var i = 0; i < data['body']['result']['faultFileInfo'].length; i++) {
+                    $("#err_pic").append(
+                        '<a href="javascript:void(0)" data-magnify="gallery" data-group="g1" data-src="'+ data['body']['result']['faultFileInfo'][i]['filePath'] +'" data-caption="显示图片">'+
+                        '<img src="' + data['body']['result']['faultFileInfo'][i]['filePath'] + '" class="err_pic" >' +
+                        '</a>'
+                    );
+                }
+
+                $("#checkDistance").val(data['body']['result']['examineDistance']);
+                $("#checkHour").val(data['body']['result']['examineTime']);
+                $("#dis_cost").text(data['body']['result']['examineDistanceCost']);
+                $("#hour_cost").text(data['body']['result']['examineTimeCost']);
+                $("#qualityLevel").val(data['body']['result']['qualityLevel']);
+                $("#check_otherCost").val(data['body']['result']['examineOtherFee']);
+                $("#butie_cost").val(data['body']['result']['examineSubsidyCost']);
+                if(data['body']['result']['status'] == 14){
+                    $("#repairday").val(data['body']['result']['examineSubsidyDays']);
+                }else{
+                    $("#checkTime").val(data['body']['result']['examineSubsidyDays']);
+                }
+
+
+
+                if(data['body']['result']['reportType'] == 0){
+                    $("#factoryNum").attr("disabled",true);
+                }
+
+                if(data['body']['result']['operationFlowList'].length != 0){
+                    for(var i=0;i<data['body']['result']['operationFlowList'].length;i++){
+                        $("#opetationLog").append(
+                            '<tr>' +
+                            '<td class="body_td" height="46px">'+data['body']['result']['operationFlowList'][i]['userName']+'</td>' +
+                            '<td class="body_td">'+data['body']['result']['operationFlowList'][i]['description']+'</td>' +
+                            '<td class="body_td">'+data['body']['result']['operationFlowList'][i]['reason']+'</td>' +
+                            '<td class="body_td">'+data['body']['result']['operationFlowList'][i]['createTime']+'</td>' +
+                            '</tr>'
+                        );
+                    }
+                }else{
+                    $("#opetationLog").append(
+                        '<tr>' +
+                        '<td class="body_td" height="46px" colspan="4">暂无操作记录</td>' +
+                        '</tr>'
+                    );
+                }
+            }
+        });
+
+
+
+        if(statue != 14){
+            $("#rep_next").html("");
+            // $("#factoryNum").attr("disabled",true);
+            // $("#lineNum").attr("disabled",true);
+            // $("#seriesNum").attr("disabled",true);
+            // $("#modelNum").attr("disabled",true);
+            $("#checkDistance").attr("disabled",true);
+            $("#checkHour").attr("disabled",true);
+            $("#tianshu").attr("disabled",true);
+            $("#qualityLevel").attr("disabled",true);
+            $("#check_otherCost").attr("disabled",true);
+            $("#makeCost").html("");
+        }else {
+            $("#status_describe").html("当前状态：待终审");
+        }
+        if(statue == 31){
+            $("#status_describe").html("当前状态：待("+ person.toString() +")初审");
+        }
+        if(statue == 32){
+            $("#status_describe").html("当前状态：初审驳回");
+        }
+        if(statue == 16){
+            $("#status_describe").html("当前状态：终审驳回");
+        }
+        if(statue == 15){
+            $("#status_describe").html("当前状态：审核通过");
+        }
+        if(statue == 6){
+            $("#status_describe").html("当前状态：已完成");
+        }
+
+        if($(window.parent.parent.document).find("input[name='history_mark']").val() == ""){
+            if($(window.parent.parent.document).find("input[name='history_400_mark']").val() != ""){
+                $("#rep_next").html('<img src="img/front.png" onclick="to_lastReport_400()">');
+            }
+        }else{
+            $("#rep_next").html('<img src="img/front.png" onclick="to_lastReport()">');
+        }
+
+        $('[data-magnify]').Magnify({
+                    Toolbar: [
+                        'prev',
+                        'next',
+                        'rotateLeft',
+                        'rotateRight',
+                        'zoomIn',
+                        'actualSize',
+                        'zoomOut'
+                    ],
+                    keyboard:true,
+                    draggable:true,
+                    movable:true,
+                    modalSize:[800,600],
+                    beforeOpen:function (obj,data) {
+                        console.log('beforeOpen')
+                    },
+                    opened:function (obj,data) {
+                        console.log('opened')
+                    },
+                    beforeClose:function (obj,data) {
+                        console.log('beforeClose')
+                    },
+                    closed:function (obj,data) {
+                        console.log('closed')
+                    },
+                    beforeChange:function (obj,data) {
+                        console.log('beforeChange')
+                    },
+                    changed:function (obj,data) {
+                        console.log('changed')
+                    }
+                });
+    }
+</script>
+</html>

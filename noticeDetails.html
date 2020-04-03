@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>通知详情</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/saleCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <script src="js/ajaxfileupload.js" type="text/javascript"></script>
+    <script src="js/jquery_form.js" type="text/javascript"></script>
+    <script src="js/ajaxfileupload.js" type="text/javascript"></script>
+    <script src="js/jquery_form.js" type="text/javascript"></script>
+</head>
+<body class="reset">
+<div class="mg-t50" style="width: 90%;margin-left: 5%;height: auto;padding-top :20px;padding-bottom:30px;background: #FFFFFF;">
+    <div style="width: 90%;margin-left: 5%;height: auto">
+        <div class="txt_center"><h1 id="title">标题</h1></div>
+        <span style="font-weight: bold">文章类型：</span><span id="type"class="mg_r70"></span><span style="font-weight: bold">发送对象：</span><span id="appoint"></span>
+        <div id="content">
+
+        </div>
+
+        <span style="font-weight: bold">附件：</span>
+        <table id="fileList">
+
+        </table>
+        <div class="txt_center">
+            <input type="button" id="back" class="submit_btn" value="撤回" onclick="noticeBack()">
+        </div>
+        <form id="form" action="" method="post">
+
+        </form>
+    </div>
+</div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/user/checkInform.do",
+            data : {
+                informId : $(window.parent.document).find("input[name='noticeId']").val()
+            },
+            dataType : "json",
+            success : function (data) {
+                if(data['head']['code'] == 200){
+                    if(data['body']['result']['status'] == 3){
+                        $("#back").addClass("submit_btn_inactive");
+                        $("#back").attr("disabled",true);
+                        $("#back").val("已撤回");
+                    }
+
+                    $("#title").text(data['body']['result']['title']);
+                    var type;
+                    switch(data['body']['result']['type']){
+                        case 1:
+                            type = "发文";
+                            break;
+                        case 2:
+                            type = "通知";
+                            break;
+                        case 3:
+                            type = "通告";
+                            break;
+                        case 0:
+                            type = "其他";
+                            break;
+                    }
+                    $("#type").text(type);
+
+                    var object = new Array();
+                    if(data['body']['result']['role'] == ""){
+                        object = data['body']['result']['appoint'].split(",");
+                    }else{
+                        var roleList = data['body']['result']['role'].split(",");
+                        for(var i=0;i<roleList.length;i++){
+                            if(roleList[i] == 14){
+                                object.push("总经理");
+                            }
+                            if(roleList[i] == 13){
+                                object.push("副总经理");
+                            }
+                            if(roleList[i] == 12){
+                                object.push("产品经理");
+                            }
+                            if(roleList[i] == 3){
+                                object.push("大区经理");
+                            }
+                            if(roleList[i] == 4){
+                                object.push("省经理");
+                            }
+                            if(roleList[i] == 5){
+                                object.push("业务员");
+                            }
+                            if(roleList[i] == 6){
+                                object.push("经销商");
+                            }
+                            if(roleList[i] == 9){
+                                object.push("社会化服务站");
+                            }
+                            if(roleList[i] == 7){
+                                object.push("三包员");
+                            }
+                        }
+                    }
+                    $("#appoint").text(object);
+
+                    // console.log(data['body']['result']['content'].split('\n'));
+                    var contList = data['body']['result']['content'].split('\n');
+                    for(var i=0;i<contList.length;i++){
+                        $("#content").append(
+                            '<p style="text-indent: 2em;word-break: break-all">' + contList[i] + '</p>'
+                        );
+                    }
+
+
+                    if(data['body']['result']['filesPathList'].length != 0){
+                        console.log(data['body']['result']['filesPathList']);
+                        $("#fileList").empty();
+                        for(var j=0;j<data['body']['result']['filesPathList'].length;j++){
+                            $("#fileList").append(
+                                '<tr>' +
+                                '<td><span>' + data['body']['result']['filesNameList'][j] +'</span></td>' +
+                                '<td><a href="###" onclick="downloadFile(this)">下载</a></td>' +
+                                '<td style="display: none;">' + data['body']['result']['filesIdList'][j] + '</td>' +
+                                '</tr>'
+                            );
+                        }
+                    }
+                }else{
+                    alert(data['head']['message']);
+                }
+            }
+        });
+    }
+</script>
+</html>

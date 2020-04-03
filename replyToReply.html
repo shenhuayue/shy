@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>回复详情</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/runningCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+</head>
+<body class="reset">
+<div class="post_title mg-t50">
+    <img src="img/status_warning.png" class="status_post">
+    <span id="status_describe" class="status_info">当前状态：</span>
+    <div class="flt_r">
+        <span class="vertival-middle">推荐</span><img id="supportLimit" src="" class="vertival-middle mg-r30" onclick="toogleSupport(this)">
+        <span class="vertival-middle">用户显示</span><img id="viewLimit" src="" class="vertival-middle mg-r30" onclick="toogleViewStatus(this)">
+        <span class="vertival-middle">允许回复</span><img id="replyLimit" src="" class="vertival-middle mg-r30" onclick="toogleReplyStatus(this)">
+    </div>
+</div>
+<div class="post_detail">
+    <div style="width: 90%;margin-left: 5%">
+
+        <div>
+            <div class="tit_msg">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>评论详情</span>
+            </div>
+            <div>
+                <div style="width: 100%;height: auto;color: #666666;background: #FFFFFF;">
+                    <div class="mg_l60 mg-t30">
+                        <table>
+                            <tr>
+                                <td><img id="replyHead" src="" style="width: 50px;height: 50px;border-radius: 50%"></td>
+                                <td><span id="replyNickName" class="mg_l10"></span></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="mg_l50" style="width: 90%;">
+                        <span id="replyContent" style="word-break: break-all;"></span>
+                    </div>
+                    <div id="imgList" class="mg_l50 mg-t30">
+
+                    </div>
+                    <div class="mg_l50 mg-t30">
+                        <span id="createTime" class="mg-r50"></span>
+                    </div>
+                    <div class="mg-t20" style="border: 2px solid #E4E4E4;width: 92%;margin-left: 4%"></div>
+                    <div class="mg_l50 mg-t30 mg_b30" style="color: #3498DB;">
+                        <span>点赞量：</span><span id="likeNum" class="mg-r50"></span>
+                        <span>回复量：</span><span id="replyNum" class="mg-r50"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="tit_msg">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>评论回复</span>
+            </div>
+            <table class="table2 mg_b20" width="96%" style="margin-left: 2%">
+                <thead>
+                    <tr>
+                        <td class="head_td" height="46" style="padding-left: 20px;">
+                            <span>回复内容</span>
+                        </td>
+                    </tr>
+                </thead>
+                <tbody id="userCommentList">
+
+                </tbody>
+            </table>
+        </div>
+        <div id="barcon" class="barcon" >
+            <div id="barcon1" class="barcon1"></div>
+            <div id="barcon2" class="barcon2">
+                <ul>
+                    <li><button id="firstPage" class="page_btn">首页</button></li>
+                    <li><button id="prePage" class="page_btn">上一页</button></li>
+                    <li><button id="nextPage" class="page_btn">下一页</button></li>
+                    <li><button id="lastPage" class="page_btn">尾页</button></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+
+        currentPage = 1;
+        $('#firstPage').attr('disabled',true);
+        $('#prePage').attr('disabled',true);
+        $("#firstPage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = 1;
+            $('#firstPage').attr('disabled',true);
+            $('#prePage').attr('disabled',true);
+            ajax_replyToReply();
+        });
+        $("#lastPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = totalPage;
+            $('#lastPage').attr('disabled',true);
+            $('#nextPage').attr('disabled',true);
+            ajax_replyToReply();
+        });
+        $("#nextPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = currentPage+1;
+            if(currentPage == totalPage){
+                $('#lastPage').attr('disabled',true);
+                $('#nextPage').attr('disabled',true);
+            }else{
+                $('#lastPage').removeAttr('disabled');
+                $('#nextPage').removeAttr('disabled');
+            }
+            ajax_replyToReply();
+        });
+        $("#prePage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = currentPage-1;
+            if(currentPage == 1){
+                $('#firstPage').attr('disabled',true);
+                $('#prePage').attr('disabled',true);
+            }else{
+                $('#firstPage').removeAttr('disabled');
+                $('#prePage').removeAttr('disabled');
+            }
+            ajax_replyToReply();
+        });
+        ajax_replyToReply();
+    }
+
+    function topicLarge(event) {
+        window.parent.pic_makeLarge(event);
+    }
+</script>
+</html>

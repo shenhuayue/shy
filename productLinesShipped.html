@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>发货产品占比</title>
+        <link href="css/bigScreen.css" type="text/css" rel="stylesheet"/>
+        <script src="js/bigScreen.js"></script>
+        <script src="js/jquery-2.1.1.min.js"></script>
+        <script src="js/echarts.min.js"></script>
+        <script src="js/common.js"></script>
+    </head>
+<body>
+    <div class="outModel">
+        <div class="headerLitle">
+            <div class="leftLitle"><span style="margin-left: 5px;">发货产品占比</span></div>
+            <div class="rightLitle">
+                <select id="line">
+
+                </select>
+                <select id="type">
+                    <option value="1">年</option>
+                    <option value="2">月</option>
+                </select>
+            </div>
+            <div style="clear: both;"></div>
+            <div id="main" style="width: 100%;"></div>
+        </div>
+    </div>
+</body>
+<script>
+window.onload = function () {
+
+    jQuery.support.cors = true
+
+    $('#main').height(Number($(window.parent.parent.document).find("input[name='height']").val())*0.45.toFixed(2));
+
+    $.ajax({
+            type : "post",
+            url : ip_path+"/changfa_system/machineModel/getMachineModels.do",
+            dataType : "json",
+            success : function (data) {
+                $("#line").append("<option value=''>全部</option>");
+                for(var i=0;i<data['body']['resultList']['length'];i++){
+                    $("#line").append("<option value='"+ data['body']['resultList'][i]['number'] +"'>"+data['body']['resultList'][i]['name']+"</option>");
+                }
+                // $("#product").unbind();
+            }
+        });
+        
+
+        var option;
+
+        getlinkRatioInfo();
+
+        $('#line').change(function(){
+            getlinkRatioInfo();
+        })
+        $('#type').change(function(){
+            getlinkRatioInfo();
+        })
+        
+
+}
+
+function getlinkRatioInfo(){
+
+    var myChart = echarts.init(document.getElementById('main'));
+
+    $.ajax({
+            type : "post",
+            url : ip_path+"/changfa_system/screen/getDeliveryLines.do",
+            dataType : "json",
+            data:{
+                type:$('#type').val(),
+                lineNum:$('#line').val()
+            },
+            success : function (data) {
+                if(data.head.code == 200){
+                    var a =[] ;
+                    var b = [];
+                    data.body.resultList.forEach(elem => {
+                        a.push(elem.lineName);
+                        b.push({
+                            value:elem.num,
+                            name:elem.lineName
+                        })
+                    });
+
+
+
+                    option = {
+    tooltip: {
+        trigger: 'item',
+        formatter: '{a} <br/>{b} : {c} ({d}%)'
+    },
+    color : [ '#0B9B53', '#E06326', '#68BF46', '#F7F54A', '#FF7734',  '#5FD5E7' ],
+    series: [
+        {
+            name: '访问来源',
+            type: 'pie',
+            radius: ['30%', '60%'],
+            center: ['50%', '60%'],
+            
+            data: b,
+            itemStyle: { 
+                normal: {
+                    // 设置扇形的阴影
+                    shadowBlur: 30,
+                    shadowColor: 'rgba(0,0,0,0.3)', 
+                    shadowOffsetX: -5,
+                    shadowOffsetY: 5
+
+                }
+            },
+            emphasis: {
+                itemStyle: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            }
+        }
+    ]
+};
+
+                myChart.setOption(option);
+                }else{
+                    alert(data.head.message);
+                }
+
+
+            }
+        }); 
+
+}
+
+</script>
+</html>

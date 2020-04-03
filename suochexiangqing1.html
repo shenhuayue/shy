@@ -1,0 +1,101 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>锁车审核内容2</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/saleCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <!--<link type="text/css" href="css/lrtk.css" rel="stylesheet" />-->
+    <!--<link type="text/css" href="css/prettyPhoto.css" rel="stylesheet" />-->
+    <!--<script type="text/javascript" src="js/jquery.prettyPhoto.js"></script>-->
+    <!--<script type="text/javascript" src="js/lrtk.js"></script>-->
+
+</head>
+<body class="reset"><input type="text" id="focus" size="1" style="display: none;">
+    <div>
+        <div class="title_box">
+            <img src="img/status_warning.png" class="status_warning">
+            <span id="status_describe" class="status_info">当前状态：</span>
+        </div>
+        <div class="rpt_detail">
+            <div id="threeServer_only">
+                <div class="tit_msg">
+                    <img src="img/tit_pic.png" class="tit_pic">
+                    <span>类型</span>
+                </div>
+                <div  style="margin-left: 35px;">
+                    <div class="car-type">类型</div>
+                    <div class="car-type" style="background:rgba(255,255,255,1);">
+                        <img src="" alt="">
+                    </div>
+                </div>
+            </div>
+
+            <div class="tit_msg" style="clear: both;">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>农机信息</span>
+                <!--<img src="img/refresh.png" class="mg-r30 flt_r" onclick="F5()">-->
+            </div>
+            <div>
+                <table class="rpt_detail_tab txt_center">
+                    <tr>
+                        <td class="head_td" height="46px">图片</td>
+                        <td class="head_td">产品线</td>
+                        <td class="head_td">产品系列</td>
+                        <td class="head_td">产品型号</td>
+                        <td class="head_td">条码</td>
+                        <td class="head_td">出厂编号</td>
+                        <td class="head_td">农机状态</td>
+                        <td class="head_td">查看位置</td>
+                    </tr>
+                    <tbody id="adminTbody">
+
+
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="tit_msg" style="clear: both;">
+                    <img src="img/tit_pic.png" class="tit_pic">
+                    <span>外出参展时间</span>
+                    <!--<img src="img/refresh.png" class="mg-r30 flt_r" onclick="F5()">-->
+                </div>
+                <div>
+                    <table class="rpt_detail_tab txt_center">
+                        <tr>
+                            <td class="head_td" height="46px">开始时间</td>
+                            <td class="head_td">结束时间</td>
+                        </tr>
+                        <tbody id="adminTbody">
+    
+    
+                        </tbody>
+                    </table>
+                </div>
+
+            <div class="tit_msg">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>申请理由</span>
+            </div>
+            <div >
+            <textarea id="describe" class="checke_discribe" placeholder="输入驳回说明"></textarea>
+            </div>
+
+            <div class="tit_msg">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>附件上传</span>
+            </div>
+            <div class="mg_b50">
+            <textarea id="describe" class="checke_discribe" placeholder="输入驳回说明"></textarea>
+            </div>
+        </div>
+        
+    </div>
+    <div id="next_status" class="next">
+        <a><img src="img/next.png" id="next" onclick="dis_next()"></a>
+    </div>
+    
+    </body>
+
+</html>

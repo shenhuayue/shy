@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>故障代码维护</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/closeAccount.js"></script>
+    <script src="js/saleCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/index.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <script src="js/ajaxfileupload.js" type="text/javascript"></script>
+    <script src="js/jquery_form.js" type="text/javascript"></script>
+    <script src="jquery-ui-1.12.1/jquery-ui.min.js"></script>
+    <link href="jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet" />
+    <script src="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.js"></script>
+    <script type="text/javascript" src="jQuery-Timepicker/dist/i18n/jquery-ui-timepicker-zh-CN.js"></script>
+    <link href="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.css" rel="stylesheet" />
+    <!--<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">-->
+    <!--<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>-->
+    <!--<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
+</head>
+<body class="reset">
+    <div id="propErrorCode"" class="addTopic outShadow" style="display: none;">
+        <div class="dealer_title">
+            <span>编辑农机信息</span>
+            <img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closePropErrorCode()">
+        </div>
+        <div style="width: 100%;height: auto;border: 1px solid #E4E4E4;border-top: none;">
+            <div class="tit_msg">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>编辑</span>
+            </div>
+            <div style="margin: 0 auto; width: 90%;position: relative;">
+                <div style="position: absolute;width: 100%;top: -50px;">
+                    <div style="float: left;width:50%">
+                        <span class="describ">产品线：</span>
+                        <select id="line2" class="area_choose" style="width: 50%;margin-left: 11px;">
+                        </select>
+                    </div>
+                    <div style="float: left;width:50%">
+                        
+                            <span class="describ" style="float: left;margin-top: 5px;">发动机型号：</span>
+                        <div style="border: 1px solid rgba(102,102,102,0.3);border-radius: 5px;float: left;width: 55%;">
+                            <select id="type2" class="area_choose" style="width: 30%;border: none;float: left;">
+    
+                            </select>
+                            <div style="float: left;">
+                                <input type="button"   class="output_btn" id="openAddModel" style="margin-right: 5px;margin-top:0;background:rgba(210,210,210,1);width: 50px;" value="新增">
+                            </div>
+                            <div style="float: left;">
+                                <input type="button"  class="output_btn" id="openDelectModel" style="margin-right: 5px;margin-top:0;background-color: rgba(236,88,88,1);width: 50px;" value="删除">
+                            </div>
+                            <div style="clear: both;"></div>
+                            <!-- 新增框 -->
+                            <div id="addModel" style="width: 100%;text-align: center;display: none;background-color: #ffffff;">
+                                <input type="text" id="modelName" class="product_line" style="width: 90%;border-radius: 5px;padding: 0;margin:5px;box-sizing: border-box;">
+                                <input type="button" id="addModelName"  class="output_btn " style="margin-right: 5px;margin-top:0;background:rgba(210,210,210,1);" value="新增">
+                            </div>
+                            <!-- 删除框 -->
+                            <div id="delectModel" style="width: 100%;display: none;text-align: center;background-color: #ffffff;">
+                                <div id="delectModelInfo" style="height: 100px;overflow-y: scroll;">
+
+                                </div>
+                                <input type="button"  class="output_btn" id="setDelectModel" style="margin-right: 5px;margin-top:20px;background-color: rgba(236,88,88,1);" value="删除">
+                            </div>
+                        </div>
+                    </div>
+                    <div style="clear: both;"></div>
+                </div>
+
+                <div style="margin-top: 80px;">
+                    <div style="float: left;width:50%">
+                        <span class="describ">故障代码：</span>
+                        <input type="text" id="errorCode" class="product_line" style="width: 50%;border-radius: 5px;">
+                    </div>
+                    <div style="float: left;width:50%">
+                        <span class="describ">故障名称：</span>
+                        <input type="text" id="errorName" class="product_line" style="width: 50%;margin-left: 11px;border-radius: 5px;">
+                    </div>
+                </div>
+                <div style="clear: both;"></div>
+                <div style="margin-top: 20px;">
+                    <span class="describ">故障描述：</span>
+                    <textarea  id="errorRemark" cols="100" rows="10" style="border-radius: 5px;border: 1px solid rgba(102,102,102,0.3);vertical-align: top;margin-left: -5px;"></textarea>
+                </div>
+            </div>
+            <div class="mg_b50" style="width: 100%;text-align: center">
+                <button class="waves submit_btn mg-t30" id="addErrorCodeInsert">提交</button>
+            </div>
+        </div>
+    </div>
+
+<div class="mg-t50">
+    <div class="tit">
+        <span class="flt_l">筛选查询</span>
+    </div>
+    <div class="account_cont2">
+
+        <span class="describ mg_l50">产品线：</span>
+        <select id="line" class="area_choose">
+        </select>
+
+        <span class="describ mg_l50">发动机型号：</span>
+        <select id="type" class="area_choose">
+        </select>
+    </div>
+</div>
+<div>
+    <div class="tit mg-t50">
+        <span class="flt_l">故障代码维护列表</span>
+        <div style="float: right;    margin-right: 50px;" >
+            <div style="float: left;">
+                <form id="form" action="" method="get">
+                    <input type="hidden" name="token" id="token1" value="">
+                    <input type="hidden" name="line" value="">
+                    <input type="hidden" name="engine" value="">
+                    <input type="button" id="costOutput" class="output_btn " style="margin-right: 5px;" value="导出">
+                </form>
+            </div>
+            <div style="float: left;">
+                <form id="form2">
+                    <input type="hidden" id="token" name="token">
+                    <input type="file" name="excel" id="file" style="display: none;">
+                </form>
+                <input type="button" id="outputStore" class="output_btn"  style="margin-right: 5px;" value="导入">
+            </div>
+            <div style="float: left;">
+                <input type="button" id="redactPropErrorCode"  class="output_btn" style="margin-right: 5px;background:rgba(162,250,233,1);" value="编辑">
+            </div>
+            <div style="float: left;">
+                <input type="button" id="addPropErrorCode"  class="output_btn " style="margin-right: 5px;background:rgba(210,210,210,1);" value="新增">
+            </div>
+            <div style="float: left;">
+                <input type="button" id="delete" class="output_btn " style="margin-right: 5px;background-color: rgba(236,88,88,1);" value="删除">
+            </div>
+        </div>
+    </div>
+    <div class="account_cont" style="font-size: 0.9em">
+        <table width="100%" cellpadding="0" cellspacing="0" class="table2" align="center">
+            <thead>
+            <tr align="center">
+                <th class="th2" height="33">故障代码</th>
+                <th class="th2">故障名称</th>
+                <th class="th2">产品线</th>
+                <th class="th2">发动机型号</th>
+                <th class="th2">操作</th>
+                <th class="th2">选择</th>
+            </tr>
+            </thead>
+            <tbody id="adminTbody">
+
+            </tbody>
+        </table>
+        <div id="barcon" class="barcon" >
+            <div id="barcon1" class="barcon1"></div>
+            <div id="barcon2" class="barcon2">
+                <ul>
+                    <li><button id="firstPage" class="page_btn">首页</button></li>
+                    <li><button id="prePage" class="page_btn">上一页</button></li>
+                    <li><button id="nextPage" class="page_btn">下一页</button></li>
+                    <li><button id="lastPage" class="page_btn">尾页</button></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+
+
+        //判断是否是编辑还是 新增
+        var addOrEdit;
+        // $.datepicker.regional['zh-CN'] = {
+        //     changeMonth: true,
+        //     changeYear: true,
+        //     clearText: '清除',
+        //     clearStatus: '清除已选日期',
+        //     closeText: '关闭',
+        //     closeStatus: '不改变当前选择',
+        //     prevText: '<上月',
+        //     prevStatus: '显示上月',
+        //     prevBigText: '<<',
+        //     prevBigStatus: '显示上一年',
+        //     nextText: '下月>',
+        //     nextStatus: '显示下月',
+        //     nextBigText: '>>',
+        //     nextBigStatus: '显示下一年',
+        //     currentText: '今天',
+        //     currentStatus: '显示本月',
+        //     monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+        //     monthNamesShort: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+        //     monthStatus: '选择月份',
+        //     yearStatus: '选择年份',
+        //     weekHeader: '周',
+        //     weekStatus: '年内周次',
+        //     dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+        //     dayNamesShort: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+        //     dayNamesMin: ['日', '一', '二', '三', '四', '五', '六'],
+        //     dayStatus: '设置 DD 为一周起始',
+        //     dateStatus: '选择 m月 d日, DD',
+        //     dateFormat: 'yy-mm-dd',
+        //     firstDay: 1,
+        //     initStatus: '请选择日期',
+        //     isRTL: false
+        // };
+
+        // $.datepicker.setDefaults($.datepicker.regional['zh-CN']);
+        // $("#date_start").datepicker({maxDate:new Date()});
+        // $("#date_end").datepicker({maxDate:new Date()});
+        // $("#defult").datetimepicker();
+        // $("#date_start").prop("readonly", true).datepicker({
+        //     changeMonth: true,
+        //     dateFormat: "yy-mm-dd",
+        //     clear : "qingkong",
+        //     onClose: function(selectedDate) {
+        //         $("#date_end").datepicker("option", "minDate", selectedDate);
+        //     }
+        // });
+
+        // $("#date_end").prop("readonly", true).datepicker({
+        //     changeMonth: true,
+        //     dateFormat: "yy-mm-dd",
+        //     onClose: function(selectedDate) {
+        //         $("#date_start").datepicker("option", "maxDate", selectedDate);
+        //         $("#date_end").val($(this).val());
+        //     }
+        // });
+
+        // $("#date_start").val('2020-01-01');
+        // $("#date_end").val(getTime(new Date()));
+
+        $.ajax({
+            type : "post",
+            url : ip_path+"/changfa_system/machineModel/getMachineModels.do",
+            dataType : "json",
+            data:{
+                machineType:2
+            },
+            success : function (data) {
+                $("#line").append("<option value=''>全部</option>");
+                for(var i=0;i<data['body']['resultList']['length'];i++){
+                    $("#line").append("<option value='"+ data['body']['resultList'][i]['name'] +"'>"+data['body']['resultList'][i]['name']+"</option>");
+                    $("#line2").append("<option value='"+ data['body']['resultList'][i]['name'] +"'>"+data['body']['resultList'][i]['name']+"</option>");
+                }
+                // $("#product").unbind();
+            }
+        });
+
+        getList();
+
+        currentPage = 1;
+        $('#firstPage').attr('disabled',true);
+        $('#prePage').attr('disabled',true);
+        $("#firstPage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = 1;
+            $('#firstPage').attr('disabled',true);
+            $('#prePage').attr('disabled',true);
+            ajax_errorCodeManage();
+        });
+        $("#lastPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = totalPage;
+            $('#lastPage').attr('disabled',true);
+            $('#nextPage').attr('disabled',true);
+            ajax_errorCodeManage();
+        });
+        $("#nextPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = currentPage+1;
+            if(currentPage == totalPage){
+                $('#lastPage').attr('disabled',true);
+                $('#nextPage').attr('disabled',true);
+            }else{
+                $('#lastPage').removeAttr('disabled');
+                $('#nextPage').removeAttr('disabled');
+            }
+            ajax_errorCodeManage();
+        });
+        $("#prePage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = currentPage-1;
+            if(currentPage == 1){
+                $('#firstPage').attr('disabled',true);
+                $('#prePage').attr('disabled',true);
+            }else{
+                $('#firstPage').removeAttr('disabled');
+                $('#prePage').removeAttr('disabled');
+            }
+            ajax_errorCodeManage();
+        });
+
+        //初始化
+        ajax_errorCodeManage();
+
+        $("#line").change(function () {
+            currentPage = 1;
+            ajax_errorCodeManage();
+        });
+
+        $("#type").change(function () {
+            currentPage = 1;
+            ajax_errorCodeManage();
+        });
+
+        $('#redactPropErrorCode').click(function(){
+            
+            var ids = [];
+            $('.change').each(function(e){
+                if($($('.change')[e]).attr('src') == 'img/service_select.png'){
+                    ids.push($($('.change')[e]).parent().parent().attr('id'));
+                }
+            });
+            if(ids.length == 0){
+                alert('请勾选故障项');
+            }else if(ids.length > 1){
+                alert('你已多选');
+            }else{
+                $.ajax({
+                    type : "get",
+                    url : ip_path+"/changfa_system/errorCode/get.do",
+                    dataType : "json",
+                    data:{
+                        id:ids[0]
+                    },
+                    success : function (data) {
+                        if(data.head.code == 200){
+                            addOrEdit = ids[0]
+                        $('#errorCode').val(data.body.result.code),
+                        $('#errorName').val(data.body.result.name),
+                        $('#errorRemark').val(data.body.result.description),
+                        $('#line2').val(data.body.result.line),
+                        $('#type2').val(data.body.result.engine),
+                        $('#propErrorCode').show();
+                        }else{
+                            alert(data.head.message);
+                        }
+
+                        // $("#product").unbind();
+                    }
+                });
+
+            }
+
+
+        })
+
+        $('#addPropErrorCode').click(function(){
+            addOrEdit = '';
+            $('#errorCode').val(''),
+                        $('#errorName').val(''),
+                        $('#errorRemark').val(''),
+                        $('#line2').val(''),
+                        $('#type2').val(''),
+            $('#propErrorCode').show('');
+        })
+
+        //打开弹框里面的新增框
+        $('#openAddModel').click(function(){
+            $('#addModel').show();
+            $('#delectModel').hide();
+        })
+
+        //打开弹框里面d的删除框
+        $('#openDelectModel').click(function(){
+            $('#delectModel').show();
+            $('#addModel').hide();
+        })
+
+
+        $("#type2").click(function(){
+            $('#addModel').hide();
+            $('#delectModel').hide();
+        })
+
+        $('#addModelName').click(function(){
+            if($('#modelName').val()){
+                $.ajax({
+                    type : "post",
+                    url : ip_path+"/changfa_system/parameter/insert.do",
+                    dataType : "json",
+                    data:{
+                        type:'engine',
+                        names:$('#modelName').val()
+                    },
+                    success : function (data) {
+                         if(data.head.code == 200 ){
+                             alert(data.head.message);
+                             $('#addModel').hide();
+                            getList();
+                         }else{
+                            alert(data.head.message);
+                         }
+
+                        // $("#product").unbind();
+                    }
+                });
+            }else{
+                alert('请输入你要添加的型号');
+            }
+        })
+
+        $("#setDelectModel").click(function () {
+            var ids =[];
+            $('.change2').each(function(e){
+                if($($('.change2')[e]).attr('src') == 'img/service_select.png'){
+                    ids.push($($('.change2')[e]).parent().prev().prev().text());
+                }
+            });
+            if(ids.length == 0){
+                alert('请勾选故障项');
+            }else{
+                $.ajax({
+                    type : "post",
+                    url : ip_path+"/changfa_system/parameter/delete.do",
+                    dataType : "json",
+                    data:{
+                        ids:ids.join(','),
+                        type:'engine'
+                    },
+                    success : function (data) {
+                        if(data.head.code == 200){
+                            alert('删除成功');
+                            getList();
+                            $('#delectModel').hide();
+                        }else{
+                            alert(data.head.message);
+                        }
+
+                        // $("#product").unbind();
+                    }
+                });
+            }
+        })
+
+        //删除
+        $("#delete").click(function () {
+            var ids =[];
+            $('.change').each(function(e){
+                if($($('.change')[e]).attr('src') == 'img/service_select.png'){
+                    ids.push($($('.change')[e]).parent().parent().attr('id'));
+                }
+            });
+            if(ids.length == 0){
+                alert('请勾选故障项');
+            }else{
+                $.ajax({
+                    type : "post",
+                    url : ip_path+"/changfa_system/errorCode/delete.do",
+                    dataType : "json",
+                    data:{
+                        ids:ids.join(',')
+                    },
+                    success : function (data) {
+                        if(data.head.code == 200){
+                            alert('删除成功');
+                            ajax_errorCodeManage();
+                        }else{
+                            alert(data.head.message);
+                        }
+
+                        // $("#product").unbind();
+                    }
+                });
+            }
+        });
+
+
+        $("#costOutput").click(function () {
+            $("#token1").val($(window.parent.document).find("input[name='token']").val());
+            $("input[name='line']").val($("#line").val());
+            $("input[name='engine']").val($("#type").val());
+            $("#form").attr("action",ip_path + "/changfa_system/errorCode/excel.do");
+            $("#form").submit();
+        });
+
+        $("#outputStore").click(function () {
+            $("#file").click();
+        });
+
+        $("#file").on("change",function(){
+            var filepath = $("#file").val();
+            var extStart = filepath.lastIndexOf(".");
+
+            var ext = filepath.substring(extStart, filepath.length).toUpperCase();
+            if(ext != ".XLSX" && ext != ".XLS") {
+                //alert(ext);
+                alert("文件限于xls,xlsx！");
+                return false;
+            } else {
+                $("#token").val($(window.parent.document).find("input[name='token']").val());
+                var option = {
+                    url :ip_path+"/changfa_system/errorCode/upload.do",
+                    type : "post",
+                    success : function (data) {
+                        if(data.body.result){
+                            alert('导入数据有问题');
+                            if(window.confirm("确定下载未导入成功的excel？")){
+                            window.open(ip_path+"/changfa_system/errorCode/error/excel.do" + "?key=" + data.body.result)
+                            }
+                        }else{
+                            alert(data['head']['message']);
+                        window.location.reload();
+                        }
+
+                        // if(data['head']['code'] == 200){
+                        //     window.location.reload();
+                        // }
+                    }
+                };
+                $("#form2").ajaxSubmit(option);
+            }
+        });
+
+
+//新增
+        $('#addErrorCodeInsert').click(function(){
+            var  url;
+            if(addOrEdit){
+                url = "/changfa_system/errorCode/update.do"
+            }else{
+                url = "/changfa_system/errorCode/insert.do"
+            }
+            $.ajax({
+                    type : "post",
+                    url : ip_path+url,
+                    dataType : "json",
+                    data:{
+                        code:$('#errorCode').val(),
+                        name:$('#errorName').val(),
+                        description:$('#errorRemark').val(),
+                        line:$('#line2').val(),
+                        engine:$('#type2').val(),
+                        token:$(window.parent.document).find("input[name='token']").val(),
+                        serial:1,
+                        id:addOrEdit
+                    },
+                    success : function (data) {
+                        if(data.head.code == 200){
+                            window.location.reload();
+                        }else{
+                            alert(data.head.message);
+                        }
+
+                        // $("#product").unbind();
+                    }
+                });
+
+        })
+
+    }
+
+    //获取型号
+    function getList(){
+        $.ajax({
+            type : "get",
+            url : ip_path+"/changfa_system/parameter/list.do",
+            dataType : "json",
+            data:{
+                type:'engine'
+            },
+            success : function (data) {
+                $("#type2").empty();
+                $("#type").empty();
+                $("#delectModelInfo").empty();
+                
+                    $("#type").append("<option value=''>全部</option>");
+                for(var i=0;i<data['body']['result']['length'];i++){
+                    $("#type").append("<option value='"+ data['body']['result'][i]['name'] +"'>"+data['body']['result'][i]['name']+"</option>");
+                }
+                
+                $("#type2").append("<option value=''>全部</option>");
+                for(var i=0;i<data['body']['result']['length'];i++){
+                    $("#type2").append("<option value='"+ data['body']['result'][i]['name'] +"'>"+data['body']['result'][i]['name']+"</option>");
+                    $('#delectModelInfo').append(
+                        '<div style="margin-top:5px; border-bottom: 2px solid rgba(102,102,102,0.3);">'+
+                            '<div style="display: none;">'+ data['body']['result'][i]['id'] +'</div>'+
+                                    '<div style="width: 50%;display:inline-block;text-align: center;padding-top: 3px;">'+
+                                        '<span style="margin-left: 20px;">'+ data['body']['result'][i]['name'] +'</span>'+
+                                    '</div>'+
+                                    '<div style="width: 50%;display:inline-block;text-align: center;padding-top: 3px;">'+
+                                        '<img style="margin-left: 20px;vertical-align: middle;" src="img/service_unselect.png" alt="" class="change2" onclick="chooseSelect2(this)">'+
+                                    '</div>'+
+                                '</div>'
+                    )
+                }
+
+                // $("#product").unbind();
+            }
+        });
+    }
+
+    function getTime(date) {  
+    var y = date.getFullYear();  
+    var m = date.getMonth() + 1;  
+    m = m < 10 ? '0' + m : m;  
+    var d = date.getDate();  
+    d = d < 10 ? ('0' + d) : d;  
+    return y + '-' + m + '-' + d;  
+    };  
+
+    function chooseSelect(event){
+        if($(event).attr('src') == 'img/service_unselect.png'){
+            $(event).attr('src','img/service_select.png')
+        }else{
+            $(event).attr('src','img/service_unselect.png')
+        }
+    }
+
+    function chooseSelect2(event){
+        if($(event).attr('src') == 'img/service_unselect.png'){
+            $(event).attr('src','img/service_select.png')
+        }else{
+            $(event).attr('src','img/service_unselect.png')
+        }
+    }
+</script>
+</html>

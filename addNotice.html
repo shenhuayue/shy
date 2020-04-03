@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>创建通知</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/saleCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <script src="jqueryTagsInput/jquery.tagsinput.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="jqueryTagsInput/jquery.tagsinput.min.css" />
+    <script src="js/ajaxfileupload.js" type="text/javascript"></script>
+    <script src="js/jquery_form.js" type="text/javascript"></script>
+    <script src="js/ajaxfileupload.js" type="text/javascript"></script>
+    <script src="js/jquery_form.js" type="text/javascript"></script>
+</head>
+<body class="reset">
+<div class="mg-t50">
+    <div class="tit">
+        <span>创建通知</span>
+    </div>
+    <div style="width: 90%;height: auto;margin-left: 5%;border: 1px solid #E4E4E4;">
+        <div style="height: 50px;"></div>
+        <div class="tit_msg mg_l100">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>类型</span>
+        </div>
+        <div class="mg_l250">
+            <select id="type" class="select_class">
+                <option value="1">发文</option>
+                <option value="2">通知</option>
+                <option value="3">通告</option>
+                <option value="0">其他</option>
+            </select>
+        </div>
+
+        <div class="tit_msg mg_l100">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>标题</span>
+        </div>
+        <div class="mg_l250">
+            <input type="text" id="title" class="userInfo" style="width: 630px">
+        </div>
+
+        <div class="tit_msg mg_l100">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>内容</span>
+        </div>
+        <div class="mg_l250">
+            <textarea id="content" style="width: 630px;height: 150px;resize: none;overflow-y: scroll"></textarea>
+        </div>
+
+        <div class="tit_msg mg_l100">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>附件</span>
+        </div>
+        <div class="mg_l250">
+            <form id="form">
+                <table id="fileList" class="mg_b20">
+                    <tr content="delete">
+                        <td><input type="file" name="file"></td>
+                        <td><a href="###" onclick="deleteFile(this)">删除</a></td>
+                    </tr>
+                </table>
+                <input type="button" class="submit_btn" value="添加" onclick="addFileUpload()">
+                <input type="button" class="submit_btn" value="上传" onclick="submitFileList()">
+            </form>
+        </div>
+
+        <div class="tit_msg mg_l100">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>发送方式</span>
+        </div>
+        <div class="mg_l250">
+            <input type="radio" id="type1" class="choose_select vert_mid" name="type" onclick="toogleAccepter()">
+            <label for="type1">按角色</label>
+            <input type="radio" id="type2" class="choose_select vert_mid" name="type" onclick="toogleAccepter()">
+            <label for="type2">按单位/人员</label>
+        </div>
+
+        <div id="qunfa">
+            <div class="tit_msg mg_l100">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>接收人</span>
+            </div>
+            <div class="mg_l250">
+                <input type="checkbox" id="14" class="choose_checkbox vert_mid"><label for="14" class="mg-r20">总经理</label>
+                <input type="checkbox" id="13" class="choose_checkbox vert_mid"><label for="13" class="mg-r20">副总经理</label>
+                <input type="checkbox" id="12" class="choose_checkbox vert_mid"><label for="12" class="mg-r20">产品经理</label>
+                <input type="checkbox" id="3" class="choose_checkbox vert_mid"><label for="3" class="mg-r20">大区经理</label>
+                <input type="checkbox" id="4" class="choose_checkbox vert_mid"><label for="4" class="mg-r20">省经理</label>
+                <input type="checkbox" id="5" class="choose_checkbox vert_mid"><label for="5" class="mg-r20">业务员</label>
+                <input type="checkbox" id="6" class="choose_checkbox vert_mid"><label for="6" class="mg-r20">经销商</label>
+                <input type="checkbox" id="9" class="choose_checkbox vert_mid"><label for="9" class="mg-r20">社会化服务站</label>
+                <input type="checkbox" id="7" class="choose_checkbox vert_mid"><label for="7" class="mg-r20">三包员</label>
+            </div>
+        </div>
+
+        <div id="danfa">
+            <div class="tit_msg mg_l100">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>接收人</span>
+            </div>
+            <div class="mg_l250" style="width: 50%;">
+                <input id="tags_2" type="text" class="tagsinput" readonly="readonly"/>
+
+                <div class="flt_l mg-t20" style="width: 200%;">
+                    <select id="acceptRole" class="select_class">
+                        <option value="14">总经理</option>
+                        <option value="13">副总经理</option>
+                        <option value="12">产品经理</option>
+                        <option value="3">大区经理</option>
+                        <option value="4">省经理</option>
+                        <option value="5">业务员</option>
+                        <option value="6">经销商</option>
+                        <option value="9">社会化服务站</option>
+                        <option value="7">三包员</option>
+                    </select>
+                    <select id="choose" class="select_class">
+                        <option value="1">名称</option>
+                        <option value="2">编号</option>
+                    </select>
+                    <input type="text" id="roleQuery" class="input_class">
+                    <button class="query_btn_big" onclick="queryAccepter()"></button>
+                    <div id="querySingleMan" style="margin-top: 20px;display: none;height: 200px;overflow-y: scroll">
+                        <table class="txt_center" style="width: 50%;border-collapse: collapse;">
+                            <tr>
+                                <td class="head_td" height="46px">名称</td>
+                                <td class="head_td">企业编号/工号</td>
+                                <td class="head_td">添加</td>
+                            </tr>
+                            <tbody id="adminTbody">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tit_msg mg_l100">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>状态</span>
+        </div>
+        <div class="mg_l250">
+            <input type="radio" id="send1" class="choose_select" name="sendType">
+            <label for="send1">草稿</label>
+            <input type="radio" id="send2" class="choose_select" name="sendType">
+            <label for="send2">发布</label>
+        </div>
+
+        <div class="btn_part mg-t50 mg_b50">
+            <img src="img/front.png" class="mg-t20" onclick="to_noticeM()">
+            <img src="img/yes.png" id="dis_unpass" class="mg-t20 mg_l50" onclick="createNotice()">
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+        $("#send2").attr("checked",true);
+        $("#type1").attr("checked",true);
+        $("#danfa").hide();
+
+        $(function(){
+            $('#tags_2').tagsInput({width:'auto'});//这样做的目的是，使tags_1能够变成标签。
+        });
+
+        $("#acceptRole").change(function () {
+           $("#roleQuery").val("");
+        });
+
+        $("#choose").change(function () {
+            $("#roleQuery").val("");
+        });
+    }
+</script>
+</html>

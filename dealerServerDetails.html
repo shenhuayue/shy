@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>经销商三包员详情</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/userCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <script src="jqueryTagsInput/jquery.tagsinput.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="jqueryTagsInput/jquery.tagsinput.min.css" />
+</head>
+<body class="reset">
+<div id="editServer_changfa" class="addTopic outShadow" style="display: none;">
+    <div class="dealer_title">
+        <span>编辑三包员信息</span>
+        <img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeChangfaServerEdit()">
+    </div>
+    <div style="width: 100%;height: auto;border: 1px solid #E4E4E4;border-top: none;">
+        <div class="tit_msg">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>信息</span>
+        </div>
+        <div>
+            <table id="reporterInfo" class="rpt_detail_tab txt_center">
+                <tr>
+                    <td class='head_td' width='136px' height='46px'>姓名</td>
+                    <td class='body_td txt_left' width='383px'>
+                        <input type="text" id="createName" class="userInfo">
+                    </td>
+                </tr>
+                <!--<tr>-->
+                    <!--<td class='head_td' width='136px' height='46px'>工号</td>-->
+                    <!--<td class='body_td txt_left' width='383px'>-->
+                        <!--<input type="text" id="createWorkNo" class="userInfo">-->
+                    <!--</td>-->
+                <!--</tr>-->
+                <tr>
+                    <td class='head_td' width='136px' height='46px'>电话</td>
+                    <td class='body_td txt_left' width='383px'>
+                        <input type="text" id="createMobile" class="userInfo">
+                    </td>
+                </tr>
+                <tr id="task_changfa">
+                    <td class='head_td' width='136px' height='46px'>业务范围</td>
+                    <td class='body_td txt_left'>
+
+                        <input id="tags_1" type="text" class="tagsinput" readonly="readonly"/>
+
+                        <div class="flt_l">
+                            <select id="province1" class="addressInfo">
+                                <!--<option value="">添加省</option>-->
+                                <!--<option value="北京">北京</option>-->
+                                <!--<option value="安徽">安徽</option>-->
+                                <!--<option value="福建">福建</option>-->
+                                <!--<option value="甘肃">甘肃</option>-->
+                                <!--<option value="广东">广东</option>-->
+                                <!--<option value="广西">广西</option>-->
+                                <!--<option value="贵州">贵州</option>-->
+                                <!--<option value="海南">海南</option>-->
+                                <!--<option value="黑龙江">黑龙江</option>-->
+                                <!--<option value="湖北">湖北</option>-->
+                                <!--<option value="湖南">湖南</option>-->
+                                <!--<option value="吉林">吉林</option>-->
+                                <!--<option value="江苏">江苏</option>-->
+                                <!--<option value="江西">江西</option>-->
+                                <!--<option value="辽宁">辽宁</option>-->
+                                <!--<option value="内蒙古">内蒙古</option>-->
+                                <!--<option value="宁夏">宁夏</option>-->
+                                <!--<option value="青海">青海</option>-->
+                                <!--<option value="山东">山东</option>-->
+                                <!--<option value="山西">山西</option>-->
+                                <!--<option value="陕西">陕西</option>-->
+                                <!--<option value="上海">上海</option>-->
+                                <!--<option value="四川">四川</option>-->
+                                <!--<option value="天津">天津</option>-->
+                                <!--<option value="西藏">西藏</option>-->
+                                <!--<option value="新疆">新疆</option>-->
+                                <!--<option value="云南">云南</option>-->
+                                <!--<option value="浙江">浙江</option>-->
+                                <!--<option value="重庆">重庆</option>-->
+                                <!--<option value="香港">香港</option>-->
+                                <!--<option value="澳门">澳门</option>-->
+                                <!--<option value="台湾">台湾</option>-->
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class='head_td' width='136px' height='46px'>产品线范围</td>
+                    <td class='body_td txt_left'>
+
+                        <input id="tags_2" type="text" class="tagsinput" readonly="readonly"/>
+
+                        <div class="flt_l">
+                            <select id="line" class="addressInfo">
+                                <option value="">选择产品线</option>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class='head_td' width='136px' height='46px'>所属公司</td>
+                    <td class='body_td txt_left' width='383px'>
+                        <input type="text" id="createCompany" class="userInfo" value="常州常发农业机械营销有限公司" disabled="true">
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="mg_b50" style="width: 100%;text-align: center">
+            <button class="waves submit_btn mg-t30" onclick="updateChangfaServer()">保存</button>
+        </div>
+    </div>
+</div>
+
+<div id="editServer_social" class="addTopic outShadow" style="display: none;">
+    <div class="dealer_title">
+        <span>编辑三包员信息</span>
+        <img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeSocialServerEdit()">
+    </div>
+    <div style="width: 100%;height: auto;border: 1px solid #E4E4E4;border-top: none;">
+        <div class="tit_msg">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>信息</span>
+        </div>
+        <div>
+            <table id="reporterSocialInfo" class="rpt_detail_tab txt_center">
+                <tr>
+                    <td class='head_td' width='136px' height='46px'>姓名</td>
+                    <td class='body_td txt_left' width='383px'>
+                        <input type="text" id="createSocialName" class="userInfo">
+                    </td>
+                </tr>
+                <!--<tr>-->
+                    <!--<td class='head_td' width='136px' height='46px'>工号</td>-->
+                    <!--<td class='body_td txt_left' width='383px'>-->
+                        <!--<input type="text" id="createSocialWorkNo" class="userInfo">-->
+                    <!--</td>-->
+                <!--</tr>-->
+                <tr>
+                    <td class='head_td' width='136px' height='46px'>电话</td>
+                    <td class='body_td txt_left' width='383px'>
+                        <input type="text" id="createSocialMobile" class="userInfo">
+                    </td>
+                </tr>
+                <!--<tr>-->
+                    <!--<td class='head_td' width='136px' height='46px'>业务范围</td>-->
+                    <!--<td class='body_td txt_left' width='383px'>-->
+                        <!--<select id="province" class="addressInfo"></select>-->
+                        <!--<select id="city" class="addressInfo"></select>-->
+                    <!--</td>-->
+                <!--</tr>-->
+                <!--<tr id="serviceLevel">-->
+                    <!--<td class='head_td' width='136px' height='46px'>产品星级</td>-->
+                    <!--<td class='body_td txt_left'>-->
+
+                        <!--<input id="tags_2" type="text" class="tagsinput" readonly="readonly"/>-->
+
+                        <!--<div class="flt_l">-->
+                            <!--<select id="line" class="addressInfo">-->
+                                <!--<option value="">请选择产品线</option>-->
+                                <!--<option value="轮式拖拉机">轮式拖拉机</option>-->
+                                <!--<option value="履带收割机">履带收割机</option>-->
+                                <!--<option value="轮式收割机">轮式收割机</option>-->
+                                <!--<option value="轮式玉米收">轮式玉米收</option>-->
+                                <!--<option value="高速插秧机">高速插秧机</option>-->
+                                <!--<option value="手扶插秧机">手扶插秧机</option>-->
+                                <!--<option value="花生捡拾收获机">花生捡拾收获机</option>-->
+                            <!--</select>-->
+                            <!--<select id="level" class="addressInfo">-->
+                                <!--<option value="">请选择星级</option>-->
+                                <!--<option value="一星级">一星级</option>-->
+                                <!--<option value="二星级">二星级</option>-->
+                                <!--<option value="三星级">三星级</option>-->
+                            <!--</select>-->
+                        <!--</div>-->
+                    <!--</td>-->
+                <!--</tr>-->
+                <tr>
+                    <td class='head_td' width='136px' height='46px'>所属公司</td>
+                    <td class='body_td txt_left' width='383px'>
+                        <input type="text" id="createSocialCompany" class="userInfo" value="" disabled="disabled">
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="mg_b50" style="width: 100%;text-align: center">
+            <button class="waves submit_btn mg-t30" onclick="updateSocial_Server()">提交</button>
+        </div>
+    </div>
+</div>
+
+<div id="scoreLog" class="addTopic outShadow" style="display: none;">
+    <div class="dealer_title">
+        <span>积分流水</span>
+        <img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeScoreLog()">
+    </div>
+    <div>
+        <div style="width: 100%;height: 300px;overflow-y: scroll">
+            <table cellpadding="0" cellspacing="0" class="table2 mg_b30">
+                <thead>
+                <tr align="center">
+                    <th height="33" class="th2">积分变动</th>
+                    <th class="th2">途径</th>
+                    <th class="th2">时间</th>
+                </tr>
+                </thead>
+                <tbody id="scoreList">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div style="width: 90%;margin-left: 5%">
+    <div class="dealerInfo2">
+        <div class="flt_l">
+            <img id="server_head" class="dealer_head" src="" style="margin-top: 110px;">
+        </div>
+        <div class="flt_l">
+            <p class="color_5e heavy">类&nbsp;&nbsp;&nbsp;&nbsp;型&nbsp;&nbsp;&nbsp;：<span class="color_66 size_14" id="type"></span></p>
+            <p class="color_5e heavy">姓&nbsp;&nbsp;&nbsp;&nbsp;名&nbsp;&nbsp;&nbsp;：<span class="color_66 size_14" id="name"></span></p>
+            <p class="color_5e heavy">工&nbsp;&nbsp;&nbsp;&nbsp;号&nbsp;&nbsp;&nbsp;：<span class="color_66 size_14" id="workNum"></span></p>
+            <p class="color_5e heavy">业务范围：<span class="color_66 size_14" id="taskAddress"></span></p>
+            <p class="color_5e heavy">产&nbsp;&nbsp;品&nbsp;线：<span class="color_66 size_14" id="lines"></span></p>
+            <p class="color_5e heavy">联系电话：<span class="color_66 size_14" id="mobile"></span></p>
+            <p class="color_5e heavy">详情地址：<span class="color_66 size_14" id="address"></span></p>
+            <p class="color_5e heavy">所属公司：<span class="color_66 size_14" id="company"></span></p>
+            <p class="color_5e heavy">持有积分：<a href="###" class="size_14" id="score" style="color: #1ABC9C;" onclick="showServerScoreLog()"></a></p>
+        </div>
+        <div class="flt_r mg-r50 mg-t20">
+            <div class="flt_r">
+                <span class="mg-r20">状态</span><img id="status" src="" style="vertical-align: middle" onclick="toogle_statusInDetail(this)">
+            </div>
+            <br><br><br><br><br><br><br><br><br><br><br><br><br>
+            <div class="flt_r" style="margin-top: 10px;">
+                <span class="mg-r20">编辑</span><img src="img/edit.png" style="vertical-align: middle" onclick="editServerInfo()">
+            </div>
+        </div>
+        <div style="clear: both;"></div>
+    </div>
+    <div class="count">
+        <table class="menu3_tab" width="100%">
+            <tr>
+                <td class="body_td txt_center" width="50%" height="98px" style="border-left: none;border-top: none;">
+                    <img src="img/repairNum.png" class="mg-r30" style="vertical-align: middle;">
+                    <span class="size_18">维修总单据数：</span>
+                    <span id="repCount" class="size_18"></span>
+                </td>
+                <td class="body_td txt_center" width="50%" style="border-top: none;border-right: none;">
+                    <img src="img/repairDistance.png" class="mg-r30" style="vertical-align: middle;">
+                    <span class="size_18">维修总里程数：</span>
+                    <span id="repDistance" class="size_18"></span>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div style="height: 20px;"></div>
+    <div class="relativeInfo">
+        <div>
+            <div class="dealer_title txt_center">
+                <input type="button" id="waitDispatch" class="type" value="待派工" onclick="server_waitDispatch()">
+                <input type="button" id="waitAccept" class="type" value="待接单" onclick="server_waitAccept()">
+                <input type="button" id="finished" class="type" value="已完成" onclick="server_finished()">
+            </div>
+        </div>
+        <div style="height: auto;">
+            <table style="border-collapse: collapse;width : 100%;">
+                <tr>
+                    <td class="head_td txt_center" height="40px">报修人</td>
+                    <td class="head_td txt_center">报修人电话</td>
+                    <td class="head_td txt_center">产品线</td>
+                    <td class="head_td txt_center">产品系列</td>
+                    <td class="head_td txt_center">产品型号</td>
+                    <td class="head_td txt_center">报修时间</td>
+                    <td class="head_td txt_center">更多</td>
+                </tr>
+                <tbody id="adminTbody">
+
+                </tbody>
+            </table>
+            <div id="barcon" class="barcon" >
+                <div id="barcon1" class="barcon1"></div>
+                <div id="barcon2" class="barcon2">
+                    <ul>
+                        <li><button id="firstPage" class="page_btn">首页</button></li>
+                        <li><button id="prePage" class="page_btn">上一页</button></li>
+                        <li><button id="nextPage" class="page_btn">下一页</button></li>
+                        <li><button id="lastPage" class="page_btn">尾页</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+        $.ajax({
+            type : "post",
+            url : ip_path+"/changfa_system/user/getUsersByUserId.do",
+            data : {
+                userId : $(window.parent.document).find("input[name='serverId']").val()
+            },
+            dataType : "json",
+            success : function (data) {
+                console.log(data)
+                if(data['head']['isSuccess']){
+                    if(!Number(data['body']['result']['person']) || Number(data['body']['result']['person']) == 2){
+                        $('#reporterSocialInfo').prepend(
+                            '<tr><td class="head_td" width="136px" height="46px">类型</td><td class="body_td txt_left" width="383px">'+
+                                    '<select id="objselect" class="obj_choose">'+
+                                        '<option value="7">经销商三包员</option>'+
+                                        '<option value="10">经销商销售</option>'+
+                                        '<option value="11">服务主管</option>'+
+                                        '<option value="29">服务及销售主管</option>'+
+                                    '</select></td></tr>'
+                            );
+                        $('#objselect').val(data['body']['result']['roleId'])
+                    }
+                    if(data['body']['result']['headUrl'] != ""){
+                        $("#server_head").attr("src",data['body']['result']['headUrl']);
+                    }else {
+                        $("#server_head").attr("src","http://app.changfanz.net:3588/changfa_file/head.png");
+                    }
+                    if(data['body']['result']['status'] == 1){
+                        $("#status").attr("src","http://app.changfanz.net:3588/changfa_file/on.png");
+                    }else{
+                        $("#status").attr("src","http://app.changfanz.net:3588/changfa_file/off.png");
+                    }
+
+                    // var type;
+                    // if(data['body']['result']['roleId'] == 7){
+                    //     if(data['body']['result']['type'] == 1){
+                    //         type = "常发三包员";
+                    //     }else if(data['body']['result']['type'] == 0){
+                    //         type = "经销商三包员";
+                    //     }
+                    // }else if(data['body']['result']['roleId'] == 9){
+                    //     type = "社会化服务站三包员";
+                    // }
+
+                    $("#type").text(data['body']['result']['roleName']);
+                    $("#name").text(data['body']['result']['userName']);
+
+                    if(data['body']['result']['roleName'] == "常发三包员"){
+                        $("#workNum").text(data['body']['result']['workNum']);
+                    }else{
+                        $("#workNum").text(data['body']['result']['workNum']);
+                    }
+
+                    $("#mobile").text(data['body']['result']['mobile']);
+                    $("#address").text(data['body']['result']['address']);
+                    $("#company").text(data['body']['result']['company']);
+                    $("#taskAddress").text(data['body']['result']['taskAddress']);
+                    $("#lines").text(data['body']['result']['lineNameList']);
+                    $("#repCount").text(data['body']['result']['repairCount']);
+                    $("#repDistance").text(data['body']['result']['repairDistanceCount']);
+                    $("#score").text(data['body']['result']['score']);
+                }else{
+                    alert(data['head']['message']);
+                }
+            }
+        });
+        server_waitDispatch();
+
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/place/getProvince.do",
+            dataType : "json",
+            success : function (data) {
+                $("#province1").append("<option value=''>全部</option>");
+                for(var i=0;i<data['body']['resultList']['length'];i++){
+                    $("#province1").append("<option value='"+ data['body']['resultList'][i]['name'] +"'>"+data['body']['resultList'][i]['name']+"</option>");
+                }
+            }
+        });
+
+        $("#province1").change(function () {
+            if($("#province1 option:selected").val() != ""){
+                add();
+            }
+        });
+
+        $(function(){
+            $('#tags_1').tagsInput({width:'auto'});//这样做的目的是，使tags_1能够变成标签。
+        });
+
+        function add(){
+            var tags = $("#province1 option:selected").val();
+            if (!$('#tags_1').tagExist(tags)){
+                $("#tags_1").addTag(tags,{focus:false,callback:false});
+            }else{
+                alert("该选项已存在！");
+            }
+            $("#province1").val("");
+        }
+
+        // $("#line").change(function () {
+        //     if($("#line option:selected").val() != "" && $("#level option:selected").val() != ""){
+        //         add_serviceLevel();
+        //     }
+        // });
+        //
+        // $("#level").change(function () {
+        //     if($("#line option:selected").val() != "" && $("#level option:selected").val() != ""){
+        //         add_serviceLevel();
+        //     }
+        // });
+        //
+        // $(function(){
+        //     $('#tags_2').tagsInput({width:'auto'});//这样做的目的是，使tags_1能够变成标签。
+        // });
+        //
+        // function add_serviceLevel(){
+        //     var oldVal = $("#tags_2").val();
+        //     var target1 = $("#line option:selected").val() + "_一星级";
+        //     var target2 = $("#line option:selected").val() + "_二星级";
+        //     var target3 = $("#line option:selected").val() + "_三星级";
+        //     var tags = $("#line option:selected").val()+"_"+$("#level option:selected").val();
+        //     if (oldVal.indexOf(target1) == -1 && oldVal.indexOf(target2) == -1 && oldVal.indexOf(target3) == -1){
+        //         $("#tags_2").addTag(tags,{focus:false,callback:false});
+        //     }else{
+        //         alert("该产品线已存在！");
+        //     }
+        //     $("#line").html(
+        //         '<option value="">请选择产品线</option>' +
+        //         '<option value="轮式拖拉机">轮式拖拉机</option>' +
+        //         '<option value="履带收割机">履带收割机</option>' +
+        //         '<option value="轮式收割机">轮式收割机</option>' +
+        //         '<option value="轮式玉米收">轮式玉米收</option>' +
+        //         '<option value="高速插秧机">高速插秧机</option>' +
+        //         '<option value="手扶插秧机">手扶插秧机</option>' +
+        //         '<option value="花生捡拾收获机">花生捡拾收获机</option>'
+        //     );
+        //     $("#level").html(
+        //         '<option value="">请选择星级</option>' +
+        //         '<option value="一星级">一星级</option>' +
+        //         '<option value="二星级">二星级</option>' +
+        //         '<option value="三星级">三星级</option>'
+        //     );
+        // }
+
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/machineModel/getMachineModels.do",
+            dataType : "json",
+            success : function (data) {
+                for(var i=0;i<data['body']['resultList']['length'];i++){
+                    $("#line").append("<option value='"+ data['body']['resultList'][i]['number'] +"'>"+data['body']['resultList'][i]['name']+"</option>");
+                }
+                $("#line").unbind();
+            }
+        });
+
+        $("#line").change(function () {
+            if($("#line option:selected").val() != ""){
+                add_line();
+            }
+        });
+
+        $(function(){
+            $('#tags_2').tagsInput({width:'auto'});//这样做的目的是，使tags_1能够变成标签。
+        });
+
+        function add_line(){
+            var tags = $("#line option:selected").text();
+            if (!$('#tags_2').tagExist(tags)){
+                $("#tags_2").addTag(tags,{focus:false,callback:false});
+            }else{
+                alert("该选项已存在！");
+            }
+        }
+    }
+</script>
+</html>

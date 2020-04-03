@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>经销商管理</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/userCenter.js"></script>
+    <script src="js/dcommon.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+</head>
+<body class="reset">
+    <div class="mg-t50">
+        <div class="tit">
+            <span class="flt_l">筛选查询</span>
+            <input type="button" class="add_btn flt_r" value="清空" onclick="clearDate()">
+            <!--<input type="button" class="add_btn flt_r" value="查询" onclick="queryDealer()">-->
+        </div>
+        <div class="account_cont2">
+            <select id="dealer_item" class="rep_guy_info">
+                <option value="userName">姓名</option>
+                <option value="workNum">企业编号/工号</option>
+                <option value="mobile">电话</option>
+            </select>
+            <input type="text" id="dealer_info" class="product_line" style="border-left: none;">
+            <button class="query_btn_big" style="margin-left: -4%;margin-right: 4%" onclick="queryChangfaUser()"></button>
+
+            <span class="describ mg_l30">角色：</span>
+            <select id="role" class="area_choose">
+
+            </select>
+
+            <span class="describ mg_l50">标记账户：</span>
+            <select id="signed" class="area_choose">
+                <option value="">全部</option>
+                <option value="0">未标记</option>
+                <option value="1">已标记</option>
+            </select>
+        </div>
+    </div>
+    <div>
+        <div class="tit mg-t50">
+            <span class="flt_l">常发用户管理</span>
+        </div>
+        <div class="account_cont">
+            <table width="100%" cellpadding="0" cellspacing="0" class="table2" align="center">
+                <thead>
+                <tr align="center">
+                    <th height="33" class="th2">姓名</th>
+                    <th class="th2">企业编号/工号</th>
+                    <th class="th2">电话</th>
+                    <th class="th2">角色</th>
+                    <th class="th2">认证</th>
+                    <th class="th2">黑名单</th>
+                </tr>
+                </thead>
+                <tbody id="adminTbody">
+               
+                </tbody>
+            </table>
+
+            <div id="barcon" class="barcon" >
+                <div id="barcon1" class="barcon1"></div>
+                <div id="barcon2" class="barcon2">
+                    <ul>
+                        <li><button id="firstPage" class="page_btn">首页</button></li>
+                        <li><button id="prePage" class="page_btn">上一页</button></li>
+                        <li><button id="nextPage" class="page_btn">下一页</button></li>
+                        <li><button id="lastPage" class="page_btn">尾页</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--禁言弹框-->
+    <style>
+        .bannerclick{width: 100%;height: 100%;position: fixed;background: rgba(0,0,0,0.3);top: 0;}
+        .bannerclick1{width: 100%;height: 100%;position: fixed;background: rgba(0,0,0,0.3);top: 0;}
+        .bjycontent{width:200px;height:122px;background:#fff;padding:10px;margin:auto;margin-top:23%;border: 1px solid #ddd;}
+        .checkbox{font-size: .9em;color: #666;margin-top:17px;display:inline-block;margin-left:10px;}
+    </style>
+    <div class="bannerclick" style="display:none;">
+        <div class="bjycontent">
+            <p onclick="byclose()" style="font-size:.5em;cursor:pointer;text-align:right;margin-top:0px !important;">✖&nbsp;&nbsp;关闭</p>
+            <span class="checkbox">
+                <label for="checkin8">禁止发帖</label>
+                <input name="fittype" type="checkbox"  value="1" id="checkin8"   style="vertical-align: middle;"/>
+            </span>
+            <span class="checkbox">
+                <label for="checkin9">禁止评论</label>
+                <input name="fittype" type="checkbox" value="2" id="checkin9"  style="vertical-align: middle;"/>
+            </span>
+            <input type="button" value="确认" onclick="confirmqr()" style="width: 60px;
+            height: 25px;margin-top:16px;margin-left:67px;
+            border: none;
+            background: #1ABC9C;
+            color: #fff;
+            border-radius: 5px;">
+            
+        </div>
+        <input type="hidden" class="jyid" value="0" />
+        <input type="hidden" class="jyfatie" value="0" />
+    </div>
+    <!--标记弹框-->
+    <div class="bannerclick1" style="display:none;">
+        <div class="bjycontent">
+            <p onclick="byclose()" style="font-size:.5em;cursor:pointer;text-align:right;margin-top:0px !important;">✖&nbsp;&nbsp;关闭</p>
+            <span class="checkbox" style="margin-left:14px;">
+                <label for="checkin10">大V认证</label>
+                <input name="fittype" type="checkbox"  value="1" id="checkin10"   style="vertical-align: middle;"/>
+            </span>
+            <span class="checkbox">
+                <label for="checkin11">官方认证</label>
+                <input name="fittype" type="checkbox" value="2" id="checkin11"  style="vertical-align: middle;"/>
+            </span>
+            <input type="button" value="确认" onclick="confirmqr1()" style="width: 60px;
+            height: 25px;margin-top:16px;margin-left:67px;
+            border: none;
+            background: #1ABC9C;
+            color: #fff;
+            border-radius: 5px;">
+            
+        </div>
+        <input type="hidden" class="jyid" value="0" />
+        <input type="hidden" class="jyfatie" value="0" />
+        <input type="hidden" class="david" value="0" />
+        <input type="hidden" class="guanfang" value="0" />
+    </div>
+</body>
+<script>
+    function byclose(){
+        $('.bannerclick').hide();
+        $('.bannerclick1').hide();
+    }
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+        currentPage = 1;
+        $('#firstPage').attr('disabled',true);
+        $('#prePage').attr('disabled',true);
+        $("#firstPage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = 1;
+            $('#firstPage').attr('disabled',true);
+            $('#prePage').attr('disabled',true);
+            ajax_cfUserM();
+            
+        });
+        $("#lastPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = totalPage;
+            $('#lastPage').attr('disabled',true);
+            $('#nextPage').attr('disabled',true);
+            ajax_cfUserM();
+        });
+        $("#nextPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = currentPage+1;
+            if(currentPage == totalPage){
+                $('#lastPage').attr('disabled',true);
+                $('#nextPage').attr('disabled',true);
+            }else{
+                $('#lastPage').removeAttr('disabled');
+                $('#nextPage').removeAttr('disabled');
+            }
+            ajax_cfUserM();
+        });
+        $("#prePage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = currentPage-1;
+            if(currentPage == 1){
+                $('#firstPage').attr('disabled',true);
+                $('#prePage').attr('disabled',true);
+            }else{
+                $('#firstPage').removeAttr('disabled');
+                $('#prePage').removeAttr('disabled');
+            }
+            ajax_cfUserM();
+        });
+
+        $.ajax({
+            type: "post",
+            async: false,
+            url: ip_path + "/changfa_system/role/queryRole.do",
+            data: {
+                status: 1,
+                pageNum: 1,
+                pageSize: 100000
+            },
+            dataType: "json",
+            success: function (data) {
+                if(data['head']['code'] == 200){
+                    $("#role").append("<option value=''>全部</option>");
+                    for(var i=0;i<data['body']['result']['data']['length'];i++){
+                        $("#role").append("<option value='"+ data['body']['result']['data'][i]['roleId'] +"'>"+data['body']['result']['data'][i]['roleName']+"</option>");
+                    }
+                }
+            }
+        });
+
+        //初始化
+        ajax_cfUserM();
+
+        $("#role").change(function () {
+            currentPage = 1;
+            ajax_cfUserM();
+        });
+
+        $("#signed").change(function () {
+            currentPage = 1;
+            ajax_cfUserM();
+        });
+
+        $("#dealer_item").change(function () {
+            $("#dealer_info").val("");
+        });
+    }
+</script>
+</html>

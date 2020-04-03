@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>生成问卷</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/runningCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+</head>
+<body class="reset">
+<div class="mg-t50" style="width: 100%;">
+    <div class="flt_l" style="width: 44%;margin-left: 5%">
+        <div class="question_tit">
+            <span class="flt_l">题库查询</span>
+        </div>
+        <div class="questionCont">
+            <br>
+            <div>
+                <span class="describ mg_l30">题目：</span>
+                <input type="text" id="question_info" class="product_line" style="width: 30%;">
+                <button class="query_btn_big" style="margin-left: -4%;margin-right: 4%" onclick="queryQuestion_forNaire()"></button>
+
+                <span class="describ mg_l30">类型：</span>
+                <select id="type" class="area_choose">
+                    <option value="">全部</option>
+                    <option value="1">选择</option>
+                    <option value="0">问答</option>
+                </select>
+            </div>
+            <div id="questionList" class="mg-t30">
+                <!-- <div>
+                    <div class="mg_l30 mg_b10">
+                        <div>
+                            <span>题目就服你吉安府建安放假啊饭否你就发</span>
+                            <img class="addQuestion" src="img/addQuestion.png" style="vertical-align: middle;" onclick="addToNaire(this)">
+                            <img class="removeQuestion" src="img/removeQuestion.png" style="vertical-align: middle;" onclick="removeFromNaire(this)">
+                        </div>
+                        <div>
+                            <div class="flt_l" style="width: 40%;word-break: break-all">A.ld,l,mfpm,p</div>
+                            <div class="flt_l" style="width: 40%;word-break: break-all">C.ld,l,mfpm,p</div>
+                        </div><br>
+                        <div>
+                            <div class="flt_l" style="width: 40%;word-break: break-all">B.ld,l,mfpm,p</div>
+                            <div class="flt_l" style="width: 40%;word-break: break-all">D.ld,l,mfpm,p</div>
+                        </div>
+                    </div><br>
+                </div>
+                <div>
+                    <div class="mg_l30 mg_b10">
+                        <div>
+                            <span>题目就服你吉安府建安放假啊饭否你就发</span>
+                            <img class="addQuestion" src="img/addQuestion.png" style="vertical-align: middle;" onclick="addToNaire(this)">
+                            <img class="removeQuestion" src="img/removeQuestion.png" style="vertical-align: middle;" onclick="removeFromNaire(this)">
+                        </div>
+                    </div><br>
+                </div> -->
+            </div>
+            <div id="barcon" class="barcon" >
+                <div id="barcon1" class="barcon1"></div>
+                <div id="barcon2" class="barcon2">
+                    <ul>
+                        <li><button id="firstPage" class="page_btn">首页</button></li>
+                        <li><button id="prePage" class="page_btn">上一页</button></li>
+                        <li><button id="nextPage" class="page_btn">下一页</button></li>
+                        <li><button id="lastPage" class="page_btn">尾页</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="flt_l" style="width: 44%;margin-left: 1%">
+        <div class="test_tit">
+            <span class="flt_l">问卷预览</span>
+        </div>
+        <div class="testCont">
+            <br>
+            <div class="mg_b20">
+                <span class="describ mg_l30">问卷名称：</span><input type="text" style="width: 200px;height: 30px;" id="title">
+            </div>
+            <div id="testList" style="height: 600px;">
+
+            </div>
+            <div class="btn_part mg-t20">
+                <input type="button" id="create" class="submit_btn" value="生成问卷" onclick="createQuestionNaire()">
+                <input type="button" id="update" class="submit_btn" value="更新问卷" onclick="updateQuestionNaire()">
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        qidList = [];
+        var questionType;
+        if($(window.parent.document).find("input[name='questionNaireId']").val() != ""){
+            $("#create").hide();
+            $("#update").show();
+            $.ajax({
+                type : "post",
+                url : ip_path + "/changfa_system/test/queryTestById.do",
+                data : {
+                    tId : $(window.parent.document).find("input[name='questionNaireId']").val()
+                },
+                dataType : "json",
+                success : function (data) {
+                    if(data['head']['code'] == 200){
+                        $("#title").val(data['body']['result']['title']);
+                        qidList = data['body']['result']['qIds'];
+                        if(qidList.length>5){
+                            $("#testList").addClass("testDivScroll");
+                        }
+                        for(var i=0;i<data['body']['result']['questions'].length;i++){
+                            if(data['body']['result']['questions'][i]['type'] == 1){
+                                if(data['body']['result']['questions'][i]['chooseType'] == 0){
+                                    questionType = "（单选题）";
+                                }else{
+                                    questionType = "（多选题）";
+                                }
+                                $("#testList").append(
+                                    '<div>'+
+                                    '<div class="mg_l30 mg_b20">' +
+                                    '    <div id="' + data['body']['result']['questions'][i]['qid'] + '">' +
+                                    '         <img class="removeQuestion" src="img/removeQuestion.png" style="vertical-align: middle;" onclick="removeFromNaire(this)">' +
+                                    '         <span>' + data['body']['result']['questions'][i]['subject'] + questionType +'</span>' +
+                                    '    </div>' +
+                                    '    <div class="mg_l50">' +
+                                    '         <div class="flt_l" style="width: 40%;word-break: break-all">A.' + data['body']['result']['questions'][i]['answerA'] + '</div>' +
+                                    '         <div class="flt_l" style="width: 40%;word-break: break-all">B.' + data['body']['result']['questions'][i]['answerB'] + '</div>' +
+                                    '    </div><br>' +
+                                    '    <div class="mg_l50">' +
+                                    '         <div class="flt_l" style="width: 40%;word-break: break-all">C.' + data['body']['result']['questions'][i]['answerC'] + '</div>' +
+                                    '         <div class="flt_l" style="width: 40%;word-break: break-all">D.' + data['body']['result']['questions'][i]['answerD'] + '</div>' +
+                                    '    </div>' +
+                                    '</div><br>'+
+                                    '</div>'
+                                );
+                            }else if(data['body']['result']['questions'][i]['type'] == 0){
+                                questionType = "（问答题）";
+                                $("#testList").append(
+                                    '<div>'+
+                                    '<div class="mg_l30 mg_b20">' +
+                                    '   <div id="' + data['body']['result']['questions'][i]['qid'] + '">' +
+                                    '        <img class="removeQuestion" src="img/removeQuestion.png" style="vertical-align: middle;" onclick="removeFromNaire(this)">' +
+                                    '        <span>' + data['body']['result']['questions'][i]['subject'] + questionType + '</span>' +
+                                    '   </div>' +
+                                    '</div><br>'+
+                                    '</div>'
+                                );
+                            }
+                        }
+                    }
+                }
+            });
+        }else{
+            $("#create").show();
+            $("#update").hide();
+        }
+        currentPage = 1;
+        $('#firstPage').attr('disabled',true);
+        $('#prePage').attr('disabled',true);
+        $("#firstPage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = 1;
+            $('#firstPage').attr('disabled',true);
+            $('#prePage').attr('disabled',true);
+            ajax_questionBank_forNaire();
+        });
+        $("#lastPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = totalPage;
+            $('#lastPage').attr('disabled',true);
+            $('#nextPage').attr('disabled',true);
+            ajax_questionBank_forNaire();
+        });
+        $("#nextPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = currentPage+1;
+            if(currentPage == totalPage){
+                $('#lastPage').attr('disabled',true);
+                $('#nextPage').attr('disabled',true);
+            }else{
+                $('#lastPage').removeAttr('disabled');
+                $('#nextPage').removeAttr('disabled');
+            }
+            ajax_questionBank_forNaire();
+        });
+        $("#prePage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = currentPage-1;
+            if(currentPage == 1){
+                $('#firstPage').attr('disabled',true);
+                $('#prePage').attr('disabled',true);
+            }else{
+                $('#firstPage').removeAttr('disabled');
+                $('#prePage').removeAttr('disabled');
+            }
+            ajax_questionBank_forNaire();
+        });
+        //初始化
+        ajax_questionBank_forNaire();
+
+        $("#type").change(function () {
+            currentPage = 1;
+            ajax_questionBank_forNaire();
+        });
+    }
+</script>
+</html>

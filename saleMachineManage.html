@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>销售管理</title>
+  <link href="css/cf_web.css" type="text/css" rel="stylesheet" />
+  <script src="js/saleCenter.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/index.js"></script>
+  <script src="js/jquery-1.8.2.min.js"></script>
+  <script src="jquery-ui-1.12.1/jquery-ui.min.js"></script>
+  <link href="jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet" />
+  <script src="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.js"></script>
+  <script type="text/javascript" src="jQuery-Timepicker/dist/i18n/jquery-ui-timepicker-zh-CN.js"></script>
+  <link href="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.css" rel="stylesheet" />
+
+</head>
+
+<body class="reset">
+  <div class="mg-t50">
+    <div class="tit">
+      <span class="flt_l">筛选查询</span>
+      <input type="button" class="add_btn flt_r" value="清空" onclick="clearDate()">
+    </div>
+    <div class="account_cont2">
+      <select id="saleM_item" class="rep_guy_info" style="width: 90px;">
+        <option value="company">经销商名称</option>
+        <option value="workNum">经销商编号</option>
+        <option value="factoryNum">出厂编号</option>
+        <option value="barCode">条码号</option>
+      </select>
+      <input type="text" id="saleM_info" class="product_line" style="border-left: none">
+      <button class="query_btn_big" style="margin-left: -4%;margin-right: 4%" onclick="querySaleMachine()"></button>
+      <span class="describ">产&nbsp;品&nbsp;线&nbsp;：</span>
+      <select id="product" class="product_line">
+
+      </select>
+      <span class="describ">状态：</span>
+      <select id="status" class="product_line">
+
+      </select>
+      <span class="describ">创建日期：</span>
+      <input id="date_start" class="timeChoose" placeholder="起始">
+      <span>-</span>
+      <input id="date_end" class="timeChoose" placeholder="截止">
+      <br />
+      <span class="describ" style="margin-left: 2%;">是否带终端：</span>
+      <select id="imei_type" class="product_line">
+        <option value="0">全部</option>
+        <option value="1">带终端</option>
+        <option value="2">不带终端</option>
+      </select>
+    </div>
+  </div>
+  <div>
+    <div class="tit mg-t50">
+      <span class="flt_l">销售管理</span>
+      <!--<input type="button" class="add_btn flt_r" value="创建" onclick="addRepairNeed()">-->
+
+      <form id="form" action="" method="post">
+        <input type="hidden" name="company" value="">
+        <input type="hidden" name="workNum" value="">
+        <input type="hidden" name="factoryNum" value="">
+        <input type="hidden" name="barCode" value="">
+        <input type="hidden" name="line_num" value="">
+        <input type="hidden" name="status" value="">
+        <input type="hidden" name="imei_type" value="">
+        <input type="hidden" name="start_time" value="">
+        <input type="hidden" name="end_time" value="">
+        <input type="hidden" name="token" value="">
+        <input type="button" id="outputLocation" class="output_btn flt_r" value="导出">
+    </form>
+
+    </div>
+    <div class="account_cont">
+      <table width="100%" cellpadding="0" cellspacing="0" class="table2" align="center">
+        <thead>
+          <tr align="center">
+            <th height="33" class="th2">经销商名称</th>
+            <th class="th2">经销商编号</th>
+            <th class="th2">产品线</th>
+            <th class="th2">产品型号</th>
+            <th class="th2">出厂编号</th>
+            <th class="th2">条码号</th>
+            <th class="th2">创建时间</th>
+            <th class="th2">是否带终端</th>
+            <th class="th2">状态</th>
+            <th class="th2">是否解除</th>
+            <th class="th2">报警状态</th>
+            <th class="th2">更多</th>
+          </tr>
+        </thead>
+        <tbody id="adminTbody">
+
+        </tbody>
+      </table>
+      <div id="barcon" class="barcon">
+        <div id="barcon1" class="barcon1"></div>
+        <div id="barcon2" class="barcon2">
+          <ul>
+            <li><button id="firstPage" class="page_btn">首页</button></li>
+            <li><button id="prePage" class="page_btn">上一页</button></li>
+            <li><button id="nextPage" class="page_btn">下一页</button></li>
+            <li><button id="lastPage" class="page_btn">尾页</button></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<script>
+  window.onload = function () {
+    jQuery.support.cors = true;
+    toTop();
+
+    //判断经销商
+    if($(window.parent.document).find("input[name='roleId']").val() == 6 || $(window.parent.document).find("input[name='roleId']").val() == 9){
+        $("#saleM_item").html(
+          '<option value="factoryNum">出厂编号</option>'+
+          '<option value="barCode">条码号</option>'
+        );
+    }
+
+    $.datepicker.regional['zh-CN'] = {
+      changeMonth: true,
+      changeYear: true,
+      clearText: '清除',
+      clearStatus: '清除已选日期',
+      closeText: '关闭',
+      closeStatus: '不改变当前选择',
+      prevText: '<上月',
+      prevStatus: '显示上月',
+      prevBigText: '<<',
+      prevBigStatus: '显示上一年',
+      nextText: '下月>',
+      nextStatus: '显示下月',
+      nextBigText: '>>',
+      nextBigStatus: '显示下一年',
+      currentText: '今天',
+      currentStatus: '显示本月',
+      monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+      monthNamesShort: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+      monthStatus: '选择月份',
+      yearStatus: '选择年份',
+      weekHeader: '周',
+      weekStatus: '年内周次',
+      dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+      dayNamesShort: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+      dayNamesMin: ['日', '一', '二', '三', '四', '五', '六'],
+      dayStatus: '设置 DD 为一周起始',
+      dateStatus: '选择 m月 d日, DD',
+      dateFormat: 'yy-mm-dd',
+      firstDay: 1,
+      initStatus: '请选择日期',
+      isRTL: false
+    };
+
+    $.datepicker.setDefaults($.datepicker.regional['zh-CN']);
+    $("#date_start").datepicker({
+      maxDate: new Date()
+    });
+    $("#date_end").datepicker({
+      maxDate: new Date()
+    });
+    $("#date_1").datepicker({
+      maxDate: new Date()
+    });
+    $("#date_2").datepicker({
+      maxDate: new Date()
+    });
+    $("#defult").datetimepicker();
+    $("#date_start").prop("readonly", true).datepicker({
+      changeMonth: true,
+      dateFormat: "yy-mm-dd",
+      onClose: function (selectedDate) {
+        $("#date_end").datepicker("option", "minDate", selectedDate);
+      }
+    });
+
+    $("#date_end").prop("readonly", true).datepicker({
+      changeMonth: true,
+      dateFormat: "yy-mm-dd",
+      onClose: function (selectedDate) {
+        $("#date_start").datepicker("option", "maxDate", selectedDate);
+        $("#date_end").val($(this).val());
+      }
+    });
+
+    $("#date_1").prop("readonly", true).datepicker({
+      changeMonth: true,
+      dateFormat: "yy-mm-dd",
+      onClose: function (selectedDate) {
+        $("#date_2").datepicker("option", "minDate", selectedDate);
+      }
+    });
+
+    $("#date_2").prop("readonly", true).datepicker({
+      changeMonth: true,
+      dateFormat: "yy-mm-dd",
+      onClose: function (selectedDate) {
+        $("#date_1").datepicker("option", "maxDate", selectedDate);
+        $("#date_2").val($(this).val());
+      }
+    });
+
+
+
+    currentPage = 1;
+    $('#firstPage').attr('disabled', true);
+    $('#prePage').attr('disabled', true);
+    $("#firstPage").click(function () {
+      $('#lastPage').removeAttr('disabled');
+      $('#nextPage').removeAttr('disabled');
+      currentPage = 1;
+      $('#firstPage').attr('disabled', true);
+      $('#prePage').attr('disabled', true);
+      ajax_saleM();
+    });
+    $("#lastPage").click(function () {
+      $('#firstPage').removeAttr('disabled');
+      $('#prePage').removeAttr('disabled');
+      currentPage = totalPage;
+      $('#lastPage').attr('disabled', true);
+      $('#nextPage').attr('disabled', true);
+      ajax_saleM();
+    });
+    $("#nextPage").click(function () {
+      $('#firstPage').removeAttr('disabled');
+      $('#prePage').removeAttr('disabled');
+      currentPage = currentPage + 1;
+      if (currentPage == totalPage) {
+        $('#lastPage').attr('disabled', true);
+        $('#nextPage').attr('disabled', true);
+      } else {
+        $('#lastPage').removeAttr('disabled');
+        $('#nextPage').removeAttr('disabled');
+      }
+      ajax_saleM();
+    });
+    $("#prePage").click(function () {
+      $('#lastPage').removeAttr('disabled');
+      $('#nextPage').removeAttr('disabled');
+      currentPage = currentPage - 1;
+      if (currentPage == 1) {
+        $('#firstPage').attr('disabled', true);
+        $('#prePage').attr('disabled', true);
+      } else {
+        $('#firstPage').removeAttr('disabled');
+        $('#prePage').removeAttr('disabled');
+      }
+      ajax_saleM();
+    });
+
+    if($(window.parent.document).find("input[name='roleId']").val() != 23 && $(window.parent.document).find("input[name='roleId']").val() != 17){
+            $("#status").empty();
+            $("#status").append(
+                '<option value="">全部</option>' +
+                '<option value="0">初审通过</option>' +
+                // '<option value="1">已审批</option>' +
+                '<option value="3">待初审</option>' +
+                // '<option value="4">已关闭</option>' +
+                '<option value="5">风控部审批通过</option>'
+            )
+        }else if($(window.parent.document).find("input[name='roleId']").val() == 23 || $(window.parent.document).find("input[name='roleId']").val() == 17){
+            $("#status").empty();
+            $("#status").append(
+                '<option value="">全部</option>' +
+                '<option value="0">风控部审批通过</option>' +
+                // '<option value="1">审批通过</option>' +
+                '<option value="3">待初审</option>' +
+                // '<option value="4">已关闭</option>' +
+                '<option value="5">初审通过</option>'
+            )
+        }
+        //定时器延迟控制赋值上面if 赋值比较慢
+        setTimeout(function(){
+          if ($(window.parent.document).find("input[name='status']").val() != '') {
+            $("#status").val($(window.parent.document).find("input[name='status']").val());
+            ajax_saleM();
+            $(window.parent.document).find("input[name='status']").val('');
+          }
+        },50)
+
+
+    $.ajax({
+      type: "post",
+      url: ip_path + "/changfa_system/machineModel/getMachineModels.do",
+      dataType: "json",
+      success: function (data) {
+        $("#product").append("<option value=''>全部</option>");
+        for (var i = 0; i < data['body']['resultList']['length']; i++) {
+          $("#product").append("<option value='" + data['body']['resultList'][i]['number'] + "'>" + data['body']
+            ['resultList'][i]['name'] + "</option>");
+        }
+        // $("#product").unbind();
+        //查询缓存的搜索项
+        if (sessionStorage.length >= 1) {
+          $("#saleM_item").val(sessionStorage.getItem("saleM_item_smm"));
+          $("#saleM_info").val(sessionStorage.getItem("saleM_info_smm"));
+          $("#product").val(sessionStorage.getItem("product_smm"));
+          $("#date_start").val(sessionStorage.getItem("date_start_smm"));
+          $("#date_end").val(sessionStorage.getItem("date_end_smm"));
+          $("#status").val(sessionStorage.getItem("status_smm"));
+          $("#imei_type").val(sessionStorage.getItem("imei_type_smm"));
+          ajax_saleM();
+        }
+      }
+    });
+
+
+
+    //初始化列表
+    ajax_saleM();
+
+    //产品线
+    $("#product").change(function () {
+      currentPage = 1;
+      sessionStorage.setItem('product_smm', $(this).val());
+      ajax_saleM();
+    });
+
+    $("#imei_type").change(function () {
+      currentPage = 1;
+      sessionStorage.setItem('imei_type_smm', $(this).val());
+      ajax_saleM();
+    });
+
+    //状态
+    $("#status").change(function () {
+      currentPage = 1;
+      sessionStorage.setItem('status_smm', $(this).val());
+      ajax_saleM();
+    });
+
+    //时间
+    $("#date_start").change(function () {
+      sessionStorage.setItem('date_start_smm', $(this).val());
+      if ($("#date_start").val() != "" && $("#date_end").val() != "") {
+        currentPage = 1;
+        ajax_saleM();
+      }
+    });
+    $("#date_end").change(function () {
+      sessionStorage.setItem('date_end_smm', $(this).val());
+      if ($("#date_start").val() != "" && $("#date_end").val() != "") {
+        currentPage = 1;
+        ajax_saleM();
+      }
+    });
+
+    $("#date_1").change(function () {
+      if ($("#date_1").val() != "" && $("#date_2").val() != "") {
+        currentPage = 1;
+        ajax_saleM();
+      }
+    });
+    $("#date_2").change(function () {
+      if ($("#date_1").val() != "" && $("#date_2").val() != "") {
+        currentPage = 1;
+        ajax_saleM();
+      }
+    });
+
+    $("#saleM_item").change(function () {
+      $("#saleM_info").val("");
+    });
+
+    $("#outputLocation").click(function () {
+          $("input[name='dealer_name']").val(dealer_name);
+            $("input[name='dealer_num']").val(dealer_num);
+            $("input[name='factory_num']").val(factory_num);
+            $("input[name='bar_code']").val(bar_code);
+            $("input[name='line_num']").val($("#product").val());
+            $("input[name='status']").val($("#status option:selected").val());
+            $("input[name='imei_type']").val($("#imei_type").val());
+            $("input[name='start_time']").val($("#date_start").val());
+            $("input[name='end_time']").val($("#date_end").val());
+            $("input[name='token']").val($(window.parent.document).find("input[name='token']").val());
+
+            if($(window.parent.document).find("input[name='roleId']").val() == 23 || $(window.parent.document).find("input[name='roleId']").val() == 17){
+              $("#form").attr("action",ip_path + "/changfa_system/machineFlow/getSaleFinalApprovalListExcel.do");
+            }else if(appRoleList.indexOf($(window.parent.document).find("input[name='roleId']").val()) != -1){
+              $("#form").attr("action",ip_path + "/changfa_system/machineFlow/getSaleSecondApprovalListExcelForDealer.do");
+            }else{
+              $("#form").attr("action",ip_path + "/changfa_system/machineFlow/getSaleSecondApprovalListExcel.do");
+            }
+            $("#form").submit();
+        });
+  }
+</script>
+
+</html>

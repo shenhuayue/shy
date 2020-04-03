@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>积分转让上限</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/runningCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+
+</head>
+<body class="reset">
+<div id="addIntegralLimit" class="addTopic outShadow" style="display: none;">
+    <div class="dealer_title">
+        <span>创建积分上限</span>
+        <img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeAddIntegralLimit()">
+    </div>
+    <div style="width: 100%;height: auto;border: 1px solid #E4E4E4;border-top: none;">
+        <div class="tit_normal">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>转出方&nbsp;&nbsp;&nbsp;：</span>
+            <select id="turnOut" style="width: 50%;height: 33px;">
+
+            </select>
+        </div>
+        <div class="tit_normal">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>转入方&nbsp;&nbsp;&nbsp;：</span>
+            <select id="turnIn" style="width: 50%;height: 33px;">
+
+            </select>
+        </div>
+        <div class="tit_normal">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>转出权限：</span>
+            <input type="radio" id="yesExist" class="choose_select mg_l30 vert_mid" checked="checked" name="existType" onclick="existLimit()"><label for="yesExist" class="describ">有权限</label>
+            <input type="radio" id="noExist" class="choose_select mg_l30 vert_mid" name="existType" onclick="existLimit()"><label for="noExist" class="describ">无权限</label>
+        </div>
+        <div id="hasLimit">
+            <!--<div class="tit_normal">-->
+                <!--<img src="img/tit_pic.png" class="tit_pic">-->
+                <!--<span>转出上限：</span>-->
+                <!--<input type="radio" id="yesLimit" class="choose_select mg_l30 vert_mid" checked="checked" name="limitType" onclick="topLimit()"><label for="yesLimit" class="describ">有上限</label>-->
+                <!--<input type="radio" id="noLimit" class="choose_select mg_l30 vert_mid" name="limitType" onclick="topLimit()"><label for="noLimit" class="describ">无上限</label>-->
+            <!--</div>-->
+            <div class="tit_normal">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>单次上限：</span>
+                <input type="text" id="timeTop" style="width: 50%;height: 30px;">
+            </div>
+            <div class="tit_normal">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>每日上限：</span>
+                <input type="text" id="dayTop" style="width: 50%;height: 30px;">
+            </div>
+        </div>
+        <div class="mg_b50" style="width: 100%;text-align: center">
+            <button class="waves submit_btn mg-t30" onclick="createIntegralLimit()">提交</button>
+        </div>
+    </div>
+</div>
+<div id="editIntegralLimit" class="addTopic outShadow" style="display: none;">
+    <div class="dealer_title">
+        <span>编辑积分上限</span>
+        <img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeEditIntegralLimit()">
+    </div>
+    <div style="width: 100%;height: auto;border: 1px solid #E4E4E4;border-top: none;">
+        <div class="tit_normal">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>转出方&nbsp;&nbsp;&nbsp;：</span>
+            <select id="edit_turnOut" style="width: 50%;height: 33px;">
+
+            </select>
+        </div>
+        <div class="tit_normal">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>转入方&nbsp;&nbsp;&nbsp;：</span>
+            <select id="edit_turnIn" style="width: 50%;height: 33px;">
+
+            </select>
+        </div>
+        <div class="tit_normal">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>转出权限：</span>
+            <input type="radio" id="edit_yesExist" class="choose_select mg_l30 vert_mid" checked="checked" name="edit_existType" onclick="edit_existLimit()"><label for="edit_yesExist" class="describ">有权限</label>
+            <input type="radio" id="edit_noExist" class="choose_select mg_l30 vert_mid" name="edit_existType" onclick="edit_existLimit()"><label for="edit_noExist" class="describ">无权限</label>
+        </div>
+        <div id="edit_hasLimit">
+            <!--<div class="tit_normal">-->
+            <!--<img src="img/tit_pic.png" class="tit_pic">-->
+            <!--<span>转出上限：</span>-->
+            <!--<input type="radio" id="yesLimit" class="choose_select mg_l30 vert_mid" checked="checked" name="limitType" onclick="topLimit()"><label for="yesLimit" class="describ">有上限</label>-->
+            <!--<input type="radio" id="noLimit" class="choose_select mg_l30 vert_mid" name="limitType" onclick="topLimit()"><label for="noLimit" class="describ">无上限</label>-->
+            <!--</div>-->
+            <div class="tit_normal">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>单次上限：</span>
+                <input type="text" id="edit_timeTop" style="width: 50%;height: 30px;">
+            </div>
+            <div class="tit_normal">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>每日上限：</span>
+                <input type="text" id="edit_dayTop" style="width: 50%;height: 30px;">
+                <input type="hidden" id="limitId">
+            </div>
+        </div>
+        <div class="mg_b50" style="width: 100%;text-align: center">
+            <button class="waves submit_btn mg-t30" onclick="updateIntegralLimit()">提交</button>
+        </div>
+    </div>
+</div>
+    <div class="mg-t50">
+        <div class="tit">
+            <span class="flt_l">筛选查询</span>
+            <input type="button" class="add_btn flt_r" value="清空" onclick="clearDate()">
+            <!--<input type="button" class="add_btn flt_r" value="查询" onclick="querySaler()">-->
+        </div>
+        <div class="account_cont2">
+            <span class="describ mg_l30">转出方：</span>
+            <select id="turnOutRoleId" class="area_choose">
+
+            </select>
+
+            <span class="describ mg_l50">转入方：</span>
+            <select id="turnInRoleId" class="area_choose">
+
+            </select>
+
+            <span class="describ mg_l50">转出权限：</span>
+            <select id="turnStatus" class="area_choose">
+                <option value="">全部</option>
+                <option value="0">无权限</option>
+                <option value="1">有权限</option>
+            </select>
+
+            <span class="describ mg_l50">状态：</span>
+            <select id="status" class="area_choose">
+                <option value="">全部</option>
+                <option value="0">禁用中</option>
+                <option value="1">启用中</option>
+            </select>
+        </div>
+    </div>
+    <div>
+        <div class="tit mg-t50">
+            <span class="flt_l">积分转让上限</span>
+            <input type="button" class="add_btn flt_r" value="创建" onclick="addIntegralTopLimit()">
+        </div>
+        <div class="account_cont">
+            <table width="100%" cellpadding="0" cellspacing="0" class="table2" align="center">
+                <thead>
+                <tr align="center">
+                    <th height="33" class="th2">转出方</th>
+                    <th class="th2">转入方</th>
+                    <th class="th2">转出权限</th>
+                    <th class="th2">单次上限</th>
+                    <th class="th2">每日上限</th>
+                    <th class="th2">禁用/启用</th>
+                    <th class="th2">更多</th>
+                </tr>
+                </thead>
+                <tbody id="adminTbody">
+
+                </tbody>
+            </table>
+            <div id="barcon" class="barcon" >
+                <div id="barcon1" class="barcon1"></div>
+                <div id="barcon2" class="barcon2">
+                    <ul>
+                        <li><button id="firstPage" class="page_btn">首页</button></li>
+                        <li><button id="prePage" class="page_btn">上一页</button></li>
+                        <li><button id="nextPage" class="page_btn">下一页</button></li>
+                        <li><button id="lastPage" class="page_btn">尾页</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+        currentPage = 1;
+        $('#firstPage').attr('disabled',true);
+        $('#prePage').attr('disabled',true);
+        $("#firstPage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = 1;
+            $('#firstPage').attr('disabled',true);
+            $('#prePage').attr('disabled',true);
+            ajax_integralLimitM();
+        });
+        $("#lastPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = totalPage;
+            $('#lastPage').attr('disabled',true);
+            $('#nextPage').attr('disabled',true);
+            ajax_integralLimitM();
+        });
+        $("#nextPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = currentPage+1;
+            if(currentPage == totalPage){
+                $('#lastPage').attr('disabled',true);
+                $('#nextPage').attr('disabled',true);
+            }else{
+                $('#lastPage').removeAttr('disabled');
+                $('#nextPage').removeAttr('disabled');
+            }
+            ajax_integralLimitM();
+        });
+        $("#prePage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = currentPage-1;
+            if(currentPage == 1){
+                $('#firstPage').attr('disabled',true);
+                $('#prePage').attr('disabled',true);
+            }else{
+                $('#firstPage').removeAttr('disabled');
+                $('#prePage').removeAttr('disabled');
+            }
+            ajax_integralLimitM();
+        });
+
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/role/queryRole.do",
+            data : {
+                pageNum : 1,
+                pageSize : 10000
+            },
+            success : function (data) {
+                $("#turnOutRoleId").empty();
+                $("#turnInRoleId").empty();
+                $("#turnOut").empty();
+                $("#turnIn").empty();
+                $("#edit_turnOut").empty();
+                $("#edit_turnIn").empty();
+                $("#turnOutRoleId").append("<option value=''>全部</option>");
+                $("#turnInRoleId").append("<option value=''>全部</option>");
+                for(var i=0;i<data['body']['result']['data'].length;i++){
+                    if(data['body']['result']['data'][i]['roleId'] != 1 && data['body']['result']['data'][i]['roleId'] != 2 && data['body']['result']['data'][i]['roleId'] != 10 && data['body']['result']['data'][i]['roleId'] != 11){
+                        $("#turnOutRoleId").append("<option value='"+ data['body']['result']['data'][i]['roleId'] +"'>"+data['body']['result']['data'][i]['roleName']+"</option>");
+                        $("#turnInRoleId").append("<option value='"+ data['body']['result']['data'][i]['roleId'] +"'>"+data['body']['result']['data'][i]['roleName']+"</option>");
+                        $("#turnOut").append("<option value='"+ data['body']['result']['data'][i]['roleId'] +"'>"+data['body']['result']['data'][i]['roleName']+"</option>");
+                        $("#turnIn").append("<option value='"+ data['body']['result']['data'][i]['roleId'] +"'>"+data['body']['result']['data'][i]['roleName']+"</option>");
+                        $("#edit_turnOut").append("<option value='"+ data['body']['result']['data'][i]['roleId'] +"'>"+data['body']['result']['data'][i]['roleName']+"</option>");
+                        $("#edit_turnIn").append("<option value='"+ data['body']['result']['data'][i]['roleId'] +"'>"+data['body']['result']['data'][i]['roleName']+"</option>");
+                    }
+                }
+            }
+        });
+
+        //初始化
+        ajax_integralLimitM();
+
+        $("#turnOutRoleId").change(function () {
+            currentPage = 1;
+            ajax_integralLimitM();
+        });
+
+        $("#turnInRoleId").change(function () {
+            currentPage = 1;
+            ajax_integralLimitM();
+        });
+
+        $("#status").change(function () {
+            currentPage = 1;
+            ajax_integralLimitM();
+        });
+
+        $("#turnStatus").change(function () {
+            currentPage = 1;
+            ajax_integralLimitM();
+        });
+    }
+</script>
+</html>

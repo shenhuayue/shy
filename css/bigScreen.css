@@ -1,0 +1,322 @@
+html, body, div, ul, li, h1, h2, h3, h4, h5, h6, p, dl, dt, dd, ol, form, input, textarea, th, td, select {
+    margin: 0;
+    padding: 0;
+    font-family:Microsoft YaHei;
+    }
+    *{box-sizing: border-box;}
+    html, body {
+    min-height: 100%;
+    
+    }
+    
+    body {
+    font-family: "Microsoft YaHei";
+    font-size:20px;
+    color:#333;
+    background:rgba(247,247,247,1);
+    }
+    h1, h2, h3, h4, h5, h6{font-weight:normal;}
+    ul,ol {
+    list-style: none;
+    }
+    
+    img {
+    border: none;
+    vertical-align: middle;
+    }
+    
+    a {
+    text-decoration: none;
+    color: #232323;
+    }
+    
+    table {
+    border-collapse: collapse;
+    table-layout: fixed;
+    }
+    
+    input, textarea {
+    outline: none;
+    border: none;
+    }
+    
+    textarea {
+    resize: none;
+    overflow: auto;
+    }
+    
+    .clearfix {
+    zoom: 1;
+    }
+    
+    .clearfix:after {
+    content: ".";
+    width: 0;
+    height: 0;
+    visibility: hidden;
+    display: block;
+    clear: both;
+    overflow:hidden;
+    }
+    
+    .fl {
+    float: left
+    }
+    
+    .fr {
+    float: right
+    }
+    
+    .tl {
+    text-align: left;
+    }
+    
+    .tc {
+    text-align: center
+    }
+    
+    .tr {
+    text-align: right;
+    }
+    
+    .ellipse {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    }
+    .inline{
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+    }
+
+.outModel{
+    margin: 0 auto;
+    text-align: center;
+    background:rgba(255,255,255,1);
+}
+
+.headerLitle{
+    padding-top: 20px;
+    padding-bottom: 20px;
+    width: 100%;
+}
+
+.leftLitle{
+    border-left: 5px solid seagreen;
+    float: left;
+    font-size: 18px;
+    font-weight:600;
+}
+
+.rightLitle{
+    float: right; 
+}
+
+select{
+    font-size: 15px;
+    padding: 5px 5px 5px 5px;
+    border:none;
+    background: none;
+}
+
+
+
+.mainRolls:nth-child(1n){
+    width:80%;
+    padding: 20px 30px;
+    margin: 20px auto;
+    background:rgba(104,191,70,0.8);
+    opacity:0.8;
+    border-radius:5px;
+}
+
+.mainRolls:nth-child(2n){
+    width:80%;
+    padding: 20px 30px;
+    margin: 20px auto;
+    background:rgba(11,155,83,0.8);
+    opacity:0.8;
+    border-radius:5px;
+}
+
+.mainRolls:nth-child(3n){
+    width:80%;
+    padding: 20px 30px;
+    margin: 20px auto;
+    background:rgba(255,119,52,0.8);
+    opacity:0.8;
+    border-radius:5px;
+}
+
+.headTop{
+    width:100%;
+    height:11px;
+    background:rgba(11,155,83,1);
+}
+
+.headTitle{
+    width:364px;
+    height:50px;
+    background:rgba(11,155,83,1);
+    margin: 0 auto;
+    border-radius:0px 0px 30px 30px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.logo{
+    display: inline;
+    float: left;
+    height: auto;
+}
+
+.newTime{
+    position: absolute;
+    right: 25px;
+    top: 30px;
+}
+
+#time{
+    font-size:16px;
+    font-family:Microsoft YaHei;
+    font-weight:bold;
+    color:rgba(11,155,83,1);
+}
+
+#titleName{
+    font-size:35px;
+    font-family:Microsoft YaHei;
+    font-weight:bold;
+    color:rgba(254,254,254,1);
+}
+
+.modelContent{
+    margin: 5px auto;
+    width: 100%;
+}
+
+.left,
+.right{
+    height: 100%;
+    width: 29%;
+    float: left;
+    
+    margin-right: 1%;
+    margin-left: 1%;
+}
+
+
+.center{
+    height: auto;
+    width: 35%;
+    float: left;
+    margin-right: 1%;
+    margin-left: 1%;
+}
+
+.barcon2 {
+    float: right;
+    margin-left: 0px;
+}
+.barcon2 ul {
+    margin: 20px 0;
+    padding-left: 0;
+    list-style: none;
+    text-align: center;
+}
+.barcon2 li {
+    display: inline;
+}
+.barcon2 a {
+    font-size: 16px;
+    font-weight: normal;
+    display: inline-block;
+    padding: 5px;
+    padding-top: 0;
+    color: black;
+    border: 1px solid #ddd;
+    background-color: #fff;
+}
+.barcon2 a:hover{
+    background-color: #eee;
+}
+
+.page_btn{
+    width: 50px;
+    height: 30px;
+    font-size:12px;
+    border: 1px solid #999999;
+    background: #FFFFFF;
+    border-radius: 5px;
+    margin-left:5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+
+.add_btn{
+    width: 80px;
+    height: 30px;
+    margin-right: 80px;
+    margin-top: 10px;
+    border: 1px solid #1ABC9C;
+    background: #1ABC9C;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    color: #FFFFFF;
+    cursor:pointer;
+}
+.add_btn:hover{
+    border:1px solid #1ABC9C;
+    border-radius:5px;
+    color:#1ABC9C;
+    background:#fff;
+    transition: .6s;
+    -webkit-transition:all .6s;
+    -moz-transition:all .6s;
+    -o-transition:all .6s;
+    -ms-transition:all .6s;
+}
+
+
+select {
+ 
+    /*Chrome和Firefox里面的边框是不一样的，所以复写了一下*/
+   
+    border: solid 1px rgba(11,155,83,1);;
+   
+   
+    text-align: center;
+    text-align-last: center;
+    /*很关键：将默认的select选择框样式清除*/
+   
+    appearance:none;
+   
+    -moz-appearance:none;
+   
+    -webkit-appearance:none;
+   
+   
+   
+    /*在选择框的最右侧中间显示小箭头图片*/
+   
+
+   
+   border-radius: 15px;
+   
+   
+   
+    /*为下拉小箭头留出一点位置，避免被文字覆盖*/
+   
+
+   
+  }
+   
+   
+   
+   
+   
+  /*清除ie的默认选择框样式清除，隐藏下拉箭头*/
+   
+  select::-ms-expand { display: none; }

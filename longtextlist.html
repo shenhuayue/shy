@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>结算审核管理</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/saleCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/index.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <!--<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">-->
+    <!--<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>-->
+    <!--<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
+</head>
+<body class="reset">
+
+<div>
+
+        <div id="editSeries" class="addTopic outShadow" style="display: none;position: fixed">
+                <div class="dealer_title">
+                    <span>网址</span>
+                    <img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeEditSeries()">
+                </div>
+                <div style="width: 100%;height: auto;border-top: none;margin-top: 20px;margin-bottom: 20px;">
+                    <div>
+                         <table class="rpt_detail_tab txt_center">
+                            <tr>
+                                <td class='head_td' width='136px' height='46px'>网址</td>
+                                <td class='body_td txt_left' width='383px'>
+                                    <span id="longtextAdress"></span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+    <div class="tit mg-t50">
+        <span class="flt_l">长文列表</span>
+    </div>
+    <div class="account_cont" style="font-size: 0.9em">
+        <table width="100%" cellpadding="0" cellspacing="0" class="table2" align="center">
+            <thead>
+            <tr align="center">
+                <th class="th2" height="33">id</th>
+				 <th class="th2">长文标题</th>
+                <th class="th2">创建时间</th>
+               <th class="th2">查看</th>
+              
+            </tr>
+            </thead>
+            <tbody id="adminTbody">
+                <!--<tr>-->
+                    <!--<td class="td2" height="33">江苏汇丰农机有限公司</td>-->
+                    <!--<td class="td2">600160</td>-->
+                    <!--<td class="td2">轮式拖拉机</td>-->
+                    <!--<td class="td2">2018</td>-->
+                    <!--<td class="td2">10</td>-->
+                    <!--<td class="td2">600</td>-->
+                    <!--<td class="td2">通过</td>-->
+                    <!--<td class="td2"><a href="###" onclick="showCostCheckDetails(this)">查看详情</a></td>-->
+                <!--</tr>-->
+            </tbody>
+        </table>
+        <div id="barcon" class="barcon" >
+            <div id="barcon1" class="barcon1"></div>
+            <div id="barcon2" class="barcon2">
+                <ul>
+                    <li><button id="firstPage" class="page_btn">首页</button></li>
+                    <li><button id="prePage" class="page_btn">上一页</button></li>
+                    <li><button id="nextPage" class="page_btn">下一页</button></li>
+                    <li><button id="lastPage" class="page_btn">尾页</button></li>
+                </ul>
+              
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    window.onload = function () {
+						
+        jQuery.support.cors = true;
+							toTop();
+						   
+					function ajax_screenAuthor() {
+						$.ajax({
+										type : "post",
+										async : false,
+										url : ip_path+"/changfa_system/consults/selectArticleList.do",
+										data : {
+										    token : $(window.parent.document).find("input[name='token']").val(),
+											modelId:'',
+											pageSize:18,
+											pageNum:currentPage,
+                                            status:''											
+										   },
+										dataType : "json",
+										success : function (data) {
+                                               currentPage = data['body']['result']['pageNum'];
+												 totalPage = data['body']['result']['pages'];
+                                                    totalData = data['body']['result']['total'];
+                                                    $("#adminTbody").empty();
+												 for(var i=0;i<data['body']['result']['data']['length'];i++){
+                                                    modelId =  data['body']['result']['data'][i]['modelId'];
+
+												$("#adminTbody").append(
+												            "<tr id='"+data['body']['result']['data'][i]['modelId']+"'>" +
+															'<td class="td2 txt_center" height="33">' + data['body']['result']['data'][i]['id'] + '</td>' +
+															'<td class="td2 txt_center" height="33">' + data['body']['result']['data'][i]['title'] + '</td>' +
+															'<td class="td2 txt_center" height="33">' + data['body']['result']['data'][i]['create_time'] + '</td>' +
+                                                            '<td class="td2 txt_center" height="33"> <a href="#" onclick="longtextAdress(' + data['body']['result']['data'][i]['id'] + ')">网址</a>  <a href="#" onclick="longtextsee(' + data['body']['result']['data'][i]['id'] + ')">查看</a> <a href="#" onclick="longtextedit(' + data['body']['result']['data'][i]['id'] + ')">编辑</a> <a href="#" onclick="longtextdel(' + data['body']['result']['data'][i]['id'] + ')">删除</a></td>' +															
+															'</tr>'												
+												)
+											}
+											pageSplit();
+                                            hideOrShow();
+                                        }
+									});
+									
+									
+								
+								
+							}
+
+
+
+                currentPage = 1;
+                $('#firstPage').attr('disabled',true);
+                $('#prePage').attr('disabled',true);
+                $("#firstPage").click(function () {
+                    $('#lastPage').removeAttr('disabled');
+                    $('#nextPage').removeAttr('disabled');
+                    currentPage = 1;
+                    $('#firstPage').attr('disabled',true);
+                    $('#prePage').attr('disabled',true);
+                    ajax_screenAuthor();
+                });
+                $("#lastPage").click(function () {
+                    $('#firstPage').removeAttr('disabled');
+                    $('#prePage').removeAttr('disabled');
+                    currentPage = totalPage;
+                    $('#lastPage').attr('disabled',true);
+                    $('#nextPage').attr('disabled',true);
+                    ajax_screenAuthor();
+                });
+                $("#nextPage").click(function () {
+                    $('#firstPage').removeAttr('disabled');
+                    $('#prePage').removeAttr('disabled');
+                    currentPage = currentPage+1;
+                    if(currentPage == totalPage){
+                        $('#lastPage').attr('disabled',true);
+                        $('#nextPage').attr('disabled',true);
+                    }else{
+                        $('#lastPage').removeAttr('disabled');
+                        $('#nextPage').removeAttr('disabled');
+                    }
+                    ajax_screenAuthor();
+                });
+                $("#prePage").click(function () {
+                    $('#lastPage').removeAttr('disabled');
+                    $('#nextPage').removeAttr('disabled');
+                    currentPage = currentPage-1;
+                    if(currentPage == 1){
+                        $('#firstPage').attr('disabled',true);
+                        $('#prePage').attr('disabled',true);
+                    }else{
+                        $('#firstPage').removeAttr('disabled');
+                        $('#prePage').removeAttr('disabled');
+                    }
+                    ajax_screenAuthor();
+                });
+
+
+                    ajax_screenAuthor();
+
+            $("#partment").change(function () {
+                currentPage = 1;
+                ajax_screenAuthor();
+            });
+            $("#status").change(function () {
+                currentPage = 1;
+                ajax_screenAuthor();
+            });
+
+            $("#meb_item").change(function () {
+            $("#meb_info").val("");
+            });
+							//初始化
+			}
+
+    function longtextsee(id){
+    $(window.parent.document).find("input[name='longTextId']").val(id);
+    window.open("longtextpreview2.html?Id="+ id  );
+    };
+
+    function longtextedit(id){
+        $(window.parent.document).find("input[name='longTextId']").val(id);
+        window.open("longtext.html","_self");        
+    }
+
+
+    function longtextdel(id){
+        $.ajax({
+			type:'get',
+			dataType:'json',
+			data : {
+					  token : $(window.parent.document).find("input[name='token']").val(),
+					  id:id
+				   },//传接收到的参数id
+			url:ip_path+ "/changfa_system/consults/deleteArticle.do",
+			success:function(data){
+
+		       window.location.href = "longtextlist.html";
+				
+			}
+		})
+    }
+
+    function longtextAdress(id){
+        var path1 = 'http://test.app.changfanz.net:3590'
+        $('#longtextAdress').html(path1+'/longtextpreview2.html?Id='+id);
+        $('#editSeries').show();
+    }
+</script>
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>物流公司管理</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/userCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <script src="layer/layer.js"></script>
+    <style>
+        .layer_input{
+            width : 300px;height: 35px;
+        }
+    </style>
+</head>
+<body class="reset">
+    <div class="mg-t50">
+        <div class="tit">
+            <span class="flt_l">筛选查询</span>
+            <input type="button" class="add_btn flt_r" value="清空" onclick="clearDate()">
+        </div>
+        <div class="account_cont2">
+            <select id="logisticsCompany_item" class="rep_guy_info">
+                <option value="company">企业名称</option>
+                <option value="workNum">企业编号</option>
+                <option value="mobile">联系人电话</option>
+            </select>
+            <input type="text" id="logisticsCompany_info" class="product_line" style="border-left: none;">
+
+            <span class="describ mg_l30">状态：</span>
+            <select id="status" class="area_choose">
+                <option value="">全部</option>
+                <option value="0">禁用中</option>
+                <option value="1">启用中</option>
+            </select>
+        </div>
+    </div>
+    <div>
+        <div class="tit mg-t50">
+            <span class="flt_l">物流公司列表</span>
+            <!-- <form id="form" action="" method="post">
+                <input type="hidden" name="roleId" value="6">
+                <input type="hidden" name="chooseItem" value="">
+                <input type="hidden" name="itemCont" value="">
+                <input type="hidden" name="status" value="">
+                <input type="button" id="sendOutput" class="output_btn flt_r" value="导出">
+            </form> -->
+            <input type="button" class="add_btn flt_r" value="创建" onclick="addLogisticsCompany()">
+            <input type="button" class="add_btn flt_r" value="查询" onclick="queryLogisticsCompany()">
+        </div>
+        <div class="account_cont">
+            <table width="100%" cellpadding="0" cellspacing="0" class="table2" align="center">
+                <thead>
+                <tr align="center">
+                    <th height="33" class="th2">企业名称</th>
+                    <th class="th2">企业编号</th>
+                    <th class="th2">联系人</th>
+                    <th class="th2">电话</th>
+                    <th class="th2">禁用/启用</th>
+                    <th class="th2">更多</th>
+                </tr>
+                </thead>
+                <tbody id="adminTbody">
+               
+                </tbody>
+            </table>
+            <div id="barcon" class="barcon" >
+                <div id="barcon1" class="barcon1"></div>
+                <div id="barcon2" class="barcon2">
+                    <ul>
+                        <li><button id="firstPage" class="page_btn">首页</button></li>
+                        <li><button id="prePage" class="page_btn">上一页</button></li>
+                        <li><button id="nextPage" class="page_btn">下一页</button></li>
+                        <li><button id="lastPage" class="page_btn">尾页</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+        currentPage = 1;
+        $('#firstPage').attr('disabled',true);
+        $('#prePage').attr('disabled',true);
+        $("#firstPage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = 1;
+            $('#firstPage').attr('disabled',true);
+            $('#prePage').attr('disabled',true);
+            ajax_logisticsCompanyM();
+        });
+        $("#lastPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = totalPage;
+            $('#lastPage').attr('disabled',true);
+            $('#nextPage').attr('disabled',true);
+            ajax_logisticsCompanyM();
+        });
+        $("#nextPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = currentPage+1;
+            if(currentPage == totalPage){
+                $('#lastPage').attr('disabled',true);
+                $('#nextPage').attr('disabled',true);
+            }else{
+                $('#lastPage').removeAttr('disabled');
+                $('#nextPage').removeAttr('disabled');
+            }
+            ajax_logisticsCompanyM();
+        });
+        $("#prePage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = currentPage-1;
+            if(currentPage == 1){
+                $('#firstPage').attr('disabled',true);
+                $('#prePage').attr('disabled',true);
+            }else{
+                $('#firstPage').removeAttr('disabled');
+                $('#prePage').removeAttr('disabled');
+            }
+            ajax_logisticsCompanyM();
+        });
+     
+        ajax_logisticsCompanyM();
+
+        // $("#sendOutput").click(function () {
+        //     $("input[name='chooseItem']").val($("#dealer_item option:selected").val());
+        //     $("input[name='itemCont']").val($("#dealer_info").val());
+        //     $("input[name='status']").val($("#status option:selected").val());
+        //     $("#form").attr("action",ip_path + "/changfa_system/user/exportServiceUserInfo.do");
+        //     $("#form").submit();
+        // });
+
+        $("#logisticsCompany_item").change(function(){
+            $("#logisticsCompany_info").val("");
+        });
+    }
+
+    function addLogisticsCompany() {  
+        layer.open({
+            id:1,
+            type: 1,
+            title:'添加物流公司',
+            skin:'layui-layer-rim',
+            offset:['300px','480px'],
+            area:['450px', 'auto'],
+            content: '<div class="row" style="width: 420px;  margin-left:7px; margin-top:10px;">'
+
+                    // +'<div class="mg_l20">'
+                    // +'<div>'
+                    // +'<span class="">企业编号:</span>'
+                    // +'<input id="dealerNum" type="text" class="layer_input mg_l10">'
+                    // +'</div>'
+                    // +'</div>'
+
+                    +'<div class="mg_l20" style="margin-top: 10px">'
+                    +'<div>'
+                    +'<span class="">企业名称:</span>'
+                    +'<input id="dealerName" type="text" class="layer_input mg_l10">'
+                    +'</div>'
+                    +'</div>'
+
+                    +'<div class="mg_l20" style="margin-top: 10px">'
+                    +'<div>'
+                    +'<span class="">联系人名:</span>'
+                    +'<input id="contactName" type="text" class="layer_input mg_l10">'
+                    +'</div>'
+                    +'</div>'
+
+                    +'<div class="mg_l20" style="margin-top: 10px">'
+                    +'<div>'
+                    +'<span class="">联系电话:</span>'
+                    +'<input id="contactMobile" type="text" class="layer_input mg_l10">'
+                    +'</div>'
+                    +'</div>'
+                        
+                    +'</div>'
+                ,
+            btn:['添加','取消'],
+            btn1: function (index,layero) {
+                $.ajax({
+                    type: "post",
+                    async: false,
+                    url: ip_path + "/changfa_system/account/createLogisticsPerson.do",
+                    data: {
+                        mobile : $("#contactMobile").val(),
+                        userName : $("#contactName").val(),
+                        company : $("#dealerName").val(),
+                        type : 1
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        if(data['head']['code'] == 200){
+                            window.location.reload();
+                        }else{
+                            alert(data['head']['message']);
+                        }
+                    }
+                });
+            },
+            btn2:function (index,layero) {
+                layer.close(index);
+            }
+        
+        });
+    }
+
+    function queryLogisticsCompany() {  
+        currentPage = 1;
+        ajax_logisticsCompanyM();
+    }
+
+    function showLogisticsCompanyDetails(param) {  
+        $(window.parent.document).find("input[name='logisticsCompanyId']").val(param.parentNode.parentNode.id);
+        window.open("logisticsCompanyDetails.html","_self");
+    }
+</script>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>功能权限设置</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/userCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <style>
+        input[type="checkbox"]:checked + label {
+            background: #1ABC9C;
+            color: #FFFFFF;
+        }
+    </style>
+</head>
+<body class="reset">
+    <div>
+        <div class="tit mg-t50">
+            <span class="flt_l">功能列表</span>
+        </div>
+        <div class="account_cont describ txt_left">
+            <div id="secondFloorList" class="menu_limit flt_l">
+                <div id="tab_menu_sales" class="menu_limit_tab" style="border-collapse: collapse;">
+                    <li class="menu_limit_td0" style="border-top: none;">通知管理<img src="img/menu_close.png" class="menu_status flt_r"></li>
+                    <ul style="display: none;">
+                        <a href="###"><li id="noticeManage" class="menu_limit_td" onclick="noticeManage(this)">通知通告</li></a>
+                    </ul>
+                    <li class="menu_limit_td0">三包服务<img src="img/menu_close.png" class="menu_status flt_r"></li>
+                    <ul style="display: none;">
+                        <a href="###"><li id="repairNeedManage" class="menu_limit_td" onclick="repairNeedManage(this)">报修管理</li></a>
+                        <a href="###"><li id="userArchivesManage" class="menu_limit_td" onclick="userArchivesManage(this)">农机档案管理</li></a>
+                    </ul>
+                    <li class="menu_limit_td0">结算管理<img src="img/menu_close.png" class="menu_status flt_r"></li>
+                    <ul style="display: none;">
+                        <a href="###"><li id="costSumManage" class="menu_limit_td" onclick="costSumManage(this)">结算生成</li></a>
+                        <a href="###"><li id="costCheckManage" class="menu_limit_td" onclick="costCheckManage(this)">结算审核</li></a>
+                        <a href="###"><li id="costPayManage" class="menu_limit_td" onclick="costPayManage(this)">结算付款</li></a>
+                    </ul>
+                </div>
+            </div>
+            <!--<div class="txt_left mg-t30 mg_b30" style="width: 90%;margin-left: 5%;">-->
+                <!--<input type="checkbox" id="1" class="choose_checkbox vert_mid" style="position: absolute;margin-left: 120px;margin-top: 13px;"><label for="1" class="outShadow label_for_checkbox mg-r20 mg_b20">添加</label>-->
+                <!--<input type="checkbox" id="2" class="choose_checkbox vert_mid" style="position: absolute;margin-left: 120px;margin-top: 13px;"><label for="2" class="outShadow label_for_checkbox mg-r20 mg_b20">编辑</label>-->
+                <!--<input type="checkbox" id="3" class="choose_checkbox vert_mid" style="position: absolute;margin-left: 120px;margin-top: 13px;"><label for="3" class="outShadow label_for_checkbox mg-r20 mg_b20">删除</label>-->
+                <!--<input type="checkbox" id="4" class="choose_checkbox vert_mid" style="position: absolute;margin-left: 120px;margin-top: 13px;"><label for="4" class="outShadow label_for_checkbox mg-r20 mg_b20">添加</label>-->
+                <!--<input type="checkbox" id="5" class="choose_checkbox vert_mid" style="position: absolute;margin-left: 120px;margin-top: 13px;"><label for="5" class="outShadow label_for_checkbox mg-r20 mg_b20">编辑</label>-->
+                <!--<input type="checkbox" id="6" class="choose_checkbox vert_mid" style="position: absolute;margin-left: 120px;margin-top: 13px;"><label for="6" class="outShadow label_for_checkbox mg-r20 mg_b20">删除</label>-->
+                <!--<input type="checkbox" id="7" class="choose_checkbox vert_mid" style="position: absolute;margin-left: 120px;margin-top: 13px;"><label for="7" class="outShadow label_for_checkbox mg-r20 mg_b20">添加</label><br>-->
+                <!--<input type="checkbox" id="8" class="choose_checkbox vert_mid" style="position: absolute;margin-left: 120px;margin-top: 13px;"><label for="8" class="outShadow label_for_checkbox mg-r20 mg_b20">编辑</label>-->
+                <!--<input type="checkbox" id="9" class="choose_checkbox vert_mid" style="position: absolute;margin-left: 120px;margin-top: 13px;"><label for="9" class="outShadow label_for_checkbox mg-r20 mg_b20">删除</label>-->
+            <!--</div>-->
+            <!--<div class="btn_part mg_b50">-->
+                <!--<input type="button" class="submit_btn" value="权限设置" onclick="insertFunctionLimit()">-->
+            <!--</div>-->
+        </div>
+    </div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+        $(".menu_limit_td0").click(function(){
+            if($(this).next('ul').css('display') == "none"){
+                $(this).addClass('menu_limit_td0_act');
+                $(this).next('ul').slideDown(100);
+                $(this).find("img").attr("src","img/menu_open.png");
+            }else{
+                $(this).removeClass('menu_limit_td0_act');
+                $(this).next('ul').slideUp(100);
+                $(this).find("img").attr("src","img/menu_close.png");
+            }
+        });
+    }
+</script>
+</html>

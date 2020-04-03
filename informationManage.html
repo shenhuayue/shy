@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>活动管理</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/runningCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <script src="jquery-ui-1.12.1/jquery-ui.min.js"></script>
+    <link href="jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet" />
+    <script src="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.js"></script>
+    <script type="text/javascript" src="jQuery-Timepicker/dist/i18n/jquery-ui-timepicker-zh-CN.js"></script>
+    <link href="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.css" rel="stylesheet" />
+    <script src="js/ajaxfileupload.js" type="text/javascript"></script>
+    <script src="js/jquery_form.js" type="text/javascript"></script>
+</head>
+<body class="reset">
+<div id="addInformation" class="addTopic outShadow" style="display: none;">
+    <div class="dealer_title">
+        <span>创建资讯</span>
+        <img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeAddInformation()">
+    </div>
+    <div style="width: 100%;height: auto;border: 1px solid #E4E4E4;border-top: none;">
+        <div class="tit_normal">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>资讯标题</span>
+            <input type="text" id="title" style="width: 50%;height: 30px;">
+        </div>
+        <div class="tit_normal">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>标题图片</span>
+            <img class="picBox vert_mid" src="img/topicBackground.png" id="tImg" onclick="upload_t()">
+            <form id="form_t">
+                <input type="file" id="file_t" name="file" style="display: none;">
+            </form>
+        </div>
+        <div class="tit_normal">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>资讯链接</span>
+            <input type="text" id="url" style="width: 50%;height: 30px;" placeholder="url地址">
+        </div>
+        <div class="tit_normal">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>资讯概述</span>
+            <textarea id="describe" style="width: 50%;height: 80px;resize: none;vertical-align: middle"></textarea>
+        </div>
+        <div class="mg_b50" style="width: 100%;text-align: center">
+            <button class="waves submit_btn mg-t30" onclick="createInformation()">提交</button>
+        </div>
+    </div>
+</div>
+
+<div id="editInformation" class="addTopic outShadow" style="display: none;">
+    <div class="dealer_title">
+        <span>创建资讯</span>
+        <img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeEditInformation()">
+    </div>
+    <div style="width: 100%;height: auto;border: 1px solid #E4E4E4;border-top: none;">
+        <div class="tit_normal">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>资讯标题</span>
+            <input type="text" id="edit_title" style="width: 50%;height: 30px;">
+        </div>
+        <div class="tit_normal">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>标题图片</span>
+            <img class="picBox vert_mid" src="img/topicBackground.png" id="edit_tImg" onclick="edit_upload_t()">
+            <form id="edit_form_t">
+                <input type="file" id="edit_file_t" name="file" style="display: none;">
+            </form>
+        </div>
+        <div class="tit_normal">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>资讯链接</span>
+            <input type="text" id="edit_url" style="width: 50%;height: 30px;" placeholder="url地址">
+        </div>
+        <div class="tit_normal">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>资讯概述</span>
+            <textarea id="edit_describe" style="width: 50%;height: 80px;resize: none;vertical-align: middle"></textarea>
+        </div>
+        <div class="mg_b50" style="width: 100%;text-align: center">
+            <button class="waves submit_btn mg-t30" onclick="updateInformation()">提交</button>
+        </div>
+    </div>
+</div>
+    <div class="mg-t50">
+        <div class="tit">
+            <span class="flt_l">筛选查询</span>
+            <input type="button" class="add_btn flt_r" value="清空" onclick="clearDate()">
+        </div>
+        <div class="account_cont2">
+            <span class="describ mg_l30">资讯标题：</span>
+            <input type="text" id="info_title" class="product_line" style="">
+            <button class="query_btn_big" style="margin-left: -4%;margin-right: 4%" onclick="queryInformation()"></button>
+
+            <span class="describ mg_l30">状态：</span>
+            <select id="status" class="area_choose">
+                <option value="">全部</option>
+                <option value="0">禁用中</option>
+                <option value="1">启用中</option>
+            </select>
+
+            <span class="describ mg_l50">创建时间：</span>
+            <input id="date_start" class="timeChoose" placeholder="起始">
+            <span>-</span>
+            <input id="date_end" class="timeChoose" placeholder="截止">
+        </div>
+    </div>
+    <div>
+        <div class="tit mg-t50">
+            <span class="flt_l">资讯列表</span>
+            <input type="button" class="output_btn flt_r" value="发布资讯" onclick="addInformation()">
+        </div>
+        <div class="account_cont">
+            <table width="100%" cellpadding="0" cellspacing="0" class="table2" align="center">
+                <thead>
+                <tr align="center">
+                    <th height="33" class="th2">资讯标题</th>
+                    <th class="th2">图片</th>
+                    <th class="th2">创建时间</th>
+                    <th class="th2">状态</th>
+                    <th class="th2">更多</th>
+                </tr>
+                </thead>
+                <tbody id="adminTbody">
+
+                </tbody>
+            </table>
+            <div id="barcon" class="barcon" >
+                <div id="barcon1" class="barcon1"></div>
+                <div id="barcon2" class="barcon2">
+                    <ul>
+                        <li><button id="firstPage" class="page_btn">首页</button></li>
+                        <li><button id="prePage" class="page_btn">上一页</button></li>
+                        <li><button id="nextPage" class="page_btn">下一页</button></li>
+                        <li><button id="lastPage" class="page_btn">尾页</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    filePath_t = "";
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+        $.datepicker.regional['zh-CN'] = {
+            changeMonth: true,
+            changeYear: true,
+            clearText: '清除',
+            clearStatus: '清除已选日期',
+            closeText: '关闭',
+            closeStatus: '不改变当前选择',
+            prevText: '<上月',
+            prevStatus: '显示上月',
+            prevBigText: '<<',
+            prevBigStatus: '显示上一年',
+            nextText: '下月>',
+            nextStatus: '显示下月',
+            nextBigText: '>>',
+            nextBigStatus: '显示下一年',
+            currentText: '今天',
+            currentStatus: '显示本月',
+            monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            monthNamesShort: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+            monthStatus: '选择月份',
+            yearStatus: '选择年份',
+            weekHeader: '周',
+            weekStatus: '年内周次',
+            dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+            dayNamesShort: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+            dayNamesMin: ['日', '一', '二', '三', '四', '五', '六'],
+            dayStatus: '设置 DD 为一周起始',
+            dateStatus: '选择 m月 d日, DD',
+            dateFormat: 'yy-mm-dd',
+            firstDay: 1,
+            initStatus: '请选择日期',
+            isRTL: false
+        };
+
+        $.datepicker.setDefaults($.datepicker.regional['zh-CN']);
+        $("#date_start").datepicker({maxDate:new Date()});
+        $("#date_end").datepicker({maxDate:new Date()});
+        $("#defult").datetimepicker();
+        $("#date_start").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            onClose: function(selectedDate) {
+                $("#date_end").datepicker("option", "minDate", selectedDate);
+            }
+        });
+
+        $("#date_end").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            onClose: function(selectedDate) {
+                $("#date_start").datepicker("option", "maxDate", selectedDate);
+                $("#date_end").val($(this).val());
+            }
+        });
+
+        currentPage = 1;
+        $('#firstPage').attr('disabled',true);
+        $('#prePage').attr('disabled',true);
+        $("#firstPage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = 1;
+            $('#firstPage').attr('disabled',true);
+            $('#prePage').attr('disabled',true);
+            ajax_informationM();
+        });
+        $("#lastPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = totalPage;
+            $('#lastPage').attr('disabled',true);
+            $('#nextPage').attr('disabled',true);
+            ajax_informationM();
+        });
+        $("#nextPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = currentPage+1;
+            if(currentPage == totalPage){
+                $('#lastPage').attr('disabled',true);
+                $('#nextPage').attr('disabled',true);
+            }else{
+                $('#lastPage').removeAttr('disabled');
+                $('#nextPage').removeAttr('disabled');
+            }
+            ajax_informationM();
+        });
+        $("#prePage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = currentPage-1;
+            if(currentPage == 1){
+                $('#firstPage').attr('disabled',true);
+                $('#prePage').attr('disabled',true);
+            }else{
+                $('#firstPage').removeAttr('disabled');
+                $('#prePage').removeAttr('disabled');
+            }
+            ajax_informationM();
+        });
+        //初始化
+        ajax_informationM();
+
+        $("#status").change(function () {
+            currentPage = 1;
+            ajax_informationM();
+        });
+
+        $("#date_start").change(function () {
+            if($("#date_start").val() != "" && $("#date_end").val() != ""){
+                currentPage = 1;
+                ajax_informationM();
+            }
+        });
+
+        $("#date_end").change(function () {
+            if($("#date_start").val() != "" && $("#date_end").val() != ""){
+                currentPage = 1;
+                ajax_informationM();
+            }
+        });
+
+        $("#file_t").on("change",function(){
+            var filepath = $("#file_t").val();
+            var objUrl = getObjectURL(this.files[0]);
+            var extStart = filepath.lastIndexOf(".");
+
+            var ext = filepath.substring(extStart, filepath.length).toUpperCase();
+            if(ext != ".BMP" && ext != ".PNG" && ext != ".GIF" && ext != ".JPG" && ext != ".JPEG") {
+                alert("图片限于bmp,png,gif,jpeg,jpg格式");
+                window.parent.hideLoading();
+
+                return false;
+            } else {
+                var option = {
+                    url :ip_path+"/changfa_system/file/oneFileUpoload.do",
+                    type : "post",
+                    success : function (data) {
+                        alert(data['head']['message']);
+                        if(data['head']['code'] == 200){
+                            filePath_t = data['body']['result']['filePath'];
+                            $("#tImg").attr("src", objUrl)
+                        }
+                    }
+                };
+                $("#form_t").ajaxSubmit(option);
+            }
+        });
+
+        $("#edit_file_t").on("change",function(){
+            var filepath = $("#edit_file_t").val();
+            var objUrl = getObjectURL(this.files[0]);
+            var extStart = filepath.lastIndexOf(".");
+            console.log(filepath);
+
+            var ext = filepath.substring(extStart, filepath.length).toUpperCase();
+            console.log(ext);
+            if(ext != ".BMP" && ext != ".PNG" && ext != ".GIF" && ext != ".JPG" && ext != ".JPEG") {
+                alert("图片限于bmp,png,gif,jpeg,jpg格式");
+                $("#edit_file_t").attr("src","img/topicBackground.png");
+                window.parent.hideLoading();
+
+                return false;
+            } else {
+                var option = {
+                    url :ip_path+"/changfa_system/file/oneFileUpoload.do",
+                    type : "post",
+                    success : function (data) {
+                        alert(data['head']['message']);
+                        if(data['head']['code'] == 200){
+                            filePath_t = data['body']['result']['filePath'];
+                            if (objUrl) {
+                                $("#edit_tImg").attr("src", objUrl) ; //将图片路径存入src中，显示出图片
+                            }
+                        }
+                    }
+                };
+                $("#edit_form_t").ajaxSubmit(option);
+            }
+        });
+
+        // $("#file_t").change(function () {
+        //     var option = {
+        //         url :ip_path+"/changfa_system/file/oneFileUpoload.do",
+        //         type : "post",
+        //         success : function (data) {
+        //             alert(data['head']['message']);
+        //             if(data['head']['code'] == 200){
+        //                 filePath_t = data['body']['result']['filePath'];
+        //                 console.log(filePath_t);
+        //             }
+        //         }
+        //     };
+        //     $("#form_t").ajaxSubmit(option);
+        // });
+    }
+</script>
+</html>

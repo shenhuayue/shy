@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>质量反馈</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/saleCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/index.js"></script>
+    <script src="js/feedback.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <script src="jquery-ui-1.12.1/jquery-ui.min.js"></script>
+    <link href="jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet" />
+    <script src="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.js"></script>
+    <script type="text/javascript" src="jQuery-Timepicker/dist/i18n/jquery-ui-timepicker-zh-CN.js"></script>
+    <link href="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.css" rel="stylesheet" />
+
+</head>
+<body class="reset">
+    <div class="mg-t50">
+        <div class="tit">
+            <span class="flt_l">筛选查询</span>
+            <input type="button" class="add_btn flt_r" value="清空" onclick="clearDate()">
+            <!--<input type="button" class="add_btn flt_r" value="查询" onclick="queryDealer()">-->
+        </div>
+        <div class="account_cont2">
+            <!--<select id="user_item" class="rep_guy_info">-->
+                <!--<option value="name">姓名</option>-->
+                <!--<option value="mobile">电话</option>-->
+            <!--</select>-->
+            <!--<input type="text" id="user_info" class="product_line" style="border-left: none;">-->
+            <!--<button class="query_btn_big" style="margin-left: -4%;margin-right: 4%" onclick="queryUser()"></button>-->
+
+
+            <span class="describ mg_l50">反馈时间：</span>
+            <input id="date_start" class="timeChoose" placeholder="起始">
+            <span>-</span>
+            <input id="date_end" class="timeChoose" placeholder="截止">
+
+            <span class="describ mg_l50">状态：</span>
+            <select id="statezt" class="area_choose" style="width:150px;">
+                <option value="">全部</option>
+                <option value="0">未回复</option>
+                <option value="1">已回复</option>
+                
+            </select>
+            <span class="describ mg_l50">处理状态：</span>
+            <select id="stateclzt" class="area_choose" style="width:150px;">
+                <option value="">全部</option>
+                <option value="0">未处理</option>
+                <option value="1">已处理</option>
+                
+            </select>
+
+        </div>
+    </div>
+    <div>
+        <div class="tit mg-t50">
+            <span class="flt_l">用户管理</span>
+            <!--<input type="button" class="add_btn flt_r" value="创建" onclick="addDealer()">-->
+            <form id="form" action="" method="post">
+                <input type="hidden" name="type" value="">
+                <input type="hidden" name="status" value="">
+                <input type="hidden" name="startTime" value="">
+                <input type="hidden" name="endTime" value="">
+                <input type="button" id="sendOutputyj" class="output_btn flt_r" value="质量反馈导出" style="width:100px;">
+            </form>
+            
+            
+        </div>
+        <div class="account_cont">
+            <table width="100%" cellpadding="0" cellspacing="0" class="table2" align="center">
+                <thead>
+                <tr align="center">
+                    <th height="33" class="th2">编号</th>
+                    <th class="th2">反馈人</th>
+                    <th class="th2">电话</th>
+                    <th class="th2">处理状态</th>
+                    <th class="th2">状态</th>
+                    <th class="th2">反馈时间</th>
+                    <th class="th2">操作</th>
+                </tr>
+                </thead>
+                <tbody id="adminTbody">
+
+                </tbody>
+            </table>
+            <div id="barcon" class="barcon" >
+                <div id="barcon1" class="barcon1"></div>
+                <div id="barcon2" class="barcon2">
+                    <ul>
+                        <li><button id="firstPage" class="page_btn">首页</button></li>
+                        <li><button id="prePage" class="page_btn">上一页</button></li>
+                        <li><button id="nextPage" class="page_btn">下一页</button></li>
+                        <li><button id="lastPage" class="page_btn">尾页</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+        $.datepicker.regional['zh-CN'] = {
+            changeMonth: true,
+            changeYear: true,
+            clearText: '清除',
+            clearStatus: '清除已选日期',
+            closeText: '关闭',
+            closeStatus: '不改变当前选择',
+            prevText: '<上月',
+            prevStatus: '显示上月',
+            prevBigText: '<<',
+            prevBigStatus: '显示上一年',
+            nextText: '下月>',
+            nextStatus: '显示下月',
+            nextBigText: '>>',
+            nextBigStatus: '显示下一年',
+            currentText: '今天',
+            currentStatus: '显示本月',
+            monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            monthNamesShort: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+            monthStatus: '选择月份',
+            yearStatus: '选择年份',
+            weekHeader: '周',
+            weekStatus: '年内周次',
+            dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+            dayNamesShort: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+            dayNamesMin: ['日', '一', '二', '三', '四', '五', '六'],
+            dayStatus: '设置 DD 为一周起始',
+            dateStatus: '选择 m月 d日, DD',
+            dateFormat: 'yy-mm-dd',
+            firstDay: 1,
+            initStatus: '请选择日期',
+            isRTL: false
+        };
+
+        $.datepicker.setDefaults($.datepicker.regional['zh-CN']);
+        $("#date_start").datepicker({maxDate:new Date()});
+        $("#date_end").datepicker({maxDate:new Date()});
+        $("#defult").datetimepicker();
+        $("#date_start").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            clear : "qingkong",
+            onClose: function(selectedDate) {
+                $("#date_end").datepicker("option", "minDate", selectedDate);
+            }
+        });
+
+        $("#date_end").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            onClose: function(selectedDate) {
+                $("#date_start").datepicker("option", "maxDate", selectedDate);
+                $("#date_end").val($(this).val());
+            }
+        });
+
+        currentPage = 1;
+        $('#firstPage').attr('disabled',true);
+        $('#prePage').attr('disabled',true);
+        $("#firstPage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = 1;
+            $('#firstPage').attr('disabled',true);
+            $('#prePage').attr('disabled',true);
+            ajax_feedBacknew1();
+        });
+        $("#lastPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = totalPage;
+            $('#lastPage').attr('disabled',true);
+            $('#nextPage').attr('disabled',true);
+            ajax_feedBacknew1();
+        });
+        $("#nextPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = currentPage+1;
+            if(currentPage == totalPage){
+                $('#lastPage').attr('disabled',true);
+                $('#nextPage').attr('disabled',true);
+            }else{
+                $('#lastPage').removeAttr('disabled');
+                $('#nextPage').removeAttr('disabled');
+            }
+            ajax_feedBacknew1();
+        });
+        $("#prePage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = currentPage-1;
+            if(currentPage == 1){
+                $('#firstPage').attr('disabled',true);
+                $('#prePage').attr('disabled',true);
+            }else{
+                $('#firstPage').removeAttr('disabled');
+                $('#prePage').removeAttr('disabled');
+            }
+            ajax_feedBacknew1();
+        });
+        
+
+         //导出
+        //质量反馈       
+        $('#sendOutputyj').click(function(){
+            $("input[name='type']").val($("#stateclzt option:selected").val());
+            $("input[name='status']").val($("#statezt option:selected").val());
+            $("input[name='startTime']").val($("#date_start").val());
+            $("input[name='endTime']").val($("#date_end").val());
+            //alert($("input[name='type']").val());
+            //alert($("input[name='status']").val());
+            //alert($("input[name='startTime']").val());
+            //alert($("input[name='endTime']").val());
+            daochu1()     
+        })
+
+        //反馈类型
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/feedBackClass/selectAllClass.do",
+            dataType : "json",
+            success : function (data) {
+                //console.log(data)
+                if(data['head']['isSuccess']){
+                    $("#type").empty();
+                    $("#type").append("<option value=''>全部</option>");
+                    for(var i=0;i<data['body']['resultList']['length'];i++){
+                        $("#type").append("<option data-id='"+ data['body']['resultList'][i]['id'] +"' value='"+ data['body']['resultList'][i]['id'] +"'>"+data['body']['resultList'][i]['name']+"</option>");
+                    }
+                }else{
+                    alert(data['head']['message']);
+                }
+            }
+        });
+        //状态
+        $("#statezt").change(function () {
+            currentPage = 1;
+            ajax_feedBacknew1();
+        });
+
+        //处理状态
+        
+        $("#stateclzt").change(function () {
+            currentPage = 1;
+            ajax_feedBacknew1();
+        });
+        
+        //初始化
+        ajax_feedBacknew1();
+
+        $("#type").change(function () {
+            currentPage = 1;
+            ajax_feedBacknew1();
+        });
+
+        $("#date_start").change(function () {
+            if($("#date_start").val() != "" && $("#date_end").val() != ""){
+                currentPage = 1;
+                ajax_feedBacknew1();
+            }
+        });
+        $("#date_end").change(function () {
+            if($("#date_start").val() != "" && $("#date_end").val() != ""){
+                currentPage = 1;
+                ajax_feedBacknew1();
+            }
+        });
+    }
+</script>
+</html>

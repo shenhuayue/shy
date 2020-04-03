@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>成员管理</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/userCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+</head>
+<body class="reset">
+<div id="addRole" class="addTopic outShadow" style="display: none;">
+    <div class="dealer_title">
+        <span>填写角色信息</span>
+        <img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeAddRole()">
+    </div>
+    <div style="width: 100%;height: auto;border: 1px solid #E4E4E4;border-top: none;">
+        <div class="tit_normal">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>部门名称：</span>
+            <select id="partName" style="width: 50%;height: 33px;margin-left: 30px;"></select>
+        </div>
+        <div class="tit_normal">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>上级领导：</span>
+            <select id="parentId" style="width: 50%;height: 33px;margin-left: 30px;"></select>
+        </div>
+        <div class="tit_normal">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>角色名称：</span>
+            <input type="text" id="roleName" style="width: 50%;height: 30px;margin-left: 30px;">
+        </div>
+        <div class="tit_normal">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>属性标记：</span>
+            <input type="checkbox" id="setManager" class="choose_checkbox vert_mid mg_l30"><label for="setManager" class="describ" style="user-select: none">标记为管理员</label>
+        </div>
+        <div class="btn_part mg-t30 mg_b30">
+            <input type="button" class="submit_btn" value="提交" onclick="createRole()">
+        </div>
+    </div>
+</div>
+<div id="editRole" class="addTopic outShadow" style="display: none;">
+    <div class="dealer_title">
+        <span>编辑角色信息</span>
+        <img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeEditRole()">
+    </div>
+    <div style="width: 100%;height: auto;border: 1px solid #E4E4E4;border-top: none;">
+        <div class="tit_normal">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>部门名称：</span>
+            <select id="edit_partName" style="width: 50%;height: 33px;margin-left: 30px;"></select>
+        </div>
+        <div class="tit_normal">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>上级领导：</span>
+            <select id="edit_parentId" style="width: 50%;height: 33px;margin-left: 30px;"></select>
+        </div>
+        <div class="tit_normal">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>角色名称：</span>
+            <input type="text" id="edit_roleName" style="width: 50%;height: 30px;margin-left: 30px;">
+        </div>
+        <div class="tit_normal">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>属性标记：</span>
+            <input type="checkbox" id="edit_setManager" class="choose_checkbox vert_mid mg_l30"><label for="edit_setManager" class="describ" style="user-select: none">标记为管理员</label>
+        </div>
+        <div class="btn_part mg-t30 mg_b30">
+            <input type="button" class="submit_btn" value="提交" onclick="updateRole()">
+        </div>
+    </div>
+</div>
+<div class="mg-t50">
+    <div class="tit">
+        <span class="flt_l">筛选查询</span>
+        <input type="button" class="add_btn flt_r" value="清空" onclick="clearDate()">
+        <!--<input type="button" class="add_btn flt_r" value="查询" onclick="queryDealer()">-->
+    </div>
+    <div class="account_cont2">
+        <span class="describ mg_l50">部门：</span>
+        <select id="partment" class="product_line">
+
+        </select>
+
+        <span class="describ">管理员标记：</span>
+        <select id="isManager" class="area_choose">
+            <option value="">全部</option>
+            <option value="0">未标记</option>
+            <option value="1">已标记</option>
+        </select>
+
+        <span class="describ mg_l50">状态：</span>
+        <select id="status" class="area_choose">
+            <option value="">全部</option>
+            <option value="0">禁用中</option>
+            <option value="1">启用中</option>
+        </select>
+    </div>
+</div>
+<div>
+    <div class="tit mg-t50">
+        <span class="flt_l">角色管理</span>
+        <input type="button" class="add_btn flt_r" value="添加" onclick="addRole()">
+    </div>
+    <div class="account_cont">
+        <table width="100%" cellpadding="0" cellspacing="0" class="table2" align="center">
+            <thead>
+            <tr align="center">
+                <th height="33" class="th2">角色名称</th>
+                <th class="th2">所属部门</th>
+                <th class="th2">标记管理员</th>
+                <th class="th2">添加时间</th>
+                <th class="th2">成员数量</th>
+                <th class="th2">禁用/启用</th>
+                <th class="th2">权限配置</th>
+                <th class="th2">大屏配置</th>
+            </tr>
+            </thead>
+            <tbody id="adminTbody">
+
+            </tbody>
+        </table>
+        <div id="barcon" class="barcon" >
+            <div id="barcon1" class="barcon1"></div>
+            <div id="barcon2" class="barcon2">
+                <ul>
+                    <li><button id="firstPage" class="page_btn">首页</button></li>
+                    <li><button id="prePage" class="page_btn">上一页</button></li>
+                    <li><button id="nextPage" class="page_btn">下一页</button></li>
+                    <li><button id="lastPage" class="page_btn">尾页</button></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+        $.ajax({
+            type: "post",
+            async: false,
+            url: ip_path + "/changfa_system/org/selectAll.do",
+            data: {
+                pageNum : 1,
+                pageSize : 99999
+            },
+            dataType: "json",
+            success: function (data) {
+                $("#partment").empty();
+                $("#partment").append("<option value=''>全部</option>");
+                for (var i = 0; i < data['body']['result']['data'].length; i++) {
+                    $("#partment").append("<option value='" + data['body']['result']['data'][i]['orgId'] + "'>" + data['body']['result']['data'][i]['orgName'] + "</option>");
+                }
+            }
+        });
+        currentPage = 1;
+        $('#firstPage').attr('disabled',true);
+        $('#prePage').attr('disabled',true);
+        $("#firstPage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = 1;
+            $('#firstPage').attr('disabled',true);
+            $('#prePage').attr('disabled',true);
+            ajax_roleM();
+        });
+        $("#lastPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = totalPage;
+            $('#lastPage').attr('disabled',true);
+            $('#nextPage').attr('disabled',true);
+            ajax_roleM();
+        });
+        $("#nextPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = currentPage+1;
+            if(currentPage == totalPage){
+                $('#lastPage').attr('disabled',true);
+                $('#nextPage').attr('disabled',true);
+            }else{
+                $('#lastPage').removeAttr('disabled');
+                $('#nextPage').removeAttr('disabled');
+            }
+            ajax_roleM();
+        });
+        $("#prePage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = currentPage-1;
+            if(currentPage == 1){
+                $('#firstPage').attr('disabled',true);
+                $('#prePage').attr('disabled',true);
+            }else{
+                $('#firstPage').removeAttr('disabled');
+                $('#prePage').removeAttr('disabled');
+            }
+            ajax_roleM();
+        });
+
+        //初始化
+        ajax_roleM();
+
+        $("#partment").change(function () {
+            currentPage = 1;
+            ajax_roleM();
+        });
+        $("#isManager").change(function () {
+            currentPage = 1;
+            ajax_roleM();
+        });
+        $("#status").change(function () {
+            currentPage = 1;
+            ajax_roleM();
+        });
+
+
+        $.ajax({
+            type: "post",
+            async: false,
+            url: ip_path + "/changfa_system/org/selectAll.do",
+            data: {
+                pageNum : 1,
+                pageSize : 99999
+            },
+            dataType: "json",
+            success: function (data) {
+                $("#partName").empty();
+                for (var i = 0; i < data['body']['result']['data'].length; i++) {
+                    $("#partName").append("<option value='" + data['body']['result']['data'][i]['orgId'] + "'>" + data['body']['result']['data'][i]['orgName'] + "</option>");
+                }
+
+                $("#edit_partName").empty();
+                for (var i = 0; i < data['body']['result']['data'].length; i++) {
+                    $("#edit_partName").append("<option value='" + data['body']['result']['data'][i]['orgId'] + "'>" + data['body']['result']['data'][i]['orgName'] + "</option>");
+                }
+            }
+        });
+
+        $.ajax({
+            type: "post",
+            async: false,
+            url: ip_path + "/changfa_system/role/queryRole.do",
+            data: {
+                orgId: $("#partName option:selected").val(),
+                pageNum : 1,
+                pageSize : 99999
+            },
+            dataType: "json",
+            success: function (data) {
+                $("#parentId").empty();
+                $("#parentId").append("<option value=''></option>");
+                for (var i = 0; i < data['body']['result']['data'].length; i++) {
+                    $("#parentId").append("<option value='" + data['body']['result']['data'][i]['roleId'] + "'>" + data['body']['result']['data'][i]['roleName'] + "</option>");
+                }
+            }
+        });
+
+        $.ajax({
+            type: "post",
+            async: false,
+            url: ip_path + "/changfa_system/role/queryRole.do",
+            data: {
+                orgId: $("#partName option:selected").val(),
+                pageNum : 1,
+                pageSize : 99999
+            },
+            dataType: "json",
+            success: function (data) {
+                $("#parentId").empty();
+                $("#parentId").append("<option value=''></option>");
+                for (var i = 0; i < data['body']['result']['data'].length; i++) {
+                    $("#parentId").append("<option value='" + data['body']['result']['data'][i]['roleId'] + "'>" + data['body']['result']['data'][i]['roleName'] + "</option>");
+                }
+
+                $("#edit_parentId").empty();
+                $("#edit_parentId").append("<option value=''></option>");
+                for (var i = 0; i < data['body']['result']['data'].length; i++) {
+                    $("#edit_parentId").append("<option value='" + data['body']['result']['data'][i]['roleId'] + "'>" + data['body']['result']['data'][i]['roleName'] + "</option>");
+                }
+            }
+        });
+
+        $("#partName").change(function () {
+            $.ajax({
+                type: "post",
+                async: false,
+                url: ip_path + "/changfa_system/role/queryRole.do",
+                data: {
+                    orgId: $("#partName option:selected").val(),
+                    pageNum : 1,
+                    pageSize : 99999
+                },
+                dataType: "json",
+                success: function (data) {
+                    $("#parentId").empty();
+                    $("#parentId").append("<option value=''></option>");
+                    for (var i = 0; i < data['body']['result']['data'].length; i++) {
+                        $("#parentId").append("<option value='" + data['body']['result']['data'][i]['roleId'] + "'>" + data['body']['result']['data'][i]['roleName'] + "</option>");
+                    }
+                }
+            });
+        });
+
+        $("#edit_partName").change(function () {
+            $.ajax({
+                type: "post",
+                async: false,
+                url: ip_path + "/changfa_system/role/queryRole.do",
+                data: {
+                    orgId: $("#edit_partName option:selected").val(),
+                    pageNum : 1,
+                    pageSize : 99999
+                },
+                dataType: "json",
+                success: function (data) {
+                    $("#edit_parentId").empty();
+                    $("#edit_parentId").append("<option value=''></option>");
+                    for (var i = 0; i < data['body']['result']['data'].length; i++) {
+                        $("#edit_parentId").append("<option value='" + data['body']['result']['data'][i]['roleId'] + "'>" + data['body']['result']['data'][i]['roleName'] + "</option>");
+                    }
+                }
+            });
+        });
+    }
+</script>
+</html>

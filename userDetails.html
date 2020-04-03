@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户详情</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/userCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <script src="jqueryTagsInput/jquery.tagsinput.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="jqueryTagsInput/jquery.tagsinput.min.css" />
+</head>
+<body class="reset">
+<div id="editUser" class="addTopic outShadow" style="display: none;">
+    <div class="dealer_title">
+        <span>编辑用户信息</span>
+        <img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeUserEdit()">
+    </div>
+    <div style="width: 100%;height: auto;border: 1px solid #E4E4E4;border-top: none;">
+        <div class="tit_msg">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>用户信息</span>
+        </div>
+        <div>
+            <table id="reporterInfo" class="rpt_detail_tab txt_center">
+                <tr>
+                    <td class='head_td' width='100px' height='46px'>用户姓名</td>
+                    <td class='body_td txt_left' width='250px'>
+                        <input type="text" id="createName" class="userInfo">
+                    </td>
+                </tr>
+                <tr>
+                    <td class='head_td' width='100px' height='46px'>身份证号</td>
+                    <td class='body_td txt_left'>
+                        <input type="text" id="createIdCard" class="userInfo">
+                    </td>
+                </tr>
+                <tr>
+                    <td class='head_td' width='100px' height='46px'>用户电话</td>
+                    <td class='body_td txt_left'>
+                        <input type="text" id="createMobile" class="userInfo" disabled="disabled">
+                    </td>
+                </tr>
+                <tr>
+                    <td class='head_td' width='100px' height='46px'>档案地址</td>
+                    <td class='body_td txt_left'>
+                        <input type="text" id="createAddress" class="userInfo">
+                    </td>
+                </tr>
+                <tr>
+                    <td class='head_td' width='100px' height='46px'>用户地区</td>
+                    <td class='body_td txt_left'>
+                        <input type="text" id="createRange" class="userInfo">
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="mg_b50" style="width: 100%;text-align: center">
+            <button class="waves submit_btn mg-t30" onclick="updateUser()">保存</button>
+        </div>
+    </div>
+</div>
+
+<div id="scoreLog" class="addTopic outShadow" style="display: none;">
+    <div class="dealer_title">
+        <span>积分流水</span>
+        <img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeScoreLog()">
+    </div>
+    <div>
+        <div style="width: 100%;height: 300px;overflow-y: scroll">
+            <table cellpadding="0" cellspacing="0" class="table2 mg_b30">
+                <thead>
+                <tr align="center">
+                    <th height="33" class="th2">积分变动</th>
+                    <th class="th2">途径</th>
+                    <th class="th2">时间</th>
+                </tr>
+                </thead>
+                <tbody id="scoreList">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div style="width: 90%;margin-left: 5%">
+    <div class="dealerInfo2">
+        <div class="flt_l">
+            <img id="user_head" class="dealer_head" src="" style="margin-top: 110px;">
+        </div>
+        <div class="flt_l">
+            <p class="color_5e heavy">类&nbsp;&nbsp;&nbsp;&nbsp;型&nbsp;&nbsp;&nbsp;：<span class="color_66 size_14" id="type">注册用户</span></p>
+            <p class="color_5e heavy">姓&nbsp;&nbsp;&nbsp;&nbsp;名&nbsp;&nbsp;&nbsp;：<span class="color_66 size_14" id="name"></span></p>
+            <p class="color_5e heavy">身份证号：<span class="color_66 size_14" id="idCard"></span></p>
+            <p class="color_5e heavy">联系电话：<span class="color_66 size_14" id="mobile"></span></p>
+            <p class="color_5e heavy">注册时间：<span class="color_66 size_14" id="signTime"></span></p>
+            <p class="color_5e heavy">档案时间：<span class="color_66 size_14" id="buyMachineTime"></span></p>
+            <p class="color_5e heavy">地&nbsp;&nbsp;&nbsp;&nbsp;区&nbsp;&nbsp;&nbsp;：<span class="color_66 size_14" id="takeAddress"></span></p>
+            <p class="color_5e heavy">档案地址：<span class="color_66 size_14" id="address"></span></p>
+            <p class="color_5e heavy">用户积分：<a href="###" class="size_14" id="score" style="color: #1ABC9C;" onclick="showScoreLog()"></a></p>
+        </div>
+        <div class="flt_r mg-r50 mg-t20">
+            <div class="flt_r">
+                <div id="startOrStop">
+                    <span class="mg-r20">状态</span><img id="status" src="" style="vertical-align: middle" onclick="toogle_statusInDetail(this)">
+                </div>
+            </div>
+            <br><br><br><br><br><br><br><br><br><br><br><br><br>
+            <div class="flt_r" style="margin-top: 5px;">
+                <span class="mg-r20">编辑</span><img src="img/edit.png" style="vertical-align: middle" onclick="editUserInfo()">
+            </div>
+        </div>
+        <div style="clear: both;"></div>
+    </div>
+
+    <div style="height: 20px;"></div>
+
+    <div id="allMachine" style="width: 100%;">
+        <div class="dealer_title">农机数量：<span id="machineTotal"></span>&nbsp;&nbsp;台</div>
+        <div class="machine_auto" style="height: 200px;">
+            <div class="toogle_machine_div flt_l">
+                <img src="img/machine_left.png" id="pre" class="toogle_machine" onclick="pre3()">
+            </div>
+            <div id="machineList" class="flt_l" style="height: 200px;width: 90%">
+                <div id="tag0" class="machine_mark flt_l" onclick="chooseIt(this)">
+                    <div class="flt_l mg-t30 mg_l30">
+                        <img id="machine_pic0" class="pic_machine" src="">
+                    </div>
+                    <div class="flt_l" style="font-size: 0.875em;margin-left: 7%">
+                        <p id="modelName0" class="txt_left" style="width: 150px;word-break: break-all"></p>
+                        <p id="factoryNum0" class="txt_left" style="width: 150px;word-break: break-all"></p>
+                        <p id="barCode0" class="txt_left" style="width: 150px;word-break: break-all"></p>
+                        <input type="hidden" id="machineId0" value="">
+                    </div>
+                </div>
+                <div id="tag1" class="machine_mark flt_l mg_l15" onclick="chooseIt(this)">
+                    <div class="flt_l mg-t30 mg_l30">
+                        <img id="machine_pic1" class="pic_machine" src="">
+                    </div>
+                    <div class="flt_l" style="font-size: 0.875em;margin-left: 7%">
+                        <p id="modelName1" class="txt_left" style="width: 150px;word-break: break-all"></p>
+                        <p id="factoryNum1" class="txt_left" style="width: 150px;word-break: break-all"></p>
+                        <p id="barCode1" class="txt_left" style="width: 150px;word-break: break-all"></p>
+                        <input type="hidden" id="machineId1" value="">
+                    </div>
+                </div>
+                <div id="tag2" class="machine_mark flt_l mg_l15" onclick="chooseIt(this)">
+                    <div class="flt_l mg-t30 mg_l30">
+                        <img id="machine_pic2" class="pic_machine" src="">
+                    </div>
+                    <div class="flt_l" style="font-size: 0.875em;margin-left: 7%">
+                        <p id="modelName2" class="txt_left" style="width: 150px;word-break: break-all"></p>
+                        <p id="factoryNum2" class="txt_left" style="width: 150px;word-break: break-all"></p>
+                        <p id="barCode2" class="txt_left" style="width: 150px;word-break: break-all"></p>
+                        <input type="hidden" id="machineId2" value="">
+                    </div>
+                </div>
+            </div>
+            <div class="toogle_machine_div flt_l">
+                <img src="img/machine_right.png" id="next" class="toogle_machine" onclick="next3()">
+            </div>
+        </div>
+    </div>
+
+    <div style="height: 20px;"></div>
+
+    <div id="oneMachine" class="dealerInfo2" style=" padding-bottom:30px;">
+        <div class="flt_l">
+            <img id="machine_head" class="dealer_head" src="" style="margin-top: 145px;">
+        </div>
+        <div class="flt_l">
+            <p class="color_5e heavy">产&nbsp;品&nbsp;线&nbsp;：<span class="color_66 size_14" id="line"></span></p>
+            <p class="color_5e heavy">产品系列：<span class="color_66 size_14" id="series"></span></p>
+            <p class="color_5e heavy">产品型号：<span class="color_66 size_14" id="model"></span></p>
+            <p class="color_5e heavy">出厂编号：<span class="color_66 size_14" id="outNum"></span></p>
+            <p class="color_5e heavy">条&nbsp;码&nbsp;号&nbsp;：<span class="color_66 size_14" id="bar_code"></span></p>
+            <p class="color_5e heavy">IMEI&nbsp;号&nbsp;：<span class="color_66 size_14" id="imei"></span></p>
+            <p class="color_5e heavy">购买日期：<span class="color_66 size_14" id="buyTime"></span></p>
+            <p class="color_5e heavy">经&nbsp;销&nbsp;商&nbsp;：<span class="color_66 size_14" id="dealer"></span></p>
+            <p class="color_5e heavy">三&nbsp;包&nbsp;期&nbsp;：<span class="color_66 size_14" id="serviceDate"></span></p>
+            <p class="color_5e heavy">农机位置：<span class="color_66 size_14" id="location"></span></p>
+        </div>
+        <div style="clear: both;"></div>
+    </div>
+
+    <div style="height: 20px;"></div>
+
+    <div class="relativeInfo">
+        <div>
+            <div class="dealer_title txt_center">
+                <input type="button" id="waitDispatch" class="type" value="待派工" onclick="user_waitDispatch()">
+                <input type="button" id="waitAccept" class="type" value="待接单" onclick="user_waitAccept()">
+                <input type="button" id="finished" class="type" value="已完成" onclick="user_finished()">
+            </div>
+        </div>
+        <div style="height: auto;">
+            <table style="border-collapse: collapse;width : 100%;">
+                <tr>
+                    <td class="head_td txt_center" height="40px">报修人</td>
+                    <td class="head_td txt_center">报修人电话</td>
+                    <td class="head_td txt_center">报修时间</td>
+                    <td class="head_td txt_center">更多</td>
+                </tr>
+                <tbody id="adminTbody">
+
+                </tbody>
+            </table>
+            <div id="barcon" class="barcon" >
+                <div id="barcon1" class="barcon1"></div>
+                <div id="barcon2" class="barcon2">
+                    <ul>
+                        <li><button id="firstPage" class="page_btn">首页</button></li>
+                        <li><button id="prePage" class="page_btn">上一页</button></li>
+                        <li><button id="nextPage" class="page_btn">下一页</button></li>
+                        <li><button id="lastPage" class="page_btn">尾页</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/user/getUsersByUserId.do",
+            data : {
+                userId : $(window.parent.document).find("input[name='userArchivesId']").val()
+            },
+            dataType : "json",
+            success : function (data) {
+                if(data['head']['code'] == 200){
+                    if(data['body']['result']['headUrl'] != ""){
+                        $("#user_head").attr("src",data['body']['result']['headUrl']);
+                    }else {
+                        $("#user_head").attr("src","http://app.changfanz.net:3588/changfa_file/head.png");
+                    }
+                    if(data['body']['result']['status'] == 1){
+                        $("#status").attr("src","http://app.changfanz.net:3588/changfa_file/on.png");
+                    }else{
+                        $("#status").attr("src","http://app.changfanz.net:3588/changfa_file/off.png");
+                    }
+                    $("#name").text(data['body']['result']['userName']);
+                    $("#mobile").text(data['body']['result']['mobile']);
+                    $("#idCard").text(data['body']['result']['idCard']);
+                    $("#takeAddress").text(data['body']['result']['takeAddress']);
+                    $("#signTime").text(data['body']['result']['accountCreateTime']);
+                    $("#buyMachineTime").text(data['body']['result']['createTime']);
+                    $("#address").text(data['body']['result']['address']);
+                    $("#score").text(data['body']['result']['score']);
+
+                    if(data['body']['result']['account'] == ""){
+                        $("#startOrStop").hide();
+                    }else{
+                        $("#startOrStop").show();
+                    }
+
+                    if(data['body']['result']['owner'] == 0){
+                        $("#allMachine").hide();
+                        $("#oneMachine").hide();
+                    }else{
+                        $("#allMachine").show();
+                        $("#oneMachine").show();
+                        currentPage = 1;
+                        ajax_machineList();
+
+                        $("#tag0").click();
+                    }
+
+                }else{
+                    alert(data['head']['message']);
+                }
+            }
+        });
+
+        user_waitDispatch();
+    }
+</script>
+</html>

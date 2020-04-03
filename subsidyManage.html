@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>补贴数据维护</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <link href="css/threePackspolicy.css" type="text/css" rel="stylesheet"/>
+    <script src="js/dcommon.js"></script>
+    <script src="js/jquery-1.9.1.js"></script>
+    <script src="jquery-ui-1.12.1/jquery-ui.min.js"></script>
+    <link href="jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet" />
+    <script src="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.js"></script>
+    <script type="text/javascript" src="jQuery-Timepicker/dist/i18n/jquery-ui-timepicker-zh-CN.js"></script>
+    <link href="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.css" rel="stylesheet" />
+    <script src="layer/layer.js"></script>
+    <script src="js/subsidybt.js"></script>
+    <script src="js/jquery_form.js" type="text/javascript"></script>
+    
+    <style>
+        .layer_input{
+            width : 300px;height: 35px;padding-left: 10px;
+        }
+        .layer_input_half{
+            width : 140px;height: 35px;padding-left: 5px;
+        }
+        
+        .radio_type{
+            width: 20px;
+            height: 20px;
+            appearance: none;
+            position: relative;
+        }
+        .radio_type:before{
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: 1px solid #cfcfcf;
+            background:#cfcfcf;
+            display: inline-block;
+            border-radius: 50%;   
+            vertical-align: middle;
+        }
+        .radio_type:after{
+            content: '';
+            width: 10px;
+            height:5px;
+            border: 2px solid white;
+            border-top: transparent;
+            border-right: transparent;
+            text-align: center;
+            display: block;
+            position: absolute;
+            top: 6px;
+            left:5px;
+            vertical-align: middle;
+            transform: rotate(-45deg);
+        }
+        .radio_type.radio_types:before{
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: 1px solid #1ABC9C;
+            background:#1ABC9C;
+            display: inline-block;
+            border-radius: 50%;
+            vertical-align: middle;
+        }
+        .radio_type:checked:after{
+            content: '';
+            width: 10px;
+            height:5px;
+            border: 2px solid white;
+            border-top: transparent;
+            border-right: transparent;
+            text-align: center;
+            display: block;
+            position: absolute;
+            top: 6px;
+            left:5px;
+            vertical-align: middle;
+            transform: rotate(-45deg);
+        }
+        
+        </style>
+    </style>
+</head>
+<body class="reset">
+
+
+    <div class="mg-t50">
+        <div class="tit">
+            <span class="flt_l">筛选查询</span>
+            <input type="button" class="add_btn flt_r" value="清空" onclick="clearDate()">
+            <!--<input type="button" class="add_btn flt_r" value="查询" onclick="queryDealer()">-->
+        </div>
+        <div class="account_cont2">
+            <span class="describ mg_l30">年份：</span>
+            <input type="text" id="year" class="product_line" value="">
+            <button class="query_btn_big" style="margin-left: -4%;margin-right: 1%" onclick="ajax_searchcp()"></button>
+            <span class="describ mg_l30">省：</span>
+            <input type="text" id="province" class="product_line" value="">
+            <button class="query_btn_big" style="margin-left: -4%;margin-right: 1%" onclick="ajax_searchcp()"></button>
+            <span class="describ mg_l30">生产厂家：</span>
+            <input type="text" id="cjjx" class="product_line" value="">
+            <button class="query_btn_big" style="margin-left: -4%;margin-right: 1%" onclick="ajax_searchcp()"></button>
+            <span class="describ mg_l30">机型：</span>
+            <input type="text" id="modeljx" class="product_line" value="" >
+            <button class="query_btn_big" style="margin-left: -4%;margin-right: 1%" onclick="ajax_searchcp()"></button>
+            <br/>
+            <span class="describ mg_l30">经销商：</span>
+            <input type="text" id="dis" class="product_line" value="">
+            <button class="query_btn_big" style="margin-left: -4%;margin-right: 1%" onclick="ajax_searchcp()"></button>
+        </div>
+    </div> 
+    <div>
+        <div class="tit mg-t50">
+            <span class="flt_l">补贴数据维护</span>
+            <input type="button" class="add_btn flt_r" value="删除" onclick="deletelist()" style="background-color:#e1e1e1;border:1px solid #e1e1e1;color:#666;margin-right:51px;">
+            <form id="form" action="" method="get">
+                <input type="hidden" name="factory" value="">
+                <input type="hidden" name="model" value="">
+                <input type="hidden" name="year" value="">
+                <input type="hidden" name="dis" value="">
+                <input type="hidden" name="province" value="">
+                <input type="button" id="dealerMachineOutput" class="output_btn flt_r" value="导出" style="background:#fff;border:1px solid #e1e1e1;color:#666;margin-right:20px;">
+            </form>
+            <input type="button" id="inputArchives" class="delbtn flt_r" value="导入" style="margin-right:20px;margin-top:9px;">
+            <form id="form11">
+            <!--<input type="hidden" id="token" name="token">-->
+            <input type="file" name="excel" id="file" style="display: none;">
+            </form>
+        </div>
+        <div class="account_cont">
+            <table width="100%" cellpadding="0" cellspacing="0" class="table2" align="center" style="width:98%;">
+                <thead>
+                <tr text-align="center">
+                    <th height="33" class="th2">年份</th>
+                    <th class="th2">省</th>
+                    <th class="th2">市</th>
+                    <th class="th2">区</th>
+                    <th class="th2">镇</th>
+                    <th class="th2">地址</th>
+                    <th class="th2" style="width:130px;">购买者名称</th>
+                    <th class="th2" style="width:128px;">产品线</th>
+                    <th class="th2" style="width:154px;">生产厂家</th>
+                    <th class="th2">产品系列</th>
+                    <th class="th2">产品型号</th>
+                    <th class="th2">数量</th>
+                    <th class="th2">经销商</th>
+                    <th class="th2">单台售价</th>
+                    <th class="th2" style="width:76px;">单台补贴（国家）</th>
+                    <th class="th2">总补贴</th>
+                    <th class="th2" id="selectallqd1" onclick="selectallqd1()" style="cursor:pointer;">全选</th>
+                    <th class="th2" style="width:30px;">编辑</th>
+                </tr>
+                </thead>
+                <tbody id="adminTbody">
+                </tbody>
+            </table>
+            <div id="barcon" class="barcon" style="width:98%;">
+                <div id="barcon1" class="barcon1"></div>
+                <div id="barcon2" class="barcon2">
+                    <ul>
+                        <li><button id="firstPage" class="page_btn">首页</button></li>
+                        <li><button id="prePage" class="page_btn">上一页</button></li>
+                        <li><button id="nextPage" class="page_btn">下一页</button></li>
+                        <li><button id="lastPage" class="page_btn">尾页</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<!-- <script src="layui/layui.js"></script> -->
+<script>
+    function tootle(event){ 
+        //event.src == "img/ts.png" ? event.src = "img/cg.png" : event.src = "img/ts.png";
+        //alert(event.src)
+
+        
+    }
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+        $.datepicker.regional['zh-CN'] = {
+            changeMonth: true,
+            changeYear: true,
+            clearText: '清除',
+            clearStatus: '清除已选日期',
+            closeText: '关闭',
+            closeStatus: '不改变当前选择',
+            prevText: '<上月',
+            prevStatus: '显示上月',
+            prevBigText: '<<',
+            prevBigStatus: '显示上一年',
+            nextText: '下月>',
+            nextStatus: '显示下月',
+            nextBigText: '>>',
+            nextBigStatus: '显示下一年',
+            currentText: '今天',
+            currentStatus: '显示本月',
+            monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            monthNamesShort: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+            monthStatus: '选择月份',
+            yearStatus: '选择年份',
+            weekHeader: '周',
+            weekStatus: '年内周次',
+            dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+            dayNamesShort: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+            dayNamesMin: ['日', '一', '二', '三', '四', '五', '六'],
+            dayStatus: '设置 DD 为一周起始',
+            dateStatus: '选择 m月 d日, DD',
+            dateFormat: 'yy-mm-dd',
+            firstDay: 1,
+            initStatus: '请选择日期',
+            isRTL: false
+        };
+        $.datepicker.setDefaults($.datepicker.regional['zh-CN']);
+        $("#date_start_rnm").datepicker({maxDate:new Date()});
+        $("#date_end_rnm").datepicker({maxDate:new Date()});
+        $("#defult").datetimepicker();
+        $("#date_start_rnm").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            clear : "qingkong",
+            onClose: function(selectedDate) {
+                $("#date_end_rnm").datepicker("option", "minDate", selectedDate);
+            }
+        });
+
+        $("#date_end_rnm").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            onClose: function(selectedDate) {
+                $("#date_start_rnm").datepicker("option", "maxDate", selectedDate);
+                $("#date_end_rnm").val($(this).val());
+            }
+        });
+        currentPage = 1;
+        $('#firstPage').attr('disabled',true);
+        $('#prePage').attr('disabled',true);
+        $("#firstPage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = 1;
+            $('#firstPage').attr('disabled',true);
+            $('#prePage').attr('disabled',true);
+            ajax_subproduct();
+        });
+        $("#lastPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = totalPage;
+            $('#lastPage').attr('disabled',true);
+            $('#nextPage').attr('disabled',true);
+            ajax_subproduct();
+        });
+        $("#nextPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = currentPage+1;
+            if(currentPage == totalPage){
+                $('#lastPage').attr('disabled',true);
+                $('#nextPage').attr('disabled',true);
+            }else{
+                $('#lastPage').removeAttr('disabled');
+                $('#nextPage').removeAttr('disabled');
+            }
+            ajax_subproduct();
+        });
+        $("#prePage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = currentPage-1;
+            if(currentPage == 1){
+                $('#firstPage').attr('disabled',true);
+                $('#prePage').attr('disabled',true);
+            }else{
+                $('#firstPage').removeAttr('disabled');
+                $('#prePage').removeAttr('disabled');
+            }
+            ajax_subproduct();
+        });
+        //初始化
+        ajax_subproduct();
+
+        $("#leixing").change(function () {
+            currentPage = 1;
+            ajax_subproduct();
+        });
+        $("#status").change(function () {
+            currentPage = 1;
+            ajax_subproduct();
+        });
+        $("#date_end_rnm").change(function () {
+            currentPage = 1;
+            ajax_subproduct();
+        });
+        //导出
+        $("#dealerMachineOutput").click(function () {
+            // $("input[name='chooseItem']").val($("#reportOut_item option:selected").val());
+            // $("input[name='itemCont']").val($("#reportOut_info").val());
+            // $("input[name='reportStatus']").val($("#process option:selected").val());
+            $("input[name='year']").val($("#year").val());
+            $("input[name='province']").val($("#province").val());
+             $("input[name='dis']").val($("#dis").val());
+             $("input[name='model']").val($("#modeljx").val());
+            $("#form").attr("action",ip_path + "/changfa_system/subsidyInfo/excel.do");
+            $("#form").submit();
+        });
+        //导入
+        $("#inputArchives").click(function () {
+            $("#file").click();
+        });
+        $("#file").on("change",function(){
+            var filepath = $("#file").val();
+            var extStart = filepath.lastIndexOf(".");
+            var ext = filepath.substring(extStart, filepath.length).toUpperCase();
+            console.log(ext);
+            console.log(filepath);
+            console.log(extStart);
+            if(ext != ".XLSX" && ext != ".XLS") {
+                alert("文件限于xls,xlsx！");
+                return false;
+            } else {
+                
+                var option = {
+                    url :ip_path+"/changfa_system/subsidyInfo/upload.do",
+                    type : "post",
+                    success : function (data) {
+                        window.location.reload();
+                        if(data['head']['code']!=200){
+                            alert(data['head']['message']);
+                            return;
+                        }
+                        if(data['body']['result'] != ''){
+                            
+                            if(window.confirm("是否下载导入异常报告？")){
+                                
+                                window.open(ip_path+"/changfa_system/subsidyInfo/error/excel.do?key="+data['body']['result']);
+                            }
+                        }else{
+                            alert(data['head']['message']);
+                        }
+                    }
+                };
+                $("#form11").ajaxSubmit(option);
+            }
+        });
+        
+
+        
+    }
+
+
+</script>
+</html>

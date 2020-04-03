@@ -1,0 +1,742 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,width=device-width,initial-scale=1.0,user-scalable=no" />
+	<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+	<title>服务目录维护</title>
+	<link rel="stylesheet" type="text/css" href="css/cf_web.css" />
+    <link rel="stylesheet" type="text/css" href="css/public.css" />
+	<script type="text/javascript" src="js/common.js"></script>
+	<script type="text/javascript" src="js/saleCenter.js"></script>
+    <script type="text/javascript" src="js/jquery-1.8.2.min.js"></script>
+	
+	<script type="text/javascript" src="layer/layer.js"></script>
+	<script type="text/javascript" src="layer/mobile/need/layer.css"></script>
+</head>
+<body>
+<!-- <div id="addLine" class="addTopic outShadow" style="display: none;position: fixed">
+        <div class="dealer_title">
+            <span>添加产品线</span>
+            <img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeAddLine()">
+        </div>
+        <div style="width: 100%;height: auto;border: 1px solid #E4E4E4;border-top: none;">
+            <div class="tit_msg">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>产品线信息</span>
+            </div>
+            <div>
+                <table class="rpt_detail_tab txt_center">
+                    <tr>
+                        <td class='head_td' width='136px' height='46px'>产品线编号</td>
+                        <td class='body_td txt_left' width='383px'>
+                            <input type="text" id="createLineNum" class="userInfo">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class='head_td' width='136px' height='46px'>产品线名称</td>
+                        <td class='body_td txt_left' width='383px'>
+                            <input type="text" id="createLineName" class="userInfo">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class='head_td' width='136px' height='46px'>
+                            <span class="font_normal">是否为销售：</span>
+                            <td class='head_td' width='136px' height='46px'>
+                            <input type="radio" id="outsaleType" class="radio_style" name="saleType0" value="1" checked>
+                            <label for="outsaleType" class="font_normal">是</label>
+                            <input type="radio" id="shopsaleType" class="radio_style" name="saleType0" value="0">
+                            <label for="shopsaleType" class="font_normal">否</label>
+                            </td>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="mg_b50" style="width: 100%;text-align: center">
+                <button class="waves submit_btn mg-t30" onclick="createLine()">提交</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="addSeries" class="addTopic outShadow" style="display: none;position: fixed">
+        <div class="dealer_title">
+            <span>添加产品系列</span>
+            <img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeAddSeries()">
+        </div>
+        <div style="width: 100%;height: auto;border: 1px solid #E4E4E4;border-top: none;">
+            <div class="tit_msg">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>产品系列信息</span>
+            </div>
+            <div>
+                <table class="rpt_detail_tab txt_center">
+                    <tr>
+                        <td class='head_td' width='136px' height='46px'>产品系列编号</td>
+                        <td class='body_td txt_left' width='383px'>
+                            <input type="text" id="createSeriesNum" class="userInfo">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class='head_td' width='136px' height='46px'>产品系列名称</td>
+                        <td class='body_td txt_left' width='383px'>
+                            <input type="text" id="createSeriesName" class="userInfo">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class='head_td' width='136px' height='46px'>
+                            <span class="font_normal">是否为销售：</span>
+                            <td class='head_td' width='136px' height='46px'>
+                            <input type="radio" id="outsaleType" class="radio_style" name="saleType" value="1" checked>
+                            <label for="outsaleType" class="font_normal">是</label>
+                            <input type="radio" id="shopsaleType" class="radio_style" name="saleType" value="0">
+                            <label for="shopsaleType" class="font_normal">否</label>
+                            </td>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="mg_b50" style="width: 100%;text-align: center">
+                <button class="waves submit_btn mg-t30" onclick="createSeries()">提交</button>
+            </div>
+        </div>
+    </div> -->
+    
+    <div id="addModel" class="addTopic outShadow" style="display: none;position: fixed">
+        <div class="dealer_title">
+            <span>添加产品型号</span>
+            <img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeAddModel()">
+        </div>
+        <div style="width: 100%;height: auto;border: 1px solid #E4E4E4;border-top: none;">
+            <div class="tit_msg">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>产品型号信息</span>
+            </div>
+            <div>
+                <div class="four-config" style="display: none;">
+                    <div style="margin-top: 20px;height: 30px;">
+                        <div style="width: 50%;float: left;position: relative;">
+                            <span style="margin-left: 20px;">发动机:</span>
+                            <select name="1" id="engine" style="width: 50%;height: 30px;position: absolute;right: 30px;" ></select>
+                        </div>
+                        <div style="width: 50%;float: left;position: relative;">
+                            <span style="margin-left: 20px;">车身电器:</span>
+                            <select name="2" id="battery" style="width: 50%;height: 30px;position: absolute;right: 30px;" ></select>
+                        </div>
+                    </div>
+                    <div style="margin-top: 20px;height: 30px;">
+                        <div style="width: 50%;float: left;position: relative;">
+                            <span style="margin-left: 20px;">提升器:</span>
+                            <select name="3" id="lifter" style="width: 50%;height: 30px;position: absolute;right: 30px;" ></select>
+                        </div>
+                        <div style="width: 50%;float: left;position: relative;">
+                            <span style="margin-left: 20px;">牵引拖挂:</span>
+                            <select name="4" id="trailer" style="width: 50%;height: 30px;position: absolute;right: 30px;" ></select>
+                        </div>
+                    </div>
+                    <div style="margin-top: 20px;height: 30px;">
+                        <div style="width: 50%;float: left;position: relative;">
+                            <span style="margin-left: 20px;">油泵管路:</span>
+                            <select name="5" id="oilPump" style="width: 50%;height: 30px;position: absolute;right: 30px;" ></select>
+                        </div>
+                        <div style="width: 50%;float: left;position: relative;">
+                            <span style="margin-left: 20px;">前驱动桥:</span>
+                            <select name="6" id="frontAxle" style="width: 50%;height: 30px;position: absolute;right: 30px;" ></select>
+                        </div>
+                    </div>
+                    <div style="margin-top: 20px;height: 30px;">
+                        <div style="width: 50%;float: left;position: relative;">
+                            <span style="margin-left: 20px;">前驱动轮:</span>
+                            <select name="7" id="frontWheel" style="width: 50%;height: 30px;position: absolute;right: 30px;" ></select>
+                        </div>
+                        <div style="width: 50%;float: left;position: relative;">
+                            <span style="margin-left: 20px;">后驱动轮:</span>
+                            <select name="8" id="rearWheel" style="width: 50%;height: 30px;position: absolute;right: 30px;" ></select>
+                        </div>
+                    </div>
+                    <div style="margin-top: 20px;height: 30px;">
+                        <div style="width: 50%;float: left;position: relative;">
+                            <span style="margin-left: 20px;">变速箱:</span>
+                            <select name="9" id="gearBox" style="width: 50%;height: 30px;position: absolute;right: 30px;" ></select>
+                        </div>
+                        <div style="width: 50%;float: left;position: relative;">
+                            <span style="margin-left: 20px;">后桥:</span>
+                            <select name="10" id="rearAxle" style="width: 50%;height: 30px;position: absolute;right: 30px;" ></select>
+                        </div>
+                    </div>
+                    <div style="margin-top: 20px;height: 30px;">
+                        <div style="width: 50%;float: left;position: relative;">
+                            <span style="margin-left: 20px;">动力输出:</span>
+                            <select name="11" id="powerOutput" style="width: 50%;height: 30px;position: absolute;right: 30px;" ></select>
+                        </div>
+                        <div style="width: 50%;float: left;position: relative;">
+                            <span style="margin-left: 20px;">前配重:</span>
+                            <select name="12" id="frontWeight" style="width: 50%;height: 30px;position: absolute;right: 30px;" ></select>
+                        </div>
+                    </div>
+                    <div style="margin-top: 20px;height: 30px;">
+                        <div style="width: 50%;float: left;position: relative;">
+                            <span style="margin-left: 20px;">后配重:</span>
+                            <select name="13" id="rearWeight" style="width: 50%;height: 30px;position: absolute;right: 30px;" ></select>
+                        </div>
+                        <div style="width: 50%;float: left;position: relative;">
+                            <span style="margin-left: 20px;">遮阳棚:</span>
+                            <select name="14" id="sunShade" style="width: 50%;height: 30px;position: absolute;right: 30px;" ></select>
+                        </div>
+                    </div>
+                </div>
+                <table class="rpt_detail_tab txt_center" style="margin-top: 20px">
+
+                    <tr>
+                        <td class='head_td' width='136px' height='46px'>产品编号</td>
+                        <td class='body_td txt_left' width='383px'>
+                            <input type="text" id="number" class="userInfo">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class='head_td' width='136px' height='46px'>产品名称</td>
+                        <td class='body_td txt_left' width='383px'>
+                            <input type="text" id="createModelName" class="userInfo">
+                        </td>
+                    </tr>
+
+                    <tr style="display: none;">
+                        <td class='head_td' width='136px' height='46px'>产品名称</td>
+                        <td class='body_td txt_left' width='383px'>
+                            <input type="text" id="name" class="userInfo">
+                        </td>
+                    </tr>
+                    
+                    <tr style="display: none">
+                        <td class='head_td' width='136px' height='46px'>标准价</td>
+                        <td class='body_td txt_left' width='383px'>
+                            <input type="text" id="price" class="userInfo">
+                        </td>
+                    </tr>
+                    <tr style="display: none">
+                        <td class='head_td' width='136px' height='46px'>总价</td>
+                        <td class='body_td txt_left' width='383px'>
+                            <input type="text" id="totalPrice" class="userInfo">
+                        </td>
+                    </tr>
+    
+
+                    <tr>
+                        <td class='head_td' width='136px' height='46px'>
+                            <span class="font_normal">是否销售：</span>
+                            <td class='head_td' width='136px' height='46px'>
+                            <input type="radio" id="outsaleType" class="radio_style" name="saleType" value="1" >
+                            <label for="outsaleType" class="font_normal">是</label>
+                            <input type="radio" id="shopsaleType" class="radio_style" name="saleType" value="0">
+                            <label for="shopsaleType" class="font_normal">否</label>
+                            </td>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="mg_b50" style="width: 100%;text-align: center">
+                <button class="waves submit_btn mg-t30" onclick="createModel()">提交</button>
+            </div>
+        </div>
+    </div>
+    
+     <div id="editSeries" class="addTopic outShadow" style="display: none;position: fixed">
+        <div class="dealer_title">
+            <span>编辑</span>
+            <img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeEditSeries()">
+        </div>
+        <div style="width: 100%;height: auto;border: 1px solid #E4E4E4;border-top: none;">
+            <div class="tit_msg">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>产品信息</span>
+            </div>
+            <div>
+                 <table class="rpt_detail_tab txt_center">
+                    <tr>
+                        <td class='head_td' width='136px' height='46px'>产品编号</td>
+                        <td class='body_td txt_left' width='383px'>
+                            <input type="text" id="editSeriesNum" class="userInfo" disabled="disabled">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class='head_td' width='136px' height='46px'>产品名称</td>
+                        <td class='body_td txt_left' width='383px'>
+                            <input type="text" id="editSeriesName" class="userInfo">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class='head_td' width='136px' height='46px'>
+                            <span class="font_normal">是否销售：</span>
+                            <td class='head_td' width='136px' height='46px'>
+                            <input type="radio" id="outsaleType" class="radio_style" name="saleType2" value="1">
+                            <label for="outsaleType" class="font_normal">是</label>
+                            <input type="radio" id="shopsaleType" class="radio_style" name="saleType2" value="0">
+                            <label for="shopsaleType" class="font_normal">否</label>
+                            </td>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="mg_b50" style="width: 100%;text-align: center">
+                <button class="waves submit_btn mg-t30" onclick="updateSeries()">提交</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="editModel" class="addTopic outShadow" style="display: none;position: fixed">
+        <div class="dealer_title">
+            <span>批量更新</span>
+            <img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeEditModel()">
+        </div>
+        <div style="width: 100%;height: auto;border: 1px solid #E4E4E4;border-top: none;">
+            <div class="tit_msg">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>产品是否销售</span>
+            </div>
+            <div>
+                <table class="rpt_detail_tab txt_center">
+                        <td class='head_td' width='136px' height='46px'>
+                            <span class="font_normal">是否销售：</span>
+                            <td class='head_td' width='136px' height='46px'>
+                            <input type="radio" id="outsaleType" class="radio_style" name="saleType3" value="1">
+                            <label for="outsaleType" class="font_normal">是</label>
+                            <input type="radio" id="shopsaleType" class="radio_style" name="saleType3" value="0">
+                            <label for="shopsaleType" class="font_normal">否</label>
+                            </td>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="mg_b50" style="width: 100%;text-align: center">
+                <button class="waves submit_btn mg-t30" onclick="updateModel()">提交</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="editConfig" class="addTopic outShadow" style="display: none;position: fixed">
+            <div class="dealer_title">
+                <span>编辑</span>
+                <img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeEditConfig()">
+            </div>
+            <div style="width: 100%;height: auto;border: 1px solid #E4E4E4;border-top: none;">
+                <div class="tit_msg">
+                    <img src="img/tit_pic.png" class="tit_pic">
+                    <span>产品信息</span>
+                </div>
+                <div>
+                        <div class="editfour-config" style="display: none;">
+                                <div style="margin-top: 20px;height: 30px;">
+                                    <div style="width: 50%;float: left;position: relative;">
+                                        <span style="margin-left: 20px;">发动机:</span>
+                                        <select name="1" id="editengine" style="width: 50%;height: 30px;position: absolute;right: 30px;" ></select>
+                                    </div>
+                                    <div style="width: 50%;float: left;position: relative;">
+                                        <span style="margin-left: 20px;">车身及电器:</span>
+                                        <select name="2" id="editbattery" style="width: 50%;height: 30px;position: absolute;right: 30px;" ></select>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 20px;height: 30px;">
+                                    <div style="width: 50%;float: left;position: relative;">
+                                        <span style="margin-left: 20px;">提&nbsp&nbsp升&nbsp&nbsp器:</span>
+                                        <select name="3" id="editlifter" style="width: 50%;height: 30px;position: absolute;right: 30px;" ></select>
+                                    </div>
+                                    <div style="width: 50%;float: left;position: relative;">
+                                        <span style="margin-left: 20px;">牵引拖挂:</span>
+                                        <select name="4" id="edittrailer" style="width: 50%;height: 30px;position: absolute;right: 30px;" ></select>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 20px;height: 30px;">
+                                    <div style="width: 50%;float: left;position: relative;">
+                                        <span style="margin-left: 20px;">油泵管路:</span>
+                                        <select name="5" id="editoilPump" style="width: 50%;height: 30px;position: absolute;right: 30px;" ></select>
+                                    </div>
+                                    <div style="width: 50%;float: left;position: relative;">
+                                        <span style="margin-left: 20px;">前驱动桥:</span>
+                                        <select name="6" id="editfrontAxle" style="width: 50%;height: 30px;position: absolute;right: 30px;" ></select>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 20px;height: 30px;">
+                                    <div style="width: 50%;float: left;position: relative;">
+                                        <span style="margin-left: 20px;">前驱动轮:</span>
+                                        <select name="7" id="editfrontWheel" style="width: 50%;height: 30px;position: absolute;right: 30px;" ></select>
+                                    </div>
+                                    <div style="width: 50%;float: left;position: relative;">
+                                        <span style="margin-left: 20px;">后驱动轮:</span>
+                                        <select name="8" id="editrearWheel" style="width: 50%;height: 30px;position: absolute;right: 30px;" ></select>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 20px;height: 30px;">
+                                    <div style="width: 50%;float: left;position: relative;">
+                                        <span style="margin-left: 20px;">变速箱:</span>
+                                        <select name="9" id="editgearBox" style="width: 50%;height: 30px;position: absolute;right: 30px;" ></select>
+                                    </div>
+                                    <div style="width: 50%;float: left;position: relative;">
+                                        <span style="margin-left: 20px;">后桥:</span>
+                                        <select name="10" id="editrearAxle" style="width: 50%;height: 30px;position: absolute;right: 30px;" ></select>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 20px;height: 30px;">
+                                    <div style="width: 50%;float: left;position: relative;">
+                                        <span style="margin-left: 20px;">动力输出:</span>
+                                        <select name="11" id="editpowerOutput" style="width: 50%;height: 30px;position: absolute;right: 30px;" ></select>
+                                    </div>
+                                    <div style="width: 50%;float: left;position: relative;">
+                                        <span style="margin-left: 20px;">前配重:</span>
+                                        <select name="12" id="editfrontWeight" style="width: 50%;height: 30px;position: absolute;right: 30px;" ></select>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 20px;height: 30px;">
+                                    <div style="width: 50%;float: left;position: relative;">
+                                        <span style="margin-left: 20px;">后配重:</span>
+                                        <select name="13" id="editrearWeight" style="width: 50%;height: 30px;position: absolute;right: 30px;" ></select>
+                                    </div>
+                                    <div style="width: 50%;float: left;position: relative;">
+                                        <span style="margin-left: 20px;">遮阳棚:</span>
+                                        <select name="14" id="editsunShade" style="width: 50%;height: 30px;position: absolute;right: 30px;" ></select>
+                                    </div>
+                                </div>
+                            </div>
+                    <table class="rpt_detail_tab txt_center">
+                        <tr>
+                            <td class='head_td' width='136px' height='46px'>编号</td>
+                            <td class='body_td txt_left' width='383px'>
+                                <input type="text" id="editnumber" class="userInfo" disabled="disabled">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class='head_td' width='136px' height='46px'>配置描述</td>
+                            <td class='body_td txt_left' width='383px'>
+                                <input type="text" id="editConfigName" class="userInfo">
+                            </td>
+                        </tr>
+
+                        <tr style="display: none;">
+                            <td class='head_td' width='136px' height='46px'>名称</td>
+                            <td class='body_td txt_left' width='383px'>
+                                <input type="text" id="editname" class="userInfo">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class='head_td' width='136px' height='46px'>标准价</td>
+                            <td class='body_td txt_left' width='383px'>
+                                <input type="text" id="editprice" class="userInfo">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class='head_td' width='136px' height='46px'>参考价</td>
+                            <td class='body_td txt_left' width='383px'>
+                                <input type="text" id="edittotalPrice" class="userInfo">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class='head_td' width='136px' height='46px'>
+                                <span class="font_normal">是否销售：</span>
+                                <td class='head_td' width='136px' height='46px'>
+                                <input type="radio" id="outsaleType" class="radio_style" name="saleType6" value="1" >
+                                <label for="outsaleType" class="font_normal">是</label>
+                                <input type="radio" id="shopsaleType" class="radio_style" name="saleType6" value="0">
+                                <label for="shopsaleType" class="font_normal">否</label>
+                                </td>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="mg_b50" style="width: 100%;text-align: center">
+                    <button class="waves submit_btn mg-t30" onclick="updateConfig()">提交</button>
+                </div>
+            </div>
+        </div>
+
+<div class="layout-container">
+	<div style="height: 30px;"></div>
+	<div class="layout-cont">
+        <h3 class="layout-cont-title">服务目录维护</h3>
+        <div class="layout-cont-control">
+            <div class="layout-cont-add" style="display: block;">
+                <!-- <img src="img/icon_add.png"  onclick="addModel()" /> -->
+                <input type="button" class="output_btn" style="margin-right: 0" value="添加" onclick="addModel()">
+            </div>
+             <div class="layout-cont-edit" style="display: none;"> 
+                <!-- <img src="img/icon_edit.png" onclick="editSeries()" /> -->
+                <input type="button" class="output_btn" style="margin-right: 0" value="型号修改" onclick="editSeries()">
+            </div>
+            <!--<input type="button" id="aliasSet" class=" output_btn" value="型号配置" style="display: none;margin-left: 10px;" onclick="openConfigurationClass()"> -->
+        </div>
+        <div class="layout-cont-main" style="height:700px">
+			<div class="add-newclass" style="width: 30%;height: auto">
+				<form action="">
+					<div id="lineList" class="category-cont" style="width: 90%;height: 700px;overflow: scroll;">
+                        
+					</div>
+				</form>
+			</div>
+			<div style="position: absolute;left: 30%;top: 150px;width: 65%;height: 730px;border: 1px solid #E4E4E4;overflow-y:scroll;">
+				
+                <div id="waiting" style="height: auto;width: 100%;">
+                    <div class="account_cont" style="font-size: 0.9em; border: 1px solid #E4E4E4;">
+                      <table cellpadding="0" cellspacing="0" class="table2" align="center" style="width: 94%;margin-left: 3%">
+                        <thead>
+                          <tr align="center">
+                            <th height="33" class="th2">待维护型号编号</th>
+                            <th height="33" class="th2">待维护产品配置</th>
+                          </tr>
+                        </thead>
+                        <tbody id="adminTbody">
+          
+                        </tbody>
+                      </table>
+                      <div id="barcon" class="barcon">
+                        <div id="barcon1" class="barcon1"></div>
+                        <div id="barcon2" class="barcon2">
+                          <ul>
+                            <li><button id="firstPage" class="page_btn">首页</button></li>
+                            <li><button id="prePage" class="page_btn">上一页</button></li>
+                            <li><button id="nextPage" class="page_btn">下一页</button></li>
+                            <li><button id="lastPage" class="page_btn">尾页</button></li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/machineModel/getMachineModels.do",
+            dataType : "json",
+            data: {
+                saleStatus:1,
+                machineType:2,
+            },
+            success : function (data) {
+                $("#lineList").empty();
+                for(var i=0;i<data['body']['resultList']['length'];i++){
+                    $("#lineList").append(
+                        '<div class="category-cont-pro">'+
+                            '<div class="category-cont-tri1-close" title="'+data['body']['resultList'][i]['number'] +'" id="'+ data['body']['resultList'][i]['level'] +'"></div>'+
+                                '<span style="line-height:30px">-----</span>'+
+                                '<div class="category-cont-proname" onclick="chooseMachineProsale('+ data['body']['resultList'][i]['number'] +')">'+
+                                        '<span id="'+ data['body']['resultList'][i]['number'] +'a">'+  data['body']['resultList'][i]['name']+'（'+ data['body']['resultList'][i]['number'] +'）'+'</span>'+
+                                '</div>'+
+                            '</div>'+
+                        '<div id="'+data['body']['resultList'][i]['number']+'">' +
+                        '</div>'
+                    );
+                    if(data['body']['resultList'][i]['type'] == 0){
+                        $("#"+ data['body']['resultList'][i]['number'] +"a").css({
+                            'text-decoration': 'line-through'
+                        });
+                    }
+                    if(proList.indexOf(data['body']['resultList'][i]['number']) == -1){
+							proList.push(data['body']['resultList'][i]['number']);
+					}
+                }
+            }
+        });
+
+        $('.category-cont').on('click', '.category-cont-tri1-close', function() {
+            var _this = $(this);
+            _this.toggleClass('category-cont-tri1-open');
+            $.ajax({
+                type: "post",
+                async: false,
+                url: ip_path + "/changfa_system/product/getProducts.do",
+                data: {
+                    machineModelNum: _this['0']['title'],
+                    type:''
+                },
+                dataType: "json",
+                success: function (data) {
+                    $("#" + _this['0']['title']).empty();
+                    for (var i = 0; i < data['body']['resultList']['length']; i++) {
+                        $("#" + _this['0']['title']).append(
+                            '<div class="category-cont-line">'+
+                            '<div class="category-cont-tri2-close" title="'+data['body']['resultList'][i]['number'] +'" id="'+ data['body']['resultList'][i]['level'] +'"></div>'+
+                                '<span style="line-height:30px">-----</span>'+
+                                '<div class="category-cont-proname" onclick="chooseMachineLinesale(\''+ data['body']['resultList'][i]['number'] +'\')">'+
+                                        '<span id="'+ data['body']['resultList'][i]['number'] +'a">'+  data['body']['resultList'][i]['name']+'（'+ data['body']['resultList'][i]['number'] +'）'+'</span>'+
+								'</div>'+
+								'<span style="display:none">'+ data['body']['resultList'][i]['type'] +'</span>'+
+                            '</div>'+
+                            '<div id="'+data['body']['resultList'][i]['number']+"s"+'">' +
+                            '</div>'
+                        );
+                        if(data['body']['resultList'][i]['type'] == 0){
+                            $("#"+ data['body']['resultList'][i]['number'] +"a").css({
+                            'text-decoration': 'line-through'
+                            });
+                        }
+                    if(lineList.indexOf(data['body']['resultList'][i]['number']) == -1){
+							lineList.push(data['body']['resultList'][i]['number']);
+					}
+                    }
+                }
+            });
+
+            var category = _this.parents('.category');
+            category.parent().height('auto');
+            category.siblings('.category-box').stop().slideToggle(300);
+        });
+
+        $('.category-cont').on('click', '.category-cont-tri1-open', function() {
+            var _this = $(this);
+            $("#" + _this['0']['title']).empty();
+        });
+
+        $('.category-cont').on('click', '.category-cont-tri2-close', function() {
+            var _this = $(this);
+            _this.toggleClass('category-cont-tri2-open');
+            $.ajax({
+                type: "post",
+                async: false,
+                url: ip_path + "/changfa_system/model/getModels.do",
+                data: {
+                    productNum : _this['0']['title'],
+                    type:''
+                },
+                dataType: "json",
+                success: function (data) {
+                    $("#" + _this['0']['title'] + "s").empty();
+                    for (var i = 0; i < data['body']['resultList']['length']; i++) {
+                        $("#" + _this['0']['title'] + "s").append(
+                            '<div class="category-cont-model" style="white-space: nowrap">'+
+                                '<div title="'+data['body']['resultList'][i]['number'] +'" id="'+ data['body']['resultList'][i]['level'] +'"></div>'+
+                                '<div style="line-height:30px;display:inline-block">--</div>'+
+                                '<div class="category-cont-proname" style="white-space: nowrap" onclick="chooseMachineModelsale(\''+ data['body']['resultList'][i]['number'] +'\')">'+
+                                        '<span id="'+ data['body']['resultList'][i]['number'] +'a">'+  data['body']['resultList'][i]['name']+'（'+ data['body']['resultList'][i]['number'] +'）'+'</span>'+
+                                '</div>'+
+                                '<span style="display:none">'+ data['body']['resultList'][i]['type'] +'</span>'+
+                            '</div>'
+                        );
+                        if(data['body']['resultList'][i]['type'] == 0){
+                            $("#"+ data['body']['resultList'][i]['number'] +"a").css({
+                            'text-decoration': 'line-through'
+                            });
+                        }
+
+                        if(modelList.indexOf(data['body']['resultList'][i]['number']) == -1){
+							modelList.push(data['body']['resultList'][i]['number']);
+						}
+                    }
+                }
+            });
+
+            
+        });
+
+        $('.category-cont').on('click', '.category-cont-tri2-open', function() {
+            var _this = $(this);
+            $("#" + _this['0']['title'] + "s").empty();
+        });
+
+        currentPage = 1;
+      $('#firstPage').attr('disabled', true);
+      $('#prePage').attr('disabled', true);
+      $("#firstPage").click(function () {
+        $('#lastPage').removeAttr('disabled');
+        $('#nextPage').removeAttr('disabled');
+        currentPage = 1;
+        $('#firstPage').attr('disabled', true);
+        $('#prePage').attr('disabled', true);
+        ajax_newProductMenu();
+      });
+      $("#lastPage").click(function () {
+        $('#firstPage').removeAttr('disabled');
+        $('#prePage').removeAttr('disabled');
+        currentPage = totalPage;
+        $('#lastPage').attr('disabled', true);
+        $('#nextPage').attr('disabled', true);
+        ajax_newProductMenu();
+      });
+      $("#nextPage").click(function () {
+        $('#firstPage').removeAttr('disabled');
+        $('#prePage').removeAttr('disabled');
+        currentPage = currentPage + 1;
+        if (currentPage == totalPage) {
+          $('#lastPage').attr('disabled', true);
+          $('#nextPage').attr('disabled', true);
+        } else {
+          $('#lastPage').removeAttr('disabled');
+          $('#nextPage').removeAttr('disabled');
+        }
+        ajax_newProductMenu();
+      });
+      $("#prePage").click(function () {
+        $('#lastPage').removeAttr('disabled');
+        $('#nextPage').removeAttr('disabled');
+        currentPage = currentPage - 1;
+        if (currentPage == 1) {
+          $('#firstPage').attr('disabled', true);
+          $('#prePage').attr('disabled', true);
+        } else {
+          $('#firstPage').removeAttr('disabled');
+          $('#prePage').removeAttr('disabled');
+        }
+        ajax_newProductMenu();
+      });
+
+      ajax_newProductMenu();
+
+        //初始化
+        // $.ajax({
+        //     type: "post",
+        //     async: false,
+        //     url: ip_path + "/changfa_system/config/queryMachineConfig.do",
+        //     data: {
+        //         modelNum : 60102004,
+        //         number : $("#productNum").val(),
+        //         pageNum : currentPage,
+        //         pageSize : 15,
+        //     },
+        //     dataType: "json",
+        //     success: function (data) {
+        //         if(data['head']['code'] == 200){
+        //             currentPage = data['body']['result']['pageNum'];
+        //             totalPage = data['body']['result']['pages'];
+        //             totalData = data['body']['result']['total'];
+        //             $("#adminTbody").empty();
+        //             for(var i=0;i<data['body']['result']['data'].length;i++){
+        //                 $("#adminTbody").append(
+        //                     "<tr id =" + data['body']['result']['data'][i]['id'] +">" +
+                            
+        //                     '<td class="td2" width="20">' +
+        //                     '<a><img src="img/icon_edit.png"  alt="'+data['body']['result']['data'][i]['number']+'" onclick="editConfig(this)"/></a>' +
+        //                     '</td>' +
+        //                     '<td class="td2" height="33"><input type="checkbox" name="saleType" value="'+ data['body']['result']['data'][i]['number'] +'"/></td>' +
+        //                     '<td class="td2" height="33">' + data['body']['result']['data'][i]['number'] + '</td>' +
+        //                     '<td class="td2" height="33">' + data['body']['result']['data'][i]['price'] + '</td>' +
+        //                     '<td class="td2" height="33">' + data['body']['result']['data'][i]['totalPrice'] + '</td>' +
+        //                     // "<td class='td2' ><a href='###' style='color:#1ABC9C' onclick='viewConfigDetail(this)'>查看</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='###' style='color:red' onclick='delConfig(this)'>删除</a></td>" +
+        //                     '<td class="td2 txt_left">' + data['body']['result']['data'][i]['des'] + '</td>' +
+        //                     '<td class="td2 txt_left" style="display:none;">' + data['body']['result']['data'][i]['type'] + '</td>' +
+        //                     // '<td class="td2" ><img src="'+on_off_path+'" class="mg-t5" onclick="toogle_limitStatus(this)"></td>'+
+        //                     '</tr>'
+        //                 );
+        //                 seriesNum = data['body']['result']['data'][i]['seriesNum']
+        //                 modelNum = data['body']['result']['data'][i]['modelNum']
+        //                 if(data['body']['result']['data'][i]['type'] == 0){
+        //                     $('#'+ data['body']['result']['data'][i]['id']).css({
+        //                     'color':'red'
+        //                 });
+        //                 }
+        //             }
+        //             pageSplit();
+        //             hideOrShow();
+        //         }else{
+        //             alert(data['head']['message']);
+        //         }
+        //     }
+        // });
+     }
+</script>
+</body>
+</html>

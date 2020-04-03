@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>维修单审核</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/dsaleCenter.js"></script>
+    <script src="js/dcommon.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+
+</head>
+<body class="reset">
+<div id="rep_choosed">
+    <div>
+        <div class="title_box">
+            <img src="img/status_warning.png" class="status_warning">
+            <span class="status_info">当前状态：审核维修单</span>
+        </div>
+        <div class="check">
+            <div>
+                <img src="img/check_pass_select.png" class="check_pass" onclick="toogle_rep()">
+                <img src="img/check_unpass_unselect.png" class="check_unpass" onclick="toogle_rep_check()">
+            </div>
+            <div class="pass">
+                <img src="img/check_pass.png">
+            </div>
+            <div class="msg">
+                <span>确定审核通过？</span>
+            </div>
+        </div>
+    </div>
+    <div class="btn_part">
+        <img src="img/front.png" class="mg-t20" onclick="return_rep()">
+        <img src="img/yes.png" id="rep_pass" class="mg-t20 mg_l50" onclick="rep_check_pass()">
+    </div>
+</div>
+<div id="checkRep_choosed" style="display: none;">
+    <div>
+        <div class="title_box">
+            <img src="img/status_warning.png" class="status_warning">
+            <span class="status_info">当前状态：维修单驳回</span>
+        </div>
+        <div class="dispatching">
+            <img src="img/check_pass_unselect.png" class="check_pass" onclick="toogle_rep()">
+            <img src="img/check_unpass_select.png" class="check_unpass" onclick="toogle_rep_check()">
+        </div>
+        <div class="dispatching_select">
+            <span>选择驳回原因</span>
+            <select id="rep_check_unpass" class="checkNoPass_choose mg-t20 flt_r">
+                <option value="">请选择原因</option>
+                <option value="27">关闭</option>
+                <option value="29">维修类型</option>
+                <option value="18">人机合影</option>
+                <option value="17">故障图片</option>
+                <!--<option value="27">农机信息</option>-->
+                <option value="30">出厂编号</option>
+                <option value="19">农机用途</option>
+                <option value="20">故障信息</option>
+                <option value="21">客户意见</option>
+                <option value="22">处理意见</option>
+                <option value="23">里程</option>
+                <option value="26">工时</option>
+                <option value="32">天数</option>
+                <option value="28">其他费用</option>
+                <option value="25">备注</option>
+            </select>
+        </div>
+        <div class="check_return">
+            <div class="tit_msg">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>驳回描述</span>
+            </div>
+            <textarea id="describe" class="checke_discribe" placeholder="输入驳回说明"></textarea>
+        </div>
+    </div>
+    <div class="btn_part">
+        <img src="img/front.png" class="mg-t20" onclick="return_rep()">
+        <img src="img/yes.png" id="rep_unpass" class="mg-t20 mg_l50" onclick="rep_check_unpass()">
+    </div>
+</div>
+</body>
+<script>
+    var token;
+    var repairId;
+    var reportId;
+
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+        token = $(window.parent.parent.document).find("input[name='token']").val();
+        reportId = $(window.parent.parent.document).find("input[name='reportId']").val();
+        repairId = $(window.parent.parent.document).find("input[name='repairId']").val();
+        // //下拉框选择维修单审核不通过原因
+        //
+        //     $.ajax({
+        //         type : "post",
+        //         async : false,
+        //         url : ip_path+"/changfa_system/repair/getRepairReson.do",
+        //         dataType : "json",
+        //         success : function (data) {
+        //             for(var i=0;i<data['body']['resultList']['length'];i++){
+        //                 $("#rep_check_unpass").append("<option value='"+ data['body']['resultList'][i]['reasonId'] +"'>"+data['body']['resultList'][i]['reason']+"</option>");
+        //             }
+        //             $("#rep_check_unpass").unbind();
+        //         }
+        //     });
+    }
+
+</script>
+</html>

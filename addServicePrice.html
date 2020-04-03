@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>创建工时里程单价</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/saleCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <!--<script src="jqueryTagsInput/jquery.tagsinput.min.js"></script>-->
+    <!--<link rel="stylesheet" type="text/css" href="jqueryTagsInput/jquery.tagsinput.min.css" />-->
+</head>
+<body class="reset">
+<div class="mg-t70" style="height: auto">
+    <div id="detail_frame" class="rpt_cont">
+        <div>
+            <div class="title_box">
+                <img src="img/status_warning.png" class="status_warning">
+                <span id="status_describe" class="status_info">当前状态：创建基础费用</span>
+            </div>
+            <div class="rpt_detail">
+                <div class="tit_msg">
+                    <img src="img/tit_pic.png" class="tit_pic">
+                    <span>工时里程单价</span>
+                </div>
+                <div>
+                    <table id="reporterInfo" class="rpt_detail_tab txt_center">
+                        <tr>
+                            <td class='head_td' width='136px' height='46px'>产品线编号</td>
+                            <td class='body_td txt_left' width='383px'>
+                                <select id="createLineNum" class="addressInfo"></select>
+                            </td>
+                        </tr>
+                        <!--<tr>-->
+                            <!--<td class='head_td' width='136px' height='46px'>产品线名称</td>-->
+                            <!--<td class='body_td txt_left' width='383px'>-->
+                                <!--<input type="text" id="createLineName" class="userInfo">-->
+                            <!--</td>-->
+                        <!--</tr>-->
+                        <tr>
+                            <td class='head_td' width='136px' height='46px'>产品线星级</td>
+                            <td class='body_td txt_left' width='383px'>
+                                <select id="createLevel" class="addressInfo">
+                                    <option value="1">一星级</option>
+                                    <option value="2">二星级</option>
+                                    <option value="3">三星级</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class='head_td' width='136px' height='46px'>工时单价</td>
+                            <td class='body_td txt_left' width='383px'>
+                                <input type="text" id="createHourPrice" class="userInfo">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class='head_td' width='136px' height='46px'>里程单价</td>
+                            <td class='body_td txt_left' width='383px'>
+                                <input type="text" id="createDistancePrice" class="userInfo">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="mg_b50" style="width: 90%;margin-left: 5%;text-align: center;">
+                    <button class="waves submit_btn mg-t30" onclick="createServicePrice()">提交</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+        $.ajax({
+            type : "post",
+            url : ip_path+"/changfa_system/machineModel/getMachineModels.do",
+            dataType : "json",
+            data:{
+                saleStatus: 1,
+                machineType: 2,
+            },
+            success : function (data) {
+                for(var i=0;i<data['body']['resultList']['length'];i++){
+                    $("#createLineNum").append("<option value='"+ data['body']['resultList'][i]['number'] +"'>"+data['body']['resultList'][i]['name']+"</option>");
+                }
+                // $("#product").unbind();
+            }
+        });
+        $("#createLineNum").val($(window.parent.document).find("input[name='newLineNum']").val());
+        // $("#createLineName").val($(window.parent.document).find("input[name='newLineName']").val());
+        $("#createLevel").val($(window.parent.document).find("input[name='newLevel']").val());
+    }
+</script>
+</html>

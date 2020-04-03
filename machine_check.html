@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>退、返、调审核</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/saleCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+
+</head>
+<body class="reset">
+<div class="all_clear" style="display: none;">
+    <span style="line-height: 40px;margin-left: 10px;">解除警报</span>
+    <span id="radio" class="radio_red"></span>
+</div>
+<div id="rep_choosed" style="width: 100%">
+    <div>
+        <div class="title_box">
+            <img src="img/status_warning.png" class="status_warning">
+            <span class="status_info">当前状态：审核</span>
+            
+        </div>
+        <div class="check">
+            <div>
+                <img src="img/check_pass_select.png" class="check_pass" onclick="toogle_rep()">
+                <img src="img/check_unpass_unselect.png" class="check_unpass" onclick="toogle_rep_check()">
+            </div>
+            <div style="text-align: left">
+                <div id="forChange" style="display: none;">
+                    <div class="tit_msg">
+                        <img src="img/tit_pic.png" class="tit_pic">
+                        <span>仓库选择</span>
+                    </div>
+                    <div>
+                        <select id="store" style="margin-left: 5%;width: 200px;height: 35px;">
+
+                        </select>
+                    </div>
+                </div>
+                <div class="tit_msg">
+                    <img src="img/tit_pic.png" class="tit_pic">
+                    <span>通过描述</span>
+                </div>
+                <div>
+                    <input id="pass_reason" type="text" class="examineReason">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="btn_part">
+        <img src="img/front.png" class="mg-t20" onclick="return_check()">
+        <img src="img/yes.png" id="rep_pass" class="mg-t20 mg_l50" onclick="machineCheckPass()">
+    </div>
+</div>
+<div id="checkRep_choosed" style="display: none;">
+    <div>
+        <div class="title_box">
+            <img src="img/status_warning.png" class="status_warning">
+            <span class="status_info">当前状态：审核不通过</span>
+        </div>
+        <div class="check">
+            <div>
+                <img src="img/check_pass_unselect.png" class="check_pass" onclick="toogle_rep()">
+                <img src="img/check_unpass_select.png" class="check_unpass" onclick="toogle_rep_check()">
+            </div>
+            <div style="text-align: left">
+                <div class="tit_msg">
+                    <img src="img/tit_pic.png" class="tit_pic">
+                    <span>不通过描述</span>
+                </div>
+                <div>
+                    <input id="unpass_reason" type="text" class="examineReason">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="btn_part">
+        <img src="img/front.png" class="mg-t20" onclick="return_check()">
+        <img src="img/yes.png" id="rep_unpass" class="mg-t20 mg_l50" onclick="machineCheckUnpass()">
+    </div>
+</div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+
+        if($(window.parent.parent.document).find("input[name='roleId']").val() == 22){
+            $(".all_clear").show();
+        }
+
+        $('#radio').click(function(){
+            $(this).toggleClass('radio_green');
+            if($(this).hasClass('radio_green')){
+                alert('当前选择了解除警报');
+            }else{
+                alert('当前选择了继续警报');
+            }
+        })
+        // if($(window.parent.parent.document).find("input[name='type']").val() == 3){
+        //     //调拨
+        //     $("#pass_reason").val("审核通过，农机请尽快调拨！");
+        //     $("#forChange").show();
+
+        //     $.ajax({
+        //         type: "post",
+        //         url: ip_path + "/changfa_system/locationRecord/selectStore.do",
+        //         data: {
+        //             pageNum: 1,
+        //             pageSize: 1000000,
+        //             workNum: $(window.parent.parent.document).find("input[name='changeNum']").val()
+        //         },
+        //         dataType: "json",
+        //         success: function (data) {
+        //             $("#store").empty();
+        //             for(var i=0;i<data['body']['result']['data'].length;i++){
+        //                 $("#store").append("<option value='"+ data['body']['result']['data'][i]['depotId'] +"'>"+data['body']['result']['data'][i]['storeRoomName']+"</option>");
+        //             }
+        //         }
+        //     });
+
+        // }else if($(window.parent.parent.document).find("input[name='type']").val() == 4){
+        //     //退货
+        //     $("#pass_reason").val("审核通过，农机请重新绑定！");
+        // }else if($(window.parent.parent.document).find("input[name='type']").val() == 5){
+        //     //返厂
+        //     $("#pass_reason").val("审核通过，农机请尽快返厂！");
+        // }else if($(window.parent.parent.document).find("input[name='type']").val() == 6){
+        //     //出售
+        //     $("#pass_reason").val("审核通过，农机请尽快绑定！");
+        // }
+    }
+
+</script>
+</html>

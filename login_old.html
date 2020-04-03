@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/login.js" charset="UTF-8"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <script src="js/common.js"></script>
+    <!--<script src="js/md5.js"></script>-->
+    <script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
+    <script  href="http://www.jb51.net/" target="_blank">javascript</A>"></script>
+    <script>
+        button_click();
+    </script>
+</head>
+<body class="body" onkeydown="keyLogin()">
+<div>
+    <div class="login_top">
+        <img class="login_logo" src="img/login_logo.png">
+    </div>
+    <div class="login_bottom">
+        <div class="login_box">
+            <div class="login_sysname">常发农装营销管理系统<br><span style="font-size: 20px">CF Management System</span></div>
+            <div class="mg-t20">
+                <img class="vert_mid" src="img/user.gif">
+                <input id="loginUser" type="text" placeholder="请输入用户名称"  class="login_user mg-t10">
+            </div>
+            <div class="mg-t20">
+                <img class="vert_mid" src="img/pwd.gif">
+                <input id="loginPwd" type="password" placeholder="请输入登录密码" class="login_pwd mg-t10">
+            </div>
+            <a id="loginBtn" type="button"  class="waves login_btn" onclick="login()">登录</a>
+            <div id="loginMsg" style="display: none;" class="login_msg mg-t">
+                <div class="login_circle flt_l">!</div>
+                <span id="loginMsgCont" class="flt_l"></span>
+            </div>
+        </div>
+        <div class="mg_b50" style="margin-top: 30px;text-align: center">
+            <img src="img/download.png">
+            <p>扫描二维码下载手机App</p>
+        </div>
+    </div>
+</div>
+</body>
+<!--<script>-->
+    <!--window.onload = function () {-->
+        <!--var browser = {-->
+            <!--versions: function() {-->
+                <!--var agent;-->
+                <!--var u = navigator.userAgent;-->
+                <!--return {-->
+                    <!--trident: u.indexOf('Trident') > -1, //IE内核-->
+                    <!--presto: u.indexOf('Presto') > -1, //opera内核-->
+                    <!--webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核-->
+                    <!--gecko: u.indexOf('Firefox') > -1, //火狐内核Gecko-->
+                    <!--mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端-->
+                    <!--ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios-->
+                    <!--android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android-->
+                    <!--iPhone: u.indexOf('iPhone') > -1 , //iPhone-->
+                    <!--iPad: u.indexOf('iPad') > -1, //iPad-->
+                    <!--webApp: u.indexOf('Safari') > -1 //Safari-->
+                <!--};-->
+            <!--}()-->
+        <!--}-->
+        <!--// document.write(navigator.userAgent+'<br><br>')-->
+        <!--// document.write(browser.versions.trident+'<span>//ie</span> <br>')-->
+        <!--// document.write(browser.versions.presto+'<span>//opera</span> <br>')-->
+        <!--// document.write(browser.versions.webKit+'<span>//苹果、谷歌内核</span> <br>')-->
+        <!--// document.write(browser.versions.gecko+'<span>//火狐内核</span> <br>')-->
+        <!--// document.write(browser.versions.mobile+'<span>//是否为移动终端</span> <br>')-->
+        <!--// document.write(browser.versions.ios+'<span>//ios</span> <br>')-->
+        <!--// document.write(browser.versions.android+'<span>//android</span> <br>')-->
+        <!--// document.write(browser.versions.iPhone+'<span>//iPhone</span> <br>')-->
+        <!--// document.write(browser.versions.iPad+'<span>//iPad</span> <br>')-->
+        <!--// document.write(browser.versions.webApp+'<span>//Safari</span> <br>')-->
+
+        <!--alert(browser.versions.webKit);-->
+    <!--}-->
+<!--</script>-->
+</html>

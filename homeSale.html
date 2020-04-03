@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>销售工作台</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/index.js"></script>
+    <script src="js/saleCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <script src="js/echarts.min.js"></script>
+    <!-- <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-gl/echarts-gl.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script> -->
+    <!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>-->
+    <!-- <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/simplex.js"></script> -->
+    <script src="jquery-ui-1.12.1/jquery-ui.min.js"></script>
+    <link href="jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet" />
+    <script src="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.js"></script>
+    <script type="text/javascript" src="jQuery-Timepicker/dist/i18n/jquery-ui-timepicker-zh-CN.js"></script>
+    <link href="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.css" rel="stylesheet" />
+
+</head>
+<body class="reset">
+<div class="mg-t50">
+    <div class="rpt_cont">
+        <div>
+            <table style="width: 90%;margin-left: 5%">
+                <tr>
+                        <!--  -->
+                    <td class="home_td" width="33%" onclick="toFastSaleApply(3)" >
+                        <div class="flt_l mg_l100 mg-t10">
+                            <img src="img/waitForCheck.png">
+                        </div>
+                        <div class="cont_home flt_l mg_l30 mg-t10">
+                            <span class="text_style">销售待初审</span><br/>
+                            <a href="###" id="saleApplyFirst"></a>
+                        </div>
+                    </td>
+                    <td class="home_td" width="33%" onclick="toFastSaleApply(0)" >
+                        <div class="flt_l mg_l100 mg-t10">
+                            <img src="img/waitForCheck.png">
+                        </div>
+                        <div class="cont_home flt_l mg_l30 mg-t10">
+                            <span class="text_style">销售待风控部</span><br/>
+                            <a href="###" id="saleApplySecond"></a>
+                        </div>
+                    </td>
+                    <td class="home_td" width="33%" onclick="toFastSaleApply(5)" >
+                        <div class="flt_l mg_l100 mg-t10">
+                            <img src="img/waitForCheck.png">
+                        </div>
+                        <div class="cont_home flt_l mg_l30 mg-t10">
+                            <span class="text_style">销售待服务部</span><br/>
+                            <a href="###" id="saleApplyFinal"></a>
+                        </div>
+                    </td>
+
+                    <td class="middle"></td>
+                    <td width="33%"></td>
+                </tr>
+                <tr>
+                    <!--  -->
+                <td class="home_td" width="33%" onclick="toFastBackApply(3)">
+                    <div class="flt_l mg_l100 mg-t10">
+                        <img src="img/waitForDispatch.png">
+                    </div>
+                    <div class="cont_home flt_l mg_l30 mg-t10">
+                        <span class="text_style">退调返厂待初审</span><br/>
+                        <a href="###" id="backApplyFirst"></a>
+                    </div>
+                </td>
+                <td class="home_td" width="33%" onclick="toFastBackApply(0)">
+                    <div class="flt_l mg_l100 mg-t10">
+                        <img src="img/waitForDispatch.png">
+                    </div>
+                    <div class="cont_home flt_l mg_l30 mg-t10">
+                        <span class="text_style">退调返厂待终审</span><br/>
+                        <a href="###" id="backApplyFinal"></a>
+                    </div>
+                </td>
+                <td class="middle"></td>
+                <td width="33%"></td>
+            </tr>
+            </table>
+        </div>
+
+        <div style="height: 50px;"></div>
+        <div class="cont_body2">
+            <div class="mg-t30 flt_r mg-r30">
+                <a href="###"><span id="send_today" class="font font_choosed mg-r20" onclick="updateSendTable(this)">昨日</span></a>
+                <a href="###"><span id="send_week" class="font mg-r20" onclick="updateSendTable(this)">本周</span></a>
+                <a href="###"><span id="send_month" class="font mg-r20" onclick="updateSendTable(this)">本月</span></a>
+                <a href="###"><span id="send_year" class="font mg-r20" onclick="updateSendTable(this)">本年度</span></a>
+            </div>
+            <div class="mg_l30 mg-t30 flt_r mg-r20" style="width: 200px;">
+                <span class="describ">产品线：</span>
+                <select id="product" class="product_line" style="width: 130px;display: inline;">
+
+                </select>
+            </div>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <div id="container" class="simpleLine"></div>
+        </div>
+        <div class="cont_body2 mg-t30">
+            <div class="mg-t30 flt_r mg-r30">
+                <a href="###"><span id="sale_today" class="font font_choosed mg-r20" onclick="updateSaleTable(this)">当日</span></a>
+                <a href="###"><span id="sale_week" class="font mg-r20" onclick="updateSaleTable(this)">本周</span></a>
+                <a href="###"><span id="sale_month" class="font mg-r20" onclick="updateSaleTable(this)">本月</span></a>
+                <a href="###"><span id="sale_year" class="font mg-r20" onclick="updateSaleTable(this)">本年度</span></a>
+            </div>
+
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <div id="container1" class="simpleLine"></div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+
+        $.ajax({
+            type : "post",
+            url : ip_path+"/changfa_system/machineFlow/count.do",
+            dataType : "json",
+            success : function (data) {
+                if(data['head']['code'] == 200){
+                    $("#saleApplyFirst").text(data['body']['result']['sale_first_count']);
+                    $("#saleApplySecond").text(data['body']['result']['sale_second_count']);
+                    $("#saleApplyFinal").text(data['body']['result']['sale_final_count']);
+                    $("#backApplyFirst").text(data['body']['result']['approval_first_count']);
+                    $("#backApplyFinal").text(data['body']['result']['approval_final_count']);
+                }else{
+                    alert(data['head']['message']);
+                }
+            }
+        });
+
+        setInterval(function () {
+            $.ajax({
+                type : "post",
+                url : ip_path+"/changfa_system/machineFlow/count.do",
+                dataType : "json",
+                success : function (data) {
+                    if(data['head']['code'] == 200){
+                        $("#saleApply").text(data['body']['result']['saleCount']);
+                        $("#backApply").text(data['body']['result']['noExamineCount']);
+                    }else{
+                        alert(data['head']['message']);
+                    }
+                }
+            });
+        },60000);
+
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/machineModel/getMachineModels.do",
+            dataType : "json",
+            success : function (data) {
+                $("#product").append("<option value=''>全部</option>");
+                for(var i=0;i<data['body']['resultList']['length'];i++){
+                    $("#product").append("<option value='"+ data['body']['resultList'][i]['number'] +"'>"+data['body']['resultList'][i]['name']+"</option>");
+                }
+            }
+        });
+
+        var day_array = new Array();
+        var week_array = new Array();
+        var month_array = new Array();
+        var date = new Date();
+        var year = date.getFullYear();
+        var month = date.getMonth()+1;
+        if(month<10){
+            month = "0" + month;
+        }
+        var day = date.getDate();
+        if(day<10){
+            day = "0" + day;
+        }
+
+        var today = year + "-" + month + "-" + day;
+
+        //发货统计图表
+        $.ajax({
+            type : "post",
+            async : true,
+            url : ip_path+"/changfa_system/machineModel/countShipAndSaleNum.do",
+            data :{
+                lineNum : $("#product option:selected").val(),
+                time : today,
+                timeType : sendTimeType
+            },
+            dataType : "json",
+            success : function (data) {
+                if(data['head']['code'] == 200){
+                    var time_x = new Array();
+                    var send_y = new Array();
+                    var sale_y = new Array();
+                    for(var i=0;i<data['body']['resultList'].length;i++){
+                        time_x.push(data['body']['resultList'][i]['date']);
+                        send_y.push(data['body']['resultList'][i]['shipNum']);
+                        sale_y.push(data['body']['resultList'][i]['saleNum']);
+                        table_send(time_x,send_y,sale_y);
+                    }
+                }else {
+                    alert(data['head']['message']);
+                }
+            }
+        });
+
+        //经销商销售top10图表
+        $.ajax({
+            type : "post",
+            async : true,
+            url : ip_path+"/changfa_system/machineModel/countSaleNum.do",
+            data :{
+                time : today,
+                timeType : saleTimeType
+            },
+            dataType : "json",
+            success : function (data) {
+                if(data['head']['code'] == 200){
+                    var dealer_x = new Array();
+                    var num_y = new Array();
+                    for(var i=0;i<data['body']['resultList'].length;i++){
+                        dealer_x.push(data['body']['resultList'][i]['dealerName']);
+                        num_y.push(data['body']['resultList'][i]['num']);
+                        table_saleSort(dealer_x,num_y);
+                    }
+                }else {
+                    table_saleSort(0,0);
+                }
+            }
+        });
+
+
+        $("#product").change(function () {
+            $.ajax({
+                type : "post",
+                async : true,
+                url : ip_path+"/changfa_system/machineModel/countShipAndSaleNum.do",
+                data :{
+                    lineNum : $("#product option:selected").val(),
+                    time : today,
+                    timeType : sendTimeType
+                },
+                dataType : "json",
+                success : function (data) {
+                    if(data['head']['code'] == 200){
+                        var time_x = new Array();
+                        var send_y = new Array();
+                        var sale_y = new Array();
+                        for(var i=0;i<data['body']['resultList'].length;i++){
+                            time_x.push(data['body']['resultList'][i]['date']);
+                            send_y.push(data['body']['resultList'][i]['shipNum']);
+                            sale_y.push(data['body']['resultList'][i]['saleNum']);
+                            table_send(time_x,send_y,sale_y);
+                        }
+                    }else {
+                        alert(data['head']['message']);
+                    }
+                }
+            });
+        });
+    }
+
+    function table_send(x,send,sale) {
+        var dom = document.getElementById("container");
+        var myChart = echarts.init(dom);
+        var app = {};
+        option = null;
+        app.title = '折柱混合';
+
+        option = {
+            title: {
+                text: '发货销售一览',
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data:['发货量','销售量']
+            },
+            toolbox: {
+                show: true,
+                feature: {
+                    // dataZoom: {
+                    //     yAxisIndex: 'none'
+                    // },
+                    // dataView: {readOnly: false},
+                    magicType: {type: ['line', 'bar']},
+                    // restore: {},
+                    saveAsImage: {}
+                }
+            },
+            xAxis:  {
+                type: 'category',
+                boundaryGap: false,
+                data: x
+            },
+            yAxis: {
+                type: 'value',
+                axisLabel: {
+                    formatter: '{value}'
+                }
+            },
+            series: [
+                {
+                    name:'发货量',
+                    type:'line',
+                    data:send,
+
+                },
+                {
+                    name:'销售量',
+                    type:'line',
+                    data:sale,
+                }
+            ]
+        };
+
+        if (option && typeof option === "object") {
+            myChart.setOption(option, true);
+        }
+    }
+
+    function table_saleSort(x,y) {
+        var dom = document.getElementById("container1");
+        var myChart = echarts.init(dom);
+        var app = {};
+        option = null;
+        app.title = '折柱混合';
+
+        option = {
+            title : {
+                text: '销售量Top10'
+            },
+            tooltip : {
+                trigger: 'axis'
+            },
+            legend: {
+                data:['销售量']
+            },
+            toolbox: {
+                show : true,
+                feature : {
+                    // dataView : {show: true, readOnly: false},
+                    // magicType : {show: true, type: ['line', 'bar']},
+                    // restore : {show: true},
+                    saveAsImage : {show: true}
+                }
+            },
+            calculable : true,
+            xAxis : [
+                {
+                    type : 'category',
+                    data : x
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value',
+                    axisLabel: {
+                        formatter: '{value} '
+                    }
+                }
+            ],
+            series : [
+                {
+                    name:'销售量',
+                    type:'bar',
+                    data:y,
+                    markLine : {
+                        data : [
+                            {type : 'average', name : '平均值'}
+                        ]
+                    }
+                }
+            ]
+        };
+
+        if (option && typeof option === "object") {
+            option = newline(option, 5, 'xAxis');
+            myChart.setOption(option, true);
+        }
+    }
+</script>
+</html>

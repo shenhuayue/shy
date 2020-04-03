@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>配置项维护</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/saleCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/jquery-2.1.1.js"></script>
+    <script src="jqueryTagsInput/jquery.tagsinput.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="jqueryTagsInput/jquery.tagsinput.min.css" />
+    <link href="layer/mobile/need/layer.css" type="text/css" rel="stylesheet"/>
+    <script src="layer/layer.js"></script>
+    <link href="css/extra_bootstrap.css" type="text/css" rel="stylesheet"/>
+    <!-- Bootstrap core CSS     -->
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+    <!--  Paper Dashboard CSS    -->
+    <link href="assets/css/amaze.css" rel="stylesheet">
+    <!--  CSS for Demo Purpose, don't include it in your project     -->
+    <link href="assets/css/demo.css" rel="stylesheet">
+    <!--     Fonts and icons     -->
+    <link href="assets/css/font-awesome.min.css" rel="stylesheet">
+    <link href="assets/css/font-muli.css" rel='stylesheet' type='text/css'>
+    <link href="assets/css/themify-icons.css" rel="stylesheet">
+    <!--    JQuery UI     -->
+    <link href="assets/vendors/jquery-ui-1.12.0/jquery-ui.css" rel="stylesheet">
+    <link href="assets/vendors/sweetalert/css/sweetalert2.min.css" rel="Stylesheet">
+    <style>
+        .rowbox{
+            width : 100%;height:200px;margin-top: 20px;margin-bottom: 20px;
+        }
+        .colbox{
+            width : 30%;height : 100%;margin-left : 2%;margin-bottom:20px;
+        }
+        .inp{
+            margin-top: 20px;width: 85%;height:150px;overflow-y:auto;margin-left: 33px;border: 1px solid #E4E4E4;
+        }
+    </style>
+</head>
+<body class="reset">
+    <div class="mg-t50">
+        <div class="tit">
+            <span class="flt_l">产品信息</span>
+        </div>
+        <div class="account_cont2" style="width : 88%">
+            <span class="describ mg_l50">产品线：</span><span id="line"></span>
+            <span class="describ mg_l50">产品系列：</span><span id="series"></span>
+            <span class="describ mg_l50">产品型号：</span><span id="model"></span>
+        </div>
+    </div>
+    <div>
+        <div class="tit mg-t50">
+            <span class="flt_l">配置项维护</span>
+        </div>
+        <div class="account_cont" style="width : 88%">
+            <div class="rowbox">
+                <div class="flt_l txt_left colbox">
+                    <div>
+                        <img src="img/tit_pic.png" class="tit_pic">
+                        <span class=" describ size_18">发动机</span>
+                        <label class="flt_r describ size_14 mg-r30 color_cf" onclick="editConfigAlias()">编辑</label>
+                    </div>
+                    <div class="inp">
+                        <table id="datatables" class="table table-striped table-no-bordered table-hover" style="width:100%;cellspacing:0">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>sap</th>
+                                    <th>简称</th>
+                                </tr>
+                            </thead>
+                            <tbody id="config1List">
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="flt_l txt_left colbox">
+                    <div>
+                        <img src="img/tit_pic.png" class="tit_pic">
+                        <span class=" describ size_18">车身及电器</span>
+                        <label class="flt_r describ size_14 mg-r30 color_cf" onclick="editConfigAlias()">编辑</label>
+                    </div>
+                    <div class="inp">
+                        <table id="datatables" class="table table-striped table-no-bordered table-hover" style="width:100%;cellspacing:0">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>sap</th>
+                                    <th>简称</th>
+                                </tr>
+                            </thead>
+                            <tbody id="config2List">
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="flt_l txt_left colbox">
+                    <div>
+                        <img src="img/tit_pic.png" class="tit_pic">
+                        <span class=" describ size_18">提升器</span>
+                        <label class="flt_r describ size_14 mg-r30 color_cf" onclick="editConfigAlias()">编辑</label>
+                    </div>
+                    <div class="inp">
+                        <table id="datatables" class="table table-striped table-no-bordered table-hover" style="width:100%;cellspacing:0">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>sap</th>
+                                    <th>简称</th>
+                                </tr>
+                            </thead>
+                            <tbody id="config3List">
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="rowbox">
+                <div class="flt_l txt_left colbox">
+                    <div>
+                        <img src="img/tit_pic.png" class="tit_pic">
+                        <span class=" describ size_18">牵引拖挂</span>
+                        <label class="flt_r describ size_14 mg-r30 color_cf" onclick="editConfigAlias()">编辑</label>
+                    </div>
+                    <div class="inp">
+                        <table id="datatables" class="table table-striped table-no-bordered table-hover" style="width:100%;cellspacing:0">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>sap</th>
+                                    <th>简称</th>
+                                </tr>
+                            </thead>
+                            <tbody id="config4List">
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="flt_l txt_left colbox">
+                    <div>
+                        <img src="img/tit_pic.png" class="tit_pic">
+                        <span class=" describ size_18">油泵管路</span>
+                        <label class="flt_r describ size_14 mg-r30 color_cf" onclick="editConfigAlias()">编辑</label>
+                    </div>
+                    <div class="inp">
+                        <table id="datatables" class="table table-striped table-no-bordered table-hover" style="width:100%;cellspacing:0">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>sap</th>
+                                    <th>简称</th>
+                                </tr>
+                            </thead>
+                            <tbody id="config5List">
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="flt_l txt_left colbox">
+                    <div>
+                        <img src="img/tit_pic.png" class="tit_pic">
+                        <span class=" describ size_18">前驱动桥</span>
+                        <label class="flt_r describ size_14 mg-r30 color_cf" onclick="editConfigAlias()">编辑</label>
+                    </div>
+                    <div class="inp">
+                        <table id="datatables" class="table table-striped table-no-bordered table-hover" style="width:100%;cellspacing:0">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>sap</th>
+                                    <th>简称</th>
+                                </tr>
+                            </thead>
+                            <tbody id="config6List">
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="rowbox">
+                <div class="flt_l txt_left colbox">
+                    <div>
+                        <img src="img/tit_pic.png" class="tit_pic">
+                        <span class=" describ size_18">后驱动轮</span>
+                        <label class="flt_r describ size_14 mg-r30 color_cf" onclick="editConfigAlias()">编辑</label>
+                    </div>
+                    <div class="inp">
+                        <table id="datatables" class="table table-striped table-no-bordered table-hover" style="width:100%;cellspacing:0">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>sap</th>
+                                    <th>简称</th>
+                                </tr>
+                            </thead>
+                            <tbody id="config7List">
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="flt_l txt_left colbox">
+                    <div>
+                        <img src="img/tit_pic.png" class="tit_pic">
+                        <span class=" describ size_18">前驱动轮</span>
+                        <label class="flt_r describ size_14 mg-r30 color_cf" onclick="editConfigAlias()">编辑</label>
+                    </div>
+                    <div class="inp">
+                        <table id="datatables" class="table table-striped table-no-bordered table-hover" style="width:100%;cellspacing:0">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>sap</th>
+                                    <th>简称</th>
+                                </tr>
+                            </thead>
+                            <tbody id="config8List">
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="flt_l txt_left colbox">
+                    <div>
+                        <img src="img/tit_pic.png" class="tit_pic">
+                        <span class=" describ size_18">变速箱</span>
+                        <label class="flt_r describ size_14 mg-r30 color_cf" onclick="editConfigAlias()">编辑</label>
+                    </div>
+                    <div class="inp">
+                        <table id="datatables" class="table table-striped table-no-bordered table-hover" style="width:100%;cellspacing:0">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>sap</th>
+                                    <th>简称</th>
+                                </tr>
+                            </thead>
+                            <tbody id="config9List">
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="rowbox">
+                <div class="flt_l txt_left colbox">
+                    <div>
+                        <img src="img/tit_pic.png" class="tit_pic">
+                        <span class=" describ size_18">后桥</span>
+                        <label class="flt_r describ size_14 mg-r30 color_cf" onclick="editConfigAlias()">编辑</label>
+                    </div>
+                    <div class="inp">
+                        <table id="datatables" class="table table-striped table-no-bordered table-hover" style="width:100%;cellspacing:0">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>sap</th>
+                                    <th>简称</th>
+                                </tr>
+                            </thead>
+                            <tbody id="config10List">
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="flt_l txt_left colbox">
+                    <div>
+                        <img src="img/tit_pic.png" class="tit_pic">
+                        <span class=" describ size_18">动力输出</span>
+                        <label class="flt_r describ size_14 mg-r30 color_cf" onclick="editConfigAlias()">编辑</label>
+                    </div>
+                    <div class="inp">
+                        <table id="datatables" class="table table-striped table-no-bordered table-hover" style="width:100%;cellspacing:0">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>sap</th>
+                                    <th>简称</th>
+                                </tr>
+                            </thead>
+                            <tbody id="config11List">
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="flt_l txt_left colbox">
+                    <div>
+                        <img src="img/tit_pic.png" class="tit_pic">
+                        <span class=" describ size_18">前配重</span>
+                        <label class="flt_r describ size_14 mg-r30 color_cf" onclick="editConfigAlias()">编辑</label>
+                    </div>
+                    <div class="inp">
+                        <table id="datatables" class="table table-striped table-no-bordered table-hover" style="width:100%;cellspacing:0">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>sap</th>
+                                    <th>简称</th>
+                                </tr>
+                            </thead>
+                            <tbody id="config12List">
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="rowbox">
+                <div class="flt_l txt_left colbox">
+                    <div>
+                        <img src="img/tit_pic.png" class="tit_pic">
+                        <span class=" describ size_18">后配重</span>
+                        <label class="flt_r describ size_14 mg-r30 color_cf" onclick="editConfigAlias()">编辑</label>
+                    </div>
+                    <div class="inp">
+                        <table id="datatables" class="table table-striped table-no-bordered table-hover" style="width:100%;cellspacing:0">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>sap</th>
+                                    <th>简称</th>
+                                </tr>
+                            </thead>
+                            <tbody id="config13List">
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop(); 
+
+        //console.log(modelId);
+
+        $.ajax({
+            type: "post",
+            async: false,
+            url: ip_path + "/changfa_system/config/queryByModelNum.do",
+            data: {
+                modelNum : $(window.parent.document).find("input[name='modelNumForConfig']").val()
+            },
+            dataType: "json",
+            success: function (data) {
+                
+                    $("#line").text(data['lineName']);
+                    $("#series").text(data['seriesName']);
+                    $("#model").text(data['modelName']);
+               
+            }
+        });
+
+        $.ajax({
+            type: "post",
+            async: false,
+            url: ip_path + "/changfa_system/config/queryItem.do",
+            data: {
+                modelNum : $(window.parent.document).find("input[name='modelNumForConfig']").val()
+            },
+            dataType: "json",
+            success: function (data) {
+                if(data['head']['code'] == 200){
+                    for(var j = 1;j<=10;j++){
+                        $("#config" + j + "List").empty();
+                    }
+                    for(var i=0;i<data['body']['resultList'].length;i++){
+                        switch(data['body']['resultList'][i]['type']){
+                            case 1:
+                                for(var j=0;j<data['body']['resultList'][i]['actualItem'].length;j++){
+                                    $("#config1List").append(
+                                        '<tr id="'+ data['body']['resultList'][i]['actualItem'][j]['id'] +'" onclick="SelectTR(this)">'+
+                                        '<td><input type="radio" name="single"></td>'+
+                                        '<td style="width: 60%;word-break: break-all">' + data['body']['resultList'][i]['actualItem'][j]['name'] +'</td>'+
+                                        '<td>' + data['body']['resultList'][i]['actualItem'][j]['nickName'] + '</td>'+
+                                        '</tr>'
+                                    );
+                                }
+                                break;
+                            case 2:
+                                for(var j=0;j<data['body']['resultList'][i]['actualItem'].length;j++){
+                                    $("#config2List").append(
+                                        '<tr id="'+ data['body']['resultList'][i]['actualItem'][j]['id'] +'" onclick="SelectTR(this)">'+
+                                        '<td><input type="radio" name="single"></td>'+
+                                        '<td style="width: 60%;word-break: break-all">' + data['body']['resultList'][i]['actualItem'][j]['name'] +'</td>'+
+                                        '<td>' + data['body']['resultList'][i]['actualItem'][j]['nickName'] + '</td>'+
+                                        '</tr>'
+                                    );
+                                }
+                                break;
+                            case 3:
+                                for(var j=0;j<data['body']['resultList'][i]['actualItem'].length;j++){
+                                    $("#config3List").append(
+                                        '<tr id="'+ data['body']['resultList'][i]['actualItem'][j]['id'] +'" onclick="SelectTR(this)">'+
+                                        '<td><input type="radio" name="single"></td>'+
+                                        '<td style="width: 60%;word-break: break-all">' + data['body']['resultList'][i]['actualItem'][j]['name'] +'</td>'+
+                                        '<td>' + data['body']['resultList'][i]['actualItem'][j]['nickName'] + '</td>'+
+                                        '</tr>'
+                                    );
+                                }
+                                break;
+                            case 4:
+                                for(var j=0;j<data['body']['resultList'][i]['actualItem'].length;j++){
+                                    $("#config4List").append(
+                                        '<tr id="'+ data['body']['resultList'][i]['actualItem'][j]['id'] +'" onclick="SelectTR(this)">'+
+                                        '<td><input type="radio" name="single"></td>'+
+                                        '<td style="width: 60%;word-break: break-all">' + data['body']['resultList'][i]['actualItem'][j]['name'] +'</td>'+
+                                        '<td>' + data['body']['resultList'][i]['actualItem'][j]['nickName'] + '</td>'+
+                                        '</tr>'
+                                    );
+                                }
+                                break;
+                            case 5:
+                                for(var j=0;j<data['body']['resultList'][i]['actualItem'].length;j++){
+                                    $("#config5List").append(
+                                        '<tr id="'+ data['body']['resultList'][i]['actualItem'][j]['id'] +'" onclick="SelectTR(this)">'+
+                                        '<td><input type="radio" name="single"></td>'+
+                                        '<td style="width: 60%;word-break: break-all">' + data['body']['resultList'][i]['actualItem'][j]['name'] +'</td>'+
+                                        '<td>' + data['body']['resultList'][i]['actualItem'][j]['nickName'] + '</td>'+
+                                        '</tr>'
+                                    );
+                                }
+                                break;
+                            case 6:
+                                for(var j=0;j<data['body']['resultList'][i]['actualItem'].length;j++){
+                                    $("#config6List").append(
+                                        '<tr id="'+ data['body']['resultList'][i]['actualItem'][j]['id'] +'" onclick="SelectTR(this)">'+
+                                        '<td><input type="radio" name="single"></td>'+
+                                        '<td style="width: 60%;word-break: break-all">' + data['body']['resultList'][i]['actualItem'][j]['name'] +'</td>'+
+                                        '<td>' + data['body']['resultList'][i]['actualItem'][j]['nickName'] + '</td>'+
+                                        '</tr>'
+                                    );
+                                }
+                                break;
+                            case 7:
+                                for(var j=0;j<data['body']['resultList'][i]['actualItem'].length;j++){
+                                    $("#config7List").append(
+                                        '<tr id="'+ data['body']['resultList'][i]['actualItem'][j]['id'] +'" onclick="SelectTR(this)">'+
+                                        '<td><input type="radio" name="single"></td>'+
+                                        '<td style="width: 60%;word-break: break-all">' + data['body']['resultList'][i]['actualItem'][j]['name'] +'</td>'+
+                                        '<td>' + data['body']['resultList'][i]['actualItem'][j]['nickName'] + '</td>'+
+                                        '</tr>'
+                                    );
+                                }
+                                break;
+                            case 8:
+                                for(var j=0;j<data['body']['resultList'][i]['actualItem'].length;j++){
+                                    $("#config8List").append(
+                                        '<tr id="'+ data['body']['resultList'][i]['actualItem'][j]['id'] +'" onclick="SelectTR(this)">'+
+                                        '<td><input type="radio" name="single"></td>'+
+                                        '<td style="width: 60%;word-break: break-all">' + data['body']['resultList'][i]['actualItem'][j]['name'] +'</td>'+
+                                        '<td>' + data['body']['resultList'][i]['actualItem'][j]['nickName'] + '</td>'+
+                                        '</tr>'
+                                    );
+                                }
+                                break;
+                            case 9:
+                                for(var j=0;j<data['body']['resultList'][i]['actualItem'].length;j++){
+                                    $("#config9List").append(
+                                        '<tr id="'+ data['body']['resultList'][i]['actualItem'][j]['id'] +'" onclick="SelectTR(this)">'+
+                                        '<td><input type="radio" name="single"></td>'+
+                                        '<td style="width: 60%;word-break: break-all">' + data['body']['resultList'][i]['actualItem'][j]['name'] +'</td>'+
+                                        '<td>' + data['body']['resultList'][i]['actualItem'][j]['nickName'] + '</td>'+
+                                        '</tr>'
+                                    );
+                                }
+                                break;
+                            case 10:
+                                for(var j=0;j<data['body']['resultList'][i]['actualItem'].length;j++){
+                                    $("#config10List").append(
+                                        '<tr id="'+ data['body']['resultList'][i]['actualItem'][j]['id'] +'" onclick="SelectTR(this)">'+
+                                        '<td><input type="radio" name="single"></td>'+
+                                        '<td style="width: 60%;word-break: break-all">' + data['body']['resultList'][i]['actualItem'][j]['name'] +'</td>'+
+                                        '<td>' + data['body']['resultList'][i]['actualItem'][j]['nickName'] + '</td>'+
+                                        '</tr>'
+                                    );
+                                }
+                                break;
+                            case 11:
+                                for(var j=0;j<data['body']['resultList'][i]['actualItem'].length;j++){
+                                    $("#config11List").append(
+                                        '<tr id="'+ data['body']['resultList'][i]['actualItem'][j]['id'] +'" onclick="SelectTR(this)">'+
+                                        '<td><input type="radio" name="single"></td>'+
+                                        '<td style="width: 60%;word-break: break-all">' + data['body']['resultList'][i]['actualItem'][j]['name'] +'</td>'+
+                                        '<td>' + data['body']['resultList'][i]['actualItem'][j]['nickName'] + '</td>'+
+                                        '</tr>'
+                                    );
+                                }
+                                break;
+                            case 12:
+                                for(var j=0;j<data['body']['resultList'][i]['actualItem'].length;j++){
+                                    $("#config12List").append(
+                                        '<tr id="'+ data['body']['resultList'][i]['actualItem'][j]['id'] +'" onclick="SelectTR(this)">'+
+                                        '<td><input type="radio" name="single"></td>'+
+                                        '<td style="width: 60%;word-break: break-all">' + data['body']['resultList'][i]['actualItem'][j]['name'] +'</td>'+
+                                        '<td>' + data['body']['resultList'][i]['actualItem'][j]['nickName'] + '</td>'+
+                                        '</tr>'
+                                    );
+                                }
+                                break;
+                            case 13:
+                                for(var j=0;j<data['body']['resultList'][i]['actualItem'].length;j++){
+                                    $("#config13List").append(
+                                        '<tr id="'+ data['body']['resultList'][i]['actualItem'][j]['id'] +'" onclick="SelectTR(this)">'+
+                                        '<td><input type="radio" name="single"></td>'+
+                                        '<td style="width: 60%;word-break: break-all">' + data['body']['resultList'][i]['actualItem'][j]['name'] +'</td>'+
+                                        '<td>' + data['body']['resultList'][i]['actualItem'][j]['nickName'] + '</td>'+
+                                        '</tr>'
+                                    );
+                                }
+                                break;
+                        }
+                    }
+                }else{
+                    alert(data['head']['message']);
+                }
+            }
+        });
+        
+    }
+
+    function editConfigAlias(){
+        if($(window.document).find("input[name='single']:checked").length == 0){
+            alert("请先勾选待编辑项！");
+        }else{
+            var id = $(window.document).find("input[name='single']:checked").parent().parent()[0]['id'];
+            var sapName = $(window.document).find("input[name='single']:checked").parent().next().html();
+            var nickName = $(window.document).find("input[name='single']:checked").parent().next().next().html();
+            // console.log($(window.document).find("input[name='single']:checked").parent().parent()[0]['id']);
+            layer.open({
+                id:1,
+                type: 1,
+                title:'配置项别名编辑',
+                skin:'layui-layer-rim',
+                offset:['300px','450px'],
+                area:['450px', 'auto'],
+                content: ' <div class="row" style="width: 420px;  margin-left:7px; margin-top:10px;">'
+                    +'<div class="col-sm-12">'
+                    +'<div>'
+                    +'<span class="">SAP描述:</span>'
+                    +'<input id="sapName" type="text" class="form-control" value="' + sapName + '">'
+                    +'</div>'
+                    +'</div>'
+                    +'<div class="col-sm-12" style="margin-top: 10px">'
+                    +'<div>'
+                    +'<span class="">简称描述:</span>'
+                    +'<input id="nickName" type="text" class="form-control" value="' + nickName + '">'
+                    +'<input id="id" type="hidden" value="' + id +'">'
+                    +'</div>'
+                    +'</div>'
+                    +'</div>'
+                ,
+                btn:['保存','取消'],
+                btn1: function (index,layero) {
+                    $.ajax({
+                        type: "post",
+                        async: false,
+                        url: ip_path + "/changfa_system/config/updateShortName.do",
+                        data: {
+                            id : $("#id").val(),
+                            nickName : $("#nickName").val()
+                        },
+                        dataType: "json",
+                        success: function (data) {
+                            if(data['head']['code'] == 200){
+                                window.location.reload();
+                            }else{
+                                alert(data['head']['message']);
+                            }
+                        }
+                    });
+                },
+                btn2:function (index,layero) {
+                    layer.close(index);
+                }
+        
+            });
+        } 
+    }
+
+    function SelectTR(tr) {  
+        // var p = tr.parentNode.children;
+        // for(var i =0,pl= p.length;i<pl;i++) {
+        //     if(p[i] !== tr) {
+        //         p[i].style.backgroundColor = "";
+        //     };
+        // }
+        var tds=tr.childNodes;
+        for(var j=0; j<tds.length;j++)
+        {
+            var inputs=tds[j].childNodes;
+            for (var i=0; i < inputs.length; i++) // 遍历页面上所有的 input
+            {
+                if (inputs[i].type == "radio"){
+                    inputs[i].checked = !inputs[i].checked;
+                    tr.style.backgroundColor = inputs[i].checked ? "#fafdc6" : "";
+                }
+            }
+        }
+
+        $(window.document).find("input[name='single']").each(function(){
+            $(this).is(":checked") ? $(this).parent().parent().css("background","#fafdc6") : $(this).parent().parent().css("background","");
+        });
+    }
+
+</script>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>创建服务站</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/userCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <script src="jqueryTagsInput/jquery.tagsinput.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="jqueryTagsInput/jquery.tagsinput.min.css" />
+</head>
+<body class="reset">
+<div class="mg-t70" style="height: auto">
+    <div id="detail_frame" class="rpt_cont">
+        <div>
+            <div class="title_box">
+                <img src="img/status_warning.png" class="status_warning">
+                <span id="status_describe" class="status_info">当前状态：创建服务站</span>
+            </div>
+            <div class="rpt_detail">
+                <div class="tit_msg">
+                    <img src="img/tit_pic.png" class="tit_pic">
+                    <span>信息</span>
+                </div>
+                <div>
+                    <div>
+                        <table id="reporterSocialInfo" class="rpt_detail_tab txt_center">
+                            <tr>
+                                <td class='head_td' width='136px' height='46px'>企业编号</td>
+                                <td class='body_td txt_left' width='383px'>
+                                <input type="text" id="createSocialWorkNo" class="userInfo">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class='head_td' width='136px' height='46px'>服务站名称</td>
+                                <td class='body_td txt_left' width='383px'>
+                                    <input type="text" id="createSocialCompany" class="userInfo">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class='head_td' width='136px' height='46px'>服务站地址</td>
+                                <td class='body_td txt_left' width='383px'>
+                                    <input type="text" id="createSocialAddress" class="userInfo">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class='head_td' width='136px' height='46px'>业务范围</td>
+                                <td class='body_td txt_left' width='383px'>
+                                <select id="province" class="addressInfo"></select>
+                                <select id="city" class="addressInfo"></select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class='head_td' width='136px' height='46px'>产品星级</td>
+                                <td class='body_td txt_left'>
+
+                                    <input id="tags_2" type="text" class="tagsinput" readonly="readonly"/>
+
+                                    <div class="flt_l">
+                                        <select id="line" class="addressInfo">
+                                        <!-- <option value="">请选择产品线</option>
+                                        <option value="轮式拖拉机">轮式拖拉机</option>
+                                        <option value="履带收割机">履带收割机</option>
+                                        <option value="轮式收割机">轮式收割机</option>
+                                        <option value="轮式玉米收">轮式玉米收</option>
+                                        <option value="插秧机">插秧机</option>
+                                        <option value="花生捡拾收获机">花生捡拾收获机</option> -->
+                                    </select>
+                                        <select id="level" class="addressInfo">
+                                            <option value="">请选择星级</option>
+                                            <option value="一星级">一星级</option>
+                                            <option value="二星级">二星级</option>
+                                            <option value="三星级">三星级</option>
+                                        </select>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class='head_td' width='136px' height='46px'>负责人姓名</td>
+                                <td class='body_td txt_left' width='383px'>
+                                <input type="text" id="createSocialName" class="userInfo" value="">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class='head_td' width='136px' height='46px'>负责人电话</td>
+                                <td class='body_td txt_left' width='383px'>
+                                    <input type="text" id="createSocialMobile" class="userInfo">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class='head_td' width='136px' height='46px'>维修区域</td>
+                                <td class='body_td txt_left' width='383px'>
+                                    <input type="text" id="remark" class="userInfo">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class='head_td' width='136px' height='46px'>省份</td>
+                                <td class='body_td txt_left' width='383px'>
+                                    <input type="text" id="remarkshenfen" class="userInfo">
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="mg_b50" style="width: 90%;margin-left: 5%;text-align: center;">
+                        <button class="waves submit_btn mg-t30" onclick="createSocialServer()">提交</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+        create_ProvinceAndCity_choose();
+
+        $("#line").change(function () {
+            if($("#line option:selected").val() != "" && $("#level option:selected").val() != ""){
+                add_serviceLevel();
+            }
+        });
+
+        $("#level").change(function () {
+            if($("#line option:selected").val() != "" && $("#level option:selected").val() != ""){
+                add_serviceLevel();
+            }
+        });
+
+        $.ajax({
+            type : "post",
+            url : ip_path+"/changfa_system/machineModel/getMachineModels.do",
+            dataType : "json",
+            data:{
+                machineType:2
+            },
+            success : function (data) {
+                $("#line").append("<option value=''>全部</option>");
+                for(var i=0;i<data['body']['resultList']['length'];i++){
+                    $("#line").append("<option value='"+ data['body']['resultList'][i]['name'] +"'>"+data['body']['resultList'][i]['name']+"</option>");
+                }
+                // $("#product").unbind();
+            }
+        });
+
+
+        $(function(){
+            $('#tags_2').tagsInput({width:'auto'});//这样做的目的是，使tags_1能够变成标签。
+        });
+
+        function add_serviceLevel(){
+            var oldVal = $("#tags_2").val();
+            var target1 = $("#line option:selected").val() + "_一星级";
+            var target2 = $("#line option:selected").val() + "_二星级";
+            var target3 = $("#line option:selected").val() + "_三星级";
+            var tags = $("#line option:selected").val()+"_"+$("#level option:selected").val();
+            if (oldVal.indexOf(target1) == -1 && oldVal.indexOf(target2) == -1 && oldVal.indexOf(target3) == -1){
+                $("#tags_2").addTag(tags,{focus:false,callback:false});
+            }else{
+                alert("该产品线已存在！");
+            }
+            $("#line").val("");
+            $("#level").html(
+                '<option value="">请选择星级</option>' +
+                '<option value="一星级">一星级</option>' +
+                '<option value="二星级">二星级</option>' +
+                '<option value="三星级">三星级</option>'
+            );
+        }
+    }
+</script>
+</html>

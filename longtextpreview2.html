@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>长文添加</title>
+    
+    <script src="js/userCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <script src="layer/layer.js"></script>
+    <script src="js/wangEditor.js"></script>
+    <script src="js/videojs-ie8.min.js"></script>
+    <script src="js/video.js"></script>
+    <script src="js/videojs-flash.min.js"></script>
+    <style type="text/css">
+        .header-img img{
+            width: 200px;
+            height: auto;
+        }
+    </style>
+</head>
+<body class="reset">
+    <div style="width: 80%; margin: 0 auto;margin-top: 40px;">
+
+            <div class="header-img">
+                <img src="./img/longtext.png" alt="">
+            </div>
+
+            <div style="text-align: center;;font-size: 25px;font-weight: 900;margin-top: 20px;margin-bottom: 20px;">
+                <span id="longTitle"></span>
+            </div>
+            <div id='longText'>
+
+            </div>
+    </div>
+
+
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        var a =  window.location.search.substring(1);
+        //(问号以后的字符串)
+        var afterEqual = a.substring(a.indexOf('=')+1).toUpperCase();
+        //(等号以后的字符串，及你所要的参数)
+                $.ajax({
+                type:'get',
+                url:ip_path+"/changfa_system/consults/selectArticleById.do",
+                dataType:'json',
+                data : {
+                        id:afterEqual
+                    },//传接收到的参数id
+                success:function(data){
+                    $('#longText').html(data['body']['result']['content']);
+                    $('#longTitle').html(data['body']['result']['title']);
+                }
+            })
+    }
+
+</script>
+</html>

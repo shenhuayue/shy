@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>大屏页面展示</title>
+        <link href="css/bigScreen.css" type="text/css" rel="stylesheet"/>
+        <script src="js/bigScreen.js"></script>
+        <script src="js/jquery-2.1.1.min.js"></script>
+        <script src="js/echarts.min.js"></script>
+        <script src="js/common.js"></script>
+        <script src="js/userCenter.js"></script>
+    </head>
+<body>
+    <div style="max-width: 100%;height: 923px;">
+        <div class="headTop"></div>
+        <div>
+            <div class="logo">
+                <div style="float: left;">
+                    <img src="static2/img/logo.png" alt="" style="width: 150px;height: auto;margin-top: 20px;margin-left: 30px;">
+                </div>
+
+                <div style="float: left;margin-top: 15px;margin-left: 30px;font-weight: 600;">
+                    <span>模板选择：</span>
+                    <select id="line">
+        
+                    </select>
+                </div>
+                <div style="float: left;display: none;" id="changeScreen">
+                    <input type="button" class="add_btn flt_r" style="margin-right: 10px;margin-top: 15px;margin-left: 10px;" value="修改" onclick="changeScreen()">
+                </div>
+                <div style="float: left;display: none;" id="deleteScreen">
+                    <input type="button" class="add_btn flt_r" style="margin-right: 10px;margin-top: 15px;background-color: red;" value="删除" onclick="deleteScreen()">
+                </div>
+            </div>
+            <div class="headTitle">
+                <span id="titleName">发货数据图</span>
+            </div>
+            <div class="newTime">
+                <span id="time"></span>
+            </div>
+        </div>
+
+        <div style="width:95%;margin: 0 auto;">
+
+
+        </div>
+        <div style="clear: both;"></div>
+        <div class="modelContent">
+
+        </div>
+        <div class="innerDiv_title">
+            <!--登录人权限-->
+            <input type="hidden" id="hidden0" name="pitchOn" value="">
+                        <!--iframe高度-->
+            <input type="hidden" id="hidden1" name="height" value="">  
+        </div>
+
+    </div>
+</body>
+<script>
+$(document).ready(function(){
+        jQuery.support.cors = true;
+        $("body").prepend('<input type="text" id="focus" size="1">');
+        //('123');
+        $("#focus").focus();
+        $("#focus").hide();
+        $.ajax({
+            type: "post",
+            url: ip_path + "/changfa_system/screenAuthor/queryAuthor.do",
+            data: {
+                //roleId:$(window.parent.document).find("input[name='roleId']").val(),
+                roleId:$(window.parent.document).find("input[name='roleId_forLimit']").val() || $(window.parent.document).find("input[name='roleId']").val()
+            },
+            dataType: "json",
+            success: function (data) {
+            if (data['head']['code'] != 200) {
+                $("#line").empty();
+            } else {
+                $("#line").empty();
+                screenArr = data.body.resultList;
+
+                // $("#line").append(
+                //     "<option value=''></option>"
+                // )
+
+                data.body.resultList.forEach(elem => {
+                    $("#line").append(
+                        "<option value='"+ elem.modelBaseCode+"("+elem.authorId + ")" + elem.modelId+"'>"+ elem.modelBaseName +"</option>"
+                    )
+                });
+
+                $("#line").val(screenArr[0].modelBaseCode + '(' + screenArr[0].authorId +')'+screenArr[0].modelId);
+
+                var a = $("#line").val().slice($("#line").val().indexOf('(')+1,$("#line").val().indexOf(')'));
+
+//console.log(a);
+screenArr.forEach(item =>{
+  if(item.authorId == a ){
+      
+      showModels.forEach(elem =>{
+          if(item.modelBaseCode == elem.modelBaseCode){
+              //console.log(elem.name);
+              //alert('123');
+              var content = "<iframe id='ifm' src='" + elem.name + ".html' frameborder='0' scrolling='no' width='100%' onload='this.height=document.body.scrollHeight==0?document.documentElement.scrollHeight:document.body.scrollHeight;'></iframe>"
+              $(".modelContent").html(content);
+
+              $(window.document).find("input[name='pitchOn']").val(JSON.stringify(item.chartList));
+              $(window.document).find("input[name='height']").val(Number(document.body.scrollHeight==0?document.documentElement.scrollHeight:document.body.scrollHeight) -130);
+              
+              
+          }
+      })
+      //alert(item.name);
+
+  }
+})
+
+            }
+            }
+        });
+
+        var a = new Date();
+        var b;
+        switch(a.getDay()){
+            case 0:
+            b = '星期日';
+            break;
+            case 1:
+            b = '星期一';
+            break;
+            case 2:
+            b = '星期二';
+            break;
+            case 3:
+            b = '星期三';
+            break;
+            case 4:
+            b = '星期四';
+            break;b
+            case 5:
+            b = '星期五';
+            break;
+            case 6:
+            b = '星期六';
+            break;
+        }
+
+        $('#time').text(a.getFullYear()+'年'+ (a.getMonth()+1) + '月' + a.getDate() + b);
+        if($(window.parent.document).find("input[name='roleId_forLimit']").val()){
+            $('#changeScreen').show();
+            $('#deleteScreen').show();
+            
+        }
+
+
+  $("#line").change(function(){
+      //console.log($(this).val().substring(0,$(this).val().indexOf("(")-1));
+      var a = $(this).val().slice($(this).val().indexOf('(')+1,$(this).val().indexOf(')'));
+
+      console.log(a);
+      screenArr.forEach(item =>{
+        if(item.authorId == a ){
+            
+            showModels.forEach(elem =>{
+                if(item.modelBaseCode == elem.modelBaseCode){
+                    //console.log(elem.name);
+                    //alert('123');
+                    var content = "<iframe id='ifm' src='" + elem.name + ".html' frameborder='0' scrolling='no' width='100%' onload='this.height=this.contentWindow.document.body.scrollHeight'></iframe>"
+                    $(".modelContent").html(content);
+
+                    $(window.document).find("input[name='pitchOn']").val(JSON.stringify(item.chartList));
+                    $(window.document).find("input[name='height']").val(Number(document.body.scrollHeight) -130);
+                    
+                    
+                }
+            })
+            //alert(item.name);
+
+        }
+    })
+  })
+
+
+
+
+    })
+
+    function changeScreen(){
+        $('#ifm').contents().find('.modelSmall').show();
+        $('#ifm').contents().find('.modelbig').show();
+        $('#ifm').contents().find('.modelbottom').show();
+        
+        $('#ifm').contents().find('#change').show();
+        $('#ifm').height(document.body.scrollHeight + 50);
+    }
+</script>
+</html>

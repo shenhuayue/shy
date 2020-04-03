@@ -1,0 +1,65 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>调拨审核</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/dsaleCenter.js"></script>
+    <script src="js/dcommon.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <!--<link type="text/css" href="css/lrtk.css" rel="stylesheet" />-->
+    <!--<link type="text/css" href="css/prettyPhoto.css" rel="stylesheet" />-->
+    <!--<script type="text/javascript" src="js/jquery.prettyPhoto.js"></script>-->
+    <!--<script type="text/javascript" src="js/lrtk.js"></script>-->
+
+</head>
+<body class="reset"><input type="text" id="focus" size="1" style="display: none;">
+    <div id="rep_choosed" style="display: block;">
+        <div>
+            <div class="title_box">
+                <img src="img/status_warning.png" class="status_warning">
+                <span class="status_info">当前状态：审核</span>
+            </div>
+                <div class="dispatching">
+                    <img src="img/check_pass_select.png" class="check_pass" onclick="toogle_rep()">
+                    <img src="img/check_unpass_unselect.png" class="check_unpass" onclick="toogle_rep_check()">
+                </div>
+                <div class="check_return">
+                    <div class="tit_msg">
+                        <img src="img/tit_pic.png" class="tit_pic">
+                        <span>通过描述</span>
+                    </div>
+                    <textarea id="pass_reason" class="checke_discribe" placeholder="输入驳回说明"></textarea>
+                </div>
+        </div>
+        <div class="btn_part">
+            <img src="img/front.png" class="mg-t20" onclick="returnWaiting_check()">
+            <img src="img/yes.png" id="rep_pass" class="mg-t20 mg_l50" onclick="waiting_check_pass()">
+        </div>
+    </div>
+    <div id="checkRep_choosed" style="display: none;">
+        <div>
+            <div class="title_box">
+                <img src="img/status_warning.png" class="status_warning">
+                <span class="status_info">当前状态：驳回</span>
+            </div>
+            <div class="dispatching">
+                <img src="img/check_pass_unselect.png" class="check_pass" onclick="toogle_rep()">
+                <img src="img/check_unpass_select.png" class="check_unpass" onclick="toogle_rep_check()">
+            </div>
+            <div class="check_return">
+                <div class="tit_msg">
+                    <img src="img/tit_pic.png" class="tit_pic">
+                    <span>驳回描述</span>
+                </div>
+                <textarea id="unpass_reason" class="checke_discribe" placeholder="输入驳回说明"></textarea>
+            </div>
+        </div>
+        <div class="btn_part">
+            <img src="img/front.png" class="mg-t20" onclick="returnWaiting_check()">
+            <img src="img/yes.png" id="rep_unpass" class="mg-t20 mg_l50" onclick="waiting_check_unpass()">
+        </div>
+    </div>
+    
+    </body>
+
+</html>

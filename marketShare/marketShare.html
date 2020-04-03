@@ -1,0 +1,2723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>业占率</title>
+    <script src="../js/common.js"></script>
+    <script src="js/marketShare.js"></script>
+    <script src="../js/echarts.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link rel="stylesheet" type="text/css" href="css/marketShare.css" />
+    <meta name="Author" content="haley">
+    <meta name="Keywords" content="">
+    <meta name="Description" content="">
+    <meta name="format-detection" content="telephone=no"> 
+    <!-- 移动端项目屏幕尺寸设置 -->
+<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" >
+<!-- 删除苹果默认的工具栏和菜单栏 -->
+<meta name="apple-mobile-web-app-capable" content="yes" > 
+<!-- 设置苹果工具栏颜色 -->
+<meta name="apple-mobile-web-app-status-bar-style" content="black"> 
+    <script src="../js/jquery-1.8.2.min.js"></script>
+    <!--<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">-->
+    <!--<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>-->
+    <!--<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
+</head>
+<body >
+<div>
+    <!-- <div class="top">
+        <span class="topleft" onclick="window.ReturnRateInterface.back();"><img src="images/back.png"></span>
+        <div style="text-align: center;">
+            <span class="topName">业占率</span>
+        </div>
+
+    </div> -->
+<!-- 品牌销量分布 -->
+    <div style="width: 100%;position: absolute;margin-top: 0px;display: none;" id="type1">
+        <div style="width: 90%;margin: 0 auto;height: 500px;">
+            <!-- <div class="tit">
+                <span style="float: left;border-left:3px solid #0A9C53;padding-left: 20px;">产品线选择</span>
+            </div> -->
+            <!-- <div style="clear: both;"></div> -->
+            <!-- <div style="width: 95%;margin: 20px auto;" id="lineNum">
+            </div> -->
+            <div style="clear: both;"></div>
+            <div style="width: 95%;margin: 5px auto;height: 300px;" id="main">
+
+            </div>
+            <div style="width: 95%;margin: 0 auto;height: 300px;" id="main2">
+
+            </div> 
+            <div style="width:95%;margin: 10px auto;">
+                <table id="orderInfo" class="txt_center" width='100%' style="border-collapse: collapse;">
+                    <thead>
+                        <tr>
+                            
+                            <td class="head_td" rowspan="2" style="width:25%;">生产厂家</td>
+                            <td class="head_td oneyear"colspan="2" align="center" style="width:25%;">2018</td>
+                            <td class="head_td twoyear"colspan="2" align="center" style="width:25%;">2019</td>
+                            <td class="head_td threeyear"colspan="2" align="center" style="width:25%;">2020</td>
+                            <tr>
+
+                                    <td class="head_td">销量</td>
+                                    <td class="head_td">占比</td>
+                                    <td class="head_td">销量</td>
+                                    <td class="head_td">占比</td>
+                                    <td class="head_td">销量</td>
+                                    <td class="head_td">占比</td>
+                            </tr>
+                        </tr>
+                    </thead>
+                    <tbody id="carList">
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+<!-- 地区销量分布 -->
+<div style="width: 100%;position: absolute;margin-top: 0px;display: none;" id="type2">
+    <div style="width: 90%;margin: 0 auto;height: 500px;">
+        <!-- <div class="tit">
+            <span style="float: left;border-left:3px solid #0A9C53;padding-left: 20px;">产品线选择</span>
+        </div>
+        <div style="clear: both;"></div> -->
+        <!-- <div style="width: 95%;margin: 20px auto;" id="lineNum">
+        </div> -->
+        <!-- <div style="clear: both;"></div>
+        <div style="width: 95%;margin: 10px auto;height: 300px;" id="main">
+
+        </div> -->
+        <div style="width: 95%;margin: 0 auto;height: 350px;" id="main3">
+
+        </div> 
+        <div style="width:95%;margin: 10px auto;">
+            <table id="orderInfo" class="txt_center" width='100%' style="border-collapse: collapse;">
+                <thead>
+                    <tr>
+                        
+                        <td class="head_td" style="width:15%;">省份</td>
+                        <td class="head_td oneyear" align="center" style="width:10%;"></td>
+                        <td class="head_td twoyear" align="center" style="width:10%;"></td>
+                        <td class="head_td threeyear" align="center" style="width:10%;"></td>
+                        <td class="head_td" align="center" style="width:15%;">2020占比</td>
+                        <td class="head_td" align="center" style="width:15%;">2020增长率</td>
+                        <td class="head_td" align="center" style="width:15%;">2020常发</td>
+                        <td class="head_td" style="width:10%;">2020常发占比</td>
+                    </tr>
+                </thead>
+                <tbody id="carList2">
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- 对应常发系列销量 -->
+<div style="width: 100%;position: absolute;margin-top: 0px;display: none;" id="type3">
+    <div style="width: 90%;margin: 0 auto;height: 500px;">
+        <div style="width: 95%;margin: 0 auto;height: 300px;" id="main4">
+
+        </div> 
+        <div style="width:95%;margin: 10px auto;">
+            <table id="orderInfo" class="txt_center" width ='100%' style="border-collapse: collapse;">
+                <thead>
+                    <tr>
+                        
+                        <td class="head_td" style="width:20%;">对应系列</td>
+                        <td class="head_td oneyear" align="center" style="width:20%;"></td>
+                        <td class="head_td twoyear" align="center" style="width:20%;"></td>
+                        <td class="head_td threeyear" align="center" style="width:20%;"></td>
+                        <td class="head_td" align="center" style="width:20%;">2020增长率</td>
+                    </tr>
+                </thead>
+                <tbody id="carList3">
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- 100马力以上（排名） -->
+<div style="width: 100%;position: absolute;margin-top: 0px;display: none;" id="type4">
+    <div style="width: 90%;margin: 0 auto;height: 500px;">
+        <div style="width: 95%;margin: 0 auto;height: 300px;" id="main5">
+
+        </div> 
+        <div style="width:95%;margin: 10px auto;">
+            <table id="orderInfo" class="txt_center" width="100%" style="border-collapse: collapse;">
+                <thead>
+                    <tr>
+                        
+                        <td class="head_td" style="width:20%;">厂家</td>
+                        <td class="head_td oneyear" align="center" style="width:20%;"></td>
+                        <td class="head_td twoyear" align="center" style="width:20%;"></td>
+                        <td class="head_td threeyear" align="center" style="width:20%;"></td>
+                        <td class="head_td" align="center"style="width:20%;">2020增长率</td>
+                    </tr>
+                </thead>
+                <tbody id="carList4">
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+    <!-- 100马力以下（排名） -->
+    <div style="width: 100%;position: absolute;margin-top: 0px;display: none;" id="type5">
+        <div style="width: 90%;margin: 0 auto;height: 500px;">
+            <div style="width: 95%;margin: 0 auto;height: 300px;" id="main6">
+    
+            </div> 
+            <div style="width:95%;margin: 10px auto;">
+                <table id="orderInfo" class="txt_center" width="100%" style="border-collapse: collapse;">
+                    <thead>
+                        <tr>
+                            
+                            <td class="head_td" style="width:20%;">厂家</td>
+                            <td class="head_td oneyear" align="center"style="width:20%;" ></td>
+                            <td class="head_td twoyear" align="center" style="width:20%;"></td>
+                            <td class="head_td threeyear" align="center" style="width:20%;"></td>
+                            <td class="head_td" align="center" style="width:20%;">2020增长率</td>
+                        </tr>
+                    </thead>
+                    <tbody id="carList5">
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- 100马力及以下（排名） -->
+    <div style="width: 100%;position: absolute;margin-top: 0px;display: none;" id="type6">
+        <div style="width: 90%;margin: 0 auto;height: 500px;">
+            <div style="width: 95%;margin: 0 auto;height: 300px;" id="main7">
+    
+            </div> 
+            <div style="width:95%;margin: 10px auto;">
+                <table id="orderInfo" class="txt_center" width="100%" style="border-collapse: collapse;">
+                    <thead>
+                        <tr>
+                            
+                            <td class="head_td" style="width:20%;">马力段</td>
+                            <td class="head_td oneyear" align="center" style="width:20%;"></td>
+                            <td class="head_td twoyear" align="center" style="width:20%;"></td>
+                            <td class="head_td threeyear" align="center" style="width:20%;"></td>
+                            <td class="head_td" align="center" style="width:20%;">2020增长率</td>
+                        </tr>
+                    </thead>
+                    <tbody id="carList6">
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- 100马力段以下（排名） -->
+    <div style="width: 100%;position: absolute;display: none;" id="type7">
+        <div style="width: 90%;margin: 0 auto;height: 500px;">
+            <div style="width: 95%;margin: 0 auto;height: 300px;" id="main8">
+    
+            </div> 
+            <div style="width:95%;margin: 10px auto;">
+                <table id="orderInfo" class="txt_center" width="100%" style="border-collapse: collapse;">
+                    <thead>
+                        <tr>
+                            
+                            <td class="head_td" style="width:20%;">马力段</td>
+                            <td class="head_td oneyear" align="center" style="width:20%;"></td>
+                            <td class="head_td twoyear" align="center" style="width:20%;"></td>
+                            <td class="head_td threeyear" align="center" style="width:20%;"></td>
+                            <td class="head_td" align="center"style="width:20%;">2020增长率</td>
+                        </tr>
+                    </thead>
+                    <tbody id="carList7">
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+<!-- 品牌系列 -->
+<div style="width: 100%;position: absolute;margin-top: 0px;display: none;" id="type8">
+    <div style="width: 90%;margin: 0 auto;height: 500px;">
+        <div class="tit">
+            <span style="float: left;border-left:3px solid #0A9C53;padding-left: 20px;">机型系列</span>
+        </div>
+        <div style="clear: both;"></div>
+         <div style="width: 95%;margin: 20px auto;" id="lineNum">
+        </div> 
+        <div style="clear: both;"></div>
+        <div style="width: 95%;margin: 10px auto;height: 300px;" id="main9">
+
+        </div>
+        <div style="width:95%;margin: 10px auto;">
+            <table id="orderInfo" class="txt_center" width='100%' style="border-collapse: collapse;">
+                <thead>
+                    <tr>
+                        
+                        <td class="head_td" style="width:20%;">生产厂家</td>
+                        <td class="head_td oneyear" align="center" style="width:20%;"></td>
+                        <td class="head_td twoyear" align="center" style="width:20%;"></td>
+                        <td class="head_td threeyear" align="center" style="width:20%;"></td>
+                        <td class="head_td" align="center" style="width:20%;">2020占比</td>
+                    </tr>
+                </thead>
+                <tbody id="carList8">
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+    <!-- 常发系列地区分布 -->
+    <div style="width: 150%;position: absolute;display: none;" id="type9">
+        <div style="width: 150%;margin: 0 auto;height: 500px;">
+            <div style="width: 90%;margin: 10px auto;height: 300px;" id="main10">
+    
+            </div> 
+            <div style="width: 90%;margin: 10px auto;">
+                <table id="orderInfo" class="txt_center" width='100%' style="border-collapse: collapse;">
+                    <thead>
+                        <tr id="tr">
+                            <td class="head_td" rowspan="2" style="width:5%;">系列</td>
+                        </tr>
+                    </thead>
+                    <tbody id="carList9">
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!--驱动型式分类销量 -->
+    <div style="width: 100%;position: absolute;margin-top: 0px;display: none;" id="type10">
+        <div style="width: 90%;margin: 0 auto;height: 500px;">
+
+            <div style="width: 95%;margin: 0 auto;height: 300px;" id="main11">
+
+            </div> 
+            <div style="width:95%;margin: 10px auto;">
+                <table id="orderInfo" class="txt_center" width='100%' style="border-collapse: collapse;">
+                    <thead>
+                        <tr>
+                            
+                            <td class="head_td" rowspan="2" style="width:25%;">驱动形式</td>
+                            <td class="head_td oneyear"colspan="2" align="center"style="width:25%;" >2018</td>
+                            <td class="head_td twoyear"colspan="2" align="center" style="width:25%;">2019</td>
+                            <td class="head_td threeyear"colspan="2" align="center" style="width:25%;">2020</td>
+                            <tr>
+
+                                    <td class="head_td">销量</td>
+                                    <td class="head_td">占比</td>
+                                    <td class="head_td">销量</td>
+                                    <td class="head_td">占比</td>
+                                    <td class="head_td">销量</td>
+                                    <td class="head_td">占比</td>
+                            </tr>
+                        </tr>
+                    </thead>
+                    <tbody id="carList10">
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+<!-- 机型系列 -->
+<div style="width: 100%;position: absolute;margin-top: 0px;display: none;" id="type11">
+    <div style="width: 90%;margin: 0 auto;height: 500px;">
+        <div class="tit">
+            <span style="float: left;border-left:3px solid #0A9C53;padding-left: 20px;">机型系列</span>
+        </div>
+        <div style="clear: both;"></div>
+         <div style="width: 95%;margin: 20px auto;" id="lineNum2">
+        </div> 
+        <div style="clear: both;"></div>
+        <div style="width: 95%;margin: 10px auto;height: 300px;" id="main12">
+
+        </div>
+        <div style="width:95%;margin: 10px auto;">
+            <table id="orderInfo" class="txt_center" width='100%' style="border-collapse: collapse;">
+                <thead>
+                    <tr>
+                        
+                        <td class="head_td" style="width:18%;">机型</td>
+                        <td class="head_td" align="center" style="width:18%;">生产厂家</td>
+                        <td class="head_td oneyear" align="center" style="width:18%;"></td>
+                        <td class="head_td twoyear" align="center" style="width:18%;"></td>
+                        <td class="head_td threeyear" align="center" style="width:18%;"></td>
+                        
+                        <td class="head_td" style="width:10%;">2020占比</td>
+                    </tr>
+                </thead>
+                <tbody id="carList11">
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- 两区机型品牌分布 -->
+<div style="width: 100%;position: absolute;margin-top: 0px;display: none;" id="type12">
+    <div style="width: 90%;margin: 0 auto;height: 500px;">
+
+        <div style="width: 95%;margin: 10px auto;height: 300px;" id="main13">
+
+        </div>
+        <div style="width:95%;margin: 10px auto;">
+            <table id="orderInfo" class="txt_center" width='100%' style="border-collapse: collapse;">
+                <thead>
+                    <tr>
+                        
+                        <!-- <td class="head_td" style="width:15%;">机型</td> -->
+                        <td class="head_td" align="center" style="width:20%;">生产厂家</td>
+                        <td class="head_td oneyear" align="center" style="width:20%;"></td>
+                        <td class="head_td twoyear" align="center" style="width:20%;"></td>
+                        <td class="head_td threeyear" align="center" style="width:20%;"></td>
+                        
+                        <td class="head_td" style="width:20%;">2020占比</td>
+                    </tr>
+                </thead>
+                <tbody id="carList12">
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- 两区机型地区分布 -->
+<div style="width: 100%;position: absolute;margin-top: 0px;display: none;" id="type13">
+    <div style="width: 90%;margin: 0 auto;height: 500px;">
+
+        <div style="width: 95%;margin: 10px auto;height: 300px;" id="main14">
+
+        </div>
+        <div style="width:95%;margin: 10px auto;">
+            <table id="orderInfo" class="txt_center" width='100%' style="border-collapse: collapse;">
+                <thead>
+                    <tr>
+                        
+                        <!-- <td class="head_td" style="width:15%;">机型</td> -->
+                        <td class="head_td" align="center" style="width:20%;">省份</td>
+                        <td class="head_td oneyear" align="center" style="width:20%;"></td>
+                        <td class="head_td twoyear" align="center" style="width:20%;"></td>
+                        <td class="head_td threeyear" align="center" style="width:20%;"></td>
+                        
+                        <td class="head_td" style="width:20%;">2020占比</td>
+                    </tr>
+                </thead>
+                <tbody id="carList13">
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- 两区机型平台分布 -->
+<div style="width: 100%;position: absolute;margin-top: 0px;display: none;" id="type14">
+    <div style="width: 90%;margin: 0 auto;height: 500px;">
+
+        <div style="width: 95%;margin: 10px auto;height: 300px;" id="main15">
+
+        </div>
+        <div style="width:95%;margin: 10px auto;">
+            <table id="orderInfo" class="txt_center" width='100%' style="border-collapse: collapse;">
+                <thead>
+                    <tr>
+                        
+                        <!-- <td class="head_td" style="width:15%;">机型</td> -->
+                        <td class="head_td" align="center" style="width:20%;">对应系列</td>
+                        <td class="head_td oneyear" align="center" style="width:20%;"></td>
+                        <td class="head_td twoyear" align="center" style="width:20%;"></td>
+                        <td class="head_td threeyear" align="center" style="width:20%;"></td>
+                        
+                        <td class="head_td" style="width:20%;">2020占比</td>
+                    </tr>
+                </thead>
+                <tbody id="carList14">
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+    <!--2018-2019渠道网点 -->
+    <div style="width: 100%;position: absolute;margin-top: 0px;display: none;" id="type15">
+        <div style="width: 90%;margin: 0 auto;height: 500px;">
+
+            <div style="width: 95%;margin: 0 auto;height: 300px;" id="main16">
+
+            </div> 
+            <div style="width:95%;margin: 10px auto;">
+                <table id="orderInfo" class="txt_center" width='100%' style="border-collapse: collapse;">
+                    <thead>
+                        <tr>
+                            
+                            <td class="head_td" rowspan="2" style="width:20%;">生产厂家</td>
+                            <td class="head_td twoyear"colspan="4" align="center" style="width:40%;">2019</td>
+                            <td class="head_td threeyear"colspan="4" align="center" style="width:40%;">2019</td>
+                            <tr>
+
+                                    <td class="head_td">销量</td>
+                                    <td class="head_td">网点数量</td>
+                                    <td class="head_td">平均销量</td>
+                                    <td class="head_td">销20台网点</td>
+                                    <td class="head_td">销量</td>
+                                    <td class="head_td">网点数量</td>
+                                    <td class="head_td">平均销量</td>
+                                    <td class="head_td">销20台网点</td>
+                            </tr>
+                        </tr>
+                    </thead>
+                    <tbody id="carList15">
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+        //alert('123');
+        var one ;
+        switch(GetRequest().title.toString() + GetRequest().item.toString()){
+            case '11':
+            one = 'type1';
+            break;
+            case '12':
+            one = 'type2';
+            break;
+            case '23':
+            one = 'type7';
+            break;
+            case '24':
+            one = 'type5';
+            break;
+            case '21':
+            one = 'type6';
+            break;
+            case '22':
+            one = 'type4';
+            break;
+            case '31':
+            one = 'type3';
+            break;
+            case '32':
+            one = 'type9';
+            break;
+            case '33':
+            one = 'type8';
+            break;
+                    case '34':
+            one = 'type11';
+            break;
+                    case '41':
+            one = 'type10';
+            break;
+                    case '42':
+            one = 'type12';
+            break;
+                            case '43':
+            one = 'type13';
+            break;
+                            case '44':
+            one = 'type14';
+            break;
+                                    case '50':
+            one = 'type15';
+            break;
+        
+        }
+        
+        //年份
+                     year1 = new Date().getFullYear().toString();
+                     year2 = (new Date().getFullYear() - 1).toString();
+                     year3 = (new Date().getFullYear() - 2).toString();
+
+                    $('.oneyear').html(year3);
+                    $('.twoyear').html(year2);
+                    $('.threeyear').html(year1);
+
+        //ajax_getLineNum();
+
+        if(one == 'type1'){
+            $('#'+one).show()
+            getMarketShareFactory();
+        }else if(one == 'type2'){
+            $('#'+one).show();
+            getMarketShareProvince();
+        }else if(one == 'type3'){
+            $('#'+one).show();
+            getMarketShareSerial();
+        }else if(one == 'type4'){
+            $('#'+one).show();
+            getMarketSharetop();
+        }else if(one == 'type5'){
+            $('#'+one).show();
+            getMarketSharebottom();
+        }else if(one == 'type6'){
+            $('#'+one).show();
+            getMarketShare100bottom();
+        }else if(one == 'type7'){
+            $('#'+one).show();
+            getMarketShare100top();
+        }else if(one == 'type8'){
+            ajax_getLineNum();
+            $('#'+one).show();
+            getMarketShareFactorySerial();
+        }else if(one == 'type9'){
+            $('#'+one).show();
+            getMarketShareProvinceSerial();
+        }else if(one == 'type10'){
+            $('#'+one).show();
+            getMarketShareDrive();
+        }else if(one == 'type11'){
+            ajax_getLineNum();
+            $('#'+one).show();
+            getMarketShareFactoryModel();
+        }else if(one == 'type12'){
+            $('#'+one).show();
+            getMarketShareDriveFactory();
+            
+        }else if(one == 'type13'){
+            $('#'+one).show();
+            getMarketShareDriveProvince();
+            
+        }else if(one == 'type14'){
+            $('#'+one).show();
+            getMarketShareDriveSerial();
+            
+        }else if(one == 'type15'){
+            $('#'+one).show();
+            getMarketShareDistributor();
+            
+        }
+        
+        
+        
+
+    }
+
+    var textStyle ={    //文字样式
+                        color: "black",
+                        fontSize: 8,
+                        fontFamily: 'Microsoft YaHei'
+                        }
+
+    //解析url
+    function GetRequest() {  
+   var url = location.search; //获取url中"?"符后的字串  
+   var theRequest = new Object();  
+   if (url.indexOf("?") != -1) {  
+      var str = url.substr(1);  
+      strs = str.split("&");  
+      for(var i = 0; i < strs.length; i ++) {  
+         theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);  
+      }  
+   }  
+   return theRequest;  
+}  
+
+    //获取品牌销量分布
+    function getMarketShareFactory(a){
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/statisticsQuery/marketShare/factory.do",
+                        data : {
+                token:GetRequest().token,
+                line:'轮式拖拉机',
+            },
+            dataType : "json",
+            success : function (data) {
+                if(data.head.code == 200){
+
+
+                    //饼状图
+                    var myChart = echarts.init(document.getElementById('main'));
+                    var myChart2 = echarts.init(document.getElementById('main2'));
+                    //饼状图图用 a、b参数
+                    var a = [];
+                    var b = [];
+                    //柱状图用 c、d参数
+                    var c =['product',year3,year2,year1];
+                    var d =[]; 
+                    data.body.result.forEach((item,index) =>{
+
+                        if(index < data.body.result.length-1){
+                            a.push(item.factory);
+                        b.push({
+                            name:item.factory,
+                            value:item.sale3
+                        });
+
+                        d.push({
+                            product:item.factory,
+                            [year3]:item.sale1,
+                            [year2]:item.sale2,
+                            [year1]:item.sale3
+                        })
+                        }
+
+
+                        //表格数据
+                        $('#carList').append(
+                        '<tr>'+
+                                    
+                                    '<td class="body_td">'+ item.factory +'</td>'+
+                                    '<td class="body_td">'+ item.sale1 +'</td>'+
+                                    '<td class="body_td">'+ item.rate1 +'</td>'+
+                                    '<td class="body_td">'+ item.sale2 +'</td>'+
+                                    '<td class="body_td">'+ item.rate2 +'</td>'+
+                                    '<td class="body_td">'+ item.sale3 +'</td>'+
+                                    '<td class="body_td">'+ item.rate3 +'</td>'+
+                                    
+                                '</tr>'
+                    )
+
+                    })
+                    option = {
+                        title: {
+                            text: '(品牌前十销量占比)',
+                            // subtext: '纯属虚构',
+                            left: 'center',
+                            textStyle:{
+                                color:'#099A52',
+                                fontWeight:'bold',
+                                fontFamily:'MicrosoftYaHei-Bold',
+                                fontSize:'8px'
+                            }
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            formatter: '{a} <br/>{b} : {c} ({d}%)'
+                        },
+                        legend: {
+                            type: 'scroll',
+                            orient: 'horizontal',
+                            x:'top',
+                            icon: "circle",
+                            y:'bottom',
+                            padding:[10,0,0,0],
+                            data: a,
+                        },
+                        color : [ '#5FD5E7', '#98E378', '#68BF46', '#30D39B', '#43F9BB', '#099A52', '#7EEAFB','#E9C453','#FF7734','#FFDA68' ],
+                        series: [
+                            {
+                                name: '销量/占比',
+                                type: 'pie',
+                                radius: '40%',
+                                center: ['50%', '50%'],
+                                data: b,
+                                emphasis: {
+                                    itemStyle: {
+                                        shadowBlur: 10,
+                                        shadowOffsetX: 0,
+                                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                    }
+                                },
+                                label:{            //饼图图形上的文本标签
+                                    normal:{
+                                        show:true,
+                                        textStyle : {
+                                            fontWeight : 500 ,
+                                            fontSize : 12   //文字的字体大小
+                                        },
+
+                                        
+                                    }
+                                },
+                            }
+                        ]
+                    };
+
+                    myChart.setOption(option);
+
+                    option2 = {
+                        legend: {
+                            type: 'scroll',
+                            orient: 'horizontal',
+                            x:'center',
+
+                            y:'bottom',
+                            padding:[30,0,0,0],
+                        },
+                        tooltip: {},
+                        dataset: {
+                            dimensions: c,
+                            source: d
+                        },
+                        xAxis: [{
+                            type: 'category',
+                            //data: ['2015-2016', '2016-2017', '2017-2018', '2018-2019']
+                            axisLabel: {
+                                        interval: 0,    //强制文字产生间隔
+                                        rotate: 45,     //文字逆时针旋转45°
+                                        textStyle: {    //文字样式
+                                                    color: "black",
+                                                    fontSize: 8,
+                                                    fontFamily: 'Microsoft YaHei'
+                                                    }
+                                    }
+                
+                        }],
+                        grid:{
+                            top:50,
+                            x:45,
+                            x2:30,
+                            y2:60,
+                        },
+                        yAxis: {
+                            axisLabel: {
+                                        textStyle: textStyle
+                                    }
+                        },
+                        // Declare several bar series, each will be mapped
+                        // to a column of dataset.source by default.
+                        series: [
+                            {type: 'bar',
+                            itemStyle: {
+                                normal: {
+                                show: true,
+                                color: '#1CBC9C',
+                                }
+                            }
+                        },
+                            {type: 'bar',
+                            itemStyle: {
+                                normal: {
+                                show: true,
+                                color: '#98E378',
+                                }
+                            }},
+                            {type: 'bar',
+                            itemStyle: {
+                                normal: {
+                                show: true,
+                                color: '#7EEAFB',
+                                }
+                            }}
+                        ]
+                    };
+                    myChart2.setOption(option2);
+                }else{
+                    alert(data.head.message)
+                }
+            }
+        });
+    }
+
+    //获取地区销量
+    function getMarketShareProvince(){
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/statisticsQuery/marketShare/province.do",
+                        data : {
+                token:GetRequest().token,
+                line:'轮式拖拉机',
+            },
+            dataType : "json",
+            success : function (data) {
+                if(data.head.code == 200){
+                    var myChart2 = echarts.init(document.getElementById('main3'));
+                    //柱状图用 c、d参数
+                    var c =['全部销量','常发销量','省份占比'];
+                    var d =[]; 
+                    //全部销量
+                    var e =[]; 
+                    //常发销量
+                    var f =[]; 
+                    //常发占比
+                    var g =[]; 
+                    data.body.result.forEach((item,index) =>{
+
+                        if(index < data.body.result.length-1){
+                        d.push(item.factory);
+                        e.push(item.sale3);
+                        f.push(item.sale);
+                        g.push(item.rate1);
+                        }
+
+                                                //表格数据
+                                                $('#carList2').append(
+                        '<tr>'+
+                                
+                                '<td class="body_td">'+ item.factory +'</td>'+
+                                '<td class="body_td">'+ item.sale1 +'</td>'+
+                                '<td class="body_td">'+ item.sale2 +'</td>'+
+                                '<td class="body_td">'+ item.sale3 +'</td>'+
+                                '<td class="body_td">'+ item.rate1 +'%</td>'+
+                                '<td class="body_td">'+ item.rate2 +'%</td>'+
+                                '<td class="body_td">'+ item.sale +'</td>'+
+                                
+                                '<td class="body_td">'+ item.rate +'%</td>'+
+                            '</tr>'
+                        )
+
+                        })
+
+                        option2 = {
+                            tooltip: {
+                                trigger: 'axis',
+                                axisPointer: {
+                                    type: 'cross',
+                                    crossStyle: {
+                                        color: '#999'
+                                    }
+                                }
+                            },
+                            legend: {
+                                data: c,
+                                x:'center',
+
+                                y:'top',
+                                padding:[20,0,0,0],
+                            },
+                            grid:{
+                            top:80,
+                            x:40,
+                            x2:50,
+                            y2:50,
+                        },
+                        
+                            xAxis: [
+                                {
+                                    type: 'category',
+                                    data: d,
+                                    axisPointer: {
+                                        type: 'shadow'
+                                    },
+                                    axisLabel: {
+                                        interval: 0,    //强制文字产生间隔
+                                        rotate: 45,     //文字逆时针旋转45°
+                                        textStyle: {    //文字样式
+                                                    color: "black",
+                                                    fontSize: 8,
+                                                    fontFamily: 'Microsoft YaHei'
+                                                    }
+                                    }
+                                }
+                            ],
+                            yAxis: [
+                                {
+                                    type: 'value',
+                                    name: '销量',
+                                    nameTextStyle:{
+                                        fontSize:8,
+                                    },
+                                    //interval: 50,
+                                    axisLabel: {
+                                        textStyle: {    //文字样式
+                                                    color: "black",
+                                                    fontSize: 8,
+                                                    fontFamily: 'Microsoft YaHei'
+                                                    }
+                                    }
+                                },
+                                {
+                                    type: 'value',
+                                    name: '省份占比',
+                                    nameTextStyle:{
+                                        fontSize:8,
+                                    },
+                                    //interval: 5,
+                                    axisLabel: {
+                                        formatter: '{value} %',
+                                        textStyle: {    //文字样式
+                                                    color: "black",
+                                                    fontSize: 8,
+                                                    fontFamily: 'Microsoft YaHei'
+                                                    }
+                                    }
+                                }
+                            ],
+                            series: [
+                                {
+                                    name: c[0],
+                                    type: 'bar',
+                                    data: e,
+                                    itemStyle: {
+                                normal: {
+                                show: true,
+                                color: '#30D39B',
+                                }
+                            },
+                                },
+                                {
+                                    name: c[1],
+                                    type: 'bar',
+                                    data: f,
+                                    itemStyle: {
+                                normal: {
+                                show: true,
+                                color: '#0B9B53',
+                                }
+                            },
+                                },
+                                {
+                                    name: c[2],
+                                    type: 'line',
+                                    yAxisIndex: 1,
+                                    data: g,
+                                    itemStyle: {
+                                normal: {
+                                show: true,
+                                color: '#FF7734',
+                                }
+                            },
+                                }
+                            ]
+                        };
+
+                    myChart2.setOption(option2);
+
+                }else{
+                    alert(data.head.message);
+                }
+            }
+        })
+    }
+
+    //常发系列销量
+    function getMarketShareSerial(){
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/statisticsQuery/marketShare/serial.do",
+                        data : {
+                token:GetRequest().token,
+                line:'轮式拖拉机',
+            },
+            dataType : "json",
+            success : function (data) {
+                if(data.head.code == 200){
+                    var myChart2 = echarts.init(document.getElementById('main4'));
+                    //柱状图用 c、d参数
+                    var c =['product',year3,year2,year1];
+                    var d =[]; 
+                    data.body.result.forEach((item,index) =>{
+                        if(index < data.body.result.length-1){
+                        d.push({
+                            product:item.name,
+                            [year3]:item.sale1,
+                            [year2]:item.sale2,
+                            [year1]:item.sale3
+                        })
+                    }
+
+                    $('#carList3').append(
+                        '<tr>'+
+                                
+                                '<td class="body_td">'+ item.name +'</td>'+
+                                '<td class="body_td">'+ item.sale1 +'</td>'+
+                                '<td class="body_td">'+ item.sale2 +'</td>'+
+                                '<td class="body_td">'+ item.sale3 +'</td>'+
+                                '<td class="body_td">'+ item.rate +'%</td>'+
+                            '</tr>'
+                        )
+
+                    })
+                
+                        option2 = {
+                        legend: {
+                            type: 'scroll',
+                            orient: 'horizontal',
+                            x:'center',
+
+                            y:'top',
+                            padding:[20,0,0,0],
+                        },
+                        tooltip: {},
+                        dataset: {
+                            dimensions: c,
+                            source: d
+                        },
+                        xAxis: [{
+                            type: 'category',
+                            //data: ['2015-2016', '2016-2017', '2017-2018', '2018-2019']
+                            axisLabel: {
+                                        interval: 0,    //强制文字产生间隔
+                                        rotate: 45,     //文字逆时针旋转45°
+                                        textStyle: {    //文字样式
+                                                    color: "black",
+                                                    fontSize: 8,
+                                                    fontFamily: 'Microsoft YaHei'
+                                                    }
+                                    }
+                
+                        }],
+                        grid:{
+                            top:50,
+                            x:45,
+                            x2:30,
+                            y2:60,
+                        },
+                        yAxis: {
+                            axisLabel: {
+                                        textStyle: textStyle
+                                    }
+                        },
+                        // Declare several bar series, each will be mapped
+                        // to a column of dataset.source by default.
+                        series: [
+                            {type: 'bar',
+                            itemStyle: {
+                                normal: {
+                                show: true,
+                                color: '#30D39B',
+                                }
+                            }
+                        },
+                            {type: 'bar',
+                            itemStyle: {
+                                normal: {
+                                show: true,
+                                color: '#E9C453',
+                                }
+                            }},
+                            {type: 'bar',
+                            itemStyle: {
+                                normal: {
+                                show: true,
+                                color: '#FF9F38',
+                                }
+                            }}
+                        ]
+                    };
+                    myChart2.setOption(option2);
+
+
+                }else{
+                    alert(data.head.message);
+                }
+            }
+        })
+    }
+  
+  //厂家销量以上
+    function getMarketSharetop(){
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/statisticsQuery/marketShare/power/factory.do",
+                        data : {
+                token:GetRequest().token,
+                line:'轮式拖拉机',
+            },
+            dataType : "json",
+            success : function (data) {
+                if(data.head.code == 200){
+
+                    var myChart2 = echarts.init(document.getElementById('main5'));
+                    //柱状图用 c、d参数
+                    // var c =[];
+                    // var d =[]; 
+                    // data.body.result.forEach((item,index) =>{
+
+                    //     if(index < data.body.result.length-1){
+                    //         c.push(item.factory);
+
+                    //     d.push(item.sale3);
+                    //     }
+                    // })
+                    var c =[];
+                    var d =[]; 
+                    var e = [];
+                    data.body.result.forEach((item,index) =>{
+                        if(index < data.body.result.length-1){
+                            c.push(item.factory);
+                        d.push(item.sale3)
+                    }
+
+                    $('#carList4').append(
+                        '<tr>'+
+                                
+                                '<td class="body_td">'+ item.factory +'</td>'+
+                                '<td class="body_td">'+ item.sale1 +'</td>'+
+                                '<td class="body_td">'+ item.sale2 +'</td>'+
+                                '<td class="body_td">'+ item.sale3 +'</td>'+
+                                '<td class="body_td">'+ item.rate +'%</td>'+
+                            '</tr>'
+                        )
+
+                })
+                option2 = {
+                    legend: {
+                            type: 'scroll',
+                            orient: 'horizontal',
+                            x:'center',
+
+                            y:'top',
+                            padding:[20,0,0,0],
+                        },
+                        tooltip: {
+                            trigger: 'axis',
+                            axisPointer: {
+                                type: 'shadow'
+                            }
+                        },
+                        calculable: true,
+                        xAxis: [{
+                            type: 'category',
+                            //data: ['2015-2016', '2016-2017', '2017-2018', '2018-2019']
+                            axisLabel: {
+                                        interval: 0,    //强制文字产生间隔
+                                        rotate: 45,     //文字逆时针旋转45°
+                                        textStyle: {    //文字样式
+                                                    color: "black",
+                                                    fontSize: 8,
+                                                    fontFamily: 'Microsoft YaHei'
+                                                    }
+                                    },
+                                    data:c
+                
+                        }],
+                        grid:{
+                            top:50,
+                            x:45,
+                            x2:30,
+                            y2:60,
+                        },
+                        yAxis: [
+                            {
+                                type: 'value',
+                                axisLabel: {
+                                        textStyle: textStyle
+                                    }
+                            }
+                        ],
+                        series: [
+                            {
+                                type: 'bar',
+                                barGap: 0,
+                                data: d,
+                                
+                                itemStyle: {
+                                    
+                                    normal: {
+
+                                    　　　　　　　　　　　　　　//好，这里就是重头戏了，定义一个list，然后根据所以取得不同的值，这样就实现了，
+                                    barBorderRadius:[5, 5, 5, 5],
+                                    color: function(params) {
+
+                                        // build a color map as your need.
+
+                                        var colorList = ['#5fd5e7','#68bf46','#98e378','#30d39b','#43f9bb','#7eeafb','#e9c453','#ff9f38','#ff7734','#ffda68','#5fd5e7','#68bf46','#98e378','#30d39b','#43f9bb','#7eeafb',];
+
+                                        return colorList[params.dataIndex]
+
+                                    },
+                            },
+                        }
+                    }
+                        ]
+                    };
+                    myChart2.setOption(option2);
+
+                }else{
+                    alert(data.body.message);
+                }
+            }
+        })
+    }
+
+
+    // 厂家销量一下
+    function getMarketSharebottom(){
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/statisticsQuery/marketShare/power/factory/100.do",
+                        data : {
+                token:GetRequest().token,
+                line:'轮式拖拉机',
+            },
+            dataType : "json",
+            success : function (data) {
+                if(data.head.code == 200){
+
+                    var myChart2 = echarts.init(document.getElementById('main6'));
+                    //柱状图用 c、d参数
+                    // var c =[];
+                    // var d =[]; 
+                    // data.body.result.forEach((item,index) =>{
+
+                    //     if(index < data.body.result.length-1){
+                    //         c.push(item.factory);
+
+                    //     d.push(item.sale3);
+                    //     }
+                    // })
+                    var c =[];
+                    var d =[]; 
+                    var e = [];
+                    data.body.result.forEach((item,index) =>{
+                        if(index < data.body.result.length-1){
+                            c.push(item.factory);
+                        d.push(item.sale3)
+                    }
+
+                    $('#carList5').append(
+                        '<tr>'+
+                                
+                                '<td class="body_td">'+ item.factory +'</td>'+
+                                '<td class="body_td">'+ item.sale1 +'</td>'+
+                                '<td class="body_td">'+ item.sale2 +'</td>'+
+                                '<td class="body_td">'+ item.sale3 +'</td>'+
+                                '<td class="body_td">'+ item.rate +'%</td>'+
+                            '</tr>'
+                        )
+
+                })
+                option2 = {
+                    legend: {
+                            type: 'scroll',
+                            orient: 'horizontal',
+                            x:'center',
+
+                            y:'top',
+                            padding:[20,0,0,0],
+                        },
+                        tooltip: {
+                            trigger: 'axis',
+                            axisPointer: {
+                                type: 'shadow'
+                            }
+                        },
+                        calculable: true,
+                        xAxis: [{
+                            type: 'category',
+                            //data: ['2015-2016', '2016-2017', '2017-2018', '2018-2019']
+                            axisLabel: {
+                                        interval: 0,    //强制文字产生间隔
+                                        rotate: 45,     //文字逆时针旋转45°
+                                        textStyle: {    //文字样式
+                                                    color: "black",
+                                                    fontSize: 8,
+                                                    fontFamily: 'Microsoft YaHei'
+                                                    }
+                                    },
+                                    data:c
+                
+                        }],
+                        grid:{
+                            top:50,
+                            x:45,
+                            x2:30,
+                            y2:60,
+                        },
+                        yAxis: [
+                            {
+                                type: 'value',
+                                axisLabel: {
+                                        textStyle: textStyle
+                                    }
+                            }
+                        ],
+                        series: [
+                            {
+                                type: 'bar',
+                                barGap: 0,
+                                data: d,
+                                
+                                itemStyle: {
+                                    
+                                    normal: {
+
+                                    　　　　　　　　　　　　　　//好，这里就是重头戏了，定义一个list，然后根据所以取得不同的值，这样就实现了，
+                                    barBorderRadius:[5, 5, 5, 5],
+                                    color: function(params) {
+
+                                        // build a color map as your need.
+
+                                        var colorList = ['#5fd5e7','#68bf46','#98e378','#30d39b','#43f9bb','#7eeafb','#e9c453','#ff9f38','#ff7734','#ffda68','#5fd5e7','#68bf46','#98e378','#30d39b','#43f9bb','#7eeafb',];
+
+                                        return colorList[params.dataIndex]
+
+                                    },
+                            },
+                        }
+                    }
+                        ]
+                    };
+                    myChart2.setOption(option2);
+
+                }else{
+                    alert(data.body.message);
+                }
+            }
+        })
+    }
+    
+    
+    //100马立段以下
+    function getMarketShare100bottom(){
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/statisticsQuery/marketShare/power.do",
+                        data : {
+                token:GetRequest().token,
+                line:'轮式拖拉机',
+            },
+            dataType : "json",
+            success : function (data) {
+                if(data.head.code == 200){
+                    var myChart2 = echarts.init(document.getElementById('main7'));
+                    //柱状图用 c、d参数
+                    var c =[year1,year2,year3];
+                    var d =[]; 
+                    var e = [];
+                    var f = [];
+                    var g= [];
+                    data.body.result.forEach((item,index) =>{
+
+                        if(index < data.body.result.length-2){
+                            d.push(item.name);
+                            e.push(item.sale1);
+                            f.push(item.sale2);
+                            g.push(item.sale3);
+                        }
+
+
+                        //表格数据
+                        $('#carList6').append(
+                        '<tr>'+
+                                    
+                                    '<td class="body_td">'+ item.name +'</td>'+
+                                    '<td class="body_td">'+ item.sale1 +'</td>'+
+                                    '<td class="body_td">'+ item.sale2 +'</td>'+
+                                    '<td class="body_td">'+ item.sale3 +'</td>'+
+                                    '<td class="body_td">'+ item.rate +'%</td>'+
+                                '</tr>'
+                    )
+
+                    })
+                    console.log(d);
+                    option2 = {
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+        }
+    },
+    legend: {
+        x:'center',
+        y:'top',
+        padding:[20,0,0,0],
+        data: c
+    },
+    grid: {
+        left: '3%',
+        right: '10%',
+        bottom: '3%',
+        containLabel: true
+    },
+    xAxis: {
+        type: 'value',
+        axisLabel: {
+                                        interval: 0,    //强制文字产生间隔
+                                        //rotate: 45,     //文字逆时针旋转45°
+                                        textStyle: {    //文字样式
+                                                    color: "black",
+                                                    fontSize: 10,
+                                                    fontFamily: 'Microsoft YaHei'
+                                                    }
+                                    },
+    },
+    yAxis: {
+        type: 'category',
+        data: d,
+        axisLabel: {
+                                        interval: 0,    //强制文字产生间隔
+                                        //rotate: 45,     //文字逆时针旋转45°
+                                        textStyle: {    //文字样式
+                                                    color: "black",
+                                                    fontSize: 10,
+                                                    fontFamily: 'Microsoft YaHei'
+                                                    }
+                                    },
+    },
+    series: [
+    {
+            name: year3,
+            type: 'bar',
+            //stack: '总量',
+            itemStyle: {
+                                normal: {
+                                show: true,
+                                color: '#68BF46',
+                                }
+                            },
+            data: e
+        },
+        {
+            name: year2,
+            type: 'bar',
+            //stack: '总量',
+            itemStyle: {
+                                normal: {
+                                show: true,
+                                color: '#30D39B',
+                                }
+                            },
+            data: f
+        },
+        {
+            name: year1,
+            type: 'bar',
+            //stack: '总量',
+            itemStyle: {
+                                normal: {
+                                show: true,
+                                color: '#0B9B53',
+                                }
+                            },
+            data: g
+        },
+    ]
+};
+myChart2.setOption(option2);
+                }else{
+                    alert(data.head.message);
+                }
+            }
+        })
+    }
+    
+    //100马立断以上
+    function getMarketShare100top(){
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/statisticsQuery/marketShare/power/100.do",
+                        data : {
+                token:GetRequest().token,
+                line:'轮式拖拉机',
+            },
+            dataType : "json",
+            success : function (data) {
+                if(data.head.code == 200){
+                    var myChart2 = echarts.init(document.getElementById('main8'));
+                    //柱状图用 c、d参数
+                    var c =[year1,year2,year3];
+                    var d =[]; 
+                    var e = [];
+                    var f = [];
+                    var g= [];
+                    data.body.result.forEach((item,index) =>{
+
+                        if(index < data.body.result.length-2){
+                            d.push(item.name);
+                            e.push(item.sale1);
+                            f.push(item.sale2);
+                            g.push(item.sale3);
+                        }
+
+
+                        //表格数据
+                        $('#carList7').append(
+                        '<tr>'+
+                                    
+                                    '<td class="body_td">'+ item.name +'</td>'+
+                                    '<td class="body_td">'+ item.sale1 +'</td>'+
+                                    '<td class="body_td">'+ item.sale2 +'</td>'+
+                                    '<td class="body_td">'+ item.sale3 +'</td>'+
+                                    '<td class="body_td">'+ item.rate +'%</td>'+
+                                '</tr>'
+                    )
+
+                    })
+                    console.log(d);
+                    option2 = {
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+        }
+    },
+    legend: {
+        x:'center',
+        y:'top',
+        padding:[20,0,0,0],
+        data: c
+    },
+    grid: {
+        left: '3%',
+        right: '10%',
+        bottom: '3%',
+        containLabel: true
+    },
+    xAxis: {
+        type: 'value',
+        axisLabel: {
+                                        interval: 0,    //强制文字产生间隔
+                                        //rotate: 45,     //文字逆时针旋转45°
+                                        textStyle: {    //文字样式
+                                                    color: "black",
+                                                    fontSize: 10,
+                                                    fontFamily: 'Microsoft YaHei'
+                                                    }
+                                    },
+    },
+    yAxis: {
+        type: 'category',
+        data: d,
+        axisLabel: {
+                                        interval: 0,    //强制文字产生间隔
+                                        //rotate: 45,     //文字逆时针旋转45°
+                                        textStyle: {    //文字样式
+                                                    color: "black",
+                                                    fontSize: 10,
+                                                    fontFamily: 'Microsoft YaHei'
+                                                    }
+                                    },
+    },
+    series: [
+    {
+            name: year3,
+            type: 'bar',
+            //stack: '总量',
+            itemStyle: {
+                                normal: {
+                                show: true,
+                                color: '#68BF46',
+                                }
+                            },
+            data: e
+        },
+        {
+            name: year2,
+            type: 'bar',
+            //stack: '总量',
+            itemStyle: {
+                                normal: {
+                                show: true,
+                                color: '#30D39B',
+                                }
+                            },
+            data: f
+        },
+        {
+            name: year1,
+            type: 'bar',
+            //stack: '总量',
+            itemStyle: {
+                                normal: {
+                                show: true,
+                                color: '#0B9B53',
+                                }
+                            },
+            data: g
+        },
+    ]
+};
+myChart2.setOption(option2);
+                }else{
+                    alert(data.head.message);
+                }
+            }
+        })
+    }
+    
+
+    //品牌系列单选
+    function getMarketShareFactorySerial(a){
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/statisticsQuery/marketShare/serial/factory.do",
+                        data : {
+                token:GetRequest().token,
+                line:'轮式拖拉机',
+                serial:a||'A'
+            },
+            dataType : "json",
+            success : function (data) {
+                if(data.head.code == 200){
+                    var myChart2 = echarts.init(document.getElementById('main9'));
+
+                    //柱状图用 c、d参数
+                    var c =['全部销量','常发占比'];
+                    var d =[]; 
+                    //全部销量
+                    var e =[]; 
+                    //常发销量
+                    var f =[]; 
+                    //常发占比
+                    var g =[]; 
+                    $('#carList8').empty();
+                    data.body.result.forEach((item,index) =>{
+
+                        if(index < data.body.result.length-1){
+                        d.push(item.factory);
+                        e.push(item.sale3);
+                        g.push(item.rate3);
+                        }
+
+                    //表格数据
+                    $('#carList8').append(
+                        '<tr>'+
+                                
+                                '<td class="body_td">'+ item.factory +'</td>'+
+                                '<td class="body_td">'+ item.sale1 +'</td>'+
+                                '<td class="body_td">'+ item.sale2 +'</td>'+
+                                '<td class="body_td">'+ item.sale3 +'</td>'+
+                                '<td class="body_td">'+ item.rate3 +'%</td>'+
+                            '</tr>'
+                        )
+
+                        })
+                
+                    option2 = {
+                            tooltip: {
+                                trigger: 'axis',
+                                axisPointer: {
+                                    type: 'cross',
+                                    crossStyle: {
+                                        color: '#999'
+                                    }
+                                }
+                            },
+                            legend: {
+                                data: c,
+                                x:'center',
+
+                                y:'top',
+                                padding:[20,0,0,0],
+                            },
+                            grid:{
+                            top:40,
+                            x:40,
+                            x2:50,
+                            y2:50,
+                        },
+                        
+                            xAxis: [
+                                {
+                                    type: 'category',
+                                    data: d,
+                                    axisPointer: {
+                                        type: 'shadow'
+                                    },
+                                    axisLabel: {
+                                        interval: 0,    //强制文字产生间隔
+                                        rotate: 45,     //文字逆时针旋转45°
+                                        textStyle: {    //文字样式
+                                                    color: "black",
+                                                    fontSize: 8,
+                                                    fontFamily: 'Microsoft YaHei'
+                                                    }
+                                    }
+                                }
+                            ],
+                            yAxis: [
+                                {
+                                    type: 'value',
+                                    name: '销量',
+                                    nameTextStyle:{
+                                        fontSize:8,
+                                    },
+                                    //interval: 50,
+                                },
+                                {
+                                    type: 'value',
+                                    name: '常发占比',
+                                    nameTextStyle:{
+                                        fontSize:8,
+                                    },
+                                    splitLine:{
+                                    show:false
+                                    },
+                                    //interval: 5,
+                                    axisLabel: {
+                                        formatter: '{value} %',
+                                        //show: true,
+                                        textStyle: {
+                                            color: 'red',
+                                            fontSize:8
+                                        },
+                                        
+                                    },
+                                }
+                            ],
+                            series: [
+                                {
+                                    name: c[0],
+                                    type: 'bar',
+                                    data: e,
+                                    itemStyle: {
+                                normal: {
+                                show: true,
+                                color: '#30D39B',
+                                }
+                            },
+                                },
+                                {
+                                    name: c[1],
+                                    type: 'line',
+                                    yAxisIndex: 1,
+                                    data: g,
+                                    itemStyle: {
+                                normal: {
+                                show: true,
+                                color: '#FF7734',
+                                }
+                            },
+                                }
+                            ]
+                        };
+                    myChart2.setOption(option2);
+
+
+                }else{
+                    alert(data.head.message);
+                }
+            }
+        }) 
+    }
+    
+    //常发系列地区分布
+    function getMarketShareProvinceSerial(){
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/statisticsQuery/marketShare/serial/province.do",
+                        data : {
+                token:GetRequest().token,
+                line:'轮式拖拉机',
+            },
+            dataType : "json",
+            success : function (data) {
+                if(data.head.code == 200){
+
+                    var myChart2 = echarts.init(document.getElementById('main10'));
+                    //省份
+                    var a = [];
+                    //图列
+                    var b = [];
+                    //数据
+                    var c = [];
+                    var colors =['#5fd5e7','#68bf46','#98e378','#30d39b','#43f9bb','#7eeafb','#e9c453','#ff9f38','#ff7734','#ffda68','#5fd5e7','#68bf46','#98e378','#30d39b','#43f9bb','#7eeafb',];
+                    data.body.result.provinces.forEach((item,index) =>{
+                        if(index < data.body.result.provinces.length - 1){
+                            a.push(item);
+                        }
+                        $('#tr').append(
+                            '<td class="head_td">'+item+'</td>'
+                        )
+                    })
+
+                    data.body.result.list.forEach((item,index) =>{
+                        if(index < data.body.result.list.length - 1){
+                            b.push(item.name);
+                            var d = []
+                            // for(let key in item){
+                            //     if(key != 'name'){
+                            //         d.push(item[key]);
+                            //     }
+
+                            // }
+                            Object.keys(item).sort(function(a,b){
+                                //a-b升序，b-a降序
+                                return a.substring(8)-b.substring(8);
+                            }).forEach((elem,index) => {
+                                if(elem != 'name'){
+                                    d.push(item[elem])
+                                }
+
+                            });
+                            console.log(Object.keys(item).sort());
+                            c.push(
+                                {
+                                name: item.name,
+                                stack: '总量',
+                                type: 'bar',
+                                data: d,
+                                color:colors[index]
+                                }
+                            )
+                        }
+
+
+                        $('#carList9').append(
+                        '<tr>'+
+                                '<td class="body_td">'+ item.name +'</td>'+
+                                
+                                '<td class="body_td">'+ item.province1 +'</td>'+
+                                '<td class="body_td">'+ item.province2 +'</td>'+
+                                '<td class="body_td">'+ item.province3 +'</td>'+
+                                '<td class="body_td">'+ item.province4 +'</td>'+
+                                '<td class="body_td">'+ item.province5 +'</td>'+
+                                '<td class="body_td">'+ item.province6 +'</td>'+
+                                '<td class="body_td">'+ item.province7 +'</td>'+
+                                '<td class="body_td">'+ item.province8 +'</td>'+
+                                '<td class="body_td">'+ item.province9 +'</td>'+
+                                '<td class="body_td">'+ item.province10 +'</td>'+
+                                '<td class="body_td">'+ item.province11 +'</td>'+
+                                '<td class="body_td">'+ item.province12 +'</td>'+
+                                '<td class="body_td">'+ item.province13 +'</td>'+
+                                '<td class="body_td">'+ item.province14 +'</td>'+
+                                '<td class="body_td">'+ item.province15 +'</td>'+
+                                '<td class="body_td">'+ item.province16 +'</td>'+
+                                '<td class="body_td">'+ item.province17 +'</td>'+
+                                '<td class="body_td">'+ item.province18 +'</td>'+
+                                '<td class="body_td">'+ item.province19 +'</td>'+
+                                '<td class="body_td">'+ item.province20 +'</td>'+
+                                '<td class="body_td">'+ item.province21 +'</td>'+
+                                '<td class="body_td">'+ item.province22 +'</td>'+
+                            '</tr>'
+                        )
+                    })
+
+                    option2 = {
+                        tooltip: {
+                            trigger: 'axis',
+                            axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                                type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                            }
+                        },
+                        legend: {
+                            type: 'scroll',
+                            orient: 'horizontal',
+                            x:'center',
+
+                            y:'top',
+                            padding:[20,0,0,0],
+                            data: b,
+                        },
+                        grid: {
+                            left: '3%',
+                            right: '4%',
+                            bottom: '3%',
+                            containLabel: true
+                        },
+                        xAxis: [
+                            {
+                                type: 'category',
+                                data: a,
+                                axisLabel: {
+                                        interval: 0,    //强制文字产生间隔
+                                        rotate: 45,     //文字逆时针旋转45°
+                                        textStyle: {    //文字样式
+                                                    color: "black",
+                                                    fontSize: 8,
+                                                    fontFamily: 'Microsoft YaHei'
+                                                    }
+                                    }
+                            }
+                        ],
+                        yAxis: [
+                            {
+                                type: 'value',
+                                axisLabel: {
+                                        textStyle: textStyle
+                                    }
+                            }
+                        ],
+                        series:c
+                    };
+                    myChart2.setOption(option2);
+
+                }else{
+                    alert(data.head.message);
+                }
+            }
+        })
+    }
+
+    //驱动型式分类销量
+    function getMarketShareDrive(){
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/statisticsQuery/marketShare/drive.do",
+                        data : {
+                token:GetRequest().token,
+                line:'轮式拖拉机',
+                
+            },
+            dataType : "json",
+            success : function (data) {
+                if(data.head.code == 200){
+
+                    var myChart2 = echarts.init(document.getElementById('main11'));
+                    //柱状图用 c、d参数
+                    var c =['product',year3,year2,year1];
+                    var d =[]; 
+                    data.body.result.forEach((item,index) =>{
+                        if(index < data.body.result.length-1){
+                        d.push({
+                            product:item.name,
+                            [year3]:item.sale1,
+                            [year2]:item.sale2,
+                            [year1]:item.sale3
+                        })
+                    }
+
+                    $('#carList10').append(
+                        '<tr>'+
+                                
+                                '<td class="body_td">'+ item.name +'</td>'+
+                                '<td class="body_td">'+ item.sale1 +'</td>'+
+                                '<td class="body_td">'+ item.rate1 +'%</td>'+
+                                '<td class="body_td">'+ item.sale2 +'</td>'+
+                                '<td class="body_td">'+ item.rate2 +'%</td>'+
+                                '<td class="body_td">'+ item.sale3 +'</td>'+
+                                '<td class="body_td">'+ item.rate3 +'%</td>'+
+                            '</tr>'
+                        )
+
+                    })
+                
+                        option2 = {
+                        legend: {
+                            type: 'scroll',
+                            orient: 'horizontal',
+                            x:'center',
+
+                            y:'top',
+                            padding:[20,0,0,0],
+                        },
+                        tooltip: {},
+                        dataset: {
+                            dimensions: c,
+                            source: d
+                        },
+                        xAxis: [{
+                            type: 'category',
+                            //data: ['2015-2016', '2016-2017', '2017-2018', '2018-2019']
+                            axisLabel: {
+                                        interval: 0,    //强制文字产生间隔
+                                        rotate: 45,     //文字逆时针旋转45°
+                                        textStyle: {    //文字样式
+                                                    color: "black",
+                                                    fontSize: 8,
+                                                    fontFamily: 'Microsoft YaHei'
+                                                    }
+                                    }
+                
+                        }],
+                        grid:{
+                            top:50,
+                            x:45,
+                            x2:30,
+                            y2:60,
+                        },
+                        yAxis: {
+                            axisLabel: {
+                                        textStyle: textStyle
+                                    }
+                        },
+                        // Declare several bar series, each will be mapped
+                        // to a column of dataset.source by default.
+                        series: [
+                            {type: 'bar',
+                            itemStyle: {
+                                normal: {
+                                show: true,
+                                color: '#30D39b',
+                                }
+                            }
+                        },
+                            {type: 'bar',
+                            itemStyle: {
+                                normal: {
+                                show: true,
+                                color: '#7eeafb',
+                                }
+                            }},
+                            {type: 'bar',
+                            itemStyle: {
+                                normal: {
+                                show: true,
+                                color: '#e9c453',
+                                }
+                            }}
+                        ]
+                    };
+                    myChart2.setOption(option2);
+
+                }else{
+                    alert(data.head.message);
+                }
+            }
+        })
+    }
+
+
+    //品牌系列单选
+    function getMarketShareFactoryModel(a){
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/statisticsQuery/marketShare/serial/model.do",
+                        data : {
+                token:GetRequest().token,
+                line:'轮式拖拉机',
+                serial:a||'A'
+            },
+            dataType : "json",
+            success : function (data) {
+                if(data.head.code == 200){
+                    var myChart2 = echarts.init(document.getElementById('main12'));
+                    $('#carList11').empty();
+                    //柱状图用 c、d参数
+                    var c =['product',year3,year2,year1];
+                    var d =[]; 
+                    data.body.result.forEach((item,index) =>{
+                        if(index < data.body.result.length-1){
+                        d.push({
+                            product:item.model,
+                            [year3]:item.sale1,
+                            [year2]:item.sale2,
+                            [year1]:item.sale3
+                        })
+                    }
+
+                    $('#carList11').append(
+                        '<tr>'+
+                                
+                                '<td class="body_td">'+ item.model +'</td>'+
+                                '<td class="body_td">'+ item.factory +'</td>'+
+                                '<td class="body_td">'+ item.sale1 +'</td>'+
+                                '<td class="body_td">'+ item.sale2 +'</td>'+
+                                '<td class="body_td">'+ item.sale3 +'</td>'+
+                                '<td class="body_td">'+ item.rate3 +'%</td>'+
+                            '</tr>'
+                        )
+
+                    })
+                
+                        option2 = {
+                        legend: {
+                            type: 'scroll',
+                            orient: 'horizontal',
+                            x:'center',
+
+                            y:'top',
+                            padding:[20,0,0,0],
+                        },
+                        tooltip: {},
+                        dataset: {
+                            dimensions: c,
+                            source: d
+                        },
+                        xAxis: [{
+                            type: 'category',
+                            //data: ['2015-2016', '2016-2017', '2017-2018', '2018-2019']
+                            axisLabel: {
+                                        interval: 0,    //强制文字产生间隔
+                                        rotate: 45,     //文字逆时针旋转45°
+                                        textStyle: {    //文字样式
+                                                    color: "black",
+                                                    fontSize: 8,
+                                                    fontFamily: 'Microsoft YaHei'
+                                                    }
+                                    }
+                
+                        }],
+                        grid:{
+                            top:50,
+                            x:45,
+                            x2:30,
+                            y2:60,
+                        },
+                        yAxis: {
+                            axisLabel: {
+                                        textStyle: textStyle
+                                    }
+                        },
+                        // Declare several bar series, each will be mapped
+                        // to a column of dataset.source by default.
+                        series: [
+                            {type: 'bar',
+                            itemStyle: {
+                                normal: {
+                                show: true,
+                                color: '#30D39B',
+                                }
+                            }
+                        },
+                            {type: 'bar',
+                            itemStyle: {
+                                normal: {
+                                show: true,
+                                color: '#43F9BB',
+                                }
+                            }},
+                            {type: 'bar',
+                            itemStyle: {
+                                normal: {
+                                show: true,
+                                color: '#099A52',
+                                }
+                            }}
+                        ]
+                    };
+                    myChart2.setOption(option2);
+
+                }else{
+                    alert(data.head.message);
+                }
+            }
+        }) 
+    }
+
+    //两区机型品牌分布
+    function getMarketShareDriveFactory(){
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/statisticsQuery/marketShare/drive/factory.do",
+                        data : {
+                token:GetRequest().token,
+                line:'轮式拖拉机',
+                
+            },
+            dataType : "json",
+            success : function (data) {
+                if(data.head.code == 200){
+
+                    var myChart2 = echarts.init(document.getElementById('main13'));
+                    //柱状图用 c、d参数
+                    var c =['product',year3,year2,year1];
+                    var d =[]; 
+                    data.body.result.forEach((item,index) =>{
+                        if(index < data.body.result.length-1){
+                        d.push({
+                            product:item.factory,
+                            [year3]:item.sale1,
+                            [year2]:item.sale2,
+                            [year1]:item.sale3
+                        })
+                    }
+
+                    $('#carList12').append(
+                        '<tr>'+
+                                
+                                '<td class="body_td">'+ item.factory +'</td>'+
+                                '<td class="body_td">'+ item.sale1 +'</td>'+
+                                '<td class="body_td">'+ item.sale2 +'</td>'+
+                                '<td class="body_td">'+ item.sale3 +'</td>'+
+                                '<td class="body_td">'+ item.rate3 +'%</td>'+
+                            '</tr>'
+                        )
+
+                    })
+                
+                        option2 = {
+                        legend: {
+                            type: 'scroll',
+                            orient: 'horizontal',
+                            x:'center',
+
+                            y:'top',
+                            padding:[20,0,0,0],
+                        },
+                        tooltip: {},
+                        dataset: {
+                            dimensions: c,
+                            source: d
+                        },
+                        xAxis: [{
+                            type: 'category',
+                            //data: ['2015-2016', '2016-2017', '2017-2018', '2018-2019']
+                            axisLabel: {
+                                        interval: 0,    //强制文字产生间隔
+                                        rotate: 45,     //文字逆时针旋转45°
+                                        textStyle: {    //文字样式
+                                                    color: "black",
+                                                    fontSize: 8,
+                                                    fontFamily: 'Microsoft YaHei'
+                                                    }
+                                    }
+                
+                        }],
+                        grid:{
+                            top:50,
+                            x:45,
+                            x2:30,
+                            y2:60,
+                        },
+                        yAxis: {
+                            axisLabel: {
+                                        textStyle: textStyle
+                                    }
+                        },
+                        // Declare several bar series, each will be mapped
+                        // to a column of dataset.source by default.
+                        series: [
+                            {type: 'bar',
+                            itemStyle: {
+                                normal: {
+                                show: true,
+                                color: '#30D39B',
+                                }
+                            }
+                        },
+                            {type: 'bar',
+                            itemStyle: {
+                                normal: {
+                                show: true,
+                                color: '#43F9BB',
+                                }
+                            }},
+                            {type: 'bar',
+                            itemStyle: {
+                                normal: {
+                                show: true,
+                                color: '#099A52',
+                                }
+                            }}
+                        ]
+                    };
+                    myChart2.setOption(option2);
+
+                }else{
+                    alert(data.head.message);
+                }
+            }
+        })
+    }
+
+    //两区机型品牌分布
+    function getMarketShareDriveProvince(){
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/statisticsQuery/marketShare/drive/province.do",
+                        data : {
+                token:GetRequest().token,
+                line:'轮式拖拉机',
+                
+            },
+            dataType : "json",
+            success : function (data) {
+                if(data.head.code == 200){
+
+                    var myChart2 = echarts.init(document.getElementById('main14'));
+                    //柱状图用 c、d参数
+                    var c =['product',year3,year2,year1];
+                    var d =[]; 
+                    data.body.result.forEach((item,index) =>{
+                        if(index < data.body.result.length-1){
+                        d.push({
+                            product:item.factory,
+                            [year3]:item.sale1,
+                            [year2]:item.sale2,
+                            [year1]:item.sale3
+                        })
+                    }
+
+                    $('#carList13').append(
+                        '<tr>'+
+                                
+                                '<td class="body_td">'+ item.factory +'</td>'+
+                                '<td class="body_td">'+ item.sale1 +'</td>'+
+                                '<td class="body_td">'+ item.sale2 +'</td>'+
+                                '<td class="body_td">'+ item.sale3 +'</td>'+
+                                '<td class="body_td">'+ item.rate3 +'%</td>'+
+                            '</tr>'
+                        )
+
+                    })
+                
+                        option2 = {
+                        legend: {
+                            type: 'scroll',
+                            orient: 'horizontal',
+                            x:'center',
+
+                            y:'top',
+                            padding:[20,0,0,0],
+                        },
+                        tooltip: {},
+                        dataset: {
+                            dimensions: c,
+                            source: d
+                        },
+                        xAxis: [{
+                            type: 'category',
+                            //data: ['2015-2016', '2016-2017', '2017-2018', '2018-2019']
+                            axisLabel: {
+                                        interval: 0,    //强制文字产生间隔
+                                        rotate: 45,     //文字逆时针旋转45°
+                                        textStyle: {    //文字样式
+                                                    color: "black",
+                                                    fontSize: 8,
+                                                    fontFamily: 'Microsoft YaHei'
+                                                    }
+                                    }
+                
+                        }],
+                        grid:{
+                            top:50,
+                            x:45,
+                            x2:30,
+                            y2:60,
+                        },
+                        yAxis: {
+                            axisLabel: {
+                                        textStyle: textStyle
+                                    }
+                        },
+                        // Declare several bar series, each will be mapped
+                        // to a column of dataset.source by default.
+                        series: [
+                            {type: 'bar',
+                            itemStyle: {
+                                normal: {
+                                show: true,
+                                color: '#30D39B',
+                                }
+                            }
+                        },
+                            {type: 'bar',
+                            itemStyle: {
+                                normal: {
+                                show: true,
+                                color: '#43F9BB',
+                                }
+                            }},
+                            {type: 'bar',
+                            itemStyle: {
+                                normal: {
+                                show: true,
+                                color: '#099A52',
+                                }
+                            }}
+                        ]
+                    };
+                    myChart2.setOption(option2);
+
+                }else{
+                    alert(data.head.message);
+                }
+            }
+        })
+    }
+    
+    //两区机型品牌分布
+    function getMarketShareDriveSerial(){
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/statisticsQuery/marketShare/drive/serial.do",
+                        data : {
+                token:GetRequest().token,
+                line:'轮式拖拉机',
+                
+            },
+            dataType : "json",
+            success : function (data) {
+                if(data.head.code == 200){
+
+                    var myChart2 = echarts.init(document.getElementById('main15'));
+                    //柱状图用 c、d参数
+                    var c =['product',year3,year2,year1];
+                    var d =[]; 
+                    data.body.result.forEach((item,index) =>{
+                        if(index < data.body.result.length-1){
+                        d.push({
+                            product:item.name,
+                            [year3]:item.sale1,
+                            [year2]:item.sale2,
+                            [year1]:item.sale3
+                        })
+                    }
+
+                    $('#carList14').append(
+                        '<tr>'+
+                                
+                                '<td class="body_td">'+ item.name +'</td>'+
+                                '<td class="body_td">'+ item.sale1 +'</td>'+
+                                '<td class="body_td">'+ item.sale2 +'</td>'+
+                                '<td class="body_td">'+ item.sale3 +'</td>'+
+                                '<td class="body_td">'+ item.rate3 +'%</td>'+
+                            '</tr>'
+                        )
+
+                    })
+                
+                        option2 = {
+                        legend: {
+                            type: 'scroll',
+                            orient: 'horizontal',
+                            x:'center',
+
+                            y:'top',
+                            padding:[20,0,0,0],
+                        },
+                        tooltip: {},
+                        dataset: {
+                            dimensions: c,
+                            source: d
+                        },
+                        xAxis: [{
+                            type: 'category',
+                            //data: ['2015-2016', '2016-2017', '2017-2018', '2018-2019']
+                            axisLabel: {
+                                        interval: 0,    //强制文字产生间隔
+                                        rotate: 45,     //文字逆时针旋转45°
+                                        textStyle: {    //文字样式
+                                                    color: "black",
+                                                    fontSize: 8,
+                                                    fontFamily: 'Microsoft YaHei'
+                                                    }
+                                    }
+                
+                        }],
+                        grid:{
+                            top:50,
+                            x:45,
+                            x2:30,
+                            y2:60,
+                        },
+                        yAxis: {
+                            axisLabel: {
+                                        textStyle: textStyle
+                                    }
+                        },
+                        // Declare several bar series, each will be mapped
+                        // to a column of dataset.source by default.
+                        series: [
+                            {type: 'bar',
+                            itemStyle: {
+                                normal: {
+                                show: true,
+                                color: '#5fd5e7',
+                                }
+                            }
+                        },
+                            {type: 'bar',
+                            itemStyle: {
+                                normal: {
+                                show: true,
+                                color: '#98e378',
+                                }
+                            }},
+                            {type: 'bar',
+                            itemStyle: {
+                                normal: {
+                                show: true,
+                                color: '#e9c453',
+                                }
+                            }}
+                        ]
+                    };
+                    myChart2.setOption(option2);
+
+                }else{
+                    alert(data.head.message);
+                }
+            }
+        })
+    }
+    
+    //2018-2020渠道网点
+    function getMarketShareDistributor(){
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/statisticsQuery/marketShare/distributor.do",
+                        data : {
+                token:GetRequest().token,
+                line:'轮式拖拉机',
+                
+            },
+            dataType : "json",
+            success : function (data) {
+                if(data.head.code == 200){
+
+                    var myChart2 = echarts.init(document.getElementById('main16'));
+                    //柱状图用 c、d参数
+                    var c =['product','销量','网点数量','平均销量'];
+                    var d =[]; 
+                    data.body.result.forEach((item,index) =>{
+                        if(index < data.body.result.length-1){
+                        d.push({
+                            product:item.factory,
+                            '销量':item.sale2,
+                            '网点数量':item.distributor2,
+                            '平均销量':item.rate2
+                        })
+                    }
+
+                    $('#carList15').append(
+                        '<tr>'+
+                                
+                                '<td class="body_td">'+ item.factory +'</td>'+
+                                
+                                '<td class="body_td">'+ item.sale1 +'</td>'+
+                                '<td class="body_td">'+ item.distributor1 +'</td>'+
+                                '<td class="body_td">'+ item.rate1 +'</td>'+
+                                '<td class="body_td">'+ item.distributor3 +'</td>'+
+                                '<td class="body_td">'+ item.sale2 +'</td>'+
+                                '<td class="body_td">'+ item.distributor2 +'</td>'+
+                                '<td class="body_td">'+ item.rate2 +'</td>'+
+                                '<td class="body_td">'+ item.distributor4 +'</td>'+
+                            '</tr>'
+                        )
+
+                    })
+                
+                        option2 = {
+                        legend: {
+                            type: 'scroll',
+                            orient: 'horizontal',
+                            x:'center',
+
+                            y:'top',
+                            padding:[20,0,0,0],
+                        },
+                        tooltip: {},
+                        dataset: {
+                            dimensions: c,
+                            source: d
+                        },
+                        xAxis: [{
+                            type: 'category',
+                            //data: ['2015-2016', '2016-2017', '2017-2018', '2018-2019']
+                            axisLabel: {
+                                        interval: 0,    //强制文字产生间隔
+                                        rotate: 45,     //文字逆时针旋转45°
+                                        textStyle: {    //文字样式
+                                                    color: "black",
+                                                    fontSize: 8,
+                                                    fontFamily: 'Microsoft YaHei'
+                                                    }
+                                    }
+                
+                        }],
+                        grid:{
+                            top:50,
+                            x:45,
+                            x2:30,
+                            y2:60,
+                        },
+                        yAxis: {
+                            axisLabel: {
+                                        textStyle: textStyle
+                                    }
+                        },
+                        // Declare several bar series, each will be mapped
+                        // to a column of dataset.source by default.
+                        series: [
+                            {type: 'bar',
+                            itemStyle: {
+                                normal: {
+                                show: true,
+                                color: '#30D39B',
+                                }
+                            }
+                        },
+                            {type: 'bar',
+                            itemStyle: {
+                                normal: {
+                                show: true,
+                                color: '#43F9BB',
+                                }
+                            }},
+                            {type: 'bar',
+                            itemStyle: {
+                                normal: {
+                                show: true,
+                                color: '#099A52',
+                                }
+                            }}
+                        ]
+                    };
+                    myChart2.setOption(option2);
+
+                }else{
+                    alert(data.head.message);
+                }
+            }
+        })
+    }
+
+
+    // 获取产品线接口
+    function ajax_getLineNum() {
+    
+    $.ajax({
+      type: "get",
+      async: false,
+      //url: ip_path + "/changfa_system/machineModel/getMachineModels.do",
+      url : ip_path+"/changfa_system/subsidyParameter/list.do",
+                  data : {
+                token:GetRequest().token,
+                line:'轮式拖拉机',
+                type:'serial'
+            },
+      dataType: "json",
+      success: function (data) {
+        //console.log(data)
+        //$("#lineNum").append('<li class="listyle listactive" onclick="listclick(this)" data-id="">'+'全部'+'</li>');
+        
+        for (var i = 0; i < data['body']['result']['length']; i++) {
+            if(i ==0){
+                $("#lineNum").append(
+                '<li class="listyle listactive" onclick="listclick(this)" data-id="'+data['body']['result'][i]['name']+'">' + data['body']['result'][i]['name'] +'</li>'
+                //"<option value='" + data['body']['resultList'][i]['number'] + "'>" + data['body']['resultList'][i]['name'] + "</option>"
+                );
+            }else{
+                $("#lineNum").append(
+                '<li class="listyle" onclick="listclick(this)" data-id="'+data['body']['result'][i]['name']+'">' + data['body']['result'][i]['name'] +'</li>'
+                //"<option value='" + data['body']['resultList'][i]['number'] + "'>" + data['body']['resultList'][i]['name'] + "</option>"
+                );
+            }
+
+        }
+        //$("#lineNum").append('<li class="listyle">'+'查看更多>'+'</li>');
+        $("#lineNum").unbind();
+
+        //$("#lineNum2").append('<li class="listyle listactive" onclick="listclick(this)" data-id="">'+'全部'+'</li>');
+        
+        for (var i = 0; i < data['body']['result']['length']; i++) {
+            if(i ==0){
+                $("#lineNum2").append(
+                '<li class="listyle listactive" onclick="listclick(this)" data-id="'+data['body']['result'][i]['name']+'">' + data['body']['result'][i]['name'] +'</li>'
+                //"<option value='" + data['body']['resultList'][i]['number'] + "'>" + data['body']['resultList'][i]['name'] + "</option>"
+                );
+            }else{
+                $("#lineNum2").append(
+                '<li class="listyle" onclick="listclick(this)" data-id="'+data['body']['result'][i]['name']+'">' + data['body']['result'][i]['name'] +'</li>'
+                //"<option value='" + data['body']['resultList'][i]['number'] + "'>" + data['body']['resultList'][i]['name'] + "</option>"
+                );
+            }
+        }
+        //$("#lineNum").append('<li class="listyle">'+'查看更多>'+'</li>');
+        $("#lineNum2").unbind();
+      }
+    });
+  }
+
+//点击产品线效果
+   function listclick(event){
+    $(event).addClass('listactive');
+    $(event).siblings().removeClass('listactive');
+    getMarketShareFactorySerial($(event).data('id'));
+    getMarketShareFactoryModel($(event).data('id'));
+    
+   }
+
+</script>
+</html>

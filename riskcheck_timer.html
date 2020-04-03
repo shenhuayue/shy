@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>档案审核</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/saleCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+</head>
+<body class="reset">
+<div style="height: auto;width: 100%">
+    <div id="status_switch" class="status_box">
+        <div class="flt_l newStatusBox">
+            <span id="text1" class="status_text fontGreen" style="display: inline-block;width: 80px;margin-left: -20px">超出围栏</span>
+            <div id="status1" class="status_on"></div>
+            <span id="time1" class="time flt_l"></span>
+        </div>
+        <div id="line1" class="allot-wcd-color flt_l"></div>
+        <div class="flt_l newStatusBox">
+            <span id="text2" class="status_text fontGreen" style="display: inline-block;width: 80px;margin-left: -20px">初步标记</span>
+            <div id="status2" class="status_on"></div>
+            <span id="time2" class="time flt_l"></span>
+        </div>
+        <div id="line2" class="allot-wcd-color flt_l"></div>
+        <div class="flt_l newStatusBox">
+            <span id="text3" class="status_text fontGreen" style="display: inline-block;width: 80px;margin-left: -20px">最终标记</span>
+            <div id="status3" class="status_on status_on_special"></div>
+            <span id="time3" class="time flt_l"></span>
+        </div>
+    </div>
+    <div id="detail_frame" class="rpt_cont">
+
+    </div>
+</div>
+</body>
+    <script>
+        window.onload = function(){
+            jQuery.support.cors = true;
+
+            $('#time1').html($(window.parent.document).find("input[name='outRange']").val());
+            $('#time2').html($(window.parent.document).find("input[name='firstTime']").val());
+            $('#time3').html($(window.parent.document).find("input[name='finalTime']").val());
+            //如果最终标记有值了，那就取消提交按钮 改变 当前状态
+            if($(window.parent.document).find("input[name='finalStatus']").val()){
+                $(window.parent.document).find("input[name='approvalStage']").val(4);
+            }else{
+                $(window.parent.document).find("input[name='approvalStage']").val(3);
+            }
+            
+            $('.flt_l div').click(function(){
+                    $(this).addClass('status_on_special');
+                    //如果点击了是 超出围栏时间 或者 初次标记 则改变状态不显示最终审核的提交按钮
+                    if($(this).attr('id')=='status2' || $(this).attr('id')=='status1'){
+                        $(window.parent.document).find("input[name='approvalStage']").val(2);
+                    }else if($(this).attr('id')=='status3'){
+                        $(window.parent.document).find("input[name='approvalStage']").val(3);
+                    }
+                    //找到所有的兄弟元素 带有 newStatusBox class的元素
+                    $(this).parent().siblings().each(function(index,ele){
+                        if($(ele).hasClass('newStatusBox')){
+                            $(ele).children('div').removeClass('status_on_special');
+                        }
+                    })
+                    var cont1 = '<iframe src="riskcheck_detail.html" frameborder="0" scrolling="no" width="100%" height="1800px"></iframe>';
+                    $("#detail_frame").html(cont1);
+                })
+                var cont = '<iframe src="riskcheck_detail.html" frameborder="0" scrolling="no" width="100%" height="1800px"></iframe>';
+                $("#detail_frame").html(cont);
+        }
+    </script>
+
+</html>

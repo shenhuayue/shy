@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>销售订单详情页</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/saleCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <link href="layer/mobile/need/layer.css" type="text/css" rel="stylesheet"/>
+    <script src="layer/layer.js"></script>
+    <script src="jquery-ui-1.12.1/jquery-ui.min.js"></script>
+    <link href="jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet" />
+    <script src="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.js"></script>
+    <script type="text/javascript" src="jQuery-Timepicker/dist/i18n/jquery-ui-timepicker-zh-CN.js"></script>
+    <link href="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.css" rel="stylesheet" />
+</head>
+<body class="reset">
+<div>
+    <div>
+        <div class="dis_detail mg-t50" style="border-top: 1px solid #E4E4E4;">
+            <div>
+                <div class="tit_msg">
+                    <img src="img/tit_pic.png" class="tit_pic">
+                    <span>计划单编号</span>
+                </div>
+                <div>
+                    <table id="orderNum" class="rpt_detail_tab txt_center">
+    
+                    </table>
+                </div>
+
+                <div class="tit_msg">
+                    <img src="img/tit_pic.png" class="tit_pic">
+                    <span>经销商信息</span>
+                </div>
+                <div>
+                    <table id="dealerInfo2" class="rpt_detail_tab txt_center">
+    
+                    </table>
+                </div>
+
+                <div class="tit_msg">
+                    <img src="img/tit_pic.png" class="tit_pic">
+                    <span>发运信息</span>
+                </div>
+                <div>
+                    <table class="rpt_detail_tab txt_center mg_b50">
+                        <tr>
+                            <td class="head_td" height="40px">发运方式</td>
+                            <td class="head_td">联系人姓名</td>
+                            <td class="head_td">联系人电话</td>
+                        </tr>
+                        <tbody id="sendInfo">
+    
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- <div class="tit_msg">
+                    <img src="img/tit_pic.png" class="tit_pic">
+                    <span>订单时间</span>
+                </div>
+                <div>
+                    <table class="rpt_detail_tab txt_center mg_b50">
+                        <tr>
+                            <td class='head_td' width='150px' height='46px'>要货时间</td>
+                            <td class='head_td' width='24%'>供货时间</td>
+                        </tr>
+                        <tr>
+                            <td class=" body_td" id="takeTime"></td>
+                            <td class=" body_td"><input type="text" id="supplyTime" style="height: 33px;width:97%"></td>
+                        </tr>
+                    </table>
+                </div> -->
+
+                <div class="tit_msg">
+                    <img src="img/tit_pic.png" class="tit_pic">
+                    <span>计划详细信息</span>
+                </div>
+                <div style="width:90%;margin-left:5%;">
+                    <table id="orderInfo" class="txt_center" style="border-collapse: collapse;">
+                        <thead>
+                            <tr>
+                                <td class="head_td" height="50px" style="width:40px;">序号</td>
+                                
+                                <td class="head_td">产品线</td>
+                                <td class="head_td">产品系列</td>
+                                <td class="head_td">产品型号</td>
+                                <td class="head_td">物料号</td>
+                                <td class="head_td" style="width:80px;">提报数量</td>
+                                <td class="head_td" style="width:80px;">确认数量</td>
+                                
+                                <td class="head_td">参考价格</td>
+                            </tr>
+                        </thead>
+                        <tbody id="carList">
+                            
+                        </tbody>
+                    </table>
+                </div>
+                <div style="width:90%;margin-left:5%;text-align:left">
+                    <span class="describ">参考总价：</span><span id="totalPrice" class="describ color_cf"></span>
+                </div>
+            </div>
+        
+            <div class="tit_msg">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>操作记录</span>
+            </div>
+            <div>
+                <table class="rpt_detail_tab txt_center mg_b50">
+                    <tr>
+                        <td class="head_td" height="40px">操作人</td>
+                        <td class="head_td">内容</td>
+                        <td class="head_td">时间</td>
+                        <td class="head_td">备注</td>
+                    </tr>
+                    <tbody id="opetationLog">
+
+                    </tbody>
+
+                </table>
+            </div>
+
+            <div id="finalCheck">
+                <div class="tit_msg">
+                    <img src="img/tit_pic.png" class="tit_pic">
+                    <span>终审</span>
+                </div>
+                <div>
+                    <table id="errInfo" class="rpt_detail_tab">
+                        <tr>
+                            <td class="head_td txt_center" height="46px" width="150px">审核备注</td>
+                            <td class='body_td'>
+                                <input type="text" id="lastRemark" class="errInfo" style="margin-left: -3px;">
+                            </td>
+                        </tr>
+                    </table>
+                    
+                    <div class="btn_part mg_b50">
+                        <img src="img/yes.png" id="dis_unpass" class="mg-t20 mg_l50" onclick="saleOrderCheckPass()">
+                        <img src="img/no.png" id="dis_unpass" class="mg-t20 mg_l50" onclick="saleOrderCheckUnPass()">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+        
+        $.ajax({
+        type: "post",
+        async: false,
+        url: ip_path + "/changfa_system/config/selectSaleOrderById.do",
+        data: {
+            id : $(window.parent.document).find("input[name='saleOrderId']").val()
+        },
+        dataType: "json",
+        success: function (data) {
+            if(data['head']['code'] == 200){
+                // $("#orderNum").text(data['body']['result']['orderNo']);
+                var type;
+                if(data['body']['result']['type']==1){
+                    type='紧急订单'
+                }else{
+                    type='普通订单'
+                }
+                $("#orderNum").append(
+                    "<tr>" +
+                        "<td class='head_td' width='136px' height='46px'>计划单编号</td>" +
+                        "<td class='body_td' width='383px'>" + data['body']['result']['orderNo'] + "</td>" +
+                        "<td class='head_td' width='136px'>订单类型</td>" +
+                        "<td class='body_td' width='383px'>" + type + "</td>" +
+                    "</tr>"
+                );
+                $("#dealerInfo2").append(
+                    "<tr>" +
+                        "<td class='head_td' width='136px' height='46px'>企业名称</td>" +
+                        "<td class='body_td' width='383px'>" + data['body']['result']['dealerName'] + "</td>" +
+                        "<td class='head_td' width='136px'>企业编号</td>" +
+                        "<td class='body_td' width='383px'>" + data['body']['result']['dealerNum'] + "</td>" +
+                    "</tr>"
+                );
+                
+                if(data['body']['result']['status'] == 1){
+                        $('.dis_detail').children('div').eq(0).after(
+                            '<div class="tit_msg">'+
+                            '<img src="img/tit_pic.png" class="tit_pic">'+
+                            '<span>时间</span>'+
+                        '</div>'+
+                        '<div>'+
+                            '<table class="rpt_detail_tab txt_center mg_b50">'+
+                                '<tr>'+
+                                    '<td class="head_td" height="40px">提交时间</td>'+
+                                    '<td class="head_td" height="40px">要货时间</td>'+
+                                    '<td class="head_td">供货时间</td>'+
+                                '</tr>'+
+                                '<tbody>'+
+                                    '<td class="body_td" style="width:33%">'+ data['body']['result']['createTime'] +'</td>'+
+                                    '<td class="body_td" style="width:33%">'+ data['body']['result']['takeTime'] +'</td>'+
+                                    '<td class="body_td"><input type="text" id="date99" style="width:97%;height:28px;"></td>'+
+                                '</tbody>'+
+
+                            '</table>'+
+                        '</div>'
+                            )
+                    }else if(data['body']['result']['status'] == 2){
+                        $('.dis_detail').children('div').eq(0).after(
+                            '<div class="tit_msg">'+
+                            '<img src="img/tit_pic.png" class="tit_pic">'+
+                            '<span>时间</span>'+
+                        '</div>'+
+                        '<div>'+
+                            '<table class="rpt_detail_tab txt_center mg_b50">'+
+                                '<tr>'+
+                                    '<td class="head_td" height="40px">提交时间</td>'+
+                                    '<td class="head_td" height="40px">要货时间</td>'+
+                                    '<td class="head_td">供货时间</td>'+
+                                '</tr>'+
+                                '<tbody>'+
+                                    '<td class="body_td" height="40px">'+ data['body']['result']['createTime'] +'</td>'+
+                                    '<td class="body_td" height="40px">'+ data['body']['result']['takeTime'] +'</td>'+
+                                    '<td class="body_td">'+ data['body']['result']['supplyTime'] +'</td>'+
+                                '</tbody>'+
+
+                            '</table>'+
+                        '</div>'
+                        )
+                    }else{
+                        $('.dis_detail').children('div').eq(0).after(
+                            '<div class="tit_msg">'+
+                            '<img src="img/tit_pic.png" class="tit_pic">'+
+                            '<span>时间</span>'+
+                        '</div>'+
+                        '<div>'+
+                            '<table class="rpt_detail_tab txt_center mg_b50">'+
+                                '<tr>'+
+                                    '<td class="head_td" height="40px">提交时间</td>'+
+                                    '<td class="head_td" height="40px">要货时间</td>'+
+                                '</tr>'+
+                                '<tbody>'+
+                                    '<td class="body_td" height="40px">'+ data['body']['result']['createTime'] +'</td>'+
+                                    '<td class="body_td" height="40px">'+ data['body']['result']['takeTime'] +'</td>'+
+                                '</tbody>'+
+
+                            '</table>'+
+                        '</div>'
+                        )
+                    }
+
+
+                $("#carList").empty();
+                for(var i=0;i<data['body']['result']['cars'].length;i++){
+                    var checkCount;
+                    if(data['body']['result']['cars'][i]['checkCount'] == null){
+                        checkCount = "";
+                    }else{
+                        checkCount = data['body']['result']['cars'][i]['checkCount'];
+                    }
+
+                    var configNum;
+                    if(data['body']['result']['cars'][i]['configNum'].length > 11 ){
+                        configNum = "";
+                    }else{
+                        configNum = data['body']['result']['cars'][i]['configNum'];
+                    }                    
+
+                    if(data['body']['result']['status'] == 1){
+                            $("#carList").append(
+                                '<tr>'+
+                                    '<td class="body_td" rowspan="2">'+ parseInt(i+1) +'</td>'+
+                                    
+                                    '<td class="body_td" height="30px">'+ data['body']['result']['lineName'] +'</td>'+
+                                    '<td class="body_td">'+ data['body']['result']['cars'][i]['seriesName'] +'</td>'+
+                                    '<td class="body_td">'+ data['body']['result']['cars'][i]['modelName'] +'</td>'+
+                                    '<td class="body_td">'+ configNum +'</td>'+
+                                    '<td class="body_td">'+ data['body']['result']['cars'][i]['count'] +'</td>'+
+                                    '<td class="body_td"><input type="text" style="width:97%;height:28px;" value="'+ checkCount +'"></td>'+
+                                    
+                                    '<td class="body_td">'+ data['body']['result']['cars'][i]['price'] +'</td>'+
+                                    '<td class="body_td" style="display:none">'+ data['body']['result']['cars'][i]['configNum'] +'</td>'+
+                                    '<td class="body_td" style="display:none">'+ data['body']['result']['cars'][i]['orderCarId'] +'</td>'+
+                                    '<td class="body_td" style="display:none">'+ data['body']['result']['cars'][i]['type'] +'</td>'+
+                                    '<td class="body_td" style="display:none">'+ data['body']['result']['type'] +'</td>'+
+                                    '<td class="body_td" style="display:none">'+ data['body']['result']['cars'][i]['actualCount'] +'</td>'+
+                                '</tr>'+
+                                '<tr>'+
+                                    '<td class="body_td txt_left" colspan="7" style="height:auto;padding-left:15px;">'+ data['body']['result']['cars'][i]['des'] +'</td>'+
+                                '</tr>'
+                            );
+                        }else{
+                            $("#carList").append(
+                                '<tr>'+
+                                    '<td class="body_td" rowspan="2">'+ parseInt(i+1) +'</td>'+
+                                    
+                                    '<td class="body_td" height="30px">'+ data['body']['result']['lineName'] +'</td>'+
+                                    '<td class="body_td">'+ data['body']['result']['cars'][i]['seriesName'] +'</td>'+
+                                    '<td class="body_td">'+ data['body']['result']['cars'][i]['modelName'] +'</td>'+
+                                    '<td class="body_td">'+ configNum +'</td>'+
+                                    '<td class="body_td">'+ data['body']['result']['cars'][i]['count'] +'</td>'+
+                                    '<td class="body_td">'+ checkCount +'</td>'+
+                                    
+                                    '<td class="body_td">'+ data['body']['result']['cars'][i]['price'] +'</td>'+
+                                    '<td class="body_td" style="display:none">'+ data['body']['result']['cars'][i]['configNum'] +'</td>'+
+                                    '<td class="body_td" style="display:none">'+ data['body']['result']['cars'][i]['orderCarId'] +'</td>'+
+                                    '<td class="body_td" style="display:none">'+ data['body']['result']['cars'][i]['type'] +'</td>'+
+                                    '<td class="body_td" style="display:none">'+ data['body']['result']['type'] +'</td>'+
+                                    '<td class="body_td" style="display:none">'+ data['body']['result']['cars'][i]['actualCount'] +'</td>'+
+                                '</tr>'+
+                                '<tr>'+
+                                    '<td class="body_td txt_left" colspan="7" style="height:auto;padding-left:15px;">'+ data['body']['result']['cars'][i]['des'] +'</td>'+
+                                '</tr>'
+                            );
+                        }
+                }
+
+                $.datepicker.regional['zh-CN'] = {
+                            changeMonth: true,
+                            changeYear: true,
+                            clearText: '清除',
+                            clearStatus: '清除已选日期',
+                            closeText: '关闭',
+                            closeStatus: '不改变当前选择',
+                            prevText: '<上月',
+                            prevStatus: '显示上月',
+                            prevBigText: '<<',
+                            prevBigStatus: '显示上一年',
+                            nextText: '下月>',
+                            nextStatus: '显示下月',
+                            nextBigText: '>>',
+                            nextBigStatus: '显示下一年',
+                            currentText: '今天',
+                            currentStatus: '显示本月',
+                            monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+                            monthNamesShort: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+                            monthStatus: '选择月份',
+                            yearStatus: '选择年份',
+                            weekHeader: '周',
+                            weekStatus: '年内周次',
+                            dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+                            dayNamesShort: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+                            dayNamesMin: ['日', '一', '二', '三', '四', '五', '六'],
+                            dayStatus: '设置 DD 为一周起始',
+                            dateStatus: '选择 m月 d日, DD',
+                            dateFormat: 'yy-mm-dd',
+                            firstDay: 1,
+                            initStatus: '请选择日期',
+                            isRTL: false
+                        };
+
+                        $.datepicker.setDefaults($.datepicker.regional['zh-CN']);
+                        $("#defult").datetimepicker();
+                        for(var i=1;i<100;i++){
+                            $("#date" + i).prop("readonly", true).datepicker({
+                                changeMonth: true,
+                                dateFormat: "yy-mm-dd",
+                                onClose: function(selectedDate) {
+                                    $("#date" + i).datepicker("option", "minDate", selectedDate);
+                                }
+                            });
+                        }
+
+                var totalPrice = 0;
+                    switch(data['body']['result']['status']){
+                        case 0:
+                            for(var i=0;i<$("#carList").find("tr").length;i++){
+                                if(i%2 == 0){
+                                    totalPrice += parseInt($("#carList").find("tr").eq(i).find("td").eq(5).html() * $("#carList").find("tr").eq(i).find("td").eq(7).html());
+                                }                                  
+                            }
+                            break;
+                        case -1:
+                            for(var i=0;i<$("#carList").find("tr").length;i++){
+                                if(i%2 == 0){
+                                    totalPrice += parseInt($("#carList").find("tr").eq(i).find("td").eq(5).html() * $("#carList").find("tr").eq(i).find("td").eq(7).html());
+                                }                                  
+                            }
+                            break;
+                        case 1:
+                            for(var i=0;i<$("#carList").find("tr").length;i++){
+                                if(i%2 == 0){
+                                    totalPrice += parseInt($("#carList").find("tr").eq(i).find("td").eq(6).find("input").eq(0).val() * $("#carList").find("tr").eq(i).find("td").eq(7).html());
+                                }                                  
+                            }
+                            break;
+                        case 2:
+                            for(var i=0;i<$("#carList").find("tr").length;i++){
+                                if(i%2 == 0){
+                                    totalPrice += parseInt($("#carList").find("tr").eq(i).find("td").eq(6).html() * $("#carList").find("tr").eq(i).find("td").eq(7).html());
+                                }                                      
+                            }
+                            break;
+                        case -2:
+                            for(var i=0;i<$("#carList").find("tr").length;i++){
+                                if(i%2 == 0){
+                                    totalPrice += parseInt($("#carList").find("tr").eq(i).find("td").eq(5).html() * $("#carList").find("tr").eq(i).find("td").eq(7).html());
+                                }                                      
+                            }
+                            break;
+                    }
+                    
+                    $("#totalPrice").text(totalPrice);
+
+
+                var sendType;
+                if(data['body']['result']['sendType'] == 0){
+                    sendType = "物流";
+                }else if(data['body']['result']['sendType'] == 1){
+                    sendType = "自提";
+                }
+                //发运信息
+                $("#sendInfo").append(
+                    '<tr>'+
+                        '<td class="body_td" height="33px">'+ sendType +'</td>'+
+                        '<td class="body_td">'+ data['body']['result']['contactName'] +'</td>'+
+                        '<td class="body_td">'+ data['body']['result']['mobile'] +'</td>'+
+                    '</tr>'+
+                    '<tr>'+
+                        '<td class="body_td txt_left" colspan="4" style="height:33px;padding-left:30px;">送货地址：'+ data['body']['result']['address'] +'</td>'+
+                    '</tr>'+
+                    '<tr>'+
+                        '<td class="body_td txt_left" colspan="4" style="height:33px;padding-left:30px;">备注：'+ data['body']['result']['remark'] +'</td>'+
+                    '</tr>'
+                );
+
+                if(data['body']['result']['flows'].length == 0){
+                    $("#opetationLog").empty();
+                    $("#opetationLog").append(
+                        '<tr>'+
+                            '<td class="body_td txt_center" colspan="4" height="30px">暂无记录</td>'+
+                        '</tr>'
+                    );
+                }else{
+                    $("#opetationLog").empty();
+                    for(var i=0;i<data['body']['result']['flows'].length;i++){
+                        var cont;
+                            switch (data['body']['result']['flows'][i]['status']){
+                                case 0:
+                                cont = "提交订单";
+                                break;
+                                case -1:
+                                cont = "初审驳回";
+                                break;
+                                case 1:
+                                cont = "初审通过";
+                                break;
+                                case 2:
+                                cont = "终审通过";
+                                break;
+                                case -2:
+                                cont = "终审驳回";
+                                break;
+                            }
+                        $("#opetationLog").append(
+                            '<tr>'+
+                                '<td class="body_td" height="33px">'+ data['body']['result']['flows'][i]['name'] +'</td>'+
+                                '<td class="body_td">'+ cont +'</td>'+
+                                '<td class="body_td">'+ data['body']['result']['flows'][i]['createTime'] +'</td>'+
+                                '<td class="body_td">'+ data['body']['result']['flows'][i]['remark'] +'</td>'+
+                            '</tr>'
+                    );
+                    }
+                }
+
+                //初审完成
+                // if(data['body']['result']['firstStatus'] == 1){
+                //     //待终审
+                //     if(data['body']['result']['lastStatus'] == 0){
+                //         $("#finalCheck").show();
+                //     }else{
+                //         $("#finalCheck").hide();
+                //     }
+                // }else{
+                //     $("#finalCheck").hide();
+                // }
+
+                //待终审
+                if(data['body']['result']['status'] == 1 && $(window.parent.document).find("input[name='roleId']").val() != 6){
+                        $("#finalCheck").show();
+                    }else{
+                        $("#finalCheck").hide();
+                    }
+            }else{
+                alert(data['head']['message']);
+            }
+        }
+    });
+    }
+
+    function showSimilarConfigs() {
+        layer.open({
+            id:1,
+            type: 1,
+            title:'近似配置',
+            skin:'layui-layer-rim',
+            area:['450px', 'auto'],
+            content: ' <div class="row" style="width: 420px;  margin-left:7px; margin-top:10px;">'
+                +'<div class="col-sm-12">'
+                +'<div>'
+                +'<span class="">SAP描述:</span>'
+                +'<input id="sapName" type="text" class="form-control" value="' + sapName + '">'
+                +'</div>'
+                +'</div>'
+                +'<div class="col-sm-12" style="margin-top: 10px">'
+                +'<div>'
+                +'<span class="">简称描述:</span>'
+                +'<input id="nickName" type="text" class="form-control" value="' + nickName + '">'
+                +'<input id="id" type="hidden" value="' + id +'">'
+                +'</div>'
+                +'</div>'
+                +'</div>'
+        });
+    }
+</script>
+</html>

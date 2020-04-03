@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户&农机档案管理</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/dsaleCenter.js"></script>
+    <script src="js/dcommon.js"></script>
+    <script src="js/index.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <script src="jquery-ui-1.12.1/jquery-ui.min.js"></script>
+    <link href="jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet" />
+    <script src="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.js"></script>
+    <script type="text/javascript" src="jQuery-Timepicker/dist/i18n/jquery-ui-timepicker-zh-CN.js"></script>
+    <link href="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.css" rel="stylesheet" />
+    <script src="js/jquery_form.js"></script>
+</head>
+<body class="reset">
+    <div class="mg-t50">
+        <div class="tit">
+            <span class="flt_l">筛选查询</span>
+            <input type="button" class="add_btn flt_r" value="清空" onclick="clearDate()">
+        </div>
+        <div class="account_cont2">
+            <select id="rep_guy_uam" class="rep_guy_info">
+                <option value="name">姓名</option>
+                <option value="mobile">电话</option>
+                <option value="factoryNum">出厂编号</option>
+                <option value="barCode">条码号</option>
+                <option value="dealerName">企业名称</option>
+                <option value="dealerNum">企业编号</option>
+            </select>
+            <input type="text" id="rep_info_uam" class="product_line" style="border-left: none">
+            <button class="query_btn_big" style="margin-left: -4%;margin-right: 2%" onclick="queryuserArchives()"></button>
+            <span class="describ">产品线：</span>
+            <select id="product_uam" class="product_line" style="margin-right:2%">
+
+            </select>
+
+            <span class="describ">销售日期：</span>
+            <input id="date_start_uam" class="timeChoose" placeholder="起始">
+            <span>-</span>
+            <input id="date_end_uam" class="timeChoose" placeholder="截止">
+            <span class="describ">提交日期：</span>
+            <input id="date_submitstart_uam" class="timeChoose" placeholder="起始">
+            <span>-</span>
+            <input id="date_submitend_uam" class="timeChoose" placeholder="截止">
+            <!--<input type="button" class="clearDate" value="清空" onclick="clearDate()">-->
+            <br/>
+            <span class="describ" style="margin-left: 2%;">是否带终端：</span>
+            <select id="imei_type" class="product_line">
+                    <option value="0">全部</option>
+                    <option value="1">带终端</option>
+                    <option value="2">不带终端</option>
+            </select>
+            <span class="describ" style="">省份：</span>
+            <input type="text" id="rep_info_shenfen" class="product_line" >
+            <button class="query_btn_big" style="margin-left: -4%;margin-right: 4%" onclick="queryuserArchives()"></button>
+        </div>
+    </div>
+    <div>
+        <div class="tit mg-t50">
+            <span class="flt_l">用户农机档案管理</span>
+            <form id="form" method="post">
+                <input type="hidden" name="startTime">
+                <input type="hidden" name="endTime">
+                <input type="hidden" name="submitStartTime">
+                <input type="hidden" name="submitEndTime">
+                <input type="hidden" name="type" value="2">
+                <input type="hidden" name="lineNum">
+                <input type="hidden" name="imei_type" value="">
+                <input type="hidden" name="chooseItem">
+                <input type="hidden" name="itemCont">
+                <input type="hidden" name="shengfen">
+                <input type="hidden" name="userId" value="">
+                <input type="button" id="outputBtn" class="add_btn flt_r" value="导出">
+            </form>
+
+            <form id="form1">
+                <!--<input type="hidden" id="token" name="token">-->
+                <input type="file" name="file" id="file" style="display: none;">
+            </form>
+
+            <input type="button" id="inputArchives" class="output_btn flt_r" value="导入">
+
+            <form id="form2" action="" method="post">
+                <input type="button" id="outputExcel" class="output_btn flt_r" value="下载模板">
+            </form>
+
+        </div>
+        <div class="account_cont">
+            <table width="100%" cellpadding="0" cellspacing="0" class="table2" align="center">
+                <thead>
+                <tr align="center">
+                    <th height="33" class="th2">产品线</th>
+                    <th class="th2">产品系列</th>
+                    <th class="th2">产品型号</th>
+                    <th class="th2">出厂编号</th>
+                    <th class="th2">机主姓名</th>
+                    <th class="th2">机主电话</th>
+                    <th class="th2">企业编号</th>
+                    <th class="th2">企业名称</th>
+                    <th class="th2">省份</th>
+                    <th class="th2">是否带终端</th>
+                    <th class="th2">销售时间</th>
+                    <th class="th2">提交时间</th>
+                    <th class="th2">更多</th>
+                </tr>
+                </thead>
+                <tbody id="adminTbody">
+
+                </tbody>
+            </table>
+            <div id="barcon" class="barcon" >
+                <div id="barcon1" class="barcon1"></div>
+                <div id="barcon2" class="barcon2">
+                    <ul>
+                        <li><button id="firstPage" class="page_btn">首页</button></li>
+                        <li><button id="prePage" class="page_btn">上一页</button></li>
+                        <li><button id="nextPage" class="page_btn">下一页</button></li>
+                        <li><button id="lastPage" class="page_btn">尾页</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+
+        //判断经销商
+        if(appRoleList.indexOf($(window.parent.document).find("input[name='roleId']").val()) != -1){
+            $("#inputArchives").hide();
+            $("#outputExcel").hide();
+            if($(window.parent.document).find("input[name='roleId']").val() == 6 || $(window.parent.document).find("input[name='roleId']").val() == 9){
+            $("#saleM_item").html(
+            '<option value="factoryNum">出厂编号</option>'+
+            '<option value="barCode">条码号</option>'+
+            '<option value="name">姓名</option>'+
+                '<option value="mobile">电话</option>'
+            );
+            }
+        }
+
+        $.ajax({
+            type : "post",
+            url : ip_path+"/changfa_system/machineModel/getMachineModels.do",
+            dataType : "json",
+            success : function (data) {
+                $("#product_uam").append("<option value=''>全部</option>");
+                for(var i=0;i<data['body']['resultList']['length'];i++){
+                    $("#product_uam").append("<option value='"+ data['body']['resultList'][i]['number'] +"'>"+data['body']['resultList'][i]['name']+"</option>");
+                }
+                if(sessionStorage.length >=1 ){
+                    $("#rep_guy_uam").val(sessionStorage.getItem("rep_guy_uam"));
+                    $("#rep_info_uam").val(sessionStorage.getItem("rep_info_uam"));
+                    $("#product_uam").val(sessionStorage.getItem("product_uam"));
+                    $("#date_start_uam").val(sessionStorage.getItem("date_start_uam"));
+                    $("#date_end_uam").val(sessionStorage.getItem("date_end_uam"));
+                    ajax_userArchives();
+                }
+                // $("#product_uam").unbind();
+            }
+        });
+        
+        // $("#date_start").val(getMonthStartDate());
+        // $("#date_end").val(getMonthEndDate());
+
+        $.datepicker.regional['zh-CN'] = {
+            changeMonth: true,
+            changeYear: true,
+            clearText: '清除',
+            clearStatus: '清除已选日期',
+            closeText: '关闭',
+            closeStatus: '不改变当前选择',
+            prevText: '<上月',
+            prevStatus: '显示上月',
+            prevBigText: '<<',
+            prevBigStatus: '显示上一年',
+            nextText: '下月>',
+            nextStatus: '显示下月',
+            nextBigText: '>>',
+            nextBigStatus: '显示下一年',
+            currentText: '今天',
+            currentStatus: '显示本月',
+            monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            monthNamesShort: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+            monthStatus: '选择月份',
+            yearStatus: '选择年份',
+            weekHeader: '周',
+            weekStatus: '年内周次',
+            dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+            dayNamesShort: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+            dayNamesMin: ['日', '一', '二', '三', '四', '五', '六'],
+            dayStatus: '设置 DD 为一周起始',
+            dateStatus: '选择 m月 d日, DD',
+            dateFormat: 'yy-mm-dd',
+            firstDay: 1,
+            initStatus: '请选择日期',
+            isRTL: false
+        };
+
+        $.datepicker.setDefaults($.datepicker.regional['zh-CN']);
+        $("#date_submitstart_uam").datepicker({maxDate: new Date()});
+        $("#date_submitend_uam").datepicker({maxDate: new Date()});
+        $("#defult").datetimepicker();
+        $("#date_submitstart_uam").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            onClose: function (selectedDate) {
+                $("#date_submitend_uam").datepicker("option", "minDate", selectedDate);
+            }
+        });
+
+        $("#date_submitend_uam").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            onClose: function (selectedDate) {
+                $("#date_submitstart_uam").datepicker("option", "maxDate", selectedDate);
+                $("#date_submitend_uam").val($(this).val());
+            }
+        });
+        $("#date_start_uam").datepicker({maxDate: new Date()});
+        $("#date_end_uam").datepicker({maxDate: new Date()});
+        $("#defult").datetimepicker();
+        $("#date_start_uam").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            onClose: function (selectedDate) {
+                $("#date_end_uam").datepicker("option", "minDate", selectedDate);
+            }
+        });
+
+        $("#date_end_uam").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            onClose: function (selectedDate) {
+                $("#date_start_uam").datepicker("option", "maxDate", selectedDate);
+                $("#date_end_uam").val($(this).val());
+            }
+        });
+
+        currentPage = 1;
+        $('#firstPage').attr('disabled', true);
+        $('#prePage').attr('disabled', true);
+        $("#firstPage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = 1;
+            $('#firstPage').attr('disabled', true);
+            $('#prePage').attr('disabled', true);
+            ajax_userArchives();
+        });
+        $("#lastPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = totalPage;
+            $('#lastPage').attr('disabled', true);
+            $('#nextPage').attr('disabled', true);
+            ajax_userArchives();
+        });
+        $("#nextPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = currentPage + 1;
+            if (currentPage == totalPage) {
+                $('#lastPage').attr('disabled', true);
+                $('#nextPage').attr('disabled', true);
+            } else {
+                $('#lastPage').removeAttr('disabled');
+                $('#nextPage').removeAttr('disabled');
+            }
+            ajax_userArchives();
+        });
+        $("#prePage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = currentPage - 1;
+            if (currentPage == 1) {
+                $('#firstPage').attr('disabled', true);
+                $('#prePage').attr('disabled', true);
+            } else {
+                $('#firstPage').removeAttr('disabled');
+                $('#prePage').removeAttr('disabled');
+            }
+            ajax_userArchives();
+        });
+
+        //初始化报修列表
+        ajax_userArchives();
+
+        //产品线
+        $("#product_uam").change(function () {
+            currentPage = 1;
+            var key = $(this).attr('id');
+            var value = $(this).val();
+            sessionStorage.setItem(key,value);
+            ajax_userArchives();
+        });
+
+        $("#imei_type").change(function () {
+            currentPage = 1;
+            ajax_userArchives();
+        });
+
+        $("#date_submitstart_uam").change(function () {
+            var key = $(this).attr('id');
+                var value = $(this).val();
+                sessionStorage.setItem(key,value);
+            if ($("#date_submitstart_uam").val() != "" && $("#date_submitend_uam").val() != "") {
+                currentPage = 1;
+                ajax_userArchives();
+            }
+        });
+
+        $("#date_submitend_uam").change(function () {
+            var key = $(this).attr('id');
+                var value = $(this).val();
+                sessionStorage.setItem(key,value);
+            if ($("#date_submitstart_uam").val() != "" && $("#date_submitend_uam").val() != "") {
+                currentPage = 1;
+                ajax_userArchives();
+            }
+        });
+
+        //时间
+        $("#date_start_uam").change(function () {
+            var key = $(this).attr('id');
+                var value = $(this).val();
+                sessionStorage.setItem(key,value);
+            if ($("#date_start_uam").val() != "" && $("#date_end_uam").val() != "") {
+                currentPage = 1;
+                ajax_userArchives();
+            }
+        });
+
+        $("#date_end_uam").change(function () {
+            var key = $(this).attr('id');
+                var value = $(this).val();
+                sessionStorage.setItem(key,value);
+            if ($("#date_start_uam").val() != "" && $("#date_end_uam").val() != "") {
+                currentPage = 1;
+                ajax_userArchives();
+            }
+        });
+
+        $("#rep_guy_uam").change(function () {
+            $("#rep_info_uam").val("");
+        });
+
+        $("#inputArchives").click(function () {
+            $("#file").click();
+        });
+
+        $("#file").on("change",function(){
+            var filepath = $("#file").val();
+            var extStart = filepath.lastIndexOf(".");
+            var ext = filepath.substring(extStart, filepath.length).toUpperCase();
+            console.log(ext);
+            if(ext != ".XLSX" && ext != ".XLS") {
+                alert("文件限于xls,xlsx！");
+                return false;
+            } else {
+                // $("#token").val($(window.parent.document).find("input[name='token']").val());
+                var option = {
+                    url :ip_path+"/changfa_system/machineFlow/batchMachineInfo.do",
+                    type : "post",
+                    success : function (data) {
+                        window.location.reload();
+                        if(data['head']['code'] != 200){
+                            // var msg = "";
+                            // for(var i=0;i<data['body']['resultList'].length;i++){
+                            //     msg += ("第" + data['body']['resultList'][i]['rowNum'] + "行," + data['body']['resultList'][i]['errorRemark'] + "\n");
+                            // }
+                            // alert(msg);
+                            if(window.confirm("是否下载导入异常报告？")){
+                                downloadErrorExcel(data['body']['result']['path']);
+                            }
+                        }else{
+                            alert(data['head']['message']);
+                        }
+                    }
+                };
+                $("#form1").ajaxSubmit(option);
+            }
+        });
+
+        $("#outputExcel").click(function () {
+            $("#form2").attr("action",ip_path + "/changfa_system/machineFlow/saleExcelDownload.do");
+            $("#form2").submit();
+        });
+
+        $("#outputBtn").click(function () {
+              //判断经销商
+            var url;
+            if(appRoleList.indexOf($(window.parent.document).find("input[name='roleId']").val()) != -1){
+                url = "/changfa_system/userMachine//exportUserAndMachineListForDealer.do";
+            }else{
+                url = "/changfa_system/userMachine/exportUserAndMachineList.do";
+            }
+            $("input[name='chooseItem']").val($("#rep_guy_uam option:selected").val());
+            $("input[name='itemCont']").val($("#rep_info_uam").val());
+            $("input[name='lineNum']").val($("#product_uam option:selected").val());
+            $("input[name='imei_type']").val($("#imei_type").val());
+            $("input[name='startTime']").val($("#date_start_uam").val());
+            $("input[name='endTime']").val($("#date_end_uam").val());
+            $("input[name='submitStartTime']").val($("#date_submitstart_uam").val());
+            $("input[name='submitEndTime']").val($("#date_submitend_uam").val());
+            $("input[name='shengfen']").val($("#rep_info_shenfen").val());
+            $("input[name='userId']").val($(window.parent.document).find("input[name='userId']").val());
+            $("#form").attr("action",ip_path + url);
+            $("#form").submit();
+        });
+    }
+
+    function downloadErrorExcel(path) {
+        window.open(path);
+    }
+</script>
+</html>

@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>系统首页</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/index.js"></script>
+    <script src="js/saleCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <script src="js/echarts.min.js"></script>
+    <!-- <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-gl/echarts-gl.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script> -->
+    <!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>-->
+    <!-- <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/simplex.js"></script> -->
+    <script src="jquery-ui-1.12.1/jquery-ui.min.js"></script>
+    <link href="jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet" />
+    <script src="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.js"></script>
+    <script type="text/javascript" src="jQuery-Timepicker/dist/i18n/jquery-ui-timepicker-zh-CN.js"></script>
+    <link href="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.css" rel="stylesheet" />
+
+</head>
+<body class="reset">
+<div class="mg-t50">
+    <div class="rpt_cont">
+        <div>
+            <table style="width: 90%;margin-left: 5%">
+                <tr>
+                    <td class="home_td" width="33%">
+                        <div class="flt_l mg_l100 mg-t10">
+                            <img src="img/month_total.png">
+                        </div>
+                        <div class="cont_home flt_l mg_l30 mg-t10">
+                            <span class="text_style">本月报修总数</span><br/>
+                            <a id="this_month"></a>
+                        </div>
+                    </td>
+                    <td class="middle"></td>
+                    <td class="home_td" width="33%">
+                        <div class="flt_l mg_l100 mg-t10">
+                            <img src="img/week_total.png">
+                        </div>
+                        <div class="cont_home flt_l mg_l30 mg-t10">
+                            <span class="text_style">本周报修总数</span><br/>
+                            <a id="this_week"></a>
+                        </div>
+                    </td>
+                    <td class="middle"></td>
+                    <td class="home_td" width="33%">
+                        <div class="flt_l mg_l100 mg-t10">
+                            <img src="img/day_total.png">
+                        </div>
+                        <div class="cont_home flt_l mg_l30 mg-t10">
+                            <span class="text_style">今日报修总数</span><br/>
+                            <a id="today"></a>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div style="height: 50px;"></div>
+        <div>
+            <table style="width: 90%;margin-left: 5%">
+                <tr>
+                    <td id="1" class="home_td" width="33%" onclick="toFastRepairNeed(this)">
+                        <div class="flt_l mg_l100 mg-t10">
+                            <img src="img/waitForDispatch.png">
+                        </div>
+                        <div class="cont_home flt_l mg_l30 mg-t10">
+                            <span class="text_style">待派工</span><br/>
+                            <a href="###" id="waitForDispatch"></a>
+                        </div>
+                    </td>
+                    <td class="middle"></td>
+                    <td id="2" class="home_td" width="33%" onclick="toFastRepairNeed(this)">
+                        <div class="flt_l mg_l100 mg-t10">
+                            <img src="img/waitForAccept.png">
+                        </div>
+                        <div class="cont_home flt_l mg_l30 mg-t10">
+                            <span class="text_style">待接单</span><br/>
+                            <a href="###" id="waitForAccept"></a>
+                        </div>
+                    </td>
+                    <td class="middle"></td>
+                    <td id="4" class="home_td" width="33%" onclick="toFastRepairNeed(this)">
+                        <div class="flt_l mg_l100 mg-t10">
+                            <img src="img/waitForCheck.png">
+                        </div>
+                        <div class="cont_home flt_l mg_l30 mg-t10">
+                            <span class="text_style">待审核</span><br/>
+                            <a href="###" id="waitForCheck"></a>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div style="height: 50px;"></div>
+        <div class="cont_body2">
+            <div class="mg-t30 flt_r mg-r30">
+                <a href="###"><span id="rpt_today" class="font font_choosed mg-r20" onclick="updateRptTable(this)">当日</span></a>
+                <a href="###"><span id="rpt_week" class="font mg-r20" onclick="updateRptTable(this)">本周</span></a>
+                <a href="###"><span id="rpt_month" class="font mg-r20" onclick="updateRptTable(this)">本月</span></a>
+                <a href="###"><span id="rpt_year" class="font mg-r20" onclick="updateRptTable(this)">本年度</span></a>
+            </div>
+            <div class="mg_l30 mg-t30 flt_r mg-r20" style="width: 220px;">
+                <span class="describ">报修来源：</span>
+                <select id="source" class="product_line" style="width: 130px;">
+                    <option value="">全部</option>
+                    <option value="2">400报修</option>
+                    <option value="0">用户报修</option>
+                    <option value="1">常发三包员报修</option>
+                    <option value="3">经销商服务站报修</option>
+                </select>
+            </div>
+            <div class="mg_l30 mg-t30 flt_r" style="width: 200px;">
+                <span class="describ">产品线：</span>
+                <select id="product" class="product_line" style="width: 130px;display: inline;">
+
+                </select>
+            </div>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <div id="container" class="simpleLine"></div>
+        </div>
+        <div class="cont_body2 mg-t30">
+            <div class="mg-t30 flt_r mg-r30">
+                <a href="###"><span id="dis_today" class="font font_choosed mg-r20" onclick="updateDisTable(this)">当日</span></a>
+                <a href="###"><span id="dis_week" class="font mg-r20" onclick="updateDisTable(this)">本周</span></a>
+                <a href="###"><span id="dis_month" class="font mg-r20" onclick="updateDisTable(this)">本月</span></a>
+                <a href="###"><span id="dis_year" class="font mg-r20" onclick="updateDisTable(this)">本年度</span></a>
+            </div>
+
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <div id="container1" class="simpleLine"></div>
+        </div>
+
+        <div class="cont_body2 mg-t30">
+            <div class="mg-t30 flt_r mg-r30">
+                <a href="###"><span id="rep_today" class="font font_choosed mg-r20" onclick="updateRepTable(this)">当日</span></a>
+                <a href="###"><span id="rep_week" class="font mg-r20" onclick="updateRepTable(this)">本周</span></a>
+                <a href="###"><span id="rep_month" class="font mg-r20" onclick="updateRepTable(this)">本月</span></a>
+                <a href="###"><span id="rep_year" class="font mg-r20" onclick="updateRepTable(this)">本年度</span></a>
+            </div>
+            <div class="mg_l30 mg-t30 flt_r" style="width: 200px;">
+                <span class="describ">产品线：</span>
+                <select id="line" class="product_line" style="width: 130px;display: inline;">
+
+                </select>
+            </div>
+
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <div id="container2" class="simpleLine"></div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/machineModel/getMachineModels.do",
+            dataType : "json",
+            success : function (data) {
+                console.log(data);
+                $("#product").append("<option value=''>全部</option>");
+                $("#line").append("<option value=''>全部</option>");
+                for(var i=0;i<data['body']['resultList']['length'];i++){
+                    $("#product").append("<option value='"+ data['body']['resultList'][i]['number'] +"'>"+data['body']['resultList'][i]['name']+"</option>");
+                    $("#line").append("<option value='"+ data['body']['resultList'][i]['number'] +"'>"+data['body']['resultList'][i]['name']+"</option>");
+                }
+            }
+        });
+
+        var day_array = new Array();
+        var week_array = new Array();
+        var month_array = new Array();
+        var date = new Date();
+        var year = date.getFullYear();
+        var month = date.getMonth()+1;
+        if(month<10){
+            month = "0" + month;
+        }
+        var day = date.getDate();
+        if(day<10){
+            day = "0" + day;
+        }
+
+        var today = year + "-" + month + "-" + day;
+
+        //本月报修总数
+        $.ajax({
+            type : "post",
+            async : true,
+            url : ip_path+"/changfa_system/reportRepair/countReport.do",
+            data :{
+                startTime : getMonthStartDate(),
+                endTime : getMonthEndDate()
+            },
+            dataType : "json",
+            success : function (data) {
+                console.log(data);
+                if(data['head']['code'] == 200){
+                    $("#this_month").html(data['body']['result']['totality']);
+                }else {
+                    alert(data['head']['message']);
+                }
+            }
+        });
+        //本周报修总数
+        $.ajax({
+            type : "post",
+            async : true,
+            url : ip_path+"/changfa_system/reportRepair/countReport.do",
+            data :{
+                startTime : getWeekStartDate(),
+                endTime : getWeekEndDate()
+            },
+            dataType : "json",
+            success : function (data) {
+                if(data['head']['code'] == 200){
+                    $("#this_week").html(data['body']['result']['totality']);
+                }else {
+                    alert(data['head']['message']);
+                }
+            }
+        });
+        //本日报修总数
+        $.ajax({
+            type : "post",
+            async : true,
+            url : ip_path+"/changfa_system/reportRepair/countReport.do",
+            data :{
+                startTime : today,
+                endTime : today
+            },
+            dataType : "json",
+            success : function (data) {
+                if(data['head']['code'] == 200){
+                    day_array.push(data['body']['result']['totality']);
+                    $("#today").html(data['body']['result']['totality']);
+                }else {
+                    alert(data['head']['message']);
+                }
+            }
+        });
+
+        //待派工、待接单、待审核 定时
+        $.ajax({
+            type : "post",
+            async : true,
+            url : ip_path+"/changfa_system/reportRepair/countReportWaitDispatch.do",
+            dataType : "json",
+            success : function (data) {
+                if(data['head']['code'] == 200){
+                    $("#waitForDispatch").html(data['body']['result']['reportCount']);
+                    $("#waitForAccept").html(data['body']['result']['dispatchCount']);
+                    $("#waitForCheck").html(data['body']['result']['examineCount']);
+                }else {
+                    alert(data['head']['message']);
+                }
+            }
+        });
+
+        setInterval(function () {
+            $.ajax({
+                type : "post",
+                async : true,
+                url : ip_path+"/changfa_system/reportRepair/countReportWaitDispatch.do",
+                dataType : "json",
+                success : function (data) {
+                    if(data['head']['code'] == 200){
+                        $("#waitForDispatch").html(data['body']['result']['reportCount']);
+                        $("#waitForAccept").html(data['body']['result']['dispatchCount']);
+                        $("#waitForCheck").html(data['body']['result']['examineCount']);
+                    }else {
+                        alert(data['head']['message']);
+                    }
+                }
+            });
+        },60000);
+
+        //报修单统计图表
+        $.ajax({
+            type : "post",
+            async : true,
+            url : ip_path+"/changfa_system/reportRepair/countReportNum.do",
+            data :{
+                lineNum : $("#product option:selected").val(),
+                reportType : $("#source option:selected").val(),
+                times : today,
+                timeType : rptTimeType
+            },
+            dataType : "json",
+            success : function (data) {
+                if(data['head']['code'] == 200){
+                    var time_x = new Array();
+                    var rpt_y = new Array();
+                    var dis_y = new Array();
+                    var rep_y = new Array();
+                    for(var i=0;i<data['body']['resultList'].length;i++){
+                        time_x.push(data['body']['resultList'][i]['date']);
+                        rpt_y.push(data['body']['resultList'][i]['reportNum']);
+                        dis_y.push(data['body']['resultList'][i]['disNum']);
+                        rep_y.push(data['body']['resultList'][i]['repairNum']);
+                        table_rpt(time_x,rpt_y,dis_y,rep_y);
+                    }
+                }else {
+                    alert(data['head']['message']);
+                }
+            }
+        });
+
+        //派工单top10图表
+        $.ajax({
+            type : "post",
+            async : true,
+            url : ip_path+"/changfa_system/dispatch/countDisNum.do",
+            data :{
+                time : today,
+                timeType : disTimeType
+            },
+            dataType : "json",
+            success : function (data) {
+                if(data['head']['code'] == 200){
+                    var dis_x = new Array();
+                    var dis_y = new Array();
+                    for(var i=0;i<data['body']['resultList'].length;i++){
+                        dis_x.push(data['body']['resultList'][i]['dispatchUserName']);
+                        dis_y.push(data['body']['resultList'][i]['num']);
+                        table_dispatchSort(dis_x,dis_y);
+                    }
+                }else {
+                    table_dispatchSort(0,0);
+                }
+            }
+        });
+
+        //维修单top10图表
+        $.ajax({
+            type : "post",
+            async : true,
+            url : ip_path+"/changfa_system/repair/countRepairNum.do",
+            data :{
+                lineNum : $("#line option:selected").val(),
+                time : today,
+                timeType : repTimeType
+            },
+            dataType : "json",
+            success : function (data) {
+                if(data['head']['code'] == 200){
+                    var dis_x = new Array();
+                    var dis_y = new Array();
+                    for(var i=0;i<data['body']['resultList'].length;i++){
+                        dis_x.push(data['body']['resultList'][i]['name']);
+                        dis_y.push(data['body']['resultList'][i]['num']);
+                        table_repairSort(dis_x,dis_y);
+                    }
+                }else {
+                    table_repairSort(0,0);
+                }
+            }
+        });
+
+        $("#product").change(function () {
+            $.ajax({
+                type : "post",
+                async : true,
+                url : ip_path+"/changfa_system/reportRepair/countReportNum.do",
+                data :{
+                    lineNum : $("#product option:selected").val(),
+                    reportType : $("#source option:selected").val(),
+                    times : today,
+                    timeType : rptTimeType
+                },
+                dataType : "json",
+                success : function (data) {
+                    if(data['head']['code'] == 200){
+                        var time_x = new Array();
+                        var rpt_y = new Array();
+                        var dis_y = new Array();
+                        var rep_y = new Array();
+                        for(var i=0;i<data['body']['resultList'].length;i++){
+                            time_x.push(data['body']['resultList'][i]['date']);
+                            rpt_y.push(data['body']['resultList'][i]['reportNum']);
+                            dis_y.push(data['body']['resultList'][i]['disNum']);
+                            rep_y.push(data['body']['resultList'][i]['repairNum']);
+                            table_rpt(time_x,rpt_y,dis_y,rep_y);
+                        }
+                    }else {
+                        alert(data['head']['message']);
+                    }
+                }
+            });
+        });
+
+        $("#source").change(function () {
+            $.ajax({
+                type : "post",
+                async : true,
+                url : ip_path+"/changfa_system/reportRepair/countReportNum.do",
+                data :{
+                    lineNum : $("#product option:selected").val(),
+                    reportType : $("#source option:selected").val(),
+                    times : today,
+                    timeType : rptTimeType
+                },
+                dataType : "json",
+                success : function (data) {
+                    if(data['head']['code'] == 200){
+                        var time_x = new Array();
+                        var rpt_y = new Array();
+                        var dis_y = new Array();
+                        var rep_y = new Array();
+                        for(var i=0;i<data['body']['resultList'].length;i++){
+                            time_x.push(data['body']['resultList'][i]['date']);
+                            rpt_y.push(data['body']['resultList'][i]['reportNum']);
+                            dis_y.push(data['body']['resultList'][i]['disNum']);
+                            rep_y.push(data['body']['resultList'][i]['repairNum']);
+                            table_rpt(time_x,rpt_y,dis_y,rep_y);
+                        }
+                    }else {
+                        alert(data['head']['message']);
+                    }
+                }
+            });
+        });
+
+        $("#line").change(function () {
+            $.ajax({
+                type : "post",
+                async : true,
+                url : ip_path+"/changfa_system/repair/countRepairNum.do",
+                data :{
+                    lineNum : $("#line option:selected").val(),
+                    time : today,
+                    timeType : repTimeType
+                },
+                dataType : "json",
+                success : function (data) {
+                    if(data['head']['code'] == 200){
+                        var dis_x = new Array();
+                        var dis_y = new Array();
+                        for(var i=0;i<data['body']['resultList'].length;i++){
+                            dis_x.push(data['body']['resultList'][i]['name']);
+                            dis_y.push(data['body']['resultList'][i]['num']);
+                            table_repairSort(dis_x,dis_y);
+                        }
+                    }else {
+                        table_repairSort(0,0);
+                    }
+                }
+            });
+        });
+    }
+
+    function table_rpt(x,rpt,dis,rep) {
+        var dom = document.getElementById("container");
+        var myChart = echarts.init(dom);
+        var app = {};
+        option = null;
+        app.title = '折柱混合';
+
+        option = {
+            title: {
+                text: '报修情况一览',
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data:['报修单','派工单','维修单']
+            },
+            toolbox: {
+                show: true,
+                feature: {
+                    // dataZoom: {
+                    //     yAxisIndex: 'none'
+                    // },
+                    // dataView: {readOnly: false},
+                    magicType: {type: ['line', 'bar']},
+                    // restore: {},
+                    saveAsImage: {}
+                }
+            },
+            xAxis:  {
+                type: 'category',
+                boundaryGap: false,
+                data: x
+            },
+            yAxis: {
+                type: 'value',
+                axisLabel: {
+                    formatter: '{value}'
+                }
+            },
+            series: [
+                {
+                    name:'报修单',
+                    type:'line',
+                    data:rpt,
+
+                },
+                {
+                    name:'派工单',
+                    type:'line',
+                    data:dis,
+                },
+                {
+                    name:'维修单',
+                    type:'line',
+                    data:rep,
+                }
+            ]
+        };
+
+        if (option && typeof option === "object") {
+            myChart.setOption(option, true);
+        }
+    }
+
+    function table_dispatchSort(x,y) {
+        var dom = document.getElementById("container1");
+        var myChart = echarts.init(dom);
+        var app = {};
+        option = null;
+        app.title = '折柱混合';
+
+        option = {
+            title : {
+                text: '派工数Top10'
+            },
+            tooltip : {
+                trigger: 'axis'
+            },
+            legend: {
+                data:['派工数']
+            },
+            toolbox: {
+                show : true,
+                feature : {
+                    // dataView : {show: true, readOnly: false},
+                    // magicType : {show: true, type: ['line', 'bar']},
+                    // restore : {show: true},
+                    saveAsImage : {show: true}
+                }
+            },
+            calculable : true,
+            xAxis : [
+                {
+                    type : 'category',
+                    data : x
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value',
+                    axisLabel: {
+                        formatter: '{value} '
+                    }
+                }
+            ],
+            series : [
+                {
+                    name:'派工数',
+                    type:'bar',
+                    data:y,
+                    markLine : {
+                        data : [
+                            {type : 'average', name : '平均值'}
+                        ]
+                    }
+                }
+            ]
+        };
+
+        if (option && typeof option === "object") {
+            myChart.setOption(option, true);
+        }
+    }
+
+    function table_repairSort(x,y) {
+        console.log(x);
+        var dom = document.getElementById("container2");
+        var myChart = echarts.init(dom);
+        var app = {};
+        option = null;
+        app.title = '折柱混合';
+
+        option = {
+            title : {
+                text: '维修数Top10'
+            },
+            tooltip : {
+                trigger: 'axis'
+            },
+            legend: {
+                data:['维修数']
+            },
+            toolbox: {
+                show : true,
+                feature : {
+                    // dataView : {show: true, readOnly: false},
+                    // magicType : {show: true, type: ['line', 'bar']},
+                    // restore : {show: true},
+                    saveAsImage : {show: true}
+                }
+            },
+            calculable : true,
+            xAxis : [
+                {
+                    type : 'category',
+                    data : x
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value',
+                    axisLabel: {
+                        formatter: '{value} '
+                    }
+                }
+            ],
+            series : [
+                {
+                    name:'维修数',
+                    type:'bar',
+                    data:y,
+                    markLine : {
+                        data : [
+                            {type : 'average', name : '平均值'}
+                        ]
+                    }
+                }
+            ]
+        };
+
+        if (option && typeof option === "object") {
+            option = newline(option, 5, 'xAxis');
+            myChart.setOption(option, true);
+        }
+    }
+    // function getLastDay(year,month) {
+    //     var new_year = year;    //取当前的年份
+    //     var new_month = month++;//取下一个月的第一天，方便计算（最后一天不固定）
+    //     if(month>12)            //如果当前大于12月，则年份转到下一年
+    //     {
+    //         new_month -=12;        //月份减
+    //         new_year++;            //年份增
+    //     }
+    //     var new_date = new Date(new_year,new_month,1);                //取当年当月中的第一天
+    //     var date_count =   (new Date(new_date.getTime()-1000*60*60*24)).getDate();//获取当月的天数
+    //     var last_date =   new Date(new_date.getTime()-1000*60*60*24);//获得当月最后一天的日期
+    //     return date_count;
+    // }
+</script>
+</html>

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>三包政策</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <link href="css/threePackspolicy.css" type="text/css" rel="stylesheet"/>
+    <script src="js/dcommon.js"></script>
+    <script src="js/jquery-1.9.1.js"></script>
+    <script src="jquery-ui-1.12.1/jquery-ui.min.js"></script>
+    <link href="jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet" />
+    <script src="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.js"></script>
+    <script type="text/javascript" src="jQuery-Timepicker/dist/i18n/jquery-ui-timepicker-zh-CN.js"></script>
+    <link href="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.css" rel="stylesheet" />
+    <script src="layer/layer.js"></script>
+    <script src="js/threePackspolicy.js"></script>
+    
+    <style>
+        .layer_input{
+            width : 300px;height: 35px;padding-left: 10px;
+        }
+        .layer_input_half{
+            width : 140px;height: 35px;padding-left: 5px;
+        }
+    </style>
+</head>
+<body class="reset">
+    <!--弹框-->
+    <div class="byskip" style="display:none;">
+        <div class="byskip_content" style="margin-top:15%;width:465px;height:285px;">
+            <p class="th_title"><span>类型选择</span><img src="img/byclose.png" style="float:right;padding:10px;cursor:pointer;" onclick="byclose()"></p>
+            <div class="th_content">
+                <li id="changgui" style="margin-right:72px;" class="choseactive" onclick="choose(this)">
+                    <!--<img src="img/cg.png">-->
+                    <p>常规</p>
+                </li>
+                <li id="teshu" onclick="choose(this)">
+                    <!--<img src="img/ts.png" >-->
+                    <p>特殊</p>
+                </li>
+            </div>
+            <img src="img/yes.png" onclick="tijiao()" style="width:37px;margin-left:46%;">
+        </div>
+    </div>
+
+    <div class="mg-t50">
+        <div class="tit">
+            <span class="flt_l">筛选查询</span>
+            <input type="button" class="add_btn flt_r" value="清空" onclick="clearDate()">
+            <!--<input type="button" class="add_btn flt_r" value="查询" onclick="queryDealer()">-->
+        </div>
+        <div class="account_cont2">
+           
+            <span class="describ mg_l30">出厂编号：</span>
+            <input type="text" id="czNum" class="product_line">
+            <button class="query_btn_big" style="margin-left: -4%;" onclick="queryRepairNeed()"></button>
+            <span class="describ mg_l30">产品线：</span>
+            <input type="text" id="rep_info_rnm" class="product_line">
+            <button class="query_btn_big" style="margin-left: -4%;" onclick="queryRepairNeed()"></button>
+            <span class="describ" style="margin-left:10px;">创建日期：</span>
+                <input id="date_start_rnm" class="timeChoose" placeholder="起始">
+                <span>-</span>
+                <input id="date_end_rnm" class="timeChoose" placeholder="截止">
+            <span class="describ mg_l30">类型：</span>
+            <select id="leixing" class="area_choose">
+                <option value="">全部</option>
+                <option value="1">常规</option>
+                <option value="2">特殊</option>
+            </select>
+            <span class="describ mg_l30">状态：</span>
+            <select id="status" class="area_choose">
+                <option value="">全部</option>
+                <option value="0">停用</option>
+                <option value="1">启用</option>
+                
+            </select>
+        </div>
+    </div>
+    <div>
+        <div class="tit mg-t50">
+            <span class="flt_l">三包政策</span>
+            <input type="button" class="add_btn flt_r" value="创建" onclick="editCreate()">
+        </div>
+        <div class="account_cont">
+            <table width="100%" cellpadding="0" cellspacing="0" class="table2" align="center">
+                <thead>
+                <tr text-align="center">
+                    <th height="33" class="th2">政策编号</th>
+                    <th class="th2">名称</th>
+                    <th class="th2">创建日期</th>
+                    <th class="th2">创建人</th>
+                    <th class="th2">类型</th>
+                    <th class="th2">状态</th>
+                    <th class="th2">选择</th>
+                    <th class="th2">查看</th>
+                    <th class="th2">编辑</th>
+                </tr>
+                </thead>
+                <tbody id="adminTbody">
+                    <!--
+                    <tr>
+                        <td class="td2" height="33">603478</td>
+                        <td class="td2" >咸阳腾俊农机有限公司</td>
+                        <td class="td2" >2020-01-01</td>
+                        <td class="td2" >李华</td>
+                        <td class="td2" >常规</td>
+                        <td class="td2" ><a href="###" onclick="editAutoDisRule(this)" class="color_cf">驳回</a></td>
+                        <td class="td2" ><img src="img/on.png" class="mg-t5" onclick="toogle_autoRuleStatus(this)"></td>
+                    </tr>
+                    -->
+                </tbody>
+            </table>
+            <div id="barcon" class="barcon" >
+                <div id="barcon1" class="barcon1"></div>
+                <div id="barcon2" class="barcon2">
+                    <ul>
+                        <li><button id="firstPage" class="page_btn">首页</button></li>
+                        <li><button id="prePage" class="page_btn">上一页</button></li>
+                        <li><button id="nextPage" class="page_btn">下一页</button></li>
+                        <li><button id="lastPage" class="page_btn">尾页</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<!-- <script src="layui/layui.js"></script> -->
+<script>
+    function tootle(event){ 
+        //event.src == "img/ts.png" ? event.src = "img/cg.png" : event.src = "img/ts.png";
+        //alert(event.src)
+
+        
+    }
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+        $.datepicker.regional['zh-CN'] = {
+            changeMonth: true,
+            changeYear: true,
+            clearText: '清除',
+            clearStatus: '清除已选日期',
+            closeText: '关闭',
+            closeStatus: '不改变当前选择',
+            prevText: '<上月',
+            prevStatus: '显示上月',
+            prevBigText: '<<',
+            prevBigStatus: '显示上一年',
+            nextText: '下月>',
+            nextStatus: '显示下月',
+            nextBigText: '>>',
+            nextBigStatus: '显示下一年',
+            currentText: '今天',
+            currentStatus: '显示本月',
+            monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            monthNamesShort: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+            monthStatus: '选择月份',
+            yearStatus: '选择年份',
+            weekHeader: '周',
+            weekStatus: '年内周次',
+            dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+            dayNamesShort: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+            dayNamesMin: ['日', '一', '二', '三', '四', '五', '六'],
+            dayStatus: '设置 DD 为一周起始',
+            dateStatus: '选择 m月 d日, DD',
+            dateFormat: 'yy-mm-dd',
+            firstDay: 1,
+            initStatus: '请选择日期',
+            isRTL: false
+        };
+        $.datepicker.setDefaults($.datepicker.regional['zh-CN']);
+        $("#date_start_rnm").datepicker({maxDate:new Date()});
+        $("#date_end_rnm").datepicker({maxDate:new Date()});
+        $("#defult").datetimepicker();
+        $("#date_start_rnm").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            clear : "qingkong",
+            onClose: function(selectedDate) {
+                $("#date_end_rnm").datepicker("option", "minDate", selectedDate);
+            }
+        });
+
+        $("#date_end_rnm").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            onClose: function(selectedDate) {
+                $("#date_start_rnm").datepicker("option", "maxDate", selectedDate);
+                $("#date_end_rnm").val($(this).val());
+            }
+        });
+        currentPage = 1;
+        $('#firstPage').attr('disabled',true);
+        $('#prePage').attr('disabled',true);
+        $("#firstPage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = 1;
+            $('#firstPage').attr('disabled',true);
+            $('#prePage').attr('disabled',true);
+            ajax_threePacks();
+        });
+        $("#lastPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = totalPage;
+            $('#lastPage').attr('disabled',true);
+            $('#nextPage').attr('disabled',true);
+            ajax_threePacks();
+        });
+        $("#nextPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = currentPage+1;
+            if(currentPage == totalPage){
+                $('#lastPage').attr('disabled',true);
+                $('#nextPage').attr('disabled',true);
+            }else{
+                $('#lastPage').removeAttr('disabled');
+                $('#nextPage').removeAttr('disabled');
+            }
+            ajax_threePacks();
+        });
+        $("#prePage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = currentPage-1;
+            if(currentPage == 1){
+                $('#firstPage').attr('disabled',true);
+                $('#prePage').attr('disabled',true);
+            }else{
+                $('#firstPage').removeAttr('disabled');
+                $('#prePage').removeAttr('disabled');
+            }
+            ajax_threePacks();
+        });
+        //初始化
+        ajax_threePacks();
+
+        $("#status").change(function () {
+            currentPage = 1;
+            ajax_threePacks();
+        });
+        $("#leixing").change(function () {
+            currentPage = 1;
+            ajax_threePacks();
+        });
+        $("#date_end_rnm").change(function () {
+            currentPage = 1;
+            ajax_threePacks();
+        });
+        
+
+        
+    }
+
+
+</script>
+</html>

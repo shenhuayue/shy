@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>退、返、调处理详情</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/dsaleCenter.js"></script>
+    <script src="js/dcommon.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+</head>
+<body class="reset">
+<div style="height: auto;width: 100%">
+    <div id="status_switch" class="status_box">
+        <div class="flt_l newStatusBox">
+            <span id="text1" class="status_text">提交</span>
+            <div id="status1" class="status_off"></div>
+            <span id="time1" class="time flt_l"></span>
+        </div>
+        <div id="line1" class="allot-wcd flt_l"></div>
+        <div class="flt_l newStatusBox">
+            <span id="text2" class="status_text">初审</span>
+            <div id="status2" class="status_off"></div>
+            <span id="time2" class="time flt_l"></span>
+        </div>
+        <div id="line2" class="allot-wcd flt_l"></div>
+        <div class="flt_l newStatusBox">
+            <span id="text3" class="status_text">终审</span>
+            <div id="status3" class="status_off"></div>
+            <span id="time3" class="time flt_l"></span>
+        </div>
+    </div>
+    <div id="detail_frame" class="rpt_cont">
+
+    </div>
+</div>
+</body>
+    <script>
+        window.onload = function(){
+            jQuery.support.cors = true;
+            $.ajax({
+                type : "post",
+                async : false,
+                url : ip_path + "/changfa_system/machineFlow/getApprovalTimelineList.do",
+                data : {
+                    flow_id :$(window.parent.document).find("input[name='machineFlowId']").val()
+                },
+                dataType : "json",
+                success : function (data) {
+                    if(data.head.code == 200){
+                        data.body.result.forEach(elem => {
+                            if(elem.status == 1){
+                                $('#status'+ elem.code).removeClass('status_off');
+                                $('#status'+ elem.code).addClass('status_on');
+                                //下一个进程开启
+                                $('#status'+ (Number(elem.code)+1)).removeClass('status_off');
+                                $('#status'+ (Number(elem.code)+1)).addClass('status_on');
+                                //status_on_special
+                                $('#status'+ elem.code).prev().addClass('fontGreen');
+
+                                if(elem.code == 3 ){
+                                    //保存当前审核流程状态 空值为待审核 0为已关闭 1为完成
+                                    $(window.parent.document).find("input[name='documentsState']").val(1);
+                                }else{
+                                    //保存当前审核流程状态 空值为待审核 0为已关闭 1为完成
+                                    $(window.parent.document).find("input[name='documentsState']").val('');
+                                }
+
+                                //判断如果是否是最后一个进度后面没有进度条了
+                                if($('#status'+ elem.code).parent().next().attr('id')==('line'+ elem.code) ){
+                                        $('#line'+ elem.code).removeClass('allot-wcd');
+                                        $('#line'+ elem.code).addClass('allot-wcd-color');
+                                        $('#status'+ elem.code).removeClass('status_on_special');
+                                        $('#status'+ (Number(elem.code)+1)).addClass('status_on_special');
+
+                                        $('#status'+ (Number(elem.code)+1)).click(function(){
+                                            //代表当前状态已经是流程已完成 所以点击任何进度都不会改变状态控制下一步操作按钮
+                                            if($(window.parent.document).find("input[name='approvalStage']").val()!=3){
+                                            //如果是空说明已经关闭审核或者被驳回了 则选什么都不会有状态  状态是控制下一步操作按钮的
+                                                if($(window.parent.document).find("input[name='approvalStage']").val()){
+                                                    $(window.parent.document).find("input[name='approvalStage']").val(elem.code);
+                                                }
+                                            }
+                                            $(this).addClass('status_on_special');
+                                            //找到所有的兄弟元素 带有 newStatusBox class的元素
+                                            $(this).parent().siblings().each(function(index,ele){
+                                                if($(ele).hasClass('newStatusBox')){
+                                                    $(ele).children('div').removeClass('status_on_special');
+                                                }
+                                            })
+                                            var cont1 = '<iframe src="lookCheck_detail.html" frameborder="0" scrolling="no" width="100%" height="1800px"></iframe>';
+                                            $("#detail_frame").html(cont1);
+                                        })
+                                        //$('#status'+ elem.code).addClass('status_on_special');
+                                }else{
+                                    $('#status'+ (Number(elem.code)-1)).removeClass('status_on_special');
+                                    $('#status'+ elem.code).addClass('status_on_special');
+                                }
+                                
+                                $('#status'+elem.code).click(function(){
+                                    if($(window.parent.document).find("input[name='approvalStage']").val()!=3){
+                                        //如果是空说明已经关闭审核或者被驳回了 则选什么都不会有状态  状态是控制下一步操作按钮的
+                                        if($(window.parent.document).find("input[name='approvalStage']").val()){
+                                            $(window.parent.document).find("input[name='approvalStage']").val(Number(elem.code)-1);
+                                        }
+                                    }
+                                    $(this).addClass('status_on_special');
+                                    //找到所有的兄弟元素 带有 newStatusBox class的元素
+                                    $(this).parent().siblings().each(function(index,ele){
+                                        if($(ele).hasClass('newStatusBox')){
+                                            $(ele).children('div').removeClass('status_on_special');
+                                        }
+                                    })
+                                    var cont1 = '<iframe src="lookCheck_detail.html" frameborder="0" scrolling="no" width="100%" height="1800px"></iframe>';
+                                    $("#detail_frame").html(cont1);
+                                })
+                            }else if(elem.status == -1){
+                                //如果风控部审核失败 就选择前面数字保证不出现下一步操作按钮
+                                $(window.parent.document).find("input[name='approvalStage']").val('');
+                                //保存当前审核流程状态 空值为待审核 0为已关闭 1为完成
+                                $(window.parent.document).find("input[name='documentsState']").val(0);
+                                
+                            }
+                            $('#time'+elem.code).html(elem.create_time);
+                        });
+                        var cont = '<iframe src="lookCheck_detail.html" frameborder="0" scrolling="no" width="100%" height="1800px"></iframe>';
+                        $("#detail_frame").html(cont);
+                        //$(window.parent.document).find("input[name='roleId']").val(),
+                    }else{
+                        alert(data.head.message);
+                    }
+                }
+            });
+        }
+    </script>
+
+</html>

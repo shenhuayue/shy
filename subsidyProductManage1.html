@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>产品维护</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <link href="css/threePackspolicy.css" type="text/css" rel="stylesheet"/>
+    <script src="js/jquery-1.9.1.js"></script>
+    <script src="jquery-ui-1.12.1/jquery-ui.min.js"></script>
+    <link href="jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet" />
+    <script src="js/subsidy.js"></script>
+    <script src="js/dcommon.js"></script>
+    <script src="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.js"></script>
+    <script type="text/javascript" src="jQuery-Timepicker/dist/i18n/jquery-ui-timepicker-zh-CN.js"></script>
+    <link href="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.css" rel="stylesheet" />
+</head>
+<body class="reset">
+    <style>
+        .radio_type{
+            width: 20px;
+            height: 20px;
+            appearance: none;
+            position: relative;
+        }
+        .radio_type:before{
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: 1px solid #cfcfcf;
+            background:#cfcfcf;
+            display: inline-block;
+            border-radius: 50%;   
+            vertical-align: middle;
+        }
+        .radio_type:after{
+            content: '';
+            width: 10px;
+            height:5px;
+            border: 2px solid white;
+            border-top: transparent;
+            border-right: transparent;
+            text-align: center;
+            display: block;
+            position: absolute;
+            top: 6px;
+            left:5px;
+            vertical-align: middle;
+            transform: rotate(-45deg);
+        }
+        .radio_type.radio_types:before{
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: 1px solid #1ABC9C;
+            background:#1ABC9C;
+            display: inline-block;
+            border-radius: 50%;
+            vertical-align: middle;
+        }
+        .radio_type:checked:after{
+            content: '';
+            width: 10px;
+            height:5px;
+            border: 2px solid white;
+            border-top: transparent;
+            border-right: transparent;
+            text-align: center;
+            display: block;
+            position: absolute;
+            top: 6px;
+            left:5px;
+            vertical-align: middle;
+            transform: rotate(-45deg);
+        }
+        
+        </style>
+    <div>
+        <div class="tit mg-t50">
+            <span class="flt_l">产品维护</span>
+            
+        </div>
+        <div class="account_cont">
+            <div class="tit_msg" style="text-align:left;padding-top:27px;">
+                <img src="img/tit_pic.png" class="tit_pic" style="margin-left:45px;">
+                <span>机型：</span>
+                <input type="text" id="model" class="product_line" value="" style="color:#666;margin-right:0px;">
+                <!--<select id="model" class="area_choose" style="width: 150px;margin-left:0px;">
+                    <option value="name">名称</option>
+                    <option value="Number">编号</option>
+                </select>-->
+                <input type="button" class="add_btn" value="查询" onclick="addCreatepro()" style="margin-left:20px;">
+            </div>
+
+        </div>
+        
+        <div class="account_cont" style="box-shadow:none;">
+            <div>
+                <table width="100%" cellpadding="0" cellspacing="0" class="table2" align="center">
+                    <thead>
+                    <tr align="center">
+                        <th height="33" class="th2">生产厂家</th>
+                        <th class="th2">机型</th>
+                        <th class="th2"><span id="selectall" onclick="selectallliebiao1()" style="color:#1ABC9C;cursor:pointer;">&nbsp;选择</span></th>
+                    </tr>
+                    </thead>
+                    <tbody id="tablecompany">   
+                        
+                    </tbody>
+                </table>
+                
+            </div>
+            <div id="barcon" class="barcon" >
+                <div id="barcon1" class="barcon1"></div>
+                <div id="barcon2" class="barcon2">
+                    <ul>
+                        <li><button id="firstPage" class="page_btn">首页</button></li>
+                        <li><button id="prePage" class="page_btn">上一页</button></li>
+                        <li><button id="nextPage" class="page_btn">下一页</button></li>
+                        <li><button id="lastPage" class="page_btn">尾页</button></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="tit_msg" style="text-align:left;height:40px;padding-top:0px;">
+                <img src="img/tit_pic.png" class="tit_pic" style="margin-left:45px;">
+                <span>属性维护</span>
+            </div>
+            <table width="100%" cellpadding="0" cellspacing="0" class="table2" align="center">
+                <thead>
+                <tr align="center">
+                    <th class="th2">对应产品线</th>
+                    <th height="33" class="th2">对应系列</th>
+                    <th class="th2">驱动形式</th>
+                    <th class="th2">马力</th>
+                    <th class="th2">重量级别</th>
+                </tr>
+                </thead>
+                <tbody id="tablist">
+                    <tr>   
+                        <td class="td2" height="33" style="width:270px;">
+                            <select id="linenum" class="area_choose" style="width: 150px;height:25px;">  
+                            </select>
+                        </td> 
+                        <td class="td2" style="width:270px;position:relative;">
+                            
+                            <input type="button" class="" id="" value="新增" onclick="xinzeng()" style="float:left;width:35%;border-radius:5px;margin-left:10%;margin-top:10px;height:25px;margin-right:0px;background:#1ABC9C;color:#fff;border:1px solid #1ABC9C;">
+                            <input type="button" class="" id="" value="删除" onclick="shanchusc()" style="float:right;width:35%;border-radius:5px;margin-right:10%;margin-top:10px;height:25px;background:#fff;color:#999;border:1px solid #999;">
+                            <br/>
+                            <select id="forserial" class="area_choose" style="width: 80%;margin-left:10%;margin-top:5px;height:25px;float:left;margin-bottom:10px;"></select>
+                            
+                            <!--新增弹框-->
+                            <span id="skiptkadd" style="position:absolute;top:75px;left:0;box-shadow: rgb(238, 238, 238) 0px 1px 15px;display:none;">
+                                <input type="text" id="addseris" class="product_line" value="" style="border-bottom-left-radius: 5px;border-top-left-radius: 5px;width:73%;margin-left:6%;margin-top:36px;color:#666;"><br/>
+                                <input type="button" class="add_btn" id="selectaddline" value="保存" onclick="selectaddline()" style="margin-left: 4px; margin-right: 25px; display: inline-block;">
+                            </span>
+                            <!--删除弹框-->
+                            <span class="skiptk" id="skiptk" style="display:none;">
+                                <span id="list" style="max-height:124px;overflow-y: scroll;margin-top:21px;"></span>
+                                <input type="button" class="add_btn" id="remsc" value="删除" onclick="addline()" style="margin-right: 0px; background: rgb(255, 255, 255); color: rgb(102, 102, 102); border: 1px solid rgb(153, 153, 153); display: inline-block;">
+                            </span>
+                        </td>
+                        
+                        <td class="td2" height="33" style="width:270px;" id="xingshi">
+                            <select id="drive" class="area_choose" style="width: 150px;height:25px;">
+                                <option value="0">两驱</option>
+                                <option value="1">四驱</option>
+                            </select>
+                        </td>
+                        <td class="td2" height="33" style="width:270px;position:relative;">
+                            
+                            <input type="button" class="" id="" value="新增" onclick="xinzeng1()" style="float:left;width:35%;border-radius:5px;margin-left:10%;margin-top:10px;height:25px;margin-right:0px;background:#1ABC9C;color:#fff;border:1px solid #1ABC9C;">
+                            <input type="button" class="" id="" value="删除" onclick="shanchusc1()" style="float:right;width:35%;border-radius:5px;margin-right:10%;margin-top:10px;height:25px;background:#fff;color:#999;border:1px solid #999;">
+                            <br/>
+                            <select id="forserial1" class="area_choose" style="width: 80%;margin-left:10%;margin-top:5px;height:25px;float:left;margin-bottom:10px;"></select>
+                            <!--新增弹框-->
+                            <span id="skiptkadd1" style="position:absolute;top:75px;left:0;box-shadow: rgb(238, 238, 238) 0px 1px 15px;display:none;">
+                                <input type="text" id="addseris1" class="product_line" value="" style="width:73%;margin-left:6%;border-bottom-left-radius: 5px;border-top-left-radius: 5px;margin-top:36px;color:#666;"><br/>
+                                <input type="button" class="add_btn" id="selectaddline1" value="保存" onclick="selectaddline1()" style="margin-left: 4px; margin-right: 25px; display: inline-block;">
+                            </span>
+                            <!--删除弹框-->
+                            <span class="skiptk" id="skiptk1" style="display:none;">
+                                <span id="list1" style="max-height:124px;overflow-y: scroll;margin-top:21px;"></span>
+                                <input type="button" class="add_btn" id="remsc1" value="删除" onclick="addline1()" style="margin-right: 0px; background: rgb(255, 255, 255); color: rgb(102, 102, 102); border: 1px solid rgb(153, 153, 153); display: inline-block;">
+                            </span>
+                        
+                        </td>
+                        
+                        <td class="td2" height="33" style="width:270px;position:relative;">
+                            
+                            <input type="button" class="" id="" value="新增" onclick="xinzeng2()" style="float:left;width:35%;border-radius:5px;margin-left:10%;margin-top:10px;height:25px;margin-right:0px;background:#1ABC9C;color:#fff;border:1px solid #1ABC9C;">
+                            <input type="button" class="" id="" value="删除" onclick="shanchusc2()" style="float:right;width:35%;border-radius:5px;margin-right:10%;margin-top:10px;height:25px;background:#fff;color:#999;border:1px solid #999;">
+                            <br/>
+                            <select id="forserial2" class="area_choose" style="width: 80%;margin-left:10%;margin-top:5px;height:25px;float:left;margin-bottom:10px;"></select>
+                            <!--新增弹框-->
+                            <span id="skiptkadd2" style="position:absolute;top:75px;left:0;box-shadow: rgb(238, 238, 238) 0px 1px 15px;display:none;">
+                                <input type="text" id="addseris2" class="product_line" value="" style="width:73%;margin-left:6%;border-bottom-left-radius: 5px;border-top-left-radius: 5px;margin-top:36px;color:#666;"><br/>
+                                <input type="button" class="add_btn" id="selectaddline2" value="保存" onclick="selectaddline2()" style="margin-left: 4px; margin-right: 25px; display: inline-block;">
+                            </span>
+                            <!--删除弹框-->
+                            <span class="skiptk" id="skiptk2" style="display:none;">
+                                <span id="list2" style="max-height:124px;overflow-y: scroll;margin-top:21px;"></span>
+                                <input type="button" class="add_btn" id="remsc2" value="删除" onclick="addline2()" style="margin-right: 0px; background: rgb(255, 255, 255); color: rgb(102, 102, 102); border: 1px solid rgb(153, 153, 153); display: inline-block;">
+                            </span>
+                        
+                        </td>
+                    </tr>
+                </tbody> 
+            </table>
+            <p style="height:33px;"><input type="hidden" class="add_btn flt_r" value="删除" onclick="delCreate()" style="margin-right:41px;height:33px;border:1px solid #F34B4B;background:#F34B4B"></p>
+            <input type="hidden" id="getid" value="" />
+            <p style="text-align:center;padding-top:100px;padding-bottom:100px;"><img src="img/yes.png" onclick="addSubpro()" style="width:50px;"></p>
+        </div>
+    </div>
+</body>
+
+<script>
+    window.onload = function () {
+        getluntuo();
+        $('#linenum').change(function(){
+            $('#forserial').empty();
+            get_listoutside();
+        })
+
+        $.ajax({
+            type: "get",
+            async: false,
+            url: ip_path + "/changfa_system/subsidyParameter/list.do",
+            data: {
+            token: $(window.parent.document).find("input[name='token']").val(),
+            type:'power',
+            //name:$('#serisename1').val()
+            },
+            dataType: "json",
+            success: function (data) {
+            //console.log(data);
+            if(data['head']['code']==200){
+                $("#forserial1").empty();
+                $("#list1").empty();
+                for(var i = 0; i < data['body']['result'].length; i++){
+                $('#forserial1').append(
+                    "<option value='" + data['body']['result'][i]['name'] + "'>" + data['body']['result'][i]['name'] + "</option>"  
+                )
+                $('#list1').append(
+                    "<i data-id =" + data['body']['result'][i]['name'] + " >"+data['body']['result'][i]['name']+
+                    //'<input class="radio_type" type="radio" name="radio" id="radio" onclick="toogleradio(this)" style="margin-right:20px;float:right;"/>'+
+                    '<input class="radio_type" type="radio" name="'+'radio'+[i]+'" id="'+'radio'+[i]+'" onclick="toogleradio(this)" style="margin-right:20px;float:right;"/> '+
+                    '</i>'
+                    
+                )
+                }
+                
+            }else{
+                alert(data['head']['message'])
+            }
+
+            }
+        })
+        $.ajax({
+            type: "get",
+            async: false,
+            url: ip_path + "/changfa_system/subsidyParameter/list.do",
+            data: {
+            token: $(window.parent.document).find("input[name='token']").val(),
+            type:'level',
+            //name:$('#serisename1').val()
+            },
+            dataType: "json",
+            success: function (data) {
+            //console.log(data);
+            if(data['head']['code']==200){
+                $("#forserial2").empty();
+                $("#list2").empty();
+                for(var i = 0; i < data['body']['result'].length; i++){
+                $('#forserial2').append(
+                    "<option value='" + data['body']['result'][i]['name'] + "'>" + data['body']['result'][i]['name'] + "</option>"  
+                )
+                $('#list2').append(
+                    "<i data-id =" + data['body']['result'][i]['name'] + " >"+data['body']['result'][i]['name']+
+                    //'<input class="radio_type" type="radio" name="radio" id="radio" onclick="toogleradio(this)" style="margin-right:20px;float:right;"/>'+
+                    '<input class="radio_type" type="radio" name="'+'radio'+[i]+'" id="'+'radio'+[i]+'" onclick="toogleradio(this)" style="margin-right:20px;float:right;"/> '+
+                    '</i>'
+                    
+                )
+                }
+                
+            }else{
+                alert(data['head']['message'])
+            }
+
+            }
+        })
+
+        
+        jQuery.support.cors = true;
+        toTop();
+        
+        
+        $.datepicker.regional['zh-CN'] = {
+            changeMonth: true,
+            changeYear: true,
+            clearText: '清除',
+            clearStatus: '清除已选日期',
+            closeText: '关闭',
+            closeStatus: '不改变当前选择',
+            prevText: '<上月',
+            prevStatus: '显示上月',
+            prevBigText: '<<',
+            prevBigStatus: '显示上一年',
+            nextText: '下月>',
+            nextStatus: '显示下月',
+            nextBigText: '>>',
+            nextBigStatus: '显示下一年',
+            currentText: '今天',
+            currentStatus: '显示本月',
+            monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            monthNamesShort: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+            monthStatus: '选择月份',
+            yearStatus: '选择年份',
+            weekHeader: '周',
+            weekStatus: '年内周次',
+            dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+            dayNamesShort: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+            dayNamesMin: ['日', '一', '二', '三', '四', '五', '六'],
+            dayStatus: '设置 DD 为一周起始',
+            dateStatus: '选择 m月 d日, DD',
+            dateFormat: 'yy-mm-dd',
+            firstDay: 1,
+            initStatus: '请选择日期',
+            isRTL: false
+        };
+        $.datepicker.setDefaults($.datepicker.regional['zh-CN']);
+        $("#date_start_ve").datepicker({maxDate:new Date()});
+        $("#date_start").datepicker({maxDate:new Date()});
+        $("#date_start_uam").datepicker({maxDate: new Date()});
+        $("#date_end_uam").datepicker({maxDate: new Date()});
+        $("#defult").datetimepicker();
+        $("#date_start_uam").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            onClose: function (selectedDate) {
+                $("#date_end_uam").datepicker("option", "minDate", selectedDate);
+            }
+        });
+
+        $("#date_end_uam").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            onClose: function (selectedDate) {
+                $("#date_start_uam").datepicker("option", "maxDate", selectedDate);
+                $("#date_end_uam").val($(this).val());
+            }
+        });
+        $("#date_start_ve").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            onClose: function(selectedDate) {
+                $("#date_end_ve").datepicker("option", "minDate", selectedDate);
+            }
+        });
+        $("#date_start").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            clear : "qingkong",
+            onClose: function(selectedDate) {
+                $("#date_start").datepicker("option", "minDate", selectedDate);
+            }
+        });
+        $('#jxshang').change(function(){
+            $('#saleM_infojxs').val('')
+        })
+        $("#saleM_item1").change(function () {
+            $("#saleM_info1").val("");
+        });
+        //初始化
+        ajax_getcompany();
+        currentPage = 1;
+        ajax_getcompany();
+        $('#firstPage').attr('disabled',true);
+        $('#prePage').attr('disabled',true);
+        $("#firstPage").click(function () {
+            $("#tablelb tr td .radio_type").each(function(){
+                $(this).attr("checked",true);
+                $(this).addClass("radio_types");
+            })
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = 1;
+            $('#firstPage').attr('disabled',true);
+            $('#prePage').attr('disabled',true);
+            ajax_getcompany();
+        });
+        $("#lastPage").click(function () {
+            $("#tablelb tr td .radio_type").each(function(){
+                $(this).attr("checked",true);
+                $(this).addClass("radio_types");
+            })
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = totalPage;
+            $('#lastPage').attr('disabled',true);
+            $('#nextPage').attr('disabled',true);
+            ajax_getcompany();
+        });
+        $("#nextPage").click(function () {
+            $("#tablelb tr td .radio_type").each(function(){
+                $(this).attr("checked",true);
+                $(this).addClass("radio_types");
+            })
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = currentPage+1;
+            if(currentPage == totalPage){
+                $('#lastPage').attr('disabled',true);
+                $('#nextPage').attr('disabled',true);
+            }else{
+                $('#lastPage').removeAttr('disabled');
+                $('#nextPage').removeAttr('disabled');
+            }
+            ajax_getcompany();
+        });
+        $("#prePage").click(function () {
+            $("#tablelb tr td .radio_type").each(function(){
+                $(this).attr("checked",true);
+                $(this).addClass("radio_types");
+            })
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = currentPage-1;
+            if(currentPage == 1){
+                $('#firstPage').attr('disabled',true);
+                $('#prePage').attr('disabled',true);
+            }else{
+                $('#firstPage').removeAttr('disabled');
+                $('#prePage').removeAttr('disabled');
+            }
+            ajax_getcompany();
+        });
+
+        
+        
+        $("#status").change(function () {
+            currentPage = 1;
+            ajax_getcompany();
+        });
+
+
+        
+    }
+</script>
+</html>

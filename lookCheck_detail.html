@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>农机详情</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/saleCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <script src="jqueryTagsInput/jquery.tagsinput.min.js"></script>
+    <link rel="stylesheet" href="css/photo.css">
+    <link rel="stylesheet" type="text/css" href="jqueryTagsInput/jquery.tagsinput.min.css" />
+    <!-- 这里要配置参数key,将其值设置为高德官网开发者获取的key -->
+    <script src="http://webapi.amap.com/maps?v=1.3&key=1e7ce268607a7319fdfe6b430761cbcb"></script>
+    <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css"/>
+    <script src="http://cache.amap.com/lbs/static/es5.min.js"></script>
+    <script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
+    <script src="jquery-ui-1.12.1/jquery-ui.min.js"></script>
+    <link href="jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet" />
+    <script src="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.js"></script>
+    <script type="text/javascript" src="jQuery-Timepicker/dist/i18n/jquery-ui-timepicker-zh-CN.js"></script>
+    <link href="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.css" rel="stylesheet" />
+    <script src="js/photo.js"></script>
+    <script src="js/jquery.rotate.min.js"></script>
+</head>
+<body class="reset"><input type="text" id="focus" size="1" style="display: none;">
+<div id="addLine" class="addTopic outShadow" style="display: none;position: fixed">
+    <div class="dealer_title">
+        <span>查看位置</span>
+        <img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeAddLine()">
+    </div>
+    <div style="width: 100%;height: auto;border: 1px solid #E4E4E4;border-top: none;">
+        <table id='lastTime' class="rpt_detail_tab txt_center" style='margin-bottom: 10px;margin-top: 20px;'>
+            <tr>
+                <td class='head_td' width='50%' height='59px'>最近时间</td>
+            </tr>
+        </table>
+            <div id="machine_map" class="flt_l mg-t30 mg_l50" style="width: 90%;height: 500px;margin-bottom: 20px;">
+            </div>
+            <table id='machinery' class="rpt_detail_tab txt_center" style='margin-bottom: 20px;'>
+                <tr>
+                    <td class='head_td' width='136px' height='30px'>IMEI号</td>
+                    <td class='head_td'>农机油压</td>
+                    <td class='head_td'>农机水温</td>
+                    <td class='head_td'>农机转速</td>
+                    <td class='head_td'>蓄电池电压</td>
+                </tr>
+            </table>
+    </div>
+</div>
+
+    <div>
+        <div class="title_box">
+            <div style="float: left">
+                <img src="img/status_warning.png" class="status_warning">
+                <span id="status_describe" class="status_info">类型：</span>
+            </div>
+            <div style="float: right; margin-right:50px; ">
+                    <span id="documents_state" class="status_info">流程状态：</span>
+            </div>
+        </div>
+        <div class="rpt_detail">
+            <!-- <div id="threeServer_only">
+                <div class="tit_msg">
+                    <img src="img/tit_pic.png" class="tit_pic">
+                    <span>类型</span>
+                </div>
+                <div  style="margin-left: 35px;">
+                    <div class="car-type">类型</div>
+                    <div id="car-type" class="car-type" style="background:rgba(255,255,255,1);">
+                        <span></span>
+                    </div>
+                </div>
+            </div> -->
+
+            <div class="tit_msg" style="clear: both;">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>农机信息</span>
+                <!--<img src="img/refresh.png" class="mg-r30 flt_r" onclick="F5()">-->
+            </div>
+            <div>
+                <table id="agricultural" class="rpt_detail_tab txt_center">
+                    <tr>
+                        <td class="head_td" height="46px">图片</td>
+                        <td class="head_td">产品线</td>
+                        <td class="head_td">产品系列</td>
+                        <td class="head_td">产品型号</td>
+                        <td class="head_td">条码</td>
+                        <td class="head_td">出厂编号</td>
+                        <td class="head_td">农机状态</td>
+                        <td class="head_td">查看位置</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div id='exhibition_time' style="display: none;">
+                <div class="tit_msg" style="clear: both;">
+                        <img src="img/tit_pic.png" class="tit_pic">
+                        <span>外出参展时间</span>
+                        <!--<img src="img/refresh.png" class="mg-r30 flt_r" onclick="F5()">-->
+                </div>
+                <div>
+                        <table id="exhibition" class="rpt_detail_tab txt_center">
+                            <tr>
+                                <td class="head_td" height="46px">开始时间</td>
+                                <td class="head_td">结束时间</td>
+                            </tr>
+                        </table>
+                </div>
+            </div>
+
+            <div class="tit_msg">
+                <img src="img/tit_pic.png" class="tit_pic" >
+                <span>申请理由</span>
+            </div>
+            <div >
+            <textarea id="describe" class="checke_discribe" disabled="true" style="margin-left: 5%;"></textarea>
+            </div>
+
+            <div class="tit_msg">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>附件上传</span>
+            </div>
+            <div id='accessory' class="mg_b50 accessory" style="margin-left: 5%;">
+            
+            </div>
+        </div>
+        
+    </div>
+    <div id="next_status" class="next" style="display: none">
+        <a><img src="img/next.png" id="next" onclick="dis_next_look()"></a>
+    </div>
+    
+    </body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path + "/changfa_system/machineFlow/getMachineInfoFlow.do",
+            data : {
+                machineFlowId :$(window.parent.parent.document).find("input[name='machineFlowId']").val()
+            },
+            dataType : "json",
+            success : function (param) {
+                if(param['head']['code'] == 200){
+                    $(window.parent.parent.document).find("input[name='type']").val(param['body']['result']['type']);
+                    $(window.parent.parent.document).find("input[name='changeNum']").val(param['body']['result']['newDealerNum']);
+                    var path = "";
+                    if(param['body']['result']['lineNum'] == 611 || param['body']['result']['lineNum'] == 61101 || param['body']['result']['lineNum'] == 61102){
+                        path="img/chayangji.png";
+                    }else if(param['body']['result']['lineNum'] == 601){
+                        path="img/tuolaji.png";
+                    }else if(param['body']['result']['lineNum'] == 612 || param['body']['result']['lineNum'] == 615 || param['body']['result']['lineNum'] == 622 || param['body']['result']['lineNum'] == 628){
+                        path="img/shougeji.png";
+                    }else {
+                        path = "";
+                    }
+
+                    var status;
+                    switch (param['body']['result']['status']) {
+                        case 1:
+                            status = '已发货';
+                            break;
+                        case 2:
+                            status = '在库中';
+                            break;
+                        case 3:
+                            status = '调拨';
+                            break;
+                        case 4:
+                            status = '退货';
+                            break;
+                        case 5:
+                            status = '返厂';
+                            break;
+                        case 6:
+                            status = '已销售';
+                            break;
+                        case 10:
+                            status = '外出参展';
+                            break;
+                        case 11:
+                            status = '锁车';
+                            break;
+                        case 12:
+                            status = '解锁';
+                            break;
+                    }
+
+                    var type;
+                    switch (param['body']['result']['type']) {
+                        case 10:
+                            type = '类型：申请外出参展';
+                            break;
+                        case 11:
+                            type = '类型：申请锁车';
+                            break;
+                        case 12:
+                            type = '类型：申请解锁';
+                            break;
+                    }
+
+                    $('#status_describe').html(type);
+
+                    if($(window.parent.parent.document).find("input[name='documentsState']").val()==''){
+                        $('#documents_state').text("流程状态：待审核");
+                    }else if($(window.parent.parent.document).find("input[name='documentsState']").val() == 1){
+                        $('#documents_state').text("流程状态：已完成");
+                    }else if($(window.parent.parent.document).find("input[name='documentsState']").val() == 0){
+                        $('#documents_state').text("流程状态：已关闭");
+                    }
+
+                    //$('.car-type span').html(status);
+                    $('#describe').val(param['body']['result']['description']);
+
+                    if(param['body']['result']['filePath']){
+                        param['body']['result']['filePath'].forEach(elem => {
+                            $('#accessory').append(
+                                '<a href="javascript:void(0)" data-magnify="gallery" data-group="g1" data-src="'+ elem +'" data-caption="显示图片">'+
+                                '<img src="' + elem + '" class="err_pic" style="width:auto;height:80%;margin-left:40px;margin-top:15px;">' +
+                                '</a>'
+                            )
+                        });
+                    }
+                    
+                    $("#agricultural").append(
+                        "<tr>" +
+                        "<td class='body_td' height='59px'><img src='"+ path +"' alt=''></td>" +
+                        "<td class='body_td'>" + param['body']['result']['lineName'] + "</td>" +
+                        "<td class='body_td'>" + param['body']['result']['seriesName'] + "</td>" +
+                        "<td class='body_td' height='59px'>"+param['body']['result']['modelName']+"</td>" +
+                        "<td class='body_td'>" + param['body']['result']['barCode'] + "</td>" +
+                        "<td class='body_td'>" + param['body']['result']['factoryNum'] + "</td>" +
+                        "<td class='body_td' height='59px'>"+status+"</td>" +
+                        "<td class='body_td'><a href='#' onclick='addLine("+ param['body']['result']['imei'] +")'>查看详情</a></td>" +
+                        "</tr>"
+                    );
+
+                    $('#machinery').append(
+                        "<tr>" +
+                        "<td class='body_td' height='30px'>" + param['body']['result']['imei'] + "</td>" +
+                        "<td class='body_td'>" + param['body']['result']['hydraulic'] + "</td>" +
+                        "<td class='body_td' height='59px'>"+param['body']['result']['temperature']+"</td>" +
+                        "<td class='body_td'>" + param['body']['result']['speed'] + "</td>" +
+                        "<td class='body_td'>" + param['body']['result']['voltage'] + "</td>" +
+                        "</tr>"
+                    )
+
+                    $('#lastTime tr').append(
+                        "<td class='head_td' style='background-color:#ffffff'>"+ param['body']['result']['lastTime'] +"</td>"
+                    )
+
+                    if(param['body']['result']['type'] == 10){
+                        $('#exhibition_time').show();
+                        $('#exhibition').append(
+                        "<tr>" +
+                        "<td class='body_td' height='59px'>" + param['body']['result']['beginTime'].split(" ")[0] + "</td>" +
+                        "<td class='body_td'>" + param['body']['result']['endTime'].split(" ")[0] + "</td>" +
+                        "</tr>"
+                        )
+                    }
+
+                // <input type='text' style='width: 100%;height: 58px;margin-left: -10px;' value='"+param['body']['result']['buyTime']+"'>
+
+                    var thisStatus = $(window.parent.parent.document).find("input[name='approvalStage']").val();
+                    if(thisStatus == 2 && ($(window.parent.parent.document).find("input[name='roleId']").val() == 22 ||  $(window.parent.parent.document).find("input[name='roleId']").val() == 23)){
+                        $("#next_status").show();
+                    }
+
+                    if(param['body']['result']['location'] != ''){
+                        map = new AMap.Map("machine_map",{
+                            resizeEnable: true,
+                            center:[param['body']['result']['location'].split(',')[0],param['body']['result']['location'].split(',')[1]],
+                            zoom: 9
+                        });
+                        var marker_machine = new AMap.Marker({
+                            position: new AMap.LngLat(param['body']['result']['location'].split(',')[0],param['body']['result']['location'].split(',')[1]),
+                            offset: new AMap.Pixel(-16, -45),
+                            icon: 'img/machine.png',
+                        });
+                        map.add(marker_machine);
+                        var msg_label = param['body']['result']['locationAddress'] ;
+                        marker_machine.setTitle(msg_label);
+                    }
+
+                }else{
+                    alert(data['head']['message']);
+                }
+            }
+        });
+
+        $('[data-magnify]').Magnify({
+                    Toolbar: [
+                        'prev',
+                        'next',
+                        'rotateLeft',
+                        'rotateRight',
+                        'zoomIn',
+                        'actualSize',
+                        'zoomOut'
+                    ],
+                    keyboard:true,
+                    draggable:true,
+                    movable:true,
+                    modalSize:[800,600],
+                    beforeOpen:function (obj,data) {
+                        console.log('beforeOpen')
+                    },
+                    opened:function (obj,data) {
+                        console.log('opened')
+                    },
+                    beforeClose:function (obj,data) {
+                        console.log('beforeClose')
+                    },
+                    closed:function (obj,data) {
+                        console.log('closed')
+                    },
+                    beforeChange:function (obj,data) {
+                        console.log('beforeChange')
+                    },
+                    changed:function (obj,data) {
+                        console.log('changed')
+                    }
+                });
+
+        $.datepicker.regional['zh-CN'] = {
+            changeMonth: true,
+            changeYear: true,
+            clearText: '清除',
+            clearStatus: '清除已选日期',
+            closeText: '关闭',
+            closeStatus: '不改变当前选择',
+            prevText: '<上月',
+            prevStatus: '显示上月',
+            prevBigText: '<<',
+            prevBigStatus: '显示上一年',
+            nextText: '下月>',
+            nextStatus: '显示下月',
+            nextBigText: '>>',
+            nextBigStatus: '显示下一年',
+            currentText: '今天',
+            currentStatus: '显示本月',
+            monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            monthNamesShort: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+            monthStatus: '选择月份',
+            yearStatus: '选择年份',
+            weekHeader: '周',
+            weekStatus: '年内周次',
+            dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+            dayNamesShort: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+            dayNamesMin: ['日', '一', '二', '三', '四', '五', '六'],
+            dayStatus: '设置 DD 为一周起始',
+            dateStatus: '选择 m月 d日, DD',
+            dateFormat: 'yy-mm-dd',
+            firstDay: 1,
+            initStatus: '请选择日期',
+            isRTL: false
+        };
+        $.datepicker.setDefaults($.datepicker.regional['zh-CN']);
+        $("#date_yy-mm-dd").datepicker({maxDate:new Date()});
+        $("#date_yy-mm-dd").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            onClose: function(selectedDate) {
+            }
+        });
+    }
+</script>
+</html>

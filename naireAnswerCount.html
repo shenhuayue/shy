@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>问卷调查统计</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/runningCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-gl/echarts-gl.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>
+    <script src="http://webapi.amap.com/maps?v=1.3&key=1e7ce268607a7319fdfe6b430761cbcb"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/simplex.js"></script>
+</head>
+<body class="reset">
+<div class="mg-t50" style="width: 100%;">
+    <div class="flt_l" style="width: 44%;margin-left: 5%">
+        <div class="question_tit">
+            <span class="flt_l">问卷统计</span>
+        </div>
+        <div class="questionCont">
+            <br>
+            <div id="answerList" style="height: 750px;overflow-y: scroll;">
+                <!--<div id="container" style="width:200px;height: 200px;margin-left: 500px;"></div>-->
+                <!--<div style="width: 100%;height: 200px;">-->
+                    <!--<div class="mg_l30 flt_l describ" style="width: 60%;">-->
+                        <!--<p>-->
+                            <!--<span>doiwnoidnwdiowjmndiowmndoiwnd</span>-->
+                        <!--</p>-->
+                        <!--<p><span>A.</span><span>oieefhioewhfioewfhiowe</span><span style="color: #1ABC9C;">（59人选择）</span></p>-->
+                        <!--<p><span>B.</span><span>oieefhioewhfioewfhiowe</span></p>-->
+                        <!--<p><span>C.</span><span>oieefhioewhfioewfhiowe</span></p>-->
+                        <!--<p><span>D.</span><span>oieefhioewhfioewfhiowe</span></p>-->
+                    <!--</div>-->
+                    <!--<div class="flt_l">-->
+                        <!--<div id="container1" style="width:200px;height: 200px;"></div>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div style="width: 100%;height: 200px;">-->
+                    <!--<div class="mg_l30 flt_l describ"  style="width: 60%;">-->
+                        <!--<p>-->
+                            <!--<span>doiwnoidnwdiowjmndiowmndoiwnd</span>-->
+                        <!--</p>-->
+                        <!--<p><span>A.</span><span>oieefhioewhfioewfhiowe</span></p>-->
+                        <!--<p><span>B.</span><span>oieefhioewhfioewfhiowe</span></p>-->
+                        <!--<p><span>C.</span><span>oieefhioewhfioewfhiowe</span></p>-->
+                        <!--<p><span>D.</span><span>oieefhioewhfioewfhiowe</span></p>-->
+                    <!--</div>-->
+                    <!--<div class="flt_l">-->
+                        <!--<div id="container2" style="width:200px;height: 200px;"></div>-->
+                    <!--</div>-->
+                <!--</div>-->
+            </div>
+        </div>
+    </div>
+
+    <div class="flt_l" style="width: 44%;margin-left: 1%">
+        <div class="test_tit">
+            <span class="flt_l">答题详情</span>
+        </div>
+        <div class="testCont">
+            <br>
+            <div style="height: 50px;">
+                <span class="describ mg_l30">问：</span><span class="describ" id="subject"></span>
+            </div>
+            <div id="answerContList" style="height: 700px;overflow-y: scroll;">
+                <!--<div style="height: 100px;">-->
+                    <!--<div class="flt_l mg_l30" style="width: 30%;border: 1px solid #999999;border-radius: 10px;">-->
+                        <!--<div class="flt_l mg_l10">-->
+                            <!--<img src="img/chayangji.png" style="width: 60px;height: 60px;border-radius: 50%;margin-top: 15px;">-->
+                        <!--</div>-->
+                        <!--<div class="flt_l mg_l10" style="width: 60%;word-break: break-all">-->
+                            <!--<span class="describ">朱明</span><br>-->
+                            <!--<span class="describ">17602543533</span><br>-->
+                            <!--<span class="describ">江苏省常州市武进区</span>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="flt_l mg_l10" style="width: 50%;border: 1px solid #999999;border-radius: 10px;">-->
+                        <!--<div style="height: 75px;padding-top: 10px;padding-left: 10px;word-break: break-all">hfvioahfoiahfhfvioahfoiahfoiawhfvioahfoiahfoiawhfvioahfoiahfoiawhfvioahfoiahfoiawoiaw</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        var questionType;
+        $.ajax({
+            type : "post",
+            url : ip_path + "/changfa_system/answer/selectCountByTest.do",
+            data : {
+                testId : $(window.parent.document).find("input[name='questionNaireId']").val()
+            },
+            dataType : "json",
+            success : function (data) {
+                if(data['head']['code'] == 200){
+                    for(var i=0;i<data['body']['resultList'].length;i++){
+                        if(data['body']['resultList'][i]['type'] == 1){
+                            if(data['body']['resultList'][i]['chooseType'] == 0){
+                                questionType = "（单选题）";
+                            }else{
+                                questionType = "（多选题）";
+                            }
+                            $("#answerList").append(
+                                '<div class="border_bottom_2px" style="width: 100%;height: 200px;">' +
+                                '     <div class="mg_l30 flt_l describ" style="width: 60%;">' +
+                                '           <p>' +
+                                '                 <a href="###" id="' + data['body']['resultList'][i]['qId'] + '" onclick="showAnswerDetails(this)">' + parseInt(i+1)+ '.' + data['body']['resultList'][i]['subject'] + questionType + '</a>' +
+                                '           </p>' +
+                                '           <p><span>A.</span><span>' + data['body']['resultList'][i]['answerA'] + '</span><span style="color: #1ABC9C;">（' + data['body']['resultList'][i]['countA'] + '人选择）</span></p>' +
+                                '           <p><span>B.</span><span>' + data['body']['resultList'][i]['answerB'] + '</span><span style="color: #1ABC9C;">（' + data['body']['resultList'][i]['countB'] + '人选择）</span></p>' +
+                                '           <p><span>C.</span><span>' + data['body']['resultList'][i]['answerC'] + '</span><span style="color: #1ABC9C;">（' + data['body']['resultList'][i]['countC'] + '人选择）</span></p>' +
+                                '           <p><span>D.</span><span>' + data['body']['resultList'][i]['answerD'] + '</span><span style="color: #1ABC9C;">（' + data['body']['resultList'][i]['countD'] + '人选择）</span></p>' +
+                                '     </div>' +
+                                '     <div class="flt_l">' +
+                                '           <div id="container' + i + '" style="width:200px;height: 200px;"></div>' +
+                                '     </div>' +
+                                '</div>'
+                            );
+                            var dom = document.getElementById("container"+i);
+                            var myChart = echarts.init(dom);
+                            option = null;
+                            option = {
+                                tooltip : {
+                                    trigger: 'item',
+                                    formatter: "{a} <br/>{b} : {c} ({d}%)"
+                                },
+                                series : [
+                                    {
+                                        name: '选项',
+                                        type: 'pie',
+                                        radius : '55%',
+                                        center: ['50%', '50%'],
+                                        data:[
+                                            {value:data['body']['resultList'][i]['countA'], name:'A'},
+                                            {value:data['body']['resultList'][i]['countB'], name:'B'},
+                                            {value:data['body']['resultList'][i]['countC'], name:'C'},
+                                            {value:data['body']['resultList'][i]['countD'], name:'D'},
+                                        ],
+                                        itemStyle: {
+                                            emphasis: {
+                                                shadowBlur: 10,
+                                                shadowOffsetX: 0,
+                                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                            }
+                                        }
+                                    }
+                                ]
+                            };
+                            if (option && typeof option === "object") {
+                                myChart.setOption(option, true);
+                            }
+                        }else if(data['body']['resultList'][i]['type'] == 0){
+                            questionType = "（问答题）";
+                            $("#answerList").append(
+                                '<div class="border_bottom_2px" style="width: 100%;height: 100px;">' +
+                                '      <div class="mg_l30 flt_l describ" style="width: 60%;">' +
+                                '            <p>' +
+                                '                  <a href="###" id="' + data['body']['resultList'][i]['qId'] + '" onclick="showAnswerDetails(this)">'+ parseInt(i+1) + '.' + data['body']['resultList'][i]['subject'] + questionType + '</a>' +
+                                '            </p>' +
+                                '            <p><span style="color: #1ABC9C;">（' + data['body']['resultList'][i]['count'] + '人回答）</span></p>' +
+                                '      </div>' +
+                                '</div>'
+                            );
+
+                            $("#subject").text(data['body']['resultList'][i]['subject']);
+                            $.ajax({
+                                type : "post",
+                                url : ip_path + "/changfa_system/answer/selectCountByTestAndQid.do",
+                                data : {
+                                    testId : $(window.parent.document).find("input[name='questionNaireId']").val(),
+                                    qId : data['body']['resultList'][i]['qId']
+                                },
+                                dataType : "json",
+                                success : function (data) {
+                                    if(data['head']['code'] == 200){
+                                        $("#answerContList").empty();
+                                        for(var i=0;i<data['body']['result']['answerInfo'].length;i++){
+                                            $("#subject").text(data['body']['result']['question']['subject']);
+                                            if(data['body']['result']['answerInfo'][i]['type'] == 1){
+                                                $("#answerContList").append(
+                                                    '<div style="height: 100px;">' +
+                                                    '    <div class="flt_l mg_l30" style="width: 30%;border: 1px solid #999999;border-radius: 10px;">' +
+                                                    '         <div class="flt_l mg_l10">' +
+                                                    '               <img src="' + data['body']['result']['answerInfo'][i]['headPath'] + '" style="width: 60px;height: 60px;border-radius: 50%;margin-top: 10px;">' +
+                                                    '         </div>' +
+                                                    '         <div class="flt_l mg_l10" style="width: 60%;word-break: break-all">' +
+                                                    '               <span class="describ">' + data['body']['result']['answerInfo'][i]['pName'] + '</span><br>' +
+                                                    '               <span class="describ">' + data['body']['result']['answerInfo'][i]['mobile'] + '</span><br>' +
+                                                    '               <span class="describ">' + data['body']['result']['answerInfo'][i]['address'] + '</span>' +
+                                                    '         </div>' +
+                                                    '    </div>' +
+                                                    '    <div class="flt_l mg_l10" style="width: 50%;border: 1px solid #999999;border-radius: 10px;">' +
+                                                    '          <div class="describ" style="height: 65px;padding-top: 10px;padding-left: 10px;word-break: break-all">' + data['body']['result']['answerInfo'][i]['answer'] + '</div>' +
+                                                    '    </div>' +
+                                                    '</div>'
+                                                );
+                                            }else if(data['body']['result']['answerInfo'][i]['type'] == 0){
+                                                $("#answerContList").append(
+                                                    '<div style="height: 100px;">' +
+                                                    '    <div class="flt_l mg_l30" style="width: 30%;border: 1px solid #999999;border-radius: 10px;">' +
+                                                    '         <div class="flt_l mg_l10">' +
+                                                    '               <img src="' + data['body']['result']['answerInfo'][i]['headPath'] + '" style="width: 60px;height: 60px;border-radius: 50%;margin-top: 10px;">' +
+                                                    '         </div>' +
+                                                    '         <div class="flt_l mg_l10" style="width: 60%;word-break: break-all">' +
+                                                    '               <span class="describ">' + data['body']['result']['answerInfo'][i]['pName'] + '</span><br>' +
+                                                    '               <span class="describ">' + data['body']['result']['answerInfo'][i]['mobile'] + '</span><br>' +
+                                                    '               <span class="describ">' + data['body']['result']['answerInfo'][i]['address'] + '</span>' +
+                                                    '         </div>' +
+                                                    '    </div>' +
+                                                    '    <div class="flt_l mg_l10" style="width: 50%;border: 1px solid #999999;border-radius: 10px;">' +
+                                                    '          <div class="describ" style="height: 65px;padding-top: 10px;padding-left: 10px;word-break: break-all">' + data['body']['result']['answerInfo'][i]['answer'] + '</div>' +
+                                                    '    </div>' +
+                                                    '</div>'
+                                                );
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+        });
+        // var dom = document.getElementById("container");
+        // var myChart = echarts.init(dom);
+        // option = null;
+        // option = {
+        //     tooltip : {
+        //         trigger: 'item',
+        //         formatter: "{a} <br/>{b} : {c} ({d}%)"
+        //     },
+        //     series : [
+        //         {
+        //             name: '选项',
+        //             type: 'pie',
+        //             radius : '55%',
+        //             center: ['50%', '50%'],
+        //             data:[
+        //                 {value:335, name:'A'},
+        //                 {value:310, name:'B'},
+        //                 {value:234, name:'C'},
+        //                 {value:135, name:'D'},
+        //             ],
+        //             itemStyle: {
+        //                 emphasis: {
+        //                     shadowBlur: 10,
+        //                     shadowOffsetX: 0,
+        //                     shadowColor: 'rgba(0, 0, 0, 0.5)'
+        //                 }
+        //             }
+        //         }
+        //     ]
+        // };
+        // if (option && typeof option === "object") {
+        //     myChart.setOption(option, true);
+        // }
+    }
+</script>
+</html>

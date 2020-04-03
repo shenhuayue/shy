@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>大屏权限配置</title>
+        <link href="css/bigScreen.css" type="text/css" rel="stylesheet"/>
+        <script src="js/bigScreen.js"></script>
+        <script src="js/jquery-2.1.1.min.js"></script>
+        <script src="js/echarts.min.js"></script>
+        <script src="js/common.js"></script>
+    </head>
+<body>
+    <div style="max-width: 100%;height: 923px;">
+        <div class="headTop"></div>
+        <div>
+            <div class="logo">
+                <img src="static2/img/logo.png" alt="" style="width: 150px;height: auto;margin-top: 20px;margin-left: 30px;">
+            </div>
+            <div class="headTitle">
+                <span id="titleName">发货数据图</span>
+            </div>
+            <div class="newTime">
+                <span id="time"></span>
+            </div>
+        </div>
+
+        <div style="width:95%;margin: 0 auto;font-weight: 600;">
+            <span>模板选择：</span>
+            <select id="line">
+
+            </select>
+        </div>
+        <div style="clear: both;"></div>
+        <div class="modelContent">
+
+        </div>
+        <div class="innerDiv_title">
+                        <!--iframe高度-->
+            <input type="hidden" id="hidden1" name="height" value="">  
+        </div>
+    </div>
+</body>
+<script>
+$(document).ready(function(){
+        jQuery.support.cors = true;
+        $("body").prepend('<input type="text" id="focus" size="1">');
+        //alert('123');
+        $("#focus").focus();
+        $("#focus").hide();
+        var a = new Date();
+        var b;
+        switch(a.getDay()){
+            case 0:
+            b = '星期日';
+            break;
+            case 1:
+            b = '星期一';
+            break;
+            case 2:
+            b = '星期二';
+            break;
+            case 3:
+            b = '星期三';
+            break;
+            case 4:
+            b = '星期四';
+            break;b
+            case 5:
+            b = '星期五';
+            break;
+            case 6:
+            b = '星期六';
+            break;
+        }
+
+        $('#time').text(a.getFullYear()+'年'+ (a.getMonth()+1) + '月' + a.getDate() + b);
+
+        $.ajax({
+    type: "post",
+    url: ip_path + "/changfa_system/screenAuthor/queryScreenModelBase.do",
+    // data: {
+    //     chartType:1
+    // },
+    dataType: "json",
+    success: function (data) {
+      if (data['head']['code'] != 200) {
+        $("#line").empty();
+      } else {
+        $("#line").empty();
+        $("#line").append(
+                "<option value=''></option>"
+            )
+        data.body.resultList.forEach(elem => {
+            $("#line").append(
+                "<option value='"+ elem.modelBaseId + "'>"+ elem.name +"</option>"
+            )
+        });
+
+      }
+    }
+  });
+
+  $("#line").change(function(){
+      //console.log($(this).val().substring(0,$(this).val().indexOf("(")-1));
+      models.forEach(item =>{
+        if(item.value == $(this).val() ){
+            //alert(item.name);
+            var content = "<iframe id='ifm' src='" + item.name + ".html' frameborder='0' scrolling='no' width='100%' onload='this.height=this.contentWindow.document.body.scrollHeight'></iframe>"
+            //$(window.document).find("input[name='pitchOn']").val(JSON.stringify(item.chartList));
+            $(window.document).find("input[name='height']").val(Number(document.body.scrollHeight) -180);
+            $(".modelContent").html(content);
+        }
+    })
+  })
+
+
+    })
+</script>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>app下载</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <script src="js/jquery-1.9.1.js"></script>
+    <script src="js/common.js"></script>
+    <style>
+        html, body, #div {
+            width: 100%;
+            height: 100%;
+            margin: 0px;
+            padding: 0px;
+        }
+        .bac{
+            background: url("img/downloadBackground.png") no-repeat;
+            background-size:100% 100%
+        }
+    </style>
+</head>
+<body style="margin: 0;padding: 0;">
+<div id="div" class="bac" style="text-align: center;padding-top: 20%;">
+    <div style="width: 60%;margin-left: 20%;margin-top: 50px;">
+        <img src="img/downloadLogo.png" style="width: 100%;">
+    </div>
+    <div style="width: 60%;margin-left: 20%;margin-top: 30px;">
+        <a id="android" href=""><img src="img/android.png" style="width: 100%;"></a>
+    </div>
+    <div style="width: 60%;margin-left: 20%;margin-top: 30px;">
+        <a href="https://itunes.apple.com/cn/app/%E5%B8%B8%E5%8F%91%E5%86%9C%E8%A3%85/id1455816204?mt=8"><img src="img/ios.png" style="width: 100%;"></a>
+    </div>
+    <!--<div style="width: 60%;margin-left: 20%;margin-top: 30px;">-->
+        <!--<p>ios客户端暂未上架</p>-->
+    <!--</div>-->
+</div>
+</body>
+<script>
+    window.onload = function() {
+        $.ajax({
+            type: "post",
+            url: ip_path + "/changfa_system/version/getAndriodVersion.do",
+            dataType: "json",
+            success: function (data) {
+                if(data['head']['code'] == 200){
+                    $("#android").attr("href",data['body']['result']['filePath']);
+                }else{
+                    alert(data['head']['message']);
+                }
+            }
+        });
+    }
+</script>
+</html>

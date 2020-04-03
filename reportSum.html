@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>报修单报表导出</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/saleCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <script src="jquery-ui-1.12.1/jquery-ui.min.js"></script>
+    <link href="jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet" />
+    <script src="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.js"></script>
+    <script type="text/javascript" src="jQuery-Timepicker/dist/i18n/jquery-ui-timepicker-zh-CN.js"></script>
+    <link href="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.css" rel="stylesheet" />
+</head>
+<body class="reset">
+    <div class="mg-t50">
+        <div class="tit">
+            <span class="flt_l">筛选查询</span>
+            <input type="button" class="add_btn flt_r" value="清空" onclick="clearDate()">
+        </div>
+        <div class="account_cont2">
+            <select id="reportOut_item" class="rep_guy_info">
+                <option value="factoryNum">出厂编号</option>
+                <option value="userName">用户姓名</option>
+                <option value="userMobile">用户电话</option>
+                <option value="disNum">派工单号</option>
+                <option value="repairName">接单人姓名</option>
+                <option value="repairMobile">接单人电话</option>
+                <option value="company">所属企业</option>
+            </select>
+            <input type="text" id="reportOut_info" class="product_line" style="border-left: none;">
+            <button class="query_btn_big" style="margin-left: -4%;margin-right: 4%" onclick="queryReportSum()"></button>
+
+            <span class="describ">产品线：</span>
+            <select id="product" class="product_line">
+
+            </select>
+
+            <span class="describ">报修状态：</span>
+            <select id="process" class="product_line">
+                <option value="">全部</option>
+                <option value="-1">已驳回</option>
+                <option value="1">待派工</option>
+                <option value="2">已派工</option>
+                <option value="3">已接单</option>
+                <option value="4">维修中</option>
+                <option value="6">已完成</option>
+                <option value="0">已关闭</option>
+            </select>
+
+            <span class="describ">报修时间：</span>
+            <input id="date_start" class="timeChoose" placeholder="起始">
+            <span>-</span>
+            <input id="date_end" class="timeChoose" placeholder="截止">
+
+            <br>
+
+            <select id="disChooseItem" class="rep_guy_info">
+                <option value="disName">派单人姓名</option>
+                <option value="disWorkNum">派单人工号</option>
+            </select>
+            <input type="text" id="disItemCont" class="product_line" style="border-left: none;">
+            <button class="query_btn_big" style="margin-left: -4%;margin-right: 4%" onclick="queryReportSum()"></button>
+
+            <span class="describ mg_l-15">派工状态：</span>
+            <select id="process_dis" class="product_line">
+                <option value="">全部</option>
+                <option value="7">待接单</option>
+                <option value="8">已接单</option>
+                <option value="9">出发</option>
+                <option value="10">到达</option>
+                <option value="11">上传故障图片</option>
+                <option value="12">上传人机合影</option>
+                <option value="13">填写维修单</option>
+                <option value="14">待审核</option>
+                <option value="15">审核通过</option>
+                <option value="16">审核不通过</option>
+                <option value="27">已关闭</option>
+            </select>
+
+            <span class="describ">回访结果：</span>
+            <select id="examineType" class="product_line">
+                <option value="">全部</option>
+                <option value="0">未回访</option>
+                <option value="2">未完成</option>
+                <option value="1">完成</option>
+                <option value="3">违规</option>
+                <option value="4">默认完工</option>
+            </select>
+
+            <span class="describ">派工时间：</span>
+            <input id="date_start_dis" class="timeChoose" placeholder="起始">
+            <span>-</span>
+            <input id="date_end_dis" class="timeChoose" placeholder="截止">
+        </br>
+            <span class="describ mg_l30" style="display:none">三包员：</span>
+            <select id="dealerType" class="product_line" style="display:none">
+                <option value="">全部</option>
+                <option value="1">常发三包员</option>
+                <option value="0">非常发三包员</option>
+            </select>
+        </div>
+    </div>
+    <div>
+        <div class="tit mg-t50">
+            <span class="flt_l">报修单报表导出</span>
+
+            <form id="form" action="" method="post">
+                <input type="hidden" name="operation" value="1">
+                <input type="hidden" name="chooseItem" value="">
+                <input type="hidden" name="itemCont" value="">
+                <input type="hidden" name="lineNum" value="">
+                <input type="hidden" name="reportStatus" value="">
+                <input type="hidden" name="startTime" value="">
+                <input type="hidden" name="endTime" value="">
+
+                <input type="hidden" name="disStatus" value="">
+                <input type="hidden" name="examineType" value="">
+                <input type="hidden" name="disStartTime" value="">
+                <input type="hidden" name="disEndTime" value="">
+
+                <input type="hidden" name="disChooseItem" value="">
+                <input type="hidden" name="disItemCont" value="">
+                <input type="hidden" name="dealerType" value="">
+                <input type="hidden" name="userId" value="">
+                <input type="button" id="reportOutput" class="output_btn flt_r" value="导出">
+            </form>
+
+        </div>
+        <div class="account_cont">
+            <table width="100%" cellpadding="0" cellspacing="0" class="table2" align="center">
+                <thead>
+                <tr align="center">
+                    <!--<th height="33" class="th2">报修单号</th>-->
+                    <!--<th class="th2">用户姓名</th>-->
+                    <!--<th class="th2">用户电话</th>-->
+                    <!--<th class="th2">出厂编号</th>-->
+                    <!--<th class="th2">产品线</th>-->
+                    <!--<th class="th2">产品系列</th>-->
+                    <!--<th class="th2">产品型号</th>-->
+                    <!--<th class="th2">报修时间</th>-->
+                    <!--<th class="th2">报修状态</th>-->
+                    <th height="33" class="th2">派工单号</th>
+                    <th class="th2">产品线</th>
+                    <th class="th2">派工时间</th>
+                    <th class="th2">派单人</th>
+                    <th class="th2">接单人</th>
+                    <th class="th2">接单人电话</th>
+                    <th class="th2">所属企业</th>
+                    <th class="th2">派工单状态</th>
+                    <th class="th2">出发时间</th>
+                    <th class="th2">到达时间</th>
+                    <th class="th2">回访情况</th>
+                </tr>
+                </thead>
+                <tbody id="adminTbody">
+
+                </tbody>
+            </table>
+            <div id="barcon" class="barcon">
+                <div id="barcon1" class="barcon1"></div>
+                <div id="barcon2" class="barcon2">
+                    <ul>
+                        <li><button id="firstPage" class="page_btn">首页</button></li>
+                        <li><button id="prePage" class="page_btn">上一页</button></li>
+                        <li><button id="nextPage" class="page_btn">下一页</button></li>
+                        <li><button id="lastPage" class="page_btn">尾页</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+
+        //判断经销商
+        if(threeGuar.indexOf($(window.parent.document).find("input[name='roleId']").val()) != -1){
+            $("#dealerType").prev().show();
+            $("#dealerType").show();
+        }
+
+        $.datepicker.regional['zh-CN'] = {
+            changeMonth: true,
+            changeYear: true,
+            clearText: '清除',
+            clearStatus: '清除已选日期',
+            closeText: '关闭',
+            closeStatus: '不改变当前选择',
+            prevText: '<上月',
+            prevStatus: '显示上月',
+            prevBigText: '<<',
+            prevBigStatus: '显示上一年',
+            nextText: '下月>',
+            nextStatus: '显示下月',
+            nextBigText: '>>',
+            nextBigStatus: '显示下一年',
+            currentText: '今天',
+            currentStatus: '显示本月',
+            monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            monthNamesShort: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+            monthStatus: '选择月份',
+            yearStatus: '选择年份',
+            weekHeader: '周',
+            weekStatus: '年内周次',
+            dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+            dayNamesShort: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+            dayNamesMin: ['日', '一', '二', '三', '四', '五', '六'],
+            dayStatus: '设置 DD 为一周起始',
+            dateStatus: '选择 m月 d日, DD',
+            dateFormat: 'yy-mm-dd',
+            firstDay: 1,
+            initStatus: '请选择日期',
+            isRTL: false
+        };
+
+        $.datepicker.setDefaults($.datepicker.regional['zh-CN']);
+        $("#date_start").datepicker({maxDate:new Date()});
+        $("#date_end").datepicker({maxDate:new Date()});
+        $("#defult").datetimepicker();
+        $("#date_start").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            onClose: function(selectedDate) {
+                $("#date_end").datepicker("option", "minDate", selectedDate);
+            }
+        });
+
+        $("#date_end").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            onClose: function(selectedDate) {
+                $("#date_start").datepicker("option", "maxDate", selectedDate);
+                $("#date_end").val($(this).val());
+            }
+        });
+
+        $("#date_start_dis").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            onClose: function(selectedDate) {
+                $("#date_end_dis").datepicker("option", "minDate", selectedDate);
+            }
+        });
+
+        $("#date_end_dis").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            onClose: function(selectedDate) {
+                $("#date_start_dis").datepicker("option", "maxDate", selectedDate);
+                $("#date_end_dis").val($(this).val());
+            }
+        });
+
+        $.ajax({
+            type : "post",
+            url : ip_path+"/changfa_system/machineModel/getMachineModels.do",
+            dataType : "json",
+            success : function (data) {
+                $("#product").append("<option value=''>全部</option>");
+                for(var i=0;i<data['body']['resultList']['length'];i++){
+                    $("#product").append("<option value='"+ data['body']['resultList'][i]['number'] +"'>"+data['body']['resultList'][i]['name']+"</option>");
+                }
+            }
+        });
+
+        currentPage = 1;
+        $('#firstPage').attr('disabled',true);
+        $('#prePage').attr('disabled',true);
+        $("#firstPage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = 1;
+            $('#firstPage').attr('disabled',true);
+            $('#prePage').attr('disabled',true);
+            ajax_reportSum();
+        });
+        $("#lastPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = totalPage;
+            $('#lastPage').attr('disabled',true);
+            $('#nextPage').attr('disabled',true);
+            ajax_reportSum();
+        });
+        $("#nextPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = currentPage+1;
+            if(currentPage == totalPage){
+                $('#lastPage').attr('disabled',true);
+                $('#nextPage').attr('disabled',true);
+            }else{
+                $('#lastPage').removeAttr('disabled');
+                $('#nextPage').removeAttr('disabled');
+            }
+            ajax_reportSum();
+        });
+        $("#prePage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = currentPage-1;
+            if(currentPage == 1){
+                $('#firstPage').attr('disabled',true);
+                $('#prePage').attr('disabled',true);
+            }else{
+                $('#firstPage').removeAttr('disabled');
+                $('#prePage').removeAttr('disabled');
+            }
+            ajax_reportSum();
+        });
+        //初始化
+        ajax_reportSum();
+
+        $("#product").change(function () {
+            currentPage = 1;
+            ajax_reportSum();
+        });
+
+        $("#process").change(function () {
+            currentPage = 1;
+            ajax_reportSum();
+        });
+
+        $("#date_start").change(function () {
+            if($("#date_start").val() != "" && $("#date_end").val() != ""){
+                currentPage = 1;
+                ajax_reportSum();
+            }
+        });
+        $("#date_end").change(function () {
+            if($("#date_start").val() != "" && $("#date_end").val() != ""){
+                currentPage = 1;
+                ajax_reportSum();
+            }
+        });
+
+        $("#process_dis").change(function () {
+            currentPage = 1;
+            ajax_reportSum();
+        });
+
+        $("#dealerType").change(function () {
+            currentPage = 1;
+            ajax_reportSum();
+        });
+
+        $("#examineType").change(function () {
+            currentPage = 1;
+            ajax_reportSum();
+        });
+
+        $("#date_start_dis").change(function () {
+            if($("#date_start_dis").val() != "" && $("#date_end_dis").val() != ""){
+                currentPage = 1;
+                ajax_reportSum();
+            }
+        });
+        $("#date_end_dis").change(function () {
+            if($("#date_start_dis").val() != "" && $("#date_end_dis").val() != ""){
+                currentPage = 1;
+                ajax_reportSum();
+            }
+        });
+
+
+        $("#reportOut_item").change(function () {
+            $("#reportOut_info").val("");
+        });
+
+        $("#reportOutput").click(function () {
+
+              //判断经销商
+              var url;
+            if(appRoleList.indexOf($(window.parent.document).find("input[name='roleId']").val()) != -1){
+                url = "/changfa_system/reportRepair/reportDispatchExportForDealer.do";
+            }else{
+                url = "/changfa_system/reportRepair/reportDispatchExport.do";
+            }
+
+            $("input[name='chooseItem']").val($("#reportOut_item option:selected").val());
+            $("input[name='itemCont']").val($("#reportOut_info").val());
+            $("input[name='lineNum']").val($("#product option:selected").val());
+            $("input[name='reportStatus']").val($("#process option:selected").val());
+            $("input[name='startTime']").val($("#date_start").val());
+            $("input[name='endTime']").val($("#date_end").val());
+            $("input[name='disStatus']").val($("#process_dis option:selected").val());
+            $("input[name='examineType']").val($("#examineType option:selected").val());
+            $("input[name='disStartTime']").val($("#date_start_dis").val());
+            $("input[name='disEndTime']").val($("#date_end_dis").val());
+            $("input[name='disChooseItem']").val($("#disChooseItem option:selected").val());
+            $("input[name='disItemCont']").val($("#disItemCont").val());
+            $("input[name='dealerType']").val($("#dealerType").val());
+            $("input[name='userId']").val($(window.parent.document).find("input[name='userId']").val());
+            $("#form").attr("action",ip_path + url);
+            $("#form").submit();
+        });
+    }
+</script>
+</html>

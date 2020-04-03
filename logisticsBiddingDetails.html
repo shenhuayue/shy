@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>竞标单详情</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/saleCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <link href="layer/mobile/need/layer.css" type="text/css" rel="stylesheet"/>
+    <script src="layer/layer.js"></script>
+    <script src="jquery-ui-1.12.1/jquery-ui.min.js"></script>
+    <link href="jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet" />
+    <script src="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.js"></script>
+    <script type="text/javascript" src="jQuery-Timepicker/dist/i18n/jquery-ui-timepicker-zh-CN.js"></script>
+    <link href="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.css" rel="stylesheet" />
+    <style>
+        .btn{
+            width: 8%;height: 40px;border-radius: 15px;border: none;margin-top: 30px;
+        }
+
+        .bac_red{
+            background: #EC5858;
+        }
+
+        .bac_grey{
+            background: #D2D2D2;
+        }
+
+        .color_white{
+            color : white;
+        }
+    </style>
+</head>
+<body class="reset">
+    <div>
+        <div class="title_box" style="height:50px;line-height: 50px;margin-top: 30px;">
+            <span class="describ mg_l30">流水号：</span><span id="logisticsNum" class="describ"></span>
+            <span id="time" class="describ flt_r mg-r30"></span><span class="describ flt_r">创建日期：</span>
+        </div>
+        <div class="rpt_detail">
+            <div id="jingbiao" class="txt_center">
+                <input type="button" id="status1" class="btn bac_red color_white" value="竞标中" style="display: none;">
+                <input type="button" id="status2" class="btn bac_grey" value="已结束" style="display: none">
+                <input type="button" id="status0" class="btn bac_grey" value="已关闭" style="display: none">
+                <p style="font-size: 13px;">
+                    <div>
+                        <img src="./img/start.png" alt="" style="height: 30px;width: auto;">
+                        <span id="beginTime" style="display: inline-block;position: relative;top: -8px;" ></span>
+                        <input type="text" id="inputbeginTime" style="position: relative;top: -8px;height: 25px;display: none;">
+                    </div>
+                    <div style="margin-top: 5px;">
+                        <img src="./img/suspend.png" alt="" style="height: 30px;width: auto">
+                        <span id="endTime" style="display: inline-block;position: relative;top: -8px;" ></span>
+                        <input type="text" id="inputendTime" style="position: relative;top: -8px;height: 25px;display: none;">
+                    </div>
+                    
+                </p>
+            </div>
+
+            <div id="threeServer_only">
+                <div class="tit_msg">
+                    <img src="img/tit_pic.png" class="tit_pic">
+                    <span>物流信息</span>
+                </div>
+                <div>
+                    <table id="createrInfo" class="rpt_detail_tab txt_center">
+                        <tr>
+                            <td class="head_td" height="46px">出发地</td>
+                            <td class="head_td">目的地</td>
+                            <td class="head_td">发货时间</td>
+                            <td class="head_td">到货时间</td>
+                            <td class="head_td">车型要求</td>
+                            <td class="head_td">发货说明</td>
+                            <td class="head_td">发货经销商</td>
+                        </tr>
+                        <tbody id="logisticsInfo">
+    
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="tit_msg">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>产品信息</span>
+            </div>
+            <div>
+                <table class="rpt_detail_tab txt_center mg_b50">
+                    <tr>
+                        <td class='head_td'height='46px'>产品线</td>
+                        <td class='head_td'>产品型号</td>
+                        <td class='head_td' style="width: 70%;word-break:break-all">配置描述</td>
+                        <td class='head_td'>数量</td>
+                    </tr>
+                    <tbody id="sendInfo">
+        
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="tit_msg">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>付款信息</span>
+            </div>
+            <div>
+                <table class="rpt_detail_tab txt_center mg_b50">
+                    <tr>
+                        <td class='head_td'height='46px'>付款方式</td>
+                        <td class='head_td'>是否开票</td>
+                    </tr>
+                    <tbody id="paymentInfo">
+                        
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="bidding">
+                <div class="tit_msg">
+                    <img src="img/tit_pic.png" class="tit_pic">
+                    <span>中标信息</span>
+                </div>
+                <div>
+                    <table id="machineInfo" class="rpt_detail_tab txt_center">
+                        <tr>
+                            <td class="head_td" height="46px">中标公司</td>
+                            <td class="head_td">中标价格</td>
+                            <td class="head_td">议价</td>
+                            <td class="head_td">审核理由</td>
+                            <td class="head_td">操作</td>
+                        </tr>
+                        <tbody id="dealerInfo2">
+        
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="tit_msg">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>竞标记录</span>
+            </div>
+            <div class="mg_b50">
+                <table class="rpt_detail_tab txt_center">
+                    <tr>
+                        <td class="head_td" height="46px">企业编号</td>
+                        <td class="head_td">企业名称</td>
+                        <td class="head_td">联系人</td>
+                        <td class="head_td">电话</td>
+                        <td class="head_td">竞标时间</td>
+                        <td class="head_td">创建时间</td>
+                        <td class="head_td">竞标价格</td>
+                        <td class="head_td">更多</td>
+                    </tr>
+                    <tbody id="biggingList">
+
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="tit_msg">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>操作记录</span>
+            </div>
+            <div>
+                <table class="rpt_detail_tab txt_center mg_b50">
+                    <tr>
+                        <td class="head_td" height="40px">操作人</td>
+                        <td class="head_td">内容</td>
+                        <td class="head_td">时间</td>
+                    </tr>
+                    <tbody id="opetationLog">
+    
+                    </tbody>
+    
+                </table>
+            </div>
+            <div id="checkRemark" class="mg_b50">
+                <div class="tit_msg">
+                    <img src="img/tit_pic.png" class="tit_pic">
+                    <span>备注信息</span>
+                </div>
+                <div>
+                    <table id="errInfo" class="rpt_detail_tab">
+                        <tr>
+                            <td class="head_td txt_center" height="46px" width="150px">备注</td>
+                            <td class='body_td' id="remark">/td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div id="check">
+                <div class="tit_msg">
+                    <img src="img/tit_pic.png" class="tit_pic">
+                    <span>审核信息</span>
+                </div>
+                <div>
+                    <table id="errInfo" class="rpt_detail_tab">
+                        <tr>
+                            <td class="head_td txt_center" height="46px" width="150px">备注</td>
+                            <td class='body_td'>
+                                <input type="text" id="remark" class="errInfo" style="margin-left: -3px;">
+                            </td>
+                        </tr>
+                    </table>
+                        
+                    <div class="btn_part mg_b50">
+                        <img src="img/yes.png" id="dis_unpass" class="mg-t20 mg_l50" onclick="chooseLogisticsCompany()">
+                        <img src="img/no.png" id="dis_unpass" class="mg-t20 mg_l50" onclick="closeLogisticsBidding()">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    var mobile;
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+        //报修单详情
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/logistics/checkLogistics.do",
+            data : {
+                logisticsId : $(window.parent.document).find("input[name='logisticsBiddingId']").val(),
+                checkExaminePrice : 0
+            },
+            dataType : "json",
+            success : function (param) {
+                $("#logisticsNum").text(param['body']['result']['logisticsNum']);
+                $("#time").text(param['body']['result']['createTime']);
+
+                $("#beginTime").text(param['body']['result']['beginTime']);
+                $("#endTime").text(param['body']['result']['endTime']);
+
+                switch(param['body']['result']['status']){
+                    case 0:
+                        $("#status0").show();
+                        break;
+                    case 1:
+                        $("#status1").show();
+                        break;
+                    case 2:
+                        $("#status2").show();
+                        break;
+                }
+
+                var payType;
+                if(param['body']['result']['paymentType'] == 0){
+                    payType = "常发付款";
+                }else{
+                    payType = "到付";
+                }
+
+                var invo;
+                if(param['body']['result']['type'] == 1){
+                    invo = "不开发票";
+                }else{
+                    invo = "开发票";
+                }
+
+                $("#logisticsInfo").append(
+                    "<tr>" +
+                    "<td class='body_td' height='33px' style='width: 15%;word-break:break-all'>" + param['body']['result']['startAddress'] + "</td>" +
+                    "<td class='body_td'style='width: 15%;word-break:break-all'>" + param['body']['result']['endAddress'] + "</td>" +
+                    "<td class='body_td'>" + param['body']['result']['deliveryTime'] + "</td>" +
+                    "<td class='body_td'>" + param['body']['result']['arrivalTime'] + "</td>" +
+                    "<td class='body_td'style='width: 20%;word-break:break-all'>" + param['body']['result']['vehicleRequirements'] + "</td>" +
+                    "<td class='body_td'style='width: 20%;word-break:break-all'>" + param['body']['result']['shippingInstructions'] + "</td>" +
+                    "<td class='body_td'style='width: 10%;word-break:break-all'>" + param['body']['result']['deliveryCompany'] + "</td>" +
+                    "</tr>"
+                );
+
+                $('#paymentInfo').append(
+                    "<tr>" +
+                    "<td class='body_td'style= word-break:break-all' height='33px'>" + payType + "</td>" +
+                    "<td class='body_td'style= word-break:break-all' height='33px'>" + invo + "</td>" +
+                    "</tr>"
+                )
+
+                if(param['body']['result']['lockPrice'] == 0){
+                    $("#dealerInfo2").append(
+                        "<tr>" +
+                        "<td class='body_td' height='33px'>" + param['body']['result']['dealerCompany'] + "</td>" +
+                        "<td class='body_td'>" + param['body']['result']['price'] + "</td>" +
+                        "<td class='body_td' width='10%'><input type='text' id='examinePrice' style='width:98%;height:43px' value='"+ param['body']['result']['examinePrice'] +"'></td>" +
+                        "<td class='body_td' width='30%'><input type='text' id='examineRemark' style='width:98%;height:43px' value='"+ param['body']['result']['examineRemark'] +"'></td>" +
+                        "<td class='body_td txt_center' width='10%'><input type='button' class='add_btn_logistics' value='修改议价' onclick='updateExaminePrice()'><br><input type='button' class='add_btn_logistics mg_b10' value='锁定议价' onclick='lockPrice()'></td>" +
+                        "</tr>"
+                    );
+                }else{
+                    $("#dealerInfo2").append(
+                        "<tr>" +
+                        "<td class='body_td' height='33px'>" + param['body']['result']['dealerCompany'] + "</td>" +
+                        "<td class='body_td'>" + param['body']['result']['price'] + "</td>" +
+                        "<td class='body_td' width='10%'>"+ param['body']['result']['examinePrice'] +"</td>" +
+                        "<td class='body_td' width='10%'>"+ param['body']['result']['examineRemark'] +"</td>" +
+                        "<td class='body_td' width='25%'>议价已锁定</td>" +
+                        "</tr>"
+                    );
+                }
+
+                for(var i=0;i<param['body']['result']['lineList'].length;i++){
+                    $("#sendInfo").append(
+                        "<tr>" +
+                        "<td class='body_td' height='33px'>" + param['body']['result']['lineList'][i]['lineName'] + "</td>" +
+                        "<td class='body_td'>" + param['body']['result']['lineList'][i]['modelName'] + "</td>" +
+                        "<td class='body_td'>" + param['body']['result']['lineList'][i]['des'] + "</td>" +
+                        "<td class='body_td'>" + param['body']['result']['lineList'][i]['amount'] + "</td>" +
+                        "</tr>"
+                    );
+                }
+                
+                // if(param['body']['result']['isEnsemble'] == 1){
+                //     $("#sendInfo").append(
+                //         "<tr>" +
+                //         "<td class='body_td' height='33px'>整装</td>" +
+                //         "<td class='body_td'>" + param['body']['result']['lineName']+"-"+param['body']['result']['seriesName']+"-"+param['body']['result']['modelName'] + "</td>" +
+                //         "</tr>"
+                //     );
+                // }else{
+                //     $("#sendInfo").append(
+                //         "<tr>" +
+                //         "<td class='body_td' height='33px'>混装</td>" +
+                //         "<td class='body_td'>" + param['body']['result']['blendRemark'] + "</td>" +
+                //         "</tr>"
+                //     );
+                // }
+                
+                
+                if(param['body']['result']['competeList'].length != 0){
+                    for(var i=0;i<param['body']['result']['competeList'].length;i++){
+                        if(param['body']['result']['status'] == 1){
+                            $("#biggingList").append(
+                                "<tr>" +
+                                "<td class='body_td'>" + param['body']['result']['competeList'][i]['dealerNum'] + "</td>" +
+                                "<td class='body_td'>" + param['body']['result']['competeList'][i]['dealerName'] + "</td>" +
+                                "<td class='body_td'>" + param['body']['result']['competeList'][i]['dealerUserName'] + "</td>" +
+                                "<td class='body_td'>" + param['body']['result']['competeList'][i]['dealerMobile'] + "</td>" +
+                                "<td class='body_td'>" + param['body']['result']['competeList'][i]['updateTime'] + "</td>" +
+                                "<td class='body_td'>" + param['body']['result']['competeList'][i]['createTime'] + "</td>" +
+                                "<td class='body_td'>" + param['body']['result']['competeList'][i]['price'] + "</td>" +
+                                '<td class="td2 txt_center" ><input type="radio" id="'+ param['body']['result']['competeList'][i]['dealerId'] +'" class="choose_select" name="choosed"></td>' +
+                                "</tr>"
+                            );
+                        }else{
+                            $("#biggingList").append(
+                                "<tr>" +
+                                "<td class='body_td'>" + param['body']['result']['competeList'][i]['dealerNum'] + "</td>" +
+                                "<td class='body_td'>" + param['body']['result']['competeList'][i]['dealerName'] + "</td>" +
+                                "<td class='body_td'>" + param['body']['result']['competeList'][i]['dealerUserName'] + "</td>" +
+                                "<td class='body_td'>" + param['body']['result']['competeList'][i]['dealerMobile'] + "</td>" +
+                                "<td class='body_td'>" + param['body']['result']['competeList'][i]['updateTime'] + "</td>" +
+                                "<td class='body_td'>" + param['body']['result']['competeList'][i]['createTime'] + "</td>" +
+                                "<td class='body_td'>" + param['body']['result']['competeList'][i]['price'] + "</td>" +
+                                '<td class="td2 txt_center" ><input type="radio" id="'+ param['body']['result']['competeList'][i]['dealerId'] +'" class="choose_select" name="choosed" disabled="disabled"></td>' +
+                                "</tr>"
+                            );
+                        }
+                        
+                    }
+                }else{
+                    $("#biggingList").append(
+                        "<tr>" +
+                        "<td class='body_td' colspan='8' height='33px'>暂无竞价</td>" +
+                        "</tr>"
+                    );
+                }
+
+                if(param['body']['result']['dealerId'] != ""){
+                    $("#" + param['body']['result']['dealerId']).attr("checked",true);
+                }
+
+                for(var i=0;i<param['body']['result']['opreationList'].length;i++){
+                    $("#opetationLog").append(
+                        "<tr>" +
+                        "<td class='body_td' height='33px'>" + param['body']['result']['opreationList'][i]['userName'] + "</td>" +
+                        "<td class='body_td'>" + param['body']['result']['opreationList'][i]['description'] + "</td>" +
+                        "<td class='body_td'>" + param['body']['result']['opreationList'][i]['createTime'] + "</td>" +
+                        "</tr>"
+                    );
+                }
+
+                $("#remark").text(param['body']['result']['remark']);
+
+                if(param['body']['result']['status'] == 1){
+                    $("#checkRemark").hide();
+                    $("#check").show();
+                    $("#bidding").hide();
+                }else{
+                    $("#checkRemark").show();
+                    $("#check").hide();
+
+                    if(param['body']['result']['status'] == 2){
+                        $("#bidding").show();
+                    }else{
+                        $("#bidding").hide();
+                    }
+                }
+            }
+         });
+        
+         $.datepicker.regional['zh-CN'] = {
+                        changeMonth: true,
+                        changeYear: true,
+                        clearText: '清除',
+                        clearStatus: '清除已选日期',
+                        closeText: '关闭',
+                        closeStatus: '不改变当前选择',
+                        prevText: '<上月',
+                        prevStatus: '显示上月',
+                        prevBigText: '<<',
+                        prevBigStatus: '显示上一年',
+                        nextText: '下月>',
+                        nextStatus: '显示下月',
+                        nextBigText: '>>',
+                        nextBigStatus: '显示下一年',
+                        currentText: '今天',
+                        currentStatus: '显示本月',
+                        monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+                        monthNamesShort: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+                        monthStatus: '选择月份',
+                        yearStatus: '选择年份',
+                        weekHeader: '周',
+                        weekStatus: '年内周次',
+                        dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+                        dayNamesShort: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+                        dayNamesMin: ['日', '一', '二', '三', '四', '五', '六'],
+                        dayStatus: '设置 DD 为一周起始',
+                        dateStatus: '选择 m月 d日, DD',
+                        dateFormat: 'yy-mm-dd',
+                        firstDay: 1,
+                        initStatus: '请选择日期',
+                        isRTL: false
+                    };
+
+                    $.datepicker.setDefaults($.datepicker.regional['zh-CN']);
+                    $("#defult").datetimepicker();
+                    $("#inputbeginTime").prop("readonly", true).datetimepicker({
+                        timeText: '时间',
+                        hourText: '小时',
+                        minuteText: '分钟',
+                        secondText: '秒',
+                        currentText: '现在',
+                        closeText: '完成',
+                        showSecond: true, //显示秒  
+                        timeFormat: 'HH:mm:ss', //格式化时间  
+                        onClose: function(selectedDate) {
+                            $("#inputendTime").datepicker("option", "minDate", selectedDate);
+                        }
+                    });
+
+                    $("#inputendTime").prop("readonly", true).datetimepicker({
+                        timeText: '时间',
+                        hourText: '小时',
+                        minuteText: '分钟',
+                        secondText: '秒',
+                        currentText: '现在',
+                        closeText: '完成',
+                        showSecond: true, //显示秒  
+                        timeFormat: 'HH:mm:ss', //格式化时间  
+                        onClose: function(selectedDate) {
+                            $("#inputbeginTime").datepicker("option", "maxDate", selectedDate);
+                            $("#inputendTime").val($(this).val());
+                        }
+                    });
+
+                    $('#beginTime').click(function(event){
+                        $(this).hide();
+                        $('#inputbeginTime').val($(this).html());
+                        $('#inputbeginTime').show();
+                        event.stopPropagation();
+                    })
+
+                    $('#endTime').click(function(event){
+                        $(this).hide();
+                        $('#inputendTime').val($(this).html());
+                        $('#inputendTime').show();
+                        event.stopPropagation();
+                    })
+
+                    $('#inputbeginTime').click(function(event){
+                        event.stopPropagation();
+                    })
+
+                    $('#inputendTime').click(function(event){
+                        event.stopPropagation();
+                    })
+
+                    $('#jingbiao').click(function(event){
+                        if($('#inputbeginTime').val() || $('#inputendTime').val()){
+                            $.ajax({
+                                type : "post",
+                                async : false,
+                                url : ip_path+"/changfa_system/logistics/updateBeginEndTime.do",
+                                data : {
+                                    logisticsId : $(window.parent.document).find("input[name='logisticsBiddingId']").val(),
+                                    beginTime:$('#inputbeginTime').val() || $('#beginTime').html(),
+                                    endTime:$('#inputendTime').val() || $('#endTime').html(),
+                                },
+                                dataType : "json",
+                                success : function (param) {
+                                    alert(param.head.message);
+                                    window.location.reload();
+                                }
+                            })
+                        }
+                    })
+     }
+
+    
+    function chooseLogisticsCompany() {  
+        if($("input[name='choosed']:checked").length == 0){
+            alert("请选择物流公司");
+        }else{
+            if(window.confirm("确认中标？")){
+                $.ajax({
+                    type : "post",
+                    async : false,
+                    url : ip_path+"/changfa_system/logistics/comfirmLogistics.do",
+                    data : {
+                        logisticsId : $(window.parent.document).find("input[name='logisticsBiddingId']").val(),
+                        status : 2,
+                        dealerId : $("input[name='choosed']:checked")[0]['id'],
+                        userId : $(window.parent.document).find("input[name='userId']").val()
+                    },
+                    dataType : "json",
+                    success : function (data) {
+                        if(data['head']['code'] == 200){
+                            window.location.reload();
+                        }else{
+                            alert(data['head']['message']);
+                        }
+                    }
+                });
+            }
+        }
+    }
+
+    function closeLogisticsBidding() {
+        if(window.confirm("确认关闭？")){  
+            $.ajax({
+                type : "post",
+                async : false,
+                url : ip_path+"/changfa_system/logistics/comfirmLogistics.do",
+                data : {
+                    logisticsId : $(window.parent.document).find("input[name='logisticsBiddingId']").val(),
+                    status : 0,
+                    remark : $("#remark").val(),
+                    userId : $(window.parent.document).find("input[name='userId']").val()
+                },
+                dataType : "json",
+                success : function (data) {
+                    if(data['head']['code'] == 200){
+                        window.location.reload();
+                    }else{
+                        alert(data['head']['message']);
+                    }
+                }
+            });
+        }
+    }
+
+    function updateExaminePrice() {  
+        $.ajax({
+                type : "post",
+                async : false,
+                url : ip_path+"/changfa_system/logistics/updateExaminePrice.do",
+                data : {
+                    logisticsId : $(window.parent.document).find("input[name='logisticsBiddingId']").val(),
+                    examinePrice : $("#examinePrice").val(),
+                    examineRemark: $("#examineRemark").val(),
+                    lockPirce : 0
+                },
+                dataType : "json",
+                success : function (data) {
+                    if(data['head']['code'] == 200){
+                        window.location.reload();
+                    }else{
+                        alert(data['head']['message']);
+                    }
+                }
+            });
+    }
+
+    function lockPrice() {  
+        $.ajax({
+                type : "post",
+                async : false,
+                url : ip_path+"/changfa_system/logistics/updateExaminePrice.do",
+                data : {
+                    logisticsId : $(window.parent.document).find("input[name='logisticsBiddingId']").val(),
+                    examinePrice : $("#examinePrice").val(),
+                    examineRemark:$('#examineRemark').val(),
+                    lockPirce : 1
+                },
+                dataType : "json",
+                success : function (data) {
+                    if(data['head']['code'] == 200){
+                        window.location.reload();
+                    }else{
+                        alert(data['head']['message']);
+                    }
+                }
+            });
+    }
+</script>
+</html>

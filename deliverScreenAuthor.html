@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>发货模板数据</title>
+        <link href="css/bigScreen.css" type="text/css" rel="stylesheet"/>
+        <script src="js/bigScreen.js"></script>
+        <script src="js/jquery-2.1.1.min.js"></script>
+        <script src="js/echarts.min.js"></script>
+        <script src="js/common.js"></script>
+    </head>
+<body>
+    <div style="width: 100%;height: auto;">
+        <div class="left">
+            <div>
+                <div>
+                    <select class="modelSmall">
+        
+                    </select>
+                </div>
+                <div id="1000" style="height: 450px;">
+
+                </div>
+            </div>
+
+            <div>
+                <div>
+                    <select class="modelSmall">
+        
+                    </select>
+                </div>
+                <div id="1100">
+
+                </div>
+            </div>
+        </div>
+        <div class="center">
+            <div>
+                <div>
+                    <select class="modelbig" >
+        
+                    </select>
+                </div>
+                <div id="1300">
+    
+                </div>
+            </div>
+            <div>
+                <div>
+                    <select class="modelbottom" >
+        
+                    </select>
+                </div>
+                <div id="1600" >
+                </div>
+            </div>
+
+        </div>
+        <div class="right">
+            <div>
+                <div>
+                    <select class="modelSmall">
+        
+                    </select>
+                </div>
+                <div id="1400" >
+
+                </div>
+            </div>
+            <div>
+                <div>
+                    <select class="modelSmall">
+        
+                    </select>
+                </div>
+                <div id="1500" >
+
+                </div>
+            </div>
+        </div>
+        <div style="clear: both;"></div>
+        <div style="width: 90%;margin-left: 5%;height: auto;text-align: center;margin-top: 20px;">
+            <img src="static2/img/yes.png" id="rep_unpass" class="mg-t20" onclick="createScreen()">
+        </div>
+    </div>
+</body>
+<script>
+    window.onload=function(){
+        $('#1000').height(Number($(window.parent.document).find("input[name='height']").val())/2);
+        $('#1100').height(Number($(window.parent.document).find("input[name='height']").val())/2);
+        $('#1400').height(Number($(window.parent.document).find("input[name='height']").val())/2);
+        $('#1500').height(Number($(window.parent.document).find("input[name='height']").val())/2);
+        $('#1600').height(Number($(window.parent.document).find("input[name='height']").val())*0.3.toFixed(2));
+        $('#1300').height(Number($(window.parent.document).find("input[name='height']").val())*0.7.toFixed(2));
+  $.ajax({
+    type: "post",
+    url: ip_path + "/changfa_system/screenAuthor/queryScreenChart.do",
+    data: {
+        chartType:1
+    },
+    dataType: "json",
+    success: function (data) {
+      if (data['head']['code'] != 200) {
+        $(".modelSmall").empty();
+      } else {
+        $(".modelSmall").empty();
+        $(".modelSmall").append(
+                "<option value=''></option>"
+            )
+        data.body.resultList.forEach(elem => {
+            $(".modelSmall").append(
+                "<option value='"+ elem.rescouseCode +"(" + elem.chartId +"'>"+ elem.rescouseName +"</option>"
+            )
+        });
+
+      }
+    }
+  });
+
+  $.ajax({
+    type: "post",
+    url: ip_path + "/changfa_system/screenAuthor/queryScreenChart.do",
+    data: {
+        chartType:2
+    },
+    dataType: "json",
+    success: function (data) {
+      if (data['head']['code'] != 200) {
+        $(".modelbig").empty();
+      } else {
+        $(".modelbig").empty();
+        $(".modelbig").append(
+                "<option value=''></option>"
+            )
+        data.body.resultList.forEach(elem => {
+            $(".modelbig").append(
+                "<option value='"+ elem.rescouseCode +"(" + elem.chartId +"'>"+ elem.rescouseName +"</option>"
+            )
+        });
+
+      }
+    }
+  });
+
+  $.ajax({
+    type: "post",
+    url: ip_path + "/changfa_system/screenAuthor/queryScreenChart.do",
+    data: {
+        chartType:3
+    },
+    dataType: "json",
+    success: function (data) {
+      if (data['head']['code'] != 200) {
+        $(".modelbottom").empty();
+      } else {
+        $(".modelbottom").empty();
+        $(".modelbottom").append(
+                "<option value=''></option>"
+            )
+        data.body.resultList.forEach(elem => {
+            $(".modelbottom").append(
+                "<option value='"+ elem.rescouseCode +"(" + elem.chartId +"'>"+ elem.rescouseName +"</option>"
+            )
+        });
+
+      }
+    }
+  });
+
+
+  var x = (Number($(window.parent.document).find("input[name='height']").val())/2).toFixed(2);
+    var y = (Number($(window.parent.document).find("input[name='height']").val())*0.7).toFixed(2);
+    var z = (Number($(window.parent.document).find("input[name='height']").val())*0.3).toFixed(2);
+
+  $(".modelbig").change(function(){
+      //console.log($(this).val().substring(0,$(this).val().indexOf("(")-1));
+      if($(this).val()){
+            screenModel.forEach(item =>{
+            if(item.value == $(this).val().substring(0,$(this).val().indexOf("(")) ){
+                //alert(item.name);
+                var content = "<iframe id='ifm1' src='" + item.name + ".html' frameborder='0' scrolling='no' width='100%' height='"+y+"'></iframe>"
+                $(this).parent().next().html(content);
+            }
+        })
+      }else{
+        $(this).parent().next().html('');
+      }
+
+  })
+
+  $(".modelSmall").change(function(){
+      //console.log($(this).val().substring(0,$(this).val().indexOf("(")-1));
+      if($(this).val()){
+        screenModel.forEach(item =>{
+            if(item.value == $(this).val().substring(0,$(this).val().indexOf("(")) ){
+                //alert(item.name);
+                var content = "<iframe id='ifm1' src='" + item.name + ".html' frameborder='0' scrolling='no' width='100%' height='"+x+"'></iframe>"
+                $(this).parent().next().html(content);
+            }
+        })
+    }else{
+        $(this).parent().next().html('');
+      }
+  })
+
+  $(".modelbottom").change(function(){
+      //console.log($(this).val().substring(0,$(this).val().indexOf("(")-1));
+      if($(this).val()){
+        screenModel.forEach(item =>{
+            if(item.value == $(this).val().substring(0,$(this).val().indexOf("(")) ){
+                //alert(item.name);
+                var content = "<iframe id='ifm1' src='" + item.name + ".html' frameborder='0' scrolling='no' width='100%' height='"+z+"'></iframe>"
+                $(this).parent().next().html(content);
+            }
+        })
+    }else{
+        $(this).parent().next().html('');
+      }
+  })
+
+        // var content = "<iframe id='ifm1' src='linkRatioOrBasis.html' frameborder='0' scrolling='no' width='100%' height='450px'></iframe>"
+        // $("#1000").html(content);
+
+        // var content2 = "<iframe id='ifm2' src='shippingModelRank.html' frameborder='0' scrolling='no' width='100%' height='450px'></iframe>"
+        // $("#1100").html(content2);
+
+        // var content3 = "<iframe id='ifm3' src='agriculturalMapSmall.html' frameborder='0' scrolling='no' width='100%' height='900px'></iframe>"
+        // $("#1300").html(content3);
+
+        // var content4 = "<iframe id='ifm4' src='waybillRolls.html' frameborder='0' scrolling='no' width='100%' height='450px'></iframe>"
+        // $("#1400").html(content4);
+
+    }
+</script>
+</html>

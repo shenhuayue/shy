@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>配件菜单权限设置</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/userCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <script src="js/jquery.cookie.js"></script>
+    <style>
+        input[type="checkbox"]:checked + label {
+            background: #1ABC9C;
+            color: #FFFFFF;
+        }
+    </style>
+</head>
+<body class="reset" style="user-select: none">
+    <div>
+        <div class="tit mg-t50">
+            <span class="flt_l">菜单权限列表</span>
+        </div>
+        <div class="account_cont describ">
+            <div id="allMenu" class="txt_left mg-t20 mg_b20" style="width: 90%;margin-left: 5%">
+                <!--<div id="menu0">-->
+                    <!--<div id="menuFloorOne">-->
+                        <!--<input type="checkbox" id="1" class="choose_checkbox vert_mid" style="position: absolute;margin-left: 120px;margin-top: 13px;"><label for="1" class="outShadow label_for_checkbox mg-r20 mg_b20">一级菜单</label>-->
+                    <!--</div>-->
+                    <!--<div id="menuFloorTwo">-->
+                        <!--<input type="checkbox" id="2" class="choose_checkbox vert_mid" style="position: absolute;margin-left: 120px;margin-top: 13px;"><label for="2" class="outShadow label_for_checkbox mg-r20 mg_b20">二级菜单</label>-->
+                    <!--</div>-->
+                    <!--<div id="menuFloorThree">-->
+                        <!--<input type="checkbox" id="3" class="choose_checkbox vert_mid" style="position: absolute;margin-left: 120px;margin-top: 13px;"><label for="3" class="outShadow label_for_checkbox mg-r20 mg_b20">三级菜单</label>-->
+                    <!--</div>-->
+                <!--</div>-->
+            </div>
+            <div class="btn_part mg_b50">
+                <input type="button" class="submit_btn" value="权限设置" onclick="insertMenuLimitPart()">
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+        limitList = [];
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/menu/queryMenu.do",
+            data:{
+                menuType:2
+            },
+            dataType : "json",
+            success : function (data) {
+                if(data['head']['code'] == 200){
+                    for(var i=0;i<data['body']['resultList'].length;i++){
+                        $("#allMenu").append(
+                            '<div id="menu"' + data['body']['resultList'][i] + ' class="mg_b30">' +
+                            '     <span>一级菜单：</span><div id="menu' + i + 'FloorOne">' +
+                            '           <input type="checkbox" id="'+ data['body']['resultList'][i]['typeOne']['menuId'] + '" class="choose_checkbox vert_mid" style="position: absolute;margin-left: 120px;margin-top: 13px;" onclick="chooseTypeOne(this)"><label for="' + data['body']['resultList'][i]['typeOne']['menuId'] + '" class="outShadow label_for_checkbox size18 mg-r20 mg_b20">'+ data['body']['resultList'][i]['typeOne']['name'] +'</label>' +
+                            '     </div>' +
+                            '     <div class="mg_b20" style="border: 1px solid #E4E4E4;"></div>' +
+                            '     <span>二级菜单：</span><div id="menu' + i + 'FloorTwo">' +
+                            '     </div>' +
+                            '     <div class="mg_b20" style="border: 1px solid #E4E4E4;"></div>' +
+                            '     <span>三级菜单：</span><div id="menu' + i + 'FloorThree">' +
+                            '     </div>' +
+                            // '     <div class="mg_b20" style="border: 1px solid #E4E4E4;"></div>' +
+                            // '     <div id="menu' + i + 'FloorFour">' +
+                            // '     </div>' +
+                            '</div>'
+                        );
+                        for(var j=0;j<data['body']['resultList'][i]['typeTwo'].length;j++){
+                            if(data['body']['resultList'][i]['typeTwo'][j]['menuId'] != 20){
+                                if(j%6 != 5){
+                                    $("#menu" + i + "FloorTwo").append(
+                                        '<input type="checkbox" id="'+ data['body']['resultList'][i]['typeTwo'][j]['menuId'] + '" class="choose_checkbox vert_mid" name="'+ data['body']['resultList'][i]['typeTwo'][j]['parentId'] +'" style="position: absolute;margin-left: 120px;margin-top: 13px;" onclick="chooseTypeTwo(this)"><label for="' + data['body']['resultList'][i]['typeTwo'][j]['menuId'] + '" class="outShadow label_for_checkbox size16 mg-r20 mg_b20">'+ data['body']['resultList'][i]['typeTwo'][j]['name'] +'</label>'
+                                    );
+                                }else{
+                                    $("#menu" + i + "FloorTwo").append(
+                                        '<input type="checkbox" id="'+ data['body']['resultList'][i]['typeTwo'][j]['menuId'] + '" class="choose_checkbox vert_mid" name="'+ data['body']['resultList'][i]['typeTwo'][j]['parentId'] +'" style="position: absolute;margin-left: 120px;margin-top: 13px;" onclick="chooseTypeTwo(this)"><label for="' + data['body']['resultList'][i]['typeTwo'][j]['menuId'] + '" class="outShadow label_for_checkbox size16 mg-r20 mg_b20">'+ data['body']['resultList'][i]['typeTwo'][j]['name'] +'</label><br>'
+                                    );
+                                }
+                            }
+                        }
+                        for(var k=0;k<data['body']['resultList'][i]['typeThree'].length;k++){
+                            if(data['body']['resultList'][i]['typeThree'][k]['id'] != 57 && data['body']['resultList'][i]['typeThree'][k]['id'] != 58 && data['body']['resultList'][i]['typeThree'][k]['id'] != 59){
+                                if(k%6 != 5){
+                                    $("#menu" + i + "FloorThree").append(
+                                        '<input type="checkbox" id="'+ data['body']['resultList'][i]['typeThree'][k]['id'] + '" class="choose_checkbox vert_mid" name="'+ data['body']['resultList'][i]['typeThree'][k]['parentId'] +'" style="position: absolute;margin-left: 120px;margin-top: 13px;" onclick="chooseTypeThree(this)"><label for="' + data['body']['resultList'][i]['typeThree'][k]['id'] + '" class="outShadow label_for_checkbox size14 mg-r20 mg_b20">'+ data['body']['resultList'][i]['typeThree'][k]['name'] +'</label>'
+                                    );
+                                }else{
+                                    $("#menu" + i + "FloorThree").append(
+                                        '<input type="checkbox" id="'+ data['body']['resultList'][i]['typeThree'][k]['id'] + '" class="choose_checkbox vert_mid" name="'+ data['body']['resultList'][i]['typeThree'][k]['parentId'] +'" style="position: absolute;margin-left: 120px;margin-top: 13px;" onclick="chooseTypeThree(this)"><label for="' + data['body']['resultList'][i]['typeThree'][k]['id'] + '" class="outShadow label_for_checkbox size14 mg-r20 mg_b20">'+ data['body']['resultList'][i]['typeThree'][k]['name'] +'</label><br>'
+                                    );
+                                }
+                            }
+                        }
+                        // for(var l=0;l<data['body']['resultList'][i]['typeFour'].length;l++){
+                        //     if(l%7 != 6){
+                        //         $("#menu" + i + "FloorFour").append(
+                        //             '<input type="checkbox" id="'+ data['body']['resultList'][i]['typeFour'][l]['id'] + '" class="choose_checkbox vert_mid" name="'+ data['body']['resultList'][i]['typeFour'][l]['parentId'] +'" style="position: absolute;margin-left: 120px;margin-top: 13px;" onclick="chooseTypeFour(this)"><label for="' + data['body']['resultList'][i]['typeFour'][l]['id'] + '" class="outShadow label_for_checkbox size12 mg-r20 mg_b20">'+ data['body']['resultList'][i]['typeFour'][l]['name'] +'</label>'
+                        //         );
+                        //     }else{
+                        //         $("#menu" + i + "FloorFour").append(
+                        //             '<input type="checkbox" id="'+ data['body']['resultList'][i]['typeFour'][l]['id'] + '" class="choose_checkbox vert_mid" name="'+ data['body']['resultList'][i]['typeFour'][l]['parentId'] +'" style="position: absolute;margin-left: 120px;margin-top: 13px;" onclick="chooseTypeFour(this)"><label for="' + data['body']['resultList'][i]['typeFour'][l]['id'] + '" class="outShadow label_for_checkbox size12 mg-r20 mg_b20">'+ data['body']['resultList'][i]['typeFour'][l]['name'] +'</label><br>'
+                        //         );
+                        //     }
+                        // }
+                    }
+                }else{
+                    alert(data['head']['message']);
+                }
+            }
+        });
+
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/menu/queryRoleMenu.do",
+            data : {
+                roleId: $(window.parent.document).find("input[name='roleId_forLimit']").val(),
+                menuType:2
+            },
+            dataType : "json",
+            success : function (data) {
+                if(data['head']['code'] == 200){
+                    var firstFloorList = data['body']['result']['typeOne'];
+                    var secondFloorList = data['body']['result']['typeTwo'];
+                    var thirdFloorList = data['body']['result']['typeThree'];
+                    var limitList = data['body']['result']['typeFour'];
+
+                    for(var item1 in firstFloorList){
+                        $("#" + firstFloorList[item1]).attr("checked",true);
+                    }
+                    for(var item2 in secondFloorList){
+                        if(secondFloorList[item2] != 20){
+                            $("#" + secondFloorList[item2]).attr("checked",true);
+                        }
+                    }
+                    for(var item3 in thirdFloorList){
+                        if(thirdFloorList[item3] != 57 && thirdFloorList[item3] != 58 && thirdFloorList[item3] != 59){
+                            $("#" + thirdFloorList[item3]).attr("checked",true);
+                        }
+                    }
+                    for(var item4 in limitList){
+                        $("#" + limitList[item4]).attr("checked",true);
+                    }
+                }
+            }
+        });
+
+        // $("#57").attr("disabled","disabled");
+        // $("#58").attr("disabled","disabled");
+        // $("#59").attr("disabled","disabled");
+        // if($(window.parent.document).find("input[name='isManage']").val() == 1){
+        //     $("#57").attr("checked",true);
+        //     $("#58").attr("checked",true);
+        //     $("#59").attr("checked",true);
+        // }else{
+        //     $("#57").attr("checked",false);
+        //     $("#58").attr("checked",false);
+        //     $("#59").attr("checked",false);
+        // }
+    }
+</script>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>公司维护详细</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <link href="css/threePackspolicy.css" type="text/css" rel="stylesheet"/>
+    <script src="js/jquery-1.9.1.js"></script>
+    <script src="jquery-ui-1.12.1/jquery-ui.min.js"></script>
+    <link href="jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet" />
+    <script src="js/subsidy.js"></script>
+    <script src="js/dcommon.js"></script>
+    <script src="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.js"></script>
+    <script type="text/javascript" src="jQuery-Timepicker/dist/i18n/jquery-ui-timepicker-zh-CN.js"></script>
+    <link href="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.css" rel="stylesheet" />
+</head>
+<body class="reset">
+    <style>
+        .radio_type{
+            width: 20px;
+            height: 20px;
+            appearance: none;
+            position: relative;
+        }
+        .radio_type:before{
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: 1px solid #cfcfcf;
+            background:#cfcfcf;
+            display: inline-block;
+            border-radius: 50%;   
+            vertical-align: middle;
+        }
+        .radio_type:after{
+            content: '';
+            width: 10px;
+            height:5px;
+            border: 2px solid white;
+            border-top: transparent;
+            border-right: transparent;
+            text-align: center;
+            display: block;
+            position: absolute;
+            top: 6px;
+            left:5px;
+            vertical-align: middle;
+            transform: rotate(-45deg);
+        }
+        .radio_type.radio_types:before{
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: 1px solid #1ABC9C;
+            background:#1ABC9C;
+            display: inline-block;
+            border-radius: 50%;
+            vertical-align: middle;
+        }
+        .radio_type:checked:after{
+            content: '';
+            width: 10px;
+            height:5px;
+            border: 2px solid white;
+            border-top: transparent;
+            border-right: transparent;
+            text-align: center;
+            display: block;
+            position: absolute;
+            top: 6px;
+            left:5px;
+            vertical-align: middle;
+            transform: rotate(-45deg);
+        }
+        
+        </style>
+    <div>
+        <div class="tit mg-t50">
+            <span class="flt_l">公司维护</span>
+            
+        </div>
+        <div class="account_cont">
+        </div>
+        
+        <div class="account_cont">
+            <div class="tit_msg" style="text-align:left;padding-top:27px;">
+                <span style="margin-left:45px;">公司名称：</span>
+                <input type="text" id="mingcheng" readonly="readonly" class="product_line" value="" style="width:350px;background:#eee;color:#666;">
+                <!--<button class="query_btn_big" style="margin-left: -4%;" onclick="ajax_seachcompany()"></button>-->
+                <span style="margin-left:30px;">简称：</span>
+                <input type="text" id="jiancheng" readonly="readonly" class="product_line" value="" style="background:#eee;color:#666;">
+                <!--<button class="query_btn_big" style="margin-left: -4%;" onclick="ajax_seachcompany()"></button>-->
+                <!--
+                <span style="font-size:16px;color:#666;display: inline-block;margin-left:20px;">创建日期：</span>
+                <input id="date_start" class="product_line" disabled="disabled" placeholder="选择日期" readonly="" style="background:#eee;color:#666;margin-right:6px;width:140px;">
+                -->
+            </div>
+            <div class="tit_msg" style="text-align:left;height:22px;padding-top:20px;">
+                <img src="img/tit_pic.png" class="tit_pic" style="margin-left:45px;">
+                <span>绑定分公司：</span>
+            </div>
+            <table width="100%" cellpadding="0" cellspacing="0" class="table2" align="center">
+                <thead>
+                    <tr align="center">
+                        <th height="33" class="th2">名称</th>
+                        <th class="th2"><span id="selectallqd" onclick="selectallqd()" style="color:#1ABC9C;cursor:pointer;">&nbsp;全选</span></th>
+                    </tr>
+                </thead>
+                <tbody id="qingdanbody">
+                </tbody>
+                
+            </table>
+            <div id="barcon_qd" class="barcon" >
+                <div id="barcon1_qd" class="barcon1"></div>
+                <div id="barcon2_qd" class="barcon2">
+                    <ul>
+                        <li><button id="firstPage_qd" class="page_btn">首页</button></li>
+                        <li><button id="prePage_qd" class="page_btn">上一页</button></li>
+                        <li><button id="nextPage_qd" class="page_btn">下一页</button></li>
+                        <li><button id="lastPage_qd" class="page_btn">尾页</button></li>
+                    </ul>
+                </div>
+            </div>
+            <input type="hidden" id="getid" value="" />
+        </div>
+    </div>
+</body>
+
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();  
+        //获取临时id
+        ajax_getid();
+        ajax_getbianji();
+        
+
+        //清单列表分页
+        currentPage_qd = 1;
+        ajax_getqingd();
+        $('#firstPage_qd').attr('disabled',true);
+        $('#prePage_qd').attr('disabled',true);
+        $("#firstPage_qd").click(function () {
+            $('#lastPage_qd').removeAttr('disabled');
+            $('#nextPage_qd').removeAttr('disabled');
+            currentPage_qd = 1;
+            $('#firstPage_qd').attr('disabled',true);
+            $('#prePage_qd').attr('disabled',true);
+            ajax_getqingd();
+        });
+        $("#lastPage_qd").click(function () {
+            $('#firstPage_qd').removeAttr('disabled');
+            $('#prePage_qd').removeAttr('disabled');
+            currentPage_qd = totalPage_qd;
+            $('#lastPage_qd').attr('disabled',true);
+            $('#nextPage_qd').attr('disabled',true);
+            ajax_getqingd();
+        });
+        $("#nextPage_qd").click(function () {
+            $('#firstPage_qd').removeAttr('disabled');
+            $('#prePage_qd').removeAttr('disabled');
+            currentPage_qd = currentPage_qd+1;
+            if(currentPage_qd == totalPage_qd){
+                $('#lastPage_qd').attr('disabled',true);
+                $('#nextPage_qd').attr('disabled',true);
+            }else{
+                $('#lastPage_qd').removeAttr('disabled');
+                $('#nextPage_qd').removeAttr('disabled');
+            }
+            ajax_getqingd();
+        });
+        $("#prePage_qd").click(function () {
+            $('#lastPage_qd').removeAttr('disabled');
+            $('#nextPage_qd').removeAttr('disabled');
+            currentPage_qd = currentPage_qd-1;
+            if(currentPage_qd == 1){
+                $('#firstPage_qd').attr('disabled',true);
+                $('#prePage_qd').attr('disabled',true);
+            }else{
+                $('#firstPage_qd').removeAttr('disabled');
+                $('#prePage_qd').removeAttr('disabled');
+            }
+            ajax_getqingd();
+        });
+    
+        
+    }
+</script>
+</html>

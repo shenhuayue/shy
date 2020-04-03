@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>车辆详情数据</title>
+        <script src="js/jquery-2.1.1.min.js"></script>
+        <script src="js/echarts.min.js"></script>
+<script src="js/waterbubble.js"></script>
+        <script src="js/common.js"></script>
+        <link rel="stylesheet" href="prettify/prettify.css">
+<script src="prettify/prettify.js"></script>
+<meta name="Author" content="haley">
+<meta name="Keywords" content="">
+<meta name="Description" content="">
+<meta name="format-detection" content="telephone=no"> 
+<!-- 移动端项目屏幕尺寸设置 -->
+<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" >
+<!-- 删除苹果默认的工具栏和菜单栏 -->
+<meta name="apple-mobile-web-app-capable" content="yes" > 
+<!-- 设置苹果工具栏颜色 -->
+<meta name="apple-mobile-web-app-status-bar-style" content="black"> 
+    </head>
+<body style="background: radial-gradient(#004400 3%,black 90%);">
+    <div style="width: 100%;height: 800px;">
+        <div style="width:100%">
+            <img src="img/1.png" alt="" style="width: 100%;height: auto;">
+            <div style="position: absolute;top: 0;width: 100%;z-index: 999;">
+                <img src="img/machine_left.png" alt="" style="margin-top:10px;height: 30px;width: auto;" id = 'back'>
+                <div style="margin: 0 auto;color: #ffffff;font-size: 14px;font-family: Fantasy;width: 40%;">
+                    <div style="margin: 0 auto;width: 52%;" id="changeLink">
+                        <div style="display: inline-block;" id="name">网络链接</div>
+                        <img src="img/icon_bottom.png" alt="" style="width: 15px;height: auto;">
+                    </div>
+                    <div id="change" style="border: 1px solid rgb(56,255,155,0.9);wdith:100%;background-color: rgb(56,255,155,0.8);display: none;">
+                        <div style="border-bottom: 1px solid #ffffff;text-align: center;line-height: 35px;" id="bluetooth">
+                            <span>蓝牙连接</span>
+                            <img src="img/machine_right.png" alt="" style="width: 6px;height: auto;margin-left: 5px;">
+                        </div>
+                        <div style="text-align: center;line-height: 35px;" id="network">
+                            <span>网络连接</span>
+                            <img src="img/machine_right.png" alt="" style="width: 6px;height: auto;margin-left: 5px;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="width: 100%;height:250px;margin: 0 auto;position: relative;margin-top: 20px;">
+            <div id="main2" style="width: 80%;height: 100%;position: absolute;left: 10%;"></div>
+            <div id="main3" style="width: 80%;height: 100%;margin: 0 auto;"></div>
+            <div  style="
+            display: flex;
+            justify-content: center;
+            align-items: center;width: 275px;height: 275px;position: absolute;left:50%;margin-left:-137.5px;top:50%;margin-top:-137.5px;border-radius: 50%;border:15px solid rgb(56,255,155,0.2);box-sizing: border-box;">
+                <div  style="width: 97%;height: 97%;margin:0 auto;border-radius: 50%;border:15px solid rgb(56,255,155,0.2);box-sizing: border-box;">
+                    <div style="width: 40px;margin: 0 auto;margin-top: 80px;">
+                        <!-- <canvas id="sucaihuo"></canvas> -->
+
+                    </div>
+
+                </div>
+                
+            </div>
+            <div style="width:275px;left:50%;margin-left:-137.5px;top:150px;color: #ffffff;position: absolute;font-size: 14px;font-family: Fantasy;">
+                <div style="float: left;">转速 </br>r/min</div>
+                <div style="float: right;">油耗 </br>l/h</div>
+            </div>
+            <div style="width: 100%;height: 150px;margin-top: 30px;color: #ffffff;">
+                <div  style="width:50%;box-sizing: border-box;float: left;">
+                    <div id='main4' style="width: 95%;margin: 0 auto;height: 100%;">
+                        
+                    </div>
+                </div>
+                <div  style="width:50%;box-sizing: border-box;float: left;border-left: 1px solid #38FF9B;">
+                    <div  style="width: 80%;margin: 0 auto;">
+                        <img src="img/nongCar.png" alt="" style="width: 100%;height: auto;">
+                        <div id="errorCode" style="width: 100%;text-align: center;">
+                            <img src="img/danger2.png" id="nongji" alt="" style="width: 10px;height: auto;">
+                            <span>发现<span id="errorCodeCount"></span>个故障码</span>
+                        </div>
+                    </div>
+                </div>
+                <div style="width: 90%;margin: 0 auto;">
+                    <img src="img/thisTime.png" alt="" style="width: 10px;height: auto;">
+                    <span id="time"></span>
+                </div>
+                <div style="width: 90%; margin: 0 auto;border: 1px solid #38FF9B;border-radius: 10px;">
+                    <div style="width: 50%;float: left;padding: 5%;box-sizing: border-box;">
+                        <img src="img/voltage.png" alt="" style="width: 12px;height: auto;">
+                        <span id="oilPressure"></span>
+                    </div>
+                    <div style="width: 50%;float: left;padding: 5%;box-sizing: border-box;">
+                        <img src="img/oilPressure.png" alt="" style="width: 12px;height: auto;">
+                        <span id="voltage"></span>
+                    </div>
+                    <div style="width: 50%;float: left;padding: 5%;box-sizing: border-box;">
+                        <span id="totalDuration"></span>
+                    </div>
+                    <div style="width: 50%;float: left;padding: 5%;box-sizing: border-box;" id="lookMore">
+                        <span >查看更多</span>
+                        <img src="img/machine_right.png" alt="" style="width: 7px;height: auto;margin-left: 5px;">
+                    </div>
+                    <div style="clear: both;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    window.onload=function(){
+
+    //     $('#sucaihuo').waterbubble({ 
+    //         radius: 20,
+    //         wave: true,
+    //         waterColor: 'rgba(56,255,155, 1)',
+    //         animation: true,
+    //         //txt: '98km/h', 
+    // textColor: 'rgba(243,153,10, 0.8)' ,
+    // lineWidth: 2
+    //     });
+
+    $.ajax({
+            type : "get",
+            url : ip_path+"/cf/machinery.do",
+            dataType : "json",
+            data:{
+                barCode:GetRequest().barCode,
+                //barCode:701150311812810615
+            },
+            success : function (data) {
+                if(data.head.code == 200){
+                    var a = new Date();
+                    switch(data.body.result.lineNum){
+                        case 615:
+                            //轮式收割机
+                            $('#nongji').attr('src','img/wheelharvester.png')
+                            break;
+                        case 612:
+                        //履带收割机
+                        $('#nongji').attr('src','img/caterpillarReaper.png')
+                        break;
+                        case 61102:
+                        //高速插秧机
+                        $('#nongji').attr('src','img/speedTransplanter.png')
+                        break;
+                    }
+                    $('#errorCodeCount').text(data.body.result.errorCodeCount);
+                    $('#oilPressure').text('油压：'+data.body.result.oilPressure);
+                    $('#voltage').text('电压：'+data.body.result.voltage);
+                    $('#totalDuration').text('工作时长：'+data.body.result.totalDuration);
+                    $('#time').text(a.getFullYear()+'-'+ (a.getMonth()+1) + '-' + a.getDate()+' '+a.getHours()+':'+a.getMinutes()+':'+a.getSeconds() );
+                    var myChart2 = echarts.init(document.getElementById('main2'));
+var myChart3 = echarts.init(document.getElementById('main3'));
+var myChart4 = echarts.init(document.getElementById('main4'));
+
+var option = {
+    tooltip: {
+        formatter: '{a} <br/>{b} : {c}%'
+    },
+    // toolbox: {
+    //     feature: {
+    //         restore: {},
+    //         saveAsImage: {}
+    //     }
+    // },
+    series: [
+        {
+            name: '业务指标',
+            type: 'gauge',
+            radius:100,
+            detail: {formatter: '{value}',
+                offsetCenter:['-120%', '-10%'],
+                color:'#ffffff',
+                fontSize:15,
+                fontFamily:'Fantasy'
+            },
+            data: [{value: data.body.result.rotationRate}],
+            pointer:{
+                show:true,
+                length:'80%',
+                width:4
+            },
+            axisLine:{
+                lineStyle:{
+                    width:20,
+                    color: [
+                    [1,new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                    {
+                        offset: 0.1,
+                        color: 'rgb(56,255,155,0.6)'
+                      },
+                      {
+                        offset: 0.6,
+                        color: 'rgb(56,255,155,0.6)'
+                      },
+                      {
+                        offset: 1,
+                        color: 'rgb(243,153,10,0.6)'
+                      }
+                    ])
+                  ]
+                ]
+                }
+            },
+            splitLine:{
+              length:20,
+              lineStyle:{
+                  color:'#000000'
+              }
+            },
+            axisLabel:{
+                distance:10,
+                fontSize:10,
+                color:'#ffffff'
+            },
+            itemStyle:{
+                color:'#38FF9B',
+                opacity:0.8
+            },
+            axisTick: {
+                // 刻度长度与轴线宽度一致，达到分隔的效果
+                length: 30,
+                // 增加刻度密度
+                splitNumber: 5,
+                lineStyle: {
+                    // 增加刻度宽度
+                    width: 3,
+                    color:'#000000'
+                },
+                
+            },
+            startAngle:220,
+            endAngle:-40,
+        }
+    ]
+};
+
+var option2 = {
+    tooltip: {
+        formatter: '{a} <br/>{b} : {c}%'
+    },
+    // toolbox: {
+    //     feature: {
+    //         restore: {},
+    //         saveAsImage: {}
+    //     }
+    // },
+    series: [
+        {
+            name: '业务指标',
+            type: 'gauge',
+            radius:50,
+            detail: {formatter: '{value}',
+                offsetCenter:['240%', '-10%'],
+                color:'#ffffff',
+                fontSize:15,
+                fontFamily:'Fantasy'
+            },
+            data: [{value: data.body.result.fuelQTY}],
+            pointer:{
+                show:true,
+                length:'60%',
+                width:4,
+            },
+            axisLine:{
+                lineStyle:{
+                    width:2,
+                    color: [
+                    [1,new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                    {
+                        offset: 0.1,
+                        color: 'rgb(56,255,155,0.6)'
+                      },
+                      {
+                        offset: 0.6,
+                        color: 'rgb(56,255,155,0.6)'
+                      },
+                      {
+                        offset: 1,
+                        color: 'rgb(243,153,10,0.6)'
+                      }
+                    ])
+                  ]
+                ]
+                }
+            },
+            splitLine:{
+              length:8,
+              lineStyle:{
+                  color:'#000000'
+              }
+            },
+            axisLabel:{
+                distance:3,
+                fontSize:8,
+                color:'#ffffff'
+            },
+            itemStyle:{
+                color:'#38FF9B',
+                opacity:0.8
+            },
+            axisTick: {
+                lineStyle: {
+                    color:'#000000'
+                },
+                
+            },
+            // startAngle:200,
+            // endAngle:-519,
+        }
+    ]
+};
+
+var option3 = {
+    tooltip: {
+        formatter: '{a} <br/>{b} : {c}%'
+    },
+    // toolbox: {
+    //     feature: {
+    //         restore: {},
+    //         saveAsImage: {}
+    //     }
+    // },
+    series: [
+        {
+            //name: '业务指标',
+            type: 'gauge',
+            radius:38,
+            detail: {formatter: '{value}',
+                //offsetCenter:['260%', '-10%'],
+                color:'#ffffff',
+                fontSize:15
+            },
+
+            title: {				// 仪表盘标题。
+	            	show: true,				// 是否显示标题,默认 true。
+	            	offsetCenter: [0,"110%"],//相对于仪表盘中心的偏移位置，数组第一项是水平方向的偏移，第二项是垂直方向的偏移。可以是绝对的数值，也可以是相对于仪表盘半径的百分比。
+	            	color: "#fff",			// 文字的颜色,默认 #333。
+	            	fontSize: 15,			// 文字的字体大小,默认 15。
+	            },
+            data: [{value: data.body.result.waterTemperature,name:'水温'}],
+            pointer:{
+                show:true,
+                length:'70%',
+                width:2
+            },
+            axisLine:{
+                lineStyle:{
+                    width:10,
+                    color: [[1,"#38FF9B"]],
+                //     color: [
+                //     [1,new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                //     {
+                //         offset: 0.1,
+                //         color: 'rgb(56,255,155,0.6)'
+                //       },
+                //       {
+                //         offset: 0.6,
+                //         color: 'rgb(56,255,155,0.6)'
+                //       },
+                //       {
+                //         offset: 1,
+                //         color: 'rgb(243,153,10,0.6)'
+                //       }
+                //     ])
+                //   ]
+                // ]
+                }
+            },
+            splitLine:{
+              length:8,
+              lineStyle:{
+                  color:'#000000'
+              }
+            },
+            axisLabel:{
+                distance:3,
+                fontSize:8,
+                color:'#ffffff',
+                distance:-19
+            },
+            itemStyle:{
+                color:'#ffffff',
+                opacity:1
+            },
+            axisTick: {
+                lineStyle: {
+                    color:'#000000'
+                },
+                splitNumber :1
+            },
+            startAngle:200,
+            endAngle:-380,
+        }
+    ]
+};
+    myChart2.setOption(option);
+    myChart3.setOption(option2);
+    myChart4.setOption(option3);
+
+                }else{
+                    alert(data.head.message);
+                }
+                // $("#product").unbind();
+            }
+        });
+
+        $(document).on("click", function(){
+        $("#change").hide();
+    });
+
+$('#changeLink').click(function(event){
+    event.stopPropagation()
+    $('#change').show();
+})
+
+//蓝牙或者网络
+var networkOrbluetooth;
+
+$('#network').click(function(event){
+    event.stopPropagation();
+    networkOrbluetooth = 1;
+    $("#change").hide();
+    $('#name').text('网络连接')
+})
+
+$('#bluetooth').click(function(event){
+    event.stopPropagation();
+    networkOrbluetooth = 2;
+    $("#change").hide();
+    $('#name').text('蓝牙连接')
+})
+
+$('#errorCode').click(function(){
+    if(GetRequest().type == 'Android'){
+        window.MachineInfoInterface.faultReport(networkOrbluetooth);
+    }else{
+        window.webkit.messageHandlers.faultReport.postMessage({"params":networkOrbluetooth});
+    }
+
+})
+
+$('#lookMore').click(function(){
+    if(GetRequest().type == 'Android'){
+    window.MachineInfoInterface.more(networkOrbluetooth);
+    }else{
+        window.webkit.messageHandlers.more.postMessage({"params":networkOrbluetooth});
+    }
+})
+
+$('#back').click(function(){
+    //alert('123');
+    if(GetRequest().type == 'Android'){
+    window.MachineInfoInterface.back();
+    }else{
+        window.webkit.messageHandlers.back.postMessage({"params":networkOrbluetooth});
+    }
+})
+
+// setInterval(function (){
+//     //window.location.reload();
+//     option.series[0].data[0].value = (Math.random() * 100).toFixed(2) - 0;
+//     option2.series[0].data[0].value = (Math.random() * 100).toFixed(2) - 0;
+//     myChart2.setOption(option,true);
+//     myChart3.setOption(option2,true);
+//     myChart4.setOption(option3,true);
+// },1000)
+
+    }
+
+        //解析url
+        function GetRequest() {  
+   var url = location.search; //获取url中"?"符后的字串  
+   var theRequest = new Object();  
+   if (url.indexOf("?") != -1) {  
+      var str = url.substr(1);  
+      strs = str.split("&");  
+      for(var i = 0; i < strs.length; i ++) {  
+         theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);  
+      }  
+   }  
+   return theRequest;  
+}  
+
+
+</script>
+</html>

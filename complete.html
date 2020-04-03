@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>完成</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/saleCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+</head>
+<body class="reset">
+<div>
+    <div>
+        <div class="title_box">
+            <img src="img/status_warning.png" class="status_warning">
+            <span id="status_describe" class="status_info">当前状态：完成</span>
+        </div>
+        <div class="dis_detail">
+            <div id="userInfo">
+                <div class="tit_msg">
+                    <img src="img/tit_pic.png" class="tit_pic">
+                    <span>用户评价</span>
+                </div>
+                <div class="rep_detail">
+                    <table id="user_tab" class="rep_detail_tab txt_center">
+                        <tr>
+                            <td class="head_td" width="167px" height="60px;">满意度</td>
+                            <td class="body_td txt_left">
+                                <img id="star1" src="http://app.changfanz.net:3588/changfa_file/star_empty.png" class="star">
+                                <img id="star2" src="http://app.changfanz.net:3588/changfa_file/star_empty.png" class="star">
+                                <img id="star3" src="http://app.changfanz.net:3588/changfa_file/star_empty.png" class="star">
+                                <img id="star4" src="http://app.changfanz.net:3588/changfa_file/star_empty.png" class="star">
+                                <img id="star5" src="http://app.changfanz.net:3588/changfa_file/star_empty.png" class="star">
+                                <span id="userIdeal" class="mg_l50"></span>&nbsp;&nbsp;分
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="head_td" width="167px" height="60px;">用户意见</td>
+                            <td id="cont" class="body_td_2 txt_left"></td>
+                        </tr>
+                        <tr>
+                            <td class="head_td" width="167px" height="80px;">评价图片</td>
+                            <td id="pic" class="body_td txt_left">
+
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div id="rep_next" class="next">
+
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+        $.ajax({
+            type: "post",
+            async: false,
+            url: ip_path + "/changfa_system/reportComment/selectByReportId.do",
+            data: {
+                reportId : $(window.parent.parent.document).find("input[name='reportId']").val() || $(window.parent.parent.parent.document).find("input[name='reportId']").val()
+            },
+            dataType: "json",
+            success: function (data) {
+                if(data['head']['isSuccess']){
+                    if(data['body']['result']['reportType'] == 0){
+                        if(data['body']['result']['judge'] != ""){
+                            var newUserId;
+                            for(var i=1;i<=data['body']['result']['level'];i++){
+                                newUserId = "star" + i;
+                                $("#"+newUserId).attr("src","http://app.changfanz.net:3588/changfa_file/star_full.png");
+                            }
+                            $("#userIdeal").text(data['body']['result']['level']);
+                            $("#cont").html(data['body']['result']['content']);
+
+                            if(data['body']['result']['filePath'].length != 0){
+                                for(var i =0;i<data['body']['result']['filePath'].length;i++){
+                                    $("#pic").append(
+                                        '<img src="'+data['body']['result']['filePath'][i]+'" class="err_pic" onclick="makeLarger(this)">'
+                                    );
+                                }
+                            }
+                        }
+                    }else{
+                        $("#userInfo").hide();
+                    }
+                }
+            }
+        });
+
+        if($(window.parent.parent.document).find("input[name='history_mark']").val() == ""){
+            if($(window.parent.parent.document).find("input[name='history_400_mark']").val() != ""){
+                $("#rep_next").html('<img src="img/front.png" onclick="to_lastReport_400()">');
+            }
+        }else{
+            $("#rep_next").html('<img src="img/front.png" onclick="to_lastReport()">');
+        }
+    }
+</script>
+</html>

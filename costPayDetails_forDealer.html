@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>付款单详情</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+        <script src="js/closeAccount.js"></script>
+    <script src="js/saleCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/index.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <!--<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">-->
+    <!--<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>-->
+    <!--<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
+    <style type="text/css">
+        .img_div{min-height: 100px; min-width: 100px;}
+        .isImg{width: 120px; height: 120px; position: relative; float: left; margin-left: 10px;}
+        .removeBtn{position: absolute; top: 0; right: 0; z-index: 11; border: 0px; border-radius: 50px; background: red; width: 22px; height: 22px; color: white;}
+    </style>
+</head>
+<body class="reset">
+
+<div>
+    <div class="tit mg-t50">
+        <span>付款单详情</span>
+    </div>
+    <div class="account_cont" style="font-size: 0.9em;">
+        <!-- <div id="scrollDiv">
+            <table cellpadding="0" cellspacing="0" class="table2" align="center">
+                <thead>
+                <tr align="center">
+                    <th class="th2" height="33">企业名称</th>
+                    <th class="th2">企业编号</th>
+                    <th class="th2">产品线</th>
+                    <th class="th2">年</th>
+                    <th class="th2">月</th>
+                    <th class="th2">费用（￥）</th>
+                    <th class="th2">状态</th>
+                </tr>
+                </thead>
+                <tbody id="adminTbody" style="width: 100%;">
+
+                </tbody>
+            </table>
+        </div>
+        <div class="txt_left mg-t20 mg_b30" style="margin-left: 5%">
+            <span class="describ">结算方式：</span><span class="describ" id="payType"></span>
+        </div>
+        <div id="ticketArea" class="mg_b30">
+            <div style="border: 1px solid #E4E4E4;width: 98%;margin-left: 1%"></div>
+            <div style="height: 210px;width: 98%;">
+                <div class="flt_l mg_l30" style="width: 15%;height: 210px;line-height: 210px;border-right: 1px solid #E4E4E4;">
+                    <span class="describ">结算单对应发票</span>
+                </div>
+                <div class="flt_l" style="width: 82%;">
+                    <div style="width: 100%;height: 35px;line-height: 35px;">
+                        <span class="describ fontGreen flt_l mg_l30">本次结算金额（元）：</span><span class="describ fontGreen flt_l" id="payTotal"></span>
+                    </div>
+
+                    <div>
+                        <table>
+                            <tr id="ticketList"></tr>
+                        </table>
+                    </div>
+                    <div class="txt_left mg-t10">
+                        <span class="describ mg_l30">备注：</span><span id="remarks" class="describ"></span>
+                    </div>
+                </div>
+            </div>
+            <div style="border: 1px solid #E4E4E4;width: 98%;margin-left: 1%"></div>
+
+        </div>
+        <div class="txt_left">
+            <div class="tit_msg">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>操作记录</span>
+            </div>
+            <div>
+                <table class="rpt_detail_tab txt_center mg_b50" style="font-size: 0.9em">
+                    <tr>
+                        <td class="head_td" height="40px">操作人</td>
+                        <td class="head_td">操作内容</td>
+                        <td class="head_td">操作时间</td>
+                    </tr>
+                    <tbody id="opetationLog">
+
+                    </tbody>
+
+                </table>
+            </div>
+        </div> -->
+        <div>
+            <span style="font-size: 35px;color: #1ABC9C;font-weight: 800;">服务站付款单</span>
+        </div>
+        <div style="width: 65%;margin:0 auto" >
+            <div style="float: left;width: 50%;">
+                <div class="txt_left">
+                    <span style="font-size: 20px;" >企业信息</span>
+                </div>
+                <div class="mg-t20 txt_left">
+                    <div class="mg-t20">
+                            <span >企业编号：</span>
+                            <span id="priseNum"></span>
+                    </div>
+                    <div class="mg-t20">
+                            <span >企业名称：</span>
+                            <span id="priseName"></span>
+                    </div>
+                    <div class="mg-t20">
+                            <span >支付宝账号：</span>
+                            <span id="alipayNum"></span>
+                    </div>
+
+                    <div class="mg-t20">
+                            <span >联系电话：</span>
+                            <span id="phone"></span>
+                    </div>
+                    <div class="mg-t20">
+                            <span >联系地址：</span>
+                            <span id="address"></span>
+                    </div>
+                    <!-- <div class="mg-t20">
+                            <span >生成时间：</span>
+                            <span id="createTime"></span>
+                    </div> -->
+
+                </div>
+
+            </div>
+            <div style="float: left;width: 50%;">
+            </div>
+            <div style="clear: both;" class="mg_b30">
+
+            </div>
+        </div>
+        <div style="width: 65%;margin:0 auto">
+                <div class="txt_left mg_b30">
+                        <span style="font-size: 20px;" >清单信息</span>
+                        <div style="float: right;">
+                            <span id="alipayCodeNum">支付宝订单号：</span>
+                            <span id="businessCodeNum"></span>
+                        </div>
+                        <div style="clear: both;"></div>
+                    </div>
+                <table cellpadding="0" cellspacing="0" class="table2" align="center" style="width: 100%;margin-left: 0;">
+                    <thead>
+                    <tr align="center">
+                        <th class="th2" height="33">派工单号</th>
+                        <th class="th2">产品型号</th>
+                        <th class="th2">创建日期</th>
+                        <th class="th2">产品线</th>
+                        <th class="th2">工时费</th>
+                        <th class="th2">里程费</th>
+                        <th class="th2">考核</th>
+                        <th class="th2">其他费用</th>
+                        <th class="th2">小计</th>
+                    </tr>
+                    <!-- <tr align="center">
+                        <th class="th2" height="33">产品线</th>
+                        <th class="th2">日期</th>
+                        <th class="th2">待结算费用（￥）</th>
+                        <th class="th2">状态</th>
+                        <th class="th2">选择</th>
+                    </tr> -->
+                    </thead>
+                    <tbody id="adminTbody" style="width: 100%;">
+        
+                    </tbody>
+                </table>
+                <div class="mg-t20" style="text-align: right;">
+                    <span class="describ fontGreen">总计金额（￥）：</span><span id="costTotal" class="fontGreen"></span>
+                </div>
+                <div class="mg-t20" style="margin-left: 5%;text-align: right;">
+                        <span class="describ fontGreen">本次应结（￥）：</span><span id="thisTotal" class="fontGreen"></span>
+                    </div>
+                <div class="mg-t20" style="margin-left: 5%;text-align: right;">
+                        <span class="describ fontGreen">剩余款项（￥）：</span><span id="afterTotal" class="fontGreen"></span>
+                    </div>
+            </div>
+            <!-- <div style="width: 65%;margin:0 auto;font-size: 15px;margin-top: 20px;">
+                <div style="float: left;">
+                    <span>制单人：</span>
+                    <span id="creatorPerson"></span>
+                </div>
+                <div style="float: right;">
+                    <span id="getMoney">付款人：</span>
+                    <span id="payPerson"></span>
+                <div></div>
+                <span>生成日期：</span>
+                    <span id="createTime"></span>
+                </div>
+            </div> -->
+
+            <div style="width: 65%;margin:0 auto;font-size: 15px;margin-top: 20px;position: relative;">
+                <div style="float: left;">
+                    <span>生成日期：</span>
+                    <span id="createTime"></span>
+                </div>
+                <div style="position: absolute;display: inline-block;left: 45%;">
+                    <span>制单人：</span>
+                    <span id="creatorPerson"></span>
+                </div>
+
+                <div style="float: right;">
+                    <span id="getMoney">付款人：</span>
+                    <span id="payPerson"></span>
+                    <div></div>
+                </div>
+            </div>
+    </div>
+</div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+        //初始化
+        //ajax_costPayDetail();
+        ajax_costPay_detail();
+    }
+
+    function ticketLarge(event) {
+        window.parent.pic_makeLarge(event);
+    }
+
+</script>
+</html>

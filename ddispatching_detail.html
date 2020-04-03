@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>派工单</title>
+
+    <!-- 这里要配置参数key,将其值设置为高德官网开发者获取的key -->
+    <script src="http://webapi.amap.com/maps?v=1.3&key=1e7ce268607a7319fdfe6b430761cbcb"></script>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/dsaleCenter.js"></script>
+    <script src="js/dcommon.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css"/>
+    <script src="http://cache.amap.com/lbs/static/es5.min.js"></script>
+    <script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
+    <style>
+        .panel{
+            position: absolute;
+            top:15px;
+            right: 15px;
+        }
+    </style>
+</head>
+<body class="reset">
+<div>
+    <div>
+        <div class="title_box">
+            <img src="img/status_warning.png" class="status_warning">
+            <span class="status_info" id="tit_stat">当前状态：</span>
+            <div id="operation" class="flt_r">
+                <input type="button" class="submit_btn flt_r mg-t20 mg-r30" value="回访" onclick="openUserVisit()">
+                <input type="button" id="reDis" class="submit_btn mg-t20 mg-r30 flt_r" value="重新派工" style="display: none;" onclick="restartDispatch()">
+                <input type="button" id="cancleDis" class="submit_btn mg-t20 mg-r30 flt_r" value="派工撤销" style="display: none;" onclick="dcancleDispatch()">
+                <input type="button" id="closeDis" class="submit_btn mg-t20 mg-r30 flt_r" value="强制关闭" style="display: none;" onclick="closeDispatch()">
+            </div>
+
+        </div>
+        <div class="dis_detail">
+            <div id="giveDis">
+                <div class="tit_msg">
+                    <img src="img/tit_pic.png" class="tit_pic">
+                    <span>派工单号</span>
+                </div>
+                <div id="disNum" class="dis_detail_tab"></div>
+
+                <div class="tit_msg">
+                    <img src="img/tit_pic.png" class="tit_pic">
+                    <span>派单信息</span>
+                    <!-- <input type="button" id="reDis" class="submit_btn mg-r30 flt_r" value="重新派工" style="display: none;margin-top: -10px;" onclick="restartDispatch()">
+                    <input type="button" id="cancleDis" class="submit_btn mg-r30 flt_r" value="派工撤销" style="display: none;margin-top: -10px;" onclick="cancleDispatch()">
+                    <input type="button" id="closeDis" class="submit_btn mg-r30 flt_r" value="强制关闭" style="display: none;margin-top: -10px;" onclick="closeDispatch()"> -->
+                </div>
+                <div>
+                    <table class="rpt_detail_tab txt_center">
+                        <tr>
+                            <td class="head_td">类型</td>
+                            <td class="head_td">联系人</td>
+                            <td class="head_td">电话</td>
+                            <td class="head_td" height="46px">所属公司</td>
+                            <td class="head_td" height="46px">维修类型</td>
+                        </tr>
+                        <tbody id="dis_tab">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!--<div id="toogleDis">-->
+                <!--<div class="tit_msg">-->
+                    <!--<img src="img/tit_pic.png" class="tit_pic">-->
+                    <!--<span>转单信息</span>-->
+                <!--</div>-->
+                <!--<div>-->
+                    <!--<table class="rpt_detail_tab txt_center">-->
+                        <!--<tr>-->
+                            <!--<td class="head_td" height="46px">转出人姓名</td>-->
+                            <!--<td class="head_td">转出人电话</td>-->
+                            <!--<td class="head_td">转出时间</td>-->
+                            <!--<td class="head_td">转入人姓名</td>-->
+                            <!--<td class="head_td">转入人电话</td>-->
+                        <!--</tr>-->
+                        <!--<tbody id="change_dis">-->
+
+                        <!--</tbody>-->
+                    <!--</table>-->
+                <!--</div>-->
+            <!--</div>-->
+            <div id="acceptDis">
+                <div class="tit_msg">
+                    <img src="img/tit_pic.png" class="tit_pic">
+                    <span>接单信息</span>
+                </div>
+                <div>
+                    <table class="rpt_detail_tab txt_center">
+                        <tr>
+                            <td class="head_td" height="46px">姓名</td>
+                            <td class="head_td">电话</td>
+                            <td class="head_td">接单时间</td>
+                            <td class="head_td">出发时间</td>
+                            <td class="head_td">出发位置</td>
+                        </tr>
+                        <tbody id="acc_dis">
+
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+            <div id="mapCont">
+                <div class="tit_msg">
+                    <img src="img/tit_pic.png" class="tit_pic">
+                    <span>地图</span>
+                </div>
+                <div class="map_detail_tab" style="color: #666666;">
+                    <img src="img/go.png" style="width:20px;height: 25px;"><span style="color: #0c2595;">出发--><img src="img/machine.png" style="width:20px;height: 25px;">农机：</span><span id="preDistance"></span>公里
+                    <span class="mg_l50" style="color: #ec1c24;"><img src="img/go.png" style="width:20px;height: 25px;">出发--><img src="img/arrive.png" style="width:20px;height: 25px;">到达：</span><span id="distance"></span>公里
+                </div>
+                <div id="map" class="map"></div>
+                <div id="panel" class="panel"></div>
+            </div>
+
+            <div class="tit_msg">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>路线备注</span>
+            </div>
+            <div>
+                <table class="rpt_detail_tab txt_center">
+                    <tbody id="routeRemark">
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="tit_msg">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>操作记录</span>
+            </div>
+            <div>
+                <table class="rpt_detail_tab txt_center mg_b50">
+                    <tr>
+                        <td class="head_td" height="46px">操作人</td>
+                        <td class="head_td">操作内容</td>
+                        <td class="head_td">驳回原因</td>
+                        <td class="head_td">操作时间</td>
+                    </tr>
+                    <tbody id="opetationLog">
+
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+    <div id="next_status" class="next">
+
+    </div>
+</div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+
+        var dis_id;
+        var machine_location;
+        var order_location;
+        var start_location;
+        var company_location;
+        var end_location;
+        var server_location;
+        var center_address;
+        var start_name;
+        var arrive_name;
+        var taskaddress;
+
+        //判断经销商
+        if(appRoleList.indexOf($(window.parent.parent.document).find("input[name='roleId']").val()) != -1){
+            $("#operation").hide();
+        }
+
+        //根据报修id获取派工id
+        $.ajax({
+            type : "post",
+            async : false,
+            //url : ip_path+"/changfa_system/dispatch/selectDispatchByReportId.do",
+            //url : ip_path+"/changfa_system/powerReport/getPowerReportInfoById.do",
+            url : ip_path+"/changfa_system/powerDispatch/selectPowerDispatchByReportId.do",
+            data : {
+                reportId : $(window.parent.parent.document).find("input[name='reportId']").val()
+            },
+            dataType : "json",
+            success : function (data) {
+                dis_id = data['body']['result']['dispatchId'];
+            }
+        });
+
+        //根据派工id获取经纬度信息
+        $.ajax({
+            type : "post",
+            async : false,
+            //url : ip_path+"/changfa_system/locationRecord/getLocationRecord.do",
+            url : ip_path+"/changfa_system/locationRecord/getPowerLocationRecord.do",
+              //url : ip_path+"/changfa_system/powerDispatch/selectPowerDisPatchById.do",
+            
+            data : {
+                disId : dis_id,
+            },
+            dataType : "json",
+            success : function (data) {
+                if(data['head']['code'] == 200){
+                    machine_location = data['body']['result']['taskLocation'];
+                    order_location = data['body']['result']['orderLocation'];
+                    start_location = data['body']['result']['startLocation'];
+                    company_location = data['body']['result']['companyLocation'];
+                    end_location = data['body']['result']['endLocation'];
+                    start_name = data['body']['result']['startLocationName'];
+                    arrive_name = data['body']['result']['endLocationName'];
+                    server_location = data['body']['result']['repairUserLocation'];
+                    $("#distance").text(data['body']['result']['distance']);
+                    $("#preDistance").text(data['body']['result']['confirmDistance']);
+                }else {
+                    machine_location = "";
+                    start_name = "";
+                    arrive_name = "";
+                    order_location = "";
+                    start_location = "";
+                    company_location = "";
+                    end_location = "";
+                    server_location = "";
+                }
+            }
+        });
+
+        
+        var type;
+        //获取派工详细信息
+        var token = $(window.parent.parent.document).find("input[name='token']").val();
+        $.ajax({
+            type : "post",
+            async : false,
+            //url : ip_path+"/changfa_system/dispatch/selectById.do",
+            url : ip_path+"/changfa_system/powerDispatch/selectPowerDisPatchById.do",
+            data : {
+                dispatchId : dis_id,
+                token : token
+            },
+            dataType : "json",
+            success : function (data) {
+                taskaddress = data['body']['result']['taskAddress'];
+                type = data['body']['result']['repairType'];
+                //console.log(data)
+
+                var stat = data['body']['result']['status'];
+                switch(stat){
+                    case 7:
+                        $("#tit_stat").html("当前状态：待接单");
+                        break;
+                    case 8:
+                        $("#tit_stat").html("当前状态：已接单");
+                        break;
+                    case 9:
+                        $("#tit_stat").html("当前状态：已出发");
+                        break;
+                    case 10:
+                        $("#tit_stat").html("当前状态：已到达");
+                        break;
+                    case 11:
+                        $("#tit_stat").html("当前状态：维修中");
+                        break;
+                    case 12:
+                        $("#tit_stat").html("当前状态：维修中");
+                        break;
+                    case 13:
+                        $("#tit_stat").html("当前状态：维修中");
+                        break;
+                    case 14:
+                        $("#tit_stat").html("当前状态：维修完成");
+                        break;
+                    case 15:
+                        $("#tit_stat").html("当前状态：维修完成");
+                        break;
+                    case 16:
+                        $("#tit_stat").html("当前状态：维修完成");
+                        break;
+                    case 6:
+                        $("#tit_stat").html("当前状态：维修完成");
+                        break;
+                }
+
+                if(stat == 7){
+                    document.getElementById("reDis").style.display = "block";
+                }else{
+                    document.getElementById("reDis").style.display = "none";
+                }
+
+                if(stat == 8){
+                    document.getElementById("cancleDis").style.display = "block";
+                }else{
+                    document.getElementById("cancleDis").style.display = "none";
+                }
+
+                if(stat == 9 || stat == 10){
+                    document.getElementById("closeDis").style.display = "block";
+                }else{
+                    document.getElementById("closeDis").style.display = "none";
+                }
+
+                $("#disNum").html(data['body']['result']['disNum']);
+
+                var repairType;
+                if(data['body']['result']['repairType'] == 1){
+                    repairType = "外出(本地用户)";
+                }else if(data['body']['result']['repairType'] == 2){
+                    repairType = "到店(本地用户)";
+                }else if(data['body']['result']['repairType'] == 3){
+                    repairType = "库存车维修";
+                }else if(data['body']['result']['repairType'] == 4){
+                    repairType = "外出(跨区用户)";
+                }else if(data['body']['result']['repairType'] == 5){
+                    repairType = "到店(跨区用户)";
+                }else if(data['body']['result']['repairType'] == 6){
+                    repairType = "寄件维修";
+                }
+                $("#dis_tab").append(
+                    '<tr>' +
+                    '<td class="body_td" height="59px">'+data['body']['result']['roleName']+'</td>' +
+                    '<td class="body_td">'+data['body']['result']['repairUserName']+'</td>' +
+                    '<td class="body_td">'+data['body']['result']['repairUserMobile']+'</td>' +
+                    '<td class="body_td"><a href="###">'+data['body']['result']['company']+'</a></td>' +
+                    '<td class="body_td">'+repairType+'</td>' +
+                    '</tr>'
+                );
+
+                var acceptTime;
+                var goTime;
+                var arriveTime;
+
+                if(data['body']['result']['statusArray'].length < 2){
+                    acceptTime = "";
+                }else {
+                    acceptTime = data['body']['result']['statusArray'][1][1]['time'];
+                }
+                if(data['body']['result']['statusArray'].length < 3){
+                    goTime = "";
+                }else{
+                    goTime = data['body']['result']['statusArray'][2][1]['time'];
+                }
+                if(data['body']['result']['statusArray'].length < 4){
+                    arriveTime = "";
+                }else {
+                    arriveTime = data['body']['result']['statusArray'][3][1]['time'];
+                }
+
+                if(acceptTime == ""){
+                    document.getElementById("acceptDis").style.display = "none";
+                }else{
+                    $("#acc_dis").append(
+                        '<tr>' +
+                        '<td class="body_td" height="59px" rowspan="3">'+data['body']['result']['repairUserName']+'</td>' +
+                        '<td class="body_td" rowspan="3">'+data['body']['result']['repairUserMobile']+'</td>' +
+                        '<td class="body_td">'+acceptTime+'</td>' +
+                        '<td class="body_td" height="59px">'+goTime+'</td>' +
+                        /*'<td class="body_td"><a href="###">'+start_name+'</a></td>' +*/
+                        '<td class="body_td"><a href="###">'+data['body']['result']['startAddress']+'</a></td>' +
+                        '</tr>'+
+                        '<tr>' +
+                        '<td class="head_td" height="46px">预计到达时间</td>' +
+                        '<td class="head_td" height="46px">实际到达时间</td>' +
+                        '<td class="head_td">到达位置</td>' +
+                        '</tr>'+
+                        '<tr>' +
+                        '<td class="body_td" height="59px">'+data['body']['result']['expectTime']+'</td>' +
+                        '<td class="body_td" height="59px">'+arriveTime+'</td>' +
+                        /*'<td class="body_td"><a href="###">'+arrive_name+'</a></td>' +*/
+                        '<td class="body_td"><a href="###">'+data['body']['result']['endAddress']+'</a></td>' +
+                        '</tr>'
+
+                    );
+                }
+
+                if(data['body']['result']['operationFlowList'].length != 0){
+                    for(var i=0;i<data['body']['result']['operationFlowList'].length;i++){
+                        $("#opetationLog").append(
+                            '<tr>' +
+                            '<td class="body_td" height="46px">'+data['body']['result']['operationFlowList'][i]['userName']+'</td>' +
+                            '<td class="body_td">'+data['body']['result']['operationFlowList'][i]['description']+'</td>' +
+                            '<td class="body_td">'+data['body']['result']['operationFlowList'][i]['reason']+'</td>' +
+                            '<td class="body_td">'+data['body']['result']['operationFlowList'][i]['createTime']+'</td>' +
+                            '</tr>'
+                        );
+                    }
+                }else{
+                    $("#opetationLog").append(
+                        '<tr>' +
+                        '<td class="body_td" height="46px" colspan="3">暂无操作记录</td>' +
+                        '</tr>'
+                    );
+                }
+
+                // if(data['body']['result']['turnOutStatus'] != 1){
+                //     document.getElementById("toogleDis").style.display = "none";
+                // }else{
+                //     //转单信息
+                //     $.ajax({
+                //         type : "post",
+                //         async : false,
+                //         url : ip_path+"/changfa_system/dispatch/selectTurnPersonByDisID.do",
+                //         data : {
+                //             disId : dis_id
+                //         },
+                //         dataType : "json",
+                //         success : function (data) {
+                //             if(data['head']['isSuccess']){
+                //                 for(var i=0;i<data['body']['resultList'].length;i++){
+                //                     $("#change_dis").append(
+                //                         '<tr>' +
+                //                         '<td class="body_td" height="59px">'+ data['body']['resultList'][i]['turnOutName'] +'</td>' +
+                //                         '<td class="body_td">'+ data['body']['resultList'][i]['turnOutMobile'] +'</td>' +
+                //                         '<td class="body_td">'+ data['body']['resultList'][i]['createTime'] +'</td>' +
+                //                         '<td class="body_td">'+ data['body']['resultList'][i]['turnInName'] +'</td>' +
+                //                         '<td class="body_td">'+ data['body']['resultList'][i]['turnInMobile'] +'</td>' +
+                //                         '</tr>'
+                //                     );
+                //                 }
+                //             }else{
+                //                 alert(data['head']['message']);
+                //             }
+                //         }
+                //     });
+                // }
+                if(data['body']['result']['remarks'] != ""){
+                    $("#routeRemark").append(
+                        '<tr>' +
+                        '<td class="body_td" height="50px" style="text-align: left;padding-left: 15px;">'+data['body']['result']['remarks']+'</td>' +
+                        '</tr>'
+                    );
+                }else{
+                    $("#routeRemark").append(
+                        '<tr>' +
+                        '<td class="body_td" height="50px" style="text-align: left;padding-left: 15px;">无</td>' +
+                        '</tr>'
+                    );
+                }
+
+            }
+        });
+
+        if(type == 2){
+            $("#mapCont").hide();
+        }else{
+            if(end_location != ""){
+                center_address = end_location;
+            }else {
+                center_address = taskaddress;
+            }
+
+            if(center_address.indexOf("-") != -1){
+                center_address = center_address.split("-")[1];
+            }
+
+            var lng_start = start_location.split(",")[0];
+            var lat_start = start_location.split(",")[1];
+            var lng_machine = machine_location.split(",")[0];
+            var lat_machine = machine_location.split(",")[1];
+            if(lng_start != ""){
+                map = new AMap.Map("map",{
+                    resizeEnable: true,
+                    center : [lng_start,lat_start]
+                });
+            }else{
+                map = new AMap.Map("map",{
+                    resizeEnable: true,
+                    center : [lng_machine,lat_machine]
+                });
+            }
+
+            //公司位置
+            if(company_location != ""){
+                var marker_company = new AMap.Marker({
+                    position: new AMap.LngLat(company_location.split(",")[0],company_location.split(",")[1]),
+                    offset: new AMap.Pixel(-16, -45),
+                    icon: 'img/service.png',
+                });
+                map.add(marker_company);
+            }
+
+            //农机位置
+            if(machine_location != ""){
+                var marker_machine = new AMap.Marker({
+                    position: new AMap.LngLat(machine_location.split(",")[0],machine_location.split(",")[1]),
+                    offset: new AMap.Pixel(-16, -45),
+                    icon: 'img/machine.png',
+                });
+                map.add(marker_machine);
+            }
+
+            //接单位置
+            if(order_location != ""){
+                var marker_accept = new AMap.Marker({
+                    position: new AMap.LngLat(order_location.split(",")[0],order_location.split(",")[1]),
+                    offset: new AMap.Pixel(-16, -45),
+                    icon: 'img/accept.png',
+                });
+                map.add(marker_accept);
+            }
+
+            //到达位置
+            if(end_location != ""){
+                var marker_machine = new AMap.Marker({
+                    position: new AMap.LngLat(end_location.split(",")[0],end_location.split(",")[1]),
+                    offset: new AMap.Pixel(-16, -45),
+                    icon: 'img/arrive.png',
+                });
+                map.add(marker_machine);
+            }
+
+            //出发位置
+            if(start_location != ""){
+                var marker_server = new AMap.Marker({
+                    position: new AMap.LngLat(start_location.split(",")[0],start_location.split(",")[1]),
+                    offset: new AMap.Pixel(-16, -45),
+                    icon: 'img/go.png',
+                });
+                map.add(marker_server);
+            }
+
+            //三包员最新位置
+            if(server_location != ""){
+                var marker_server = new AMap.Marker({
+                    position: new AMap.LngLat(server_location.split(",")[0],server_location.split(",")[1]),
+                    offset: new AMap.Pixel(-16, -45),
+                    icon: 'img/server.png',
+                });
+                map.add(marker_server);
+            }
+
+            if(start_location != ""){
+                AMap.plugin(["AMap.Driving"], function() {
+                    var drivingOption = {
+                        policy:AMap.DrivingPolicy.LEAST_TIME,
+                        map:map,
+                        outlineColor : "#0c2595",
+                        autoFitView : true,
+                        hideMarkers : true
+                    };
+
+                    var driving = new AMap.Driving(drivingOption); //构造驾车导航类
+                    //根据起终点坐标规划驾车路线
+                    driving.search(new AMap.LngLat(start_location.split(",")[0],start_location.split(",")[1]), new AMap.LngLat(machine_location.split(",")[0],machine_location.split(",")[1]));
+
+                });
+            }
+            
+            if(start_location != "" && end_location){
+                AMap.plugin(["AMap.Driving"], function() {
+                    var drivingOption = {
+                        policy:AMap.DrivingPolicy.LEAST_TIME,
+                        map:map,
+                        outlineColor : "#ec1c24",
+                        autoFitView : true,
+                        hideMarkers : true
+                    };
+
+                    var driving = new AMap.Driving(drivingOption); //构造驾车导航类
+                    //根据起终点坐标规划驾车路线
+                    driving.search(new AMap.LngLat(start_location.split(",")[0],start_location.split(",")[1]), new AMap.LngLat(end_location.split(",")[0],end_location.split(",")[1]));
+
+                });
+            }
+        }
+
+        if($(window.parent.parent.document).find("input[name='history_mark']").val() == ""){
+            if($(window.parent.parent.document).find("input[name='history_400_mark']").val() != ""){
+                $("#next_status").html('<img src="img/front.png" onclick="to_lastReport_400()">');
+                document.getElementById("reDis").style.display = "none";
+            }
+        }else{
+            $("#next_status").html('<img src="img/front.png" onclick="to_lastReport()">');
+            document.getElementById("reDis").style.display = "none";
+        }
+    }
+</script>
+</html>

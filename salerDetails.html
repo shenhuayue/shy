@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>业务员详情</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/userCenter.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <script src="jqueryTagsInput/jquery.tagsinput.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="jqueryTagsInput/jquery.tagsinput.min.css" />
+    <link rel="stylesheet" type="text/css" href="select/select.css" />
+    <script src="select/select.js"></script>
+    <script src="js/common.js"></script>
+</head>
+<body class="reset">
+
+        <div id="addDealerInfo" class="addTopic outShadow" style="display: none;position: fixed">
+                <div class="dealer_title">
+                    <span>新增</span>
+                    <img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeDealerInfo()">
+                </div>
+                <div style="width: 80%;margin: 0 auto; padding-top:20px ;padding-bottom: 20px;">
+                    <div style="float: left;width: 30%;">
+                            <span class="font_normal">省份：</span>
+                            <select id="province" class="product_line" style="width: 60%;height: 34px;">
+                            </select>
+                    </div>
+
+                    <div id="demo2" class="selectPickerWrapper" style="float:left;"> 
+                        
+                        <select id="product" class="hidden" multiple="multiple">
+                       </select>
+                       <!--<button class="query_btn_big" style="margin-left: -4%;margin-right: 4%" onclick="querySaleMachine()"></button>-->
+                    </div>
+                    <!--
+                    <div style="float: left;width: 30%;">
+                            <span class="describ">产&nbsp;品&nbsp;线&nbsp;：</span>
+                            <select id="product" class="product_line" style="width: 60%;height: 34px;" >
+                      
+                            </select>
+                    </div>
+                    -->
+                    <div style="float: left;width: 35%;">
+                        <select id="saleM_item" class="rep_guy_info" style="width: 90px;">
+                            <option value="company">企业名称</option>
+                            <option value="workNum">企业编号</option>
+                        </select>
+                        <input type="text" id="saleM_info" class="product_line" style="width: 30%;">
+                        <button class="query_btn_big" style="margin-left: -4%;margin-right: 4%" onclick="querySaleMachine()"></button>
+                    </div>
+                    <div style="clear: both;"></div>
+                </div>
+                <div style="width: 80%;height: auto;border: 1px solid #E4E4E4;border-top: none;margin: 0 auto;">
+
+                        <div style="overflow-y: scroll;height: 400px;">
+                                <table style="border-collapse: collapse;width : 100%;">
+                                    <tr>
+                                        <td class="head_td txt_center" height="40px">
+                                            <input type="checkbox" name="allelem" id="allelem">
+                                        </td>
+                                        <td class="head_td">企业编号</td>
+                                        <td class="head_td">企业名称</td>
+                                        <td class="head_td txt_center">业务范围</td>
+                                    </tr>
+                                    <tbody id="adminTbody2">
+                    
+                                    </tbody>
+                                </table>
+                            </div>
+
+                </div>
+                <div style="width: 80%;margin: 0 auto; padding-top:20px ;padding-bottom: 20px;">
+                    <div style="display: inline-block;float: right;" id="shuliang"></div>
+                </div>
+                <div class="mg_b50" style="width: 100%;text-align: center">
+                        <button class="waves submit_btn mg-t30" onclick="addDealerModel()">提交</button>
+                    </div>
+            </div>
+
+<div id="editSaler" class="addTopic outShadow" style="display: none;">
+    <div class="dealer_title">
+        <span>编辑业务员信息</span>
+        <img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeSalerEdit()">
+    </div>
+    <div style="width: 100%;height: auto;border: 1px solid #E4E4E4;border-top: none;">
+        <div class="tit_msg">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>信息</span>
+        </div>
+        <div>
+            <table id="reporterInfo" class="rpt_detail_tab txt_center">
+                <tr>
+                    <td class='head_td' width='136px' height='46px'>姓名</td>
+                    <td class='body_td txt_left' width='383px'>
+                        <input type="text" id="createName" class="userInfo">
+                    </td>
+                </tr>
+                <!--<tr>-->
+                <!--<td class='head_td' width='136px' height='46px'>工号</td>-->
+                <!--<td class='body_td txt_left' width='383px'>-->
+                <!--<input type="text" id="createWorkNo" class="userInfo">-->
+                <!--</td>-->
+                <!--</tr>-->
+                <tr>
+                    <td class='head_td' width='136px' height='46px'>电话</td>
+                    <td class='body_td txt_left' width='383px'>
+                        <input type="text" id="createMobile" class="userInfo">
+                    </td>
+                </tr>
+                <tr id="task_changfa">
+                    <td class='head_td' width='136px' height='46px'>业务范围</td>
+                    <td class='body_td txt_left'>
+
+                        <input id="tags_1" type="text" class="tagsinput" readonly="readonly"/>
+
+                        <div class="flt_l">
+                            <select id="province1" class="addressInfo">
+
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class='head_td' width='136px' height='46px'>产品线范围</td>
+                    <td class='body_td txt_left'>
+
+                        <input id="tags_2" type="text" class="tagsinput" readonly="readonly"/>
+
+                        <div class="flt_l">
+                            <select id="line" class="addressInfo">
+
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class='head_td' width='136px' height='46px'>所属公司</td>
+                    <td class='body_td txt_left' width='383px'>
+                        <input type="text" id="createCompany" class="userInfo" value="常州常发农业机械营销有限公司" disabled="true">
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="mg_b50" style="width: 100%;text-align: center">
+            <button class="waves submit_btn mg-t30" onclick="updateSaler()">保存</button>
+        </div>
+    </div>
+</div>
+<div id="scoreLog" class="addTopic outShadow" style="display: none;">
+    <div class="dealer_title">
+        <span>积分流水</span>
+        <img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeScoreLog()">
+    </div>
+    <div>
+        <div style="width: 100%;height: 300px;overflow-y: scroll">
+            <table cellpadding="0" cellspacing="0" class="table2 mg_b30">
+                <thead>
+                <tr align="center">
+                    <th height="33" class="th2">积分变动</th>
+                    <th class="th2">途径</th>
+                    <th class="th2">时间</th>
+                </tr>
+                </thead>
+                <tbody id="scoreList">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div style="width: 90%;margin-left: 5%">
+    <div class="dealerInfo2">
+        <div class="flt_l">
+            <img id="server_head" class="dealer_head" src="" style="margin-top: 130px;">
+        </div>
+        <div class="flt_l" style="width:45%;">
+            <p class="color_5e heavy">类&nbsp;&nbsp;&nbsp;&nbsp;型&nbsp;&nbsp;&nbsp;：<span class="color_66 size_14" id="type"></span></p>
+            <p class="color_5e heavy">姓&nbsp;&nbsp;&nbsp;&nbsp;名&nbsp;&nbsp;&nbsp;：<span class="color_66 size_14" id="name"></span></p>
+            <p class="color_5e heavy">工&nbsp;&nbsp;&nbsp;&nbsp;号&nbsp;&nbsp;&nbsp;：<span class="color_66 size_14" id="workNum"></span></p>
+            <p class="color_5e heavy">联系电话：<span class="color_66 size_14" id="mobile"></span></p>
+            <p class="color_5e heavy">业务范围：<span class="color_66 size_14" id="taskAddress" style="width: auto;word-break:break-all"></span></p>
+            <p class="color_5e heavy">产&nbsp;&nbsp;品&nbsp;线：<span class="color_66 size_14" id="lines"></span></p>
+            <p class="color_5e heavy">所属公司：<span class="color_66 size_14" id="company"></span></p>
+            <p class="color_5e heavy">创建时间：<span class="color_66 size_14" id="createTime"></span></p>
+            <p class="color_5e heavy">持有积分：<a href="###" class="size_14" id="score" style="color: #1ABC9C;" onclick="showSalerScoreLog()"></a></p>
+            <span class="color_66 size_14" id="roleId" style="display: none;"></span>
+        </div>
+        <div class="flt_r mg-r50 mg-t20">
+            <div class="flt_r">
+                <span class="mg-r20">状态</span><img id="status" src="" style="vertical-align: middle" onclick="toogle_statusInDetail(this)">
+            </div>
+            <br><br><br><br><br><br><br><br><br><br><br><br><br>
+            <div class="flt_r" style="margin-top: 10px;">
+                <span class="mg-r20">编辑</span><img src="img/edit.png" style="vertical-align: middle" onclick="editSalerInfo()">
+            </div>
+        </div>
+        <div style="clear: both;"></div>
+    </div>
+    <!--<div class="count">-->
+        <!--<table class="menu3_tab" width="100%">-->
+            <!--<tr>-->
+                <!--<td class="body_td txt_center" width="50%" height="98px" style="border-left: none;border-top: none;">-->
+                    <!--<img src="img/repairNum.png" class="mg-r30" style="vertical-align: middle;">-->
+                    <!--<span class="size_18">维修总单据数：</span>-->
+                    <!--<span id="repCount" class="size_18"></span>-->
+                <!--</td>-->
+                <!--<td class="body_td txt_center" width="50%" style="border-top: none;border-right: none;">-->
+                    <!--<img src="img/repairDistance.png" class="mg-r30" style="vertical-align: middle;">-->
+                    <!--<span class="size_18">维修总里程数：</span>-->
+                    <!--<span id="repDistance" class="size_18"></span>-->
+                <!--</td>-->
+            <!--</tr>-->
+        <!--</table>-->
+    <!--</div>-->
+    <div style="height: 20px;"></div>
+    <div class="relativeInfo">
+        <div>
+            <div class="dealer_title txt_center" style="position: relative;">
+                <div style="float: left;width: 280px;position:absolute;left:0;">
+                    <select id="saleM_item1" class="rep_guy_info" style="width: 93px;">
+                            <option value="company">企业名称</option>
+                            <option value="workNum">企业编号</option>
+                          </select>
+                    <input type="text" id="saleM_info1" class="product_line" style="width: 39%;">
+                    <button class="query_btn_big" style="margin-left: -4%;margin-right: 4%" onclick="ajax_seach1()"></button>
+                </div>
+                <input type="button" id="waitDispatch" class="type_choosed" value="辖下经销商">
+                <input type="button" id="addDealer" class="type_choosed" value="新增" style="position: absolute;right: 135px;top: 50%;margin-top:-15px ;">
+                <input type="button" id="deleteDealer" class="type_choosed" value="删除" style="position: absolute;right: 0px;top: 50%;margin-top:-15px ;">
+            </div>
+        </div>
+        <div style="height: auto;">
+            <table style="border-collapse: collapse;width : 100%;">
+                <tr>
+                    <td class="head_td txt_center" height="40px">
+                        <input type="checkbox" name="allitem" id="allitem">
+                    </td>
+                    <td class="head_td">企业编号</td>
+                    <td class="head_td">企业名称</td>
+                    <td class="head_td txt_center">负责人姓名</td>
+                    <td class="head_td txt_center">负责人电话</td>
+                    <td class="head_td txt_center">业务范围</td>
+                    <td class="head_td txt_center">更多</td>
+                </tr>
+                <tbody id="adminTbody">
+
+                </tbody>
+            </table>
+            <div id="barcon" class="barcon" >
+                <div id="barcon1" class="barcon1"></div>
+                <div id="barcon2" class="barcon2">
+                    <ul>
+                        <li><button id="firstPage" class="page_btn">首页</button></li>
+                        <li><button id="prePage" class="page_btn">上一页</button></li>
+                        <li><button id="nextPage" class="page_btn">下一页</button></li>
+                        <li><button id="lastPage" class="page_btn">尾页</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    $('#saleM_item1').change(function(){
+        $('#saleM_info1').val('')
+        ajax_dealersUnderSaler();
+    })
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+        $(function() {        	
+		    $("#demo2").mySelect();
+	    });
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/user/getUsersByUserId.do",
+            data : {
+                userId : $(window.parent.document).find("input[name='salerId']").val()
+            },
+            dataType : "json",
+            success : function (data) {
+                if(data['head']['isSuccess']){
+                    if(data['body']['result']['headUrl'] != ""){
+                        $("#server_head").attr("src",data['body']['result']['headUrl']);
+                    }else {
+                        $("#server_head").attr("src","http://app.changfanz.net:3588/changfa_file/head.png");
+                    }
+                    if(data['body']['result']['status'] == 1){
+                        $("#status").attr("src","http://app.changfanz.net:3588/changfa_file/on.png");
+                    }else{
+                        $("#status").attr("src","http://app.changfanz.net:3588/changfa_file/off.png");
+                    }
+
+                    // var type;
+                    // if(data['body']['result']['roleId'] == 3){
+                    //     type="大区经理";
+                    // }else if(data['body']['result']['roleId'] == 4){
+                    //     type="省经理";
+                    // }else if(data['body']['result']['roleId'] == 5){
+                    //     type="业务员";
+                    // }
+                    
+                    $("#roleId").text(data['body']['result']['roleId']);
+                    $("#type").text(data['body']['result']['roleName']);
+                    $("#name").text(data['body']['result']['userName']);
+                    $("#workNum").text(data['body']['result']['workNum']);
+                    $("#mobile").text(data['body']['result']['mobile']);
+                    $("#taskAddress").text(data['body']['result']['provinceListName']);
+                    $("#lines").text(data['body']['result']['lineNameList']);
+                    $("#company").text(data['body']['result']['company']);
+                    $("#createTime").text(data['body']['result']['createTime']);
+                    $("#score").text(data['body']['result']['score']);
+                }else{
+                    alert(data['head']['message']);
+                }
+            }
+        });
+
+        currentPage = 1;
+        ajax_dealersUnderSaler();
+        ajax_getDealersInfo();
+        $('#firstPage').attr('disabled',true);
+        $('#prePage').attr('disabled',true);
+        $("#firstPage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = 1;
+            $('#firstPage').attr('disabled',true);
+            $('#prePage').attr('disabled',true);
+            ajax_dealersUnderSaler();
+        });
+        $("#lastPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = totalPage;
+            $('#lastPage').attr('disabled',true);
+            $('#nextPage').attr('disabled',true);
+            ajax_dealersUnderSaler();
+        });
+        $("#nextPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = currentPage+1;
+            if(currentPage == totalPage){
+                $('#lastPage').attr('disabled',true);
+                $('#nextPage').attr('disabled',true);
+            }else{
+                $('#lastPage').removeAttr('disabled');
+                $('#nextPage').removeAttr('disabled');
+            }
+            ajax_dealersUnderSaler();
+        });
+        $("#prePage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = currentPage-1;
+            if(currentPage == 1){
+                $('#firstPage').attr('disabled',true);
+                $('#prePage').attr('disabled',true);
+            }else{
+                $('#firstPage').removeAttr('disabled');
+                $('#prePage').removeAttr('disabled');
+            }
+            ajax_dealersUnderSaler();
+        });
+
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/place/getProvince.do",
+            dataType : "json",
+            success : function (data) {
+                $("#province1").append("<option value=''>选择省份</option>");
+                $("#province1").append("<option value='0'>全部省份</option>");
+                $("#province").append("<option value=''>全部省份</option>");
+                for(var i=0;i<data['body']['resultList']['length'];i++){
+                    $("#province1").append("<option value='"+ data['body']['resultList'][i]['name'] +"'>"+data['body']['resultList'][i]['name']+"</option>");
+                    $("#province").append("<option value='"+ data['body']['resultList'][i]['name'] +"'>"+data['body']['resultList'][i]['name']+"</option>");
+                }
+            }
+        });
+
+        $("#province1").change(function () {
+            if($("#province1 option:selected").val() != ""){
+                if($("#province1").val() == "0"){
+                    $.ajax({
+                        type : "post",
+                        async : false,
+                        url : ip_path+"/changfa_system/place/getProvince.do",
+                        dataType : "json",
+                        success : function (data) {
+                            for(var i=0;i<data['body']['resultList']['length'];i++){
+                                if (!$("#tags_1").tagExist(data['body']['resultList'][i]['name'])){
+                                    $("#tags_1").addTag(data['body']['resultList'][i]['name'],{focus:false,callback:false});
+                                }
+                            }
+                            $("#province1").val("");
+                        }
+                    });
+                }else{
+                    add();
+                }
+                
+            }
+        });
+
+        $.ajax({
+      type: "post",
+      url: ip_path + "/changfa_system/machineModel/getMachineModels.do",
+      dataType: "json",
+      success: function (data) {
+        $("#product").append("<option value=''>全部</option>");
+        for (var i = 0; i < data['body']['resultList']['length']; i++) {
+          $("#product").append("<option value='" + data['body']['resultList'][i]['number'] + "'>" + data['body']
+            ['resultList'][i]['name'] + "</option>");
+
+            $('.select-picker-options-list').append(
+              '<div class="select-picker-options-list-item">'+
+                '<b class="duihao duihao-nocheck">'+'</b>'+"<span data-id='" + data['body']['resultList'][i]['number'] + "'>"+data['body']
+            ['resultList'][i]['name']+'</span>'+'</div>'
+          )
+        }
+        // $("#product").unbind();
+        //查询缓存的搜索项
+      }
+    });
+
+    $('.select-picker-options-list-item').live("click",function(){
+		ajax_getDealersInfo();
+		//alert($('.select-picker-search-checked').text())
+	})
+    $('#saleM_item1').change(function(){
+        $('#saleM_info1').val('');
+        dealer_name='';
+        dealer_num='';
+        ajax_dealersUnderSaler();
+    })
+    if($('#saleM_info1').val()==''){
+        dealer_name='';
+        dealer_num='';
+        ajax_dealersUnderSaler();
+    }
+
+
+        $(function(){
+            $('#tags_1').tagsInput({width:'auto'});//这样做的目的是，使tags_1能够变成标签。
+        });
+
+        function add(){
+            var tags = $("#province1 option:selected").val();
+            if (!$('#tags_1').tagExist(tags)){
+                $("#tags_1").addTag(tags,{focus:false,callback:false});
+            }else{
+                alert("该选项已存在！");
+            }
+            $("#province1").val("");
+        }
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/machineModel/getMachineModels.do",
+            dataType : "json",
+            data:{
+                saleStatus: 1,
+                machineType: 2,
+            },
+            success : function (data) {
+                $("#line").append("<option value=''>选择产品线</option>");
+                $("#line").append("<option value='0'>全部产品线</option>");
+                for(var i=0;i<data['body']['resultList']['length'];i++){
+                    $("#line").append("<option value='"+ data['body']['resultList'][i]['number'] +"'>"+data['body']['resultList'][i]['name']+"</option>");
+                }
+            }
+        });
+        //弹出新增框
+        $('#addDealer').click(function(){
+            $('#addDealerInfo').show();
+        });
+
+    //产品线
+    $("#product").change(function () {
+        ajax_getDealersInfo();
+    });
+
+    $('#province').change(function () {
+        ajax_getDealersInfo();
+    });
+
+    $('#deleteDealer').click(function(){
+        if($('input[name="item"]:checked').length == 0){
+            alert('请选择企业')
+        }else{
+            var allDealers;
+            $('input[name="item"]:checked').each(function(){
+                if(allDealers){
+                    allDealers +=(','+$(this).parent().next().html());
+                }else{
+                    allDealers = $(this).parent().next().html();
+                }
+            })
+
+            $.ajax({
+                type: "post",
+                url: ip_path + "/changfa_system/salesmanDealer/delete.do",
+                data : {
+                    token : $(window.parent.document).find("input[name='token']").val(),
+                    salesman_id: $(window.parent.document).find("input[name='salerId']").val(),
+                    dealer_nums:allDealers,
+                    },
+                dataType: "json",
+                success: function (data) {
+                    if (data['head']['code'] == 200) {
+                        window.location.reload();
+                    } else {
+                        alert('操作失败')
+                    }
+                }
+            })
+
+        }
+    })
+
+
+        $("#line").change(function () {
+            if($("#line option:selected").val() != ""){
+                if($("#line option:selected").val() == "0"){
+                    $.ajax({
+                        type : "post",
+                        async : false,
+                        url : ip_path+"/changfa_system/machineModel/getMachineModels.do",
+                        dataType : "json",
+                        success : function (data) {
+                            for(var i=0;i<data['body']['resultList']['length'];i++){
+                                if (!$("#tags_2").tagExist(data['body']['resultList'][i]['name'])){
+                                    $("#tags_2").addTag(data['body']['resultList'][i]['name'],{focus:false,callback:false});
+                                }
+                            }
+                            $("#line").val("");
+                        }
+                    });
+                }else{
+                    add_line();
+                }    
+            }
+        });
+
+        $(function(){
+            $('#tags_2').tagsInput({width:'auto'});//这样做的目的是，使tags_1能够变成标签。
+        });
+
+        function add_line(){
+            var tags = $("#line option:selected").text();
+            if (!$('#tags_2').tagExist(tags)){
+                $("#tags_2").addTag(tags,{focus:false,callback:false});
+            }else{
+                alert("该选项已存在！");
+            }
+            $("#line").val("");
+        }
+
+        $("input[name='allelem']").click(function(){
+            if($(this).is(':checked')){
+                $('input[name="elem"]').attr("checked",true);
+            }else{
+                $('input[name="elem"]').attr("checked",false);
+            }
+        })
+
+        $("input[name='allitem']").click(function(){
+            if($(this).is(':checked')){
+                $('input[name="item"]').attr("checked",true);
+            }else{
+                $('input[name="item"]').attr("checked",false);
+            }
+        })
+        
+
+    }
+
+    function closeDealerInfo(){
+        $('#addDealerInfo').hide();   
+    }
+
+
+    
+    function addDealerModel (){
+        if($('input[name="elem"]:checked').length == 0){
+            alert('请选择企业')
+        }else{
+            var allDealers;
+            $('input[name="elem"]:checked').each(function(){
+                if(allDealers){
+                    allDealers +=(','+$(this).parent().next().html());
+                }else{
+                    allDealers = $(this).parent().next().html();
+                }
+            })
+
+            $.ajax({
+                type: "post",
+                url: ip_path + "/changfa_system/salesmanDealer/insert.do",
+                data : {
+                    token : $(window.parent.document).find("input[name='token']").val(),
+                    salesman_id: $(window.parent.document).find("input[name='salerId']").val(),
+                    dealer_nums:allDealers,
+                    },
+                dataType: "json",
+                success: function (data) {
+                    if (data['head']['code'] == 200) {
+                        window.location.reload();
+                    } else {
+                        alert(data['body']['result'])
+                    }
+                }
+            })
+
+        }
+    }
+
+    function querySaleMachine(){
+        ajax_getDealersInfo();
+    }
+</script>
+</html>

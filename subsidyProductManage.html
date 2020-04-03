@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>产品维护</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <link href="css/threePackspolicy.css" type="text/css" rel="stylesheet"/>
+    <script src="js/dcommon.js"></script>
+    <script src="js/jquery-1.9.1.js"></script>
+    <script src="jquery-ui-1.12.1/jquery-ui.min.js"></script>
+    <link href="jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet" />
+    <script src="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.js"></script>
+    <script type="text/javascript" src="jQuery-Timepicker/dist/i18n/jquery-ui-timepicker-zh-CN.js"></script>
+    <link href="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.css" rel="stylesheet" />
+    <script src="layer/layer.js"></script>
+    <script src="js/subsidy.js"></script>
+    <script src="js/jquery_form.js"></script>
+    
+    <style>
+        .layer_input{
+            width : 300px;height: 35px;padding-left: 10px;
+        }
+        .layer_input_half{
+            width : 140px;height: 35px;padding-left: 5px;
+        }
+        
+        .radio_type{
+            width: 20px;
+            height: 20px;
+            appearance: none;
+            position: relative;
+        }
+        .radio_type:before{
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: 1px solid #cfcfcf;
+            background:#cfcfcf;
+            display: inline-block;
+            border-radius: 50%;   
+            vertical-align: middle;
+        }
+        .radio_type:after{
+            content: '';
+            width: 10px;
+            height:5px;
+            border: 2px solid white;
+            border-top: transparent;
+            border-right: transparent;
+            text-align: center;
+            display: block;
+            position: absolute;
+            top: 6px;
+            left:5px;
+            vertical-align: middle;
+            transform: rotate(-45deg);
+        }
+        .radio_type.radio_types:before{
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: 1px solid #1ABC9C;
+            background:#1ABC9C;
+            display: inline-block;
+            border-radius: 50%;
+            vertical-align: middle;
+        }
+        .radio_type:checked:after{
+            content: '';
+            width: 10px;
+            height:5px;
+            border: 2px solid white;
+            border-top: transparent;
+            border-right: transparent;
+            text-align: center;
+            display: block;
+            position: absolute;
+            top: 6px;
+            left:5px;
+            vertical-align: middle;
+            transform: rotate(-45deg);
+        }
+        .relate{
+            width:100%;
+            position:fixed;
+            height:100%;
+            top:0;left:0;
+            z-index:3;
+            background:rgba(0,0,0,0.3)
+        }
+        .relate_main{
+            width:500px;
+            height:300px;
+            margin:auto;
+            margin-top:15%;
+            background:#fff;
+        }
+        .weihu{
+            width:90%;
+            float:left;
+            margin-left:5%;
+            margin-top:30px;
+        }
+        
+        </style>
+    </style>
+</head>
+<body class="reset">
+    <!--关系维护弹框-->
+    <!--<div class="relate">
+        <div class="relate_main">
+            <div class="weihu" >
+                <table width="100%" cellpadding="0" cellspacing="0" class="table2" align="center">
+                    <thead>
+                    <tr align="center">
+                        <th class="th2">对应产品线</th>
+                        <th height="33" class="th2">对应系列</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tablist">
+                        <tr>   
+                            <td class="td2" height="33" style="width:270px;">
+                                <select id="linenum" class="area_choose" style="width: 150px;height:25px;">
+                                    
+                                </select>
+                            </td> 
+                            <td class="td2" style="width:270px;position:relative;">
+                                <select id="forserial" class="area_choose" style="width: 80px;margin-left:18px;margin-top:5px;height:25px;float:left;"></select>
+                                <input type="button" class="" id="" value="新增" onclick="xinzeng()" style="float:left;width:60px;border-radius:5px;margin-left:43px;margin-top:5px;height:25px;margin-right:0px;background:#1ABC9C;color:#fff;border:1px solid #1ABC9C;">
+                                <input type="button" class="" id="" value="删除" onclick="shanchusc()" style="float:left;width:60px;border-radius:5px;margin-left:10px;margin-top:5px;height:25px;margin-right:0px;background:#fff;color:#999;border:1px solid #999;">
+                                
+                                <span id="skiptkadd" style="position:absolute;top:0;left:0;box-shadow: rgb(238, 238, 238) 0px 1px 15px;display:none;">
+                                    <input type="text" id="addseris" class="product_line" value="" style="border-bottom-left-radius: 5px;border-top-left-radius: 5px;width:177px;margin-top:56px;color:#666;"><br/>
+                                    <input type="button" class="add_btn" id="selectaddline" value="保存" onclick="selectaddline()" style="margin-left: 4px; margin-right: 25px; display: inline-block;">
+                                </span>
+                                
+                                <span class="skiptk" id="skiptk" style="display:none;">
+                                    <span id="list" style="max-height:124px;overflow-y: scroll;margin-top:53px;"></span>
+                                    <input type="button" class="add_btn" id="remsc" value="删除" onclick="addline()" style="margin-right: 0px; background: rgb(255, 255, 255); color: rgb(102, 102, 102); border: 1px solid rgb(153, 153, 153); display: inline-block;">
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody> 
+                    </table>
+                    <input type="button" class="add_btn" value="保存" onclick="" style="margin-top: 42px;margin-left: 43%;">
+            </div>
+        </div>
+    </div>-->
+    <div class="mg-t50">
+        <div class="tit">
+            <span class="flt_l">筛选查询</span>
+            <input type="button" class="add_btn flt_r" value="清空" onclick="clearDate()">
+            <!--<input type="button" class="add_btn flt_r" value="查询" onclick="queryDealer()">-->
+        </div>
+        <div class="account_cont2">
+            <span class="describ mg_l30">生产厂家：</span>
+            <!--<select id="leixing" class="area_choose" style="width:150px;">
+                <option value="">全部</option>
+                <option value="1">常规</option>
+                <option value="2">特殊</option>
+            </select>-->
+            <input type="text" id="cjjx" class="product_line" value="">
+            <button class="query_btn_big" style="margin-left: -4%;margin-right: 4%" onclick="ajax_searchcp()"></button>
+            <span class="describ mg_l30">机型：</span>
+            <input type="text" id="modeljx" class="product_line" value="" >
+            <button class="query_btn_big" style="margin-left: -4%;margin-right: 4%" onclick="ajax_searchcp()"></button>
+        </div>
+    </div>
+    <div>
+        <div class="tit mg-t50">
+            <span class="flt_l">产品维护</span>
+            <input type="button" class="add_btn flt_r" value="删除" onclick="deletelist()" style="background-color:#e1e1e1;border:1px solid #e1e1e1;color:#666;margin-right:51px;">
+            <form id="form" action="" method="get">
+                <!--<input type="hidden" name="operation" value="1">-->
+                <!--<input type="hidden" name="chooseItem" value="">-->
+                <!--<input type="hidden" name="itemCont" value="">-->
+                <!--<input type="hidden" name="reportStatus" value="">-->
+                <input type="hidden" name="factory" value="">
+                <input type="hidden" name="model" value="">
+                <input type="button" id="dealerMachineOutput" class="output_btn flt_r" value="导出" style="background:#fff;border:1px solid #e1e1e1;color:#666;margin-right:20px;">
+            </form>
+            <input type="button" id="inputArchives" class="delbtn flt_r" value="导入" style="margin-right:20px;margin-top:9px;">
+            <form id="form11">
+            <!--<input type="hidden" id="token" name="token">-->
+            <input type="file" name="excel" id="file" style="display: none;">
+            </form>
+
+
+            <input type="button" class="add_btn flt_r" value="创建" onclick="editproduct()" style="margin-right:20px;">
+            <!--<input type="button" class="add_btn flt_r" value="关系维护" onclick="related()" style="background:#fff;border:1px solid #FE5933;color:#FE5933;margin-right:20px;">-->
+        </div>
+        
+        <div class="account_cont">
+            <table width="100%" cellpadding="0" cellspacing="0" class="table2" align="center">
+                <thead>
+                <tr text-align="center">
+                    <th height="33" class="th2">生产厂家</th>
+                    <th class="th2" style="width:200px;">机型</th>
+                    <th class="th2">对应产品线</th>
+                    <th class="th2">对应系列</th>
+                    <th class="th2">驱动形式</th>
+                    <th class="th2">马力</th>
+                    <th class="th2">重量级别</th>
+                    <th class="th2">状态</th>
+                    <th class="th2" id="selectallqd1" onclick="selectallqd1()" style="cursor:pointer;">全选</th>
+                    <th class="th2">编辑</th>
+                </tr>
+                </thead>
+                <tbody id="adminTbody">
+                </tbody>
+            </table>
+            <div id="barcon" class="barcon" >
+                <div id="barcon1" class="barcon1"></div>
+                <div id="barcon2" class="barcon2">
+                    <ul>
+                        <li><button id="firstPage" class="page_btn">首页</button></li>
+                        <li><button id="prePage" class="page_btn">上一页</button></li>
+                        <li><button id="nextPage" class="page_btn">下一页</button></li>
+                        <li><button id="lastPage" class="page_btn">尾页</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+        $.datepicker.regional['zh-CN'] = {
+            changeMonth: true,
+            changeYear: true,
+            clearText: '清除',
+            clearStatus: '清除已选日期',
+            closeText: '关闭',
+            closeStatus: '不改变当前选择',
+            prevText: '<上月',
+            prevStatus: '显示上月',
+            prevBigText: '<<',
+            prevBigStatus: '显示上一年',
+            nextText: '下月>',
+            nextStatus: '显示下月',
+            nextBigText: '>>',
+            nextBigStatus: '显示下一年',
+            currentText: '今天',
+            currentStatus: '显示本月',
+            monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            monthNamesShort: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+            monthStatus: '选择月份',
+            yearStatus: '选择年份',
+            weekHeader: '周',
+            weekStatus: '年内周次',
+            dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+            dayNamesShort: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+            dayNamesMin: ['日', '一', '二', '三', '四', '五', '六'],
+            dayStatus: '设置 DD 为一周起始',
+            dateStatus: '选择 m月 d日, DD',
+            dateFormat: 'yy-mm-dd',
+            firstDay: 1,
+            initStatus: '请选择日期',
+            isRTL: false
+        };
+        $.datepicker.setDefaults($.datepicker.regional['zh-CN']);
+        $("#date_start_rnm").datepicker({maxDate:new Date()});
+        $("#date_end_rnm").datepicker({maxDate:new Date()});
+        $("#defult").datetimepicker();
+        $("#date_start_rnm").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            clear : "qingkong",
+            onClose: function(selectedDate) {
+                $("#date_end_rnm").datepicker("option", "minDate", selectedDate);
+            }
+        });
+
+        $("#date_end_rnm").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            onClose: function(selectedDate) {
+                $("#date_start_rnm").datepicker("option", "maxDate", selectedDate);
+                $("#date_end_rnm").val($(this).val());
+            }
+        });
+        currentPage = 1;
+        $('#firstPage').attr('disabled',true);
+        $('#prePage').attr('disabled',true);
+        $("#firstPage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = 1;
+            $('#firstPage').attr('disabled',true);
+            $('#prePage').attr('disabled',true);
+            ajax_subproduct();
+        });
+        $("#lastPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = totalPage;
+            $('#lastPage').attr('disabled',true);
+            $('#nextPage').attr('disabled',true);
+            ajax_subproduct();
+        });
+        $("#nextPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = currentPage+1;
+            if(currentPage == totalPage){
+                $('#lastPage').attr('disabled',true);
+                $('#nextPage').attr('disabled',true);
+            }else{
+                $('#lastPage').removeAttr('disabled');
+                $('#nextPage').removeAttr('disabled');
+            }
+            ajax_subproduct();
+        });
+        $("#prePage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = currentPage-1;
+            if(currentPage == 1){
+                $('#firstPage').attr('disabled',true);
+                $('#prePage').attr('disabled',true);
+            }else{
+                $('#firstPage').removeAttr('disabled');
+                $('#prePage').removeAttr('disabled');
+            }
+            ajax_subproduct();
+        });
+        //初始化
+        ajax_subproduct();
+
+        $("#leixing").change(function () {
+            currentPage = 1;
+            ajax_subproduct();
+        });
+        $("#status").change(function () {
+            currentPage = 1;
+            ajax_subproduct();
+        });
+        $("#date_end_rnm").change(function () {
+            currentPage = 1;
+            ajax_subproduct();
+        });
+        //导出
+        $("#dealerMachineOutput").click(function () {
+            // $("input[name='chooseItem']").val($("#reportOut_item option:selected").val());
+            // $("input[name='itemCont']").val($("#reportOut_info").val());
+            // $("input[name='reportStatus']").val($("#process option:selected").val());
+            $("input[name='factory']").val($("#cjjx").val());
+            $("input[name='model']").val($("#modeljx").val());
+            $("#form").attr("action",ip_path + "/changfa_system/subsidyProduct/excel.do");
+            $("#form").submit();
+        });
+        //导入
+        $("#inputArchives").click(function () {
+            $("#file").click();
+        });
+        $("#file").on("change",function(){
+            var filepath = $("#file").val();
+            var extStart = filepath.lastIndexOf(".");
+            var ext = filepath.substring(extStart, filepath.length).toUpperCase();
+            console.log(ext);
+            console.log(filepath);
+            console.log(extStart);
+            if(ext != ".XLSX" && ext != ".XLS") {
+                alert("文件限于xls,xlsx！");
+                return false;
+            } else {
+                
+                var option = {
+                    url :ip_path+"/changfa_system/subsidyProduct/upload.do",
+                    type : "post",
+                    success : function (data) {
+                        window.location.reload();
+                        if(data['body']['result'] != ''){
+                            
+                            if(window.confirm("是否下载导入异常报告？")){
+                                
+                                window.open(ip_path+"/changfa_system/subsidyProduct/error/excel.do?key="+data['body']['result']);
+                            }
+                        }else{
+                            alert(data['head']['message']);
+                        }
+                    }
+                };
+                $("#form11").ajaxSubmit(option);
+            }
+        });
+        
+
+        
+    }
+
+
+</script>
+</html>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加商品</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/runningCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <script src="js/ajaxfileupload.js" type="text/javascript"></script>
+    <script src="js/jquery_form.js" type="text/javascript"></script>
+    <script src="jqueryTagsInput/jquery.tagsinput.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="jqueryTagsInput/jquery.tagsinput.min.css" />
+    <style type="text/css">
+        .img_div{min-height: 100px; min-width: 100px;}
+        .isImg{width: 120px; height: 120px; position: relative; float: left; margin-left: 10px;}
+        .removeBtn{position: absolute; top: 0px; right: 0; z-index: 11; border: 0px; border-radius: 50px; background: red; width: 22px; height: 22px; color: white;}
+
+        .ui-datepicker-calendar {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div id="addGoodsType" class="addTopic outShadow" style="display: none;">
+    <div class="dealer_title">
+        <span>添加商品分类</span>
+        <img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeAddGoodsType()">
+    </div>
+    <div style="width: 100%;height: auto;border: 1px solid #E4E4E4;border-top: none;">
+        <div class="tit_normal">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>商品类别</span>
+            <input type="text" id="goods_type" style="width: 50%;height: 30px;margin-left: 30px;">
+        </div>
+        <div class="mg_b50" style="width: 100%;text-align: center">
+            <button class="waves submit_btn mg-t30" onclick="createGoodsType()">提交</button>
+        </div>
+    </div>
+</div>
+<div id="addGoods">
+    <div class="mg-t50" style="width: 70%;margin-left:15%;height: auto;">
+        <div class="flt_l goods_sign_bar">
+            <div class="mg-t30 goods_sign">
+                <img src="img/tit_pic.png" class="tit_pic vert_mid">
+                <span class="describ">商品基本信息</span><br>
+            </div>
+            <div class="mg-t150 goods_sign">
+                <img src="img/tit_pic.png" class="tit_pic vert_mid">
+                <span class="describ">商品规格库存</span><br>
+            </div>
+            <div class="goods_sign" style="margin-top: 120px;">
+                <img src="img/tit_pic.png" class="tit_pic vert_mid">
+                <span class="describ">商品展示图片</span><br>
+            </div>
+        </div>
+        <div class="flt_l goods_cont_bar">
+            <div class="mg_l100">
+                <div class="mg-t50">
+                    <span class="describ">商品名称：</span><input type="text" id="goodsName" class="mg_b20" style="width: 40%;height: 30px;"><br>
+                    <span class="describ">商品介绍：</span><textarea id="goodsDescribe" class="mg_b20" style="width: 40%;height: 60px;resize: none;vertical-align: middle"></textarea><br>
+                    <span class="describ">兑换积分：</span><input type="text" id="changeScore" class="mg_b20" style="width: 40%;height: 30px;"><br>
+                    <span class="describ">市场价额：</span><input type="text" id="marketPrice" class="mg_b20" style="width: 40%;height: 30px;">
+                </div>
+                <div class="mg-t50">
+                    <span class="describ">额外属性：</span><input type="radio" id="has" class="choose_select vert_mid" name="extral" checked="checked"><label for="has" class="describ">统一属性</label><input type="radio" id="hasNot" class="choose_select vert_mid" name="extral"><label for="hasNot" class="describ">额外属性</label><br>
+                    <span class="describ">商品分类：</span>
+                    <select id="goodsType" style="width: 20%;height: 30px;margin-left: -5px;margin-top: 20px;">
+
+                    </select><img src="img/addQuestion.png" class="vert_mid mg_l10" onclick="addType()"><br>
+                    <!--<div id="for_size" class="mg-t30">-->
+                        <!--<span class="describ flt_l">尺码颜色：</span>-->
+
+                        <!--<div class="flt_l" style="width: 60%;height: 80px">-->
+                            <!--<input id="tags" type="text" style=";margin-left: -5px;" readonly="readonly"/>-->
+                        <!--</div>-->
+
+                        <!--<select id="size" style="width: 100px;height: 31px;">-->
+                            <!--<option value="M">M</option>-->
+                            <!--<option value="L">L</option>-->
+                            <!--<option value="XL">XL</option>-->
+                            <!--<option value="2XL">2XL</option>-->
+                        <!--</select><br>-->
+                        <!--<input type="text" id="color" style="width: 96px;height: 25px;margin-top: 10px;" placeholder="颜色（xx色）"><br>-->
+                        <!--<input type="text" id="count" style="width: 96px;height: 25px;margin-top: 9px;" placeholder="库存数">-->
+                        <!--<img src="img/addQuestion.png" class="vert_mid" onclick="add()">-->
+                    <!--</div>-->
+                    <span class="describ">库存数量：</span><input type="text" id="goodsCount" class="mg-t20" style="width: 40%;height: 30px;">
+                </div>
+                <div style="margin-top: 50px;">
+                    <div id="for_update" style="display: none;">
+                        <span class="describ">上架：</span><img src="http://app.changfanz.net:3588/changfa_file/on.png" id="status" class="vert_mid" onclick="toogleGoodsStatus(this)">
+                        <span class="mg_l50 describ">置顶：</span><img src="http://app.changfanz.net:3588/changfa_file/on.png" id="isTop" class="vert_mid" onclick="toogleGoodsStatus(this)">
+                    </div>
+                    <div class="flt_l mg-t20">
+                        <div>
+                            <span class="describ">商品图片：</span><form id="form"><input type="button" class="add_btn flt_l" value="添加图片" onclick="fileClick()"><input type="file" name="file" id="file" style="display: none;"></form><br>
+                            <table>
+                                <tr id="ticketList"></tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="btn_part">
+            <input type="button" id="addG" class="submit_btn mg-t30" value="添加商品" onclick="createGoods()">
+            <input type="button" id="editG" class="submit_btn mg-t30" value="更新商品" onclick="updateGoods()" style="display: none;">
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    jQuery.support.cors = true;
+    ticketIds = [];
+    var count = 0;
+    // $(function(){
+    //     $('#tags').tagsInput({width:'auto'});//这样做的目的是，使tags_1能够变成标签。
+    // });
+
+    // function add(){
+    //     if($("#color").val() != "" && $("#count").val() != ""){
+    //         var tags = $("#size option:selected").val()+"_"+$("#color").val()+"_"+$("#count").val();
+    //         if (!$('#tags').tagExist(tags)){
+    //             $("#tags").addTag(tags,{focus:false,callback:false});
+    //             $("#color").val("");
+    //             $("#count").val("");
+    //         }else{
+    //             alert("该选项已存在！");
+    //         }
+    //     }
+    // }
+
+    $.ajax({
+        type : "post",
+        url : ip_path+"/changfa_system/goodsClass/getAllGoodsClass.do",
+        dataType : "json",
+        success : function (data) {
+            $("#goodsType").empty();
+            for(var i=0;i<data['body']['resultList']['length'];i++){
+                $("#goodsType").append("<option value='"+ data['body']['resultList'][i]['id'] +"'>"+data['body']['resultList'][i]['name']+"</option>");
+            }
+            $("#goodsType").unbind();
+        }
+    });
+
+    if($(window.parent.document).find("input[name='goodsId']").val() != ""){
+        //编辑更新操作
+        $("#addG").hide();
+        $("#editG").show();
+        $("#for_update").show();
+        $.ajax({
+            type : "post",
+            url : ip_path+"/changfa_system/goods/selectGoodsById.do",
+            data : {
+                id : $(window.parent.document).find("input[name='goodsId']").val()
+            },
+            dataType : "json",
+            success : function (data) {
+                if(data['head']['code'] == 200){
+                    $("#goodsName").val(data['body']['resultList'][0]['name']);
+                    $("#goodsDescribe").val(data['body']['resultList'][0]['description']);
+                    $("#changeScore").val(data['body']['resultList'][0]['price']);
+                    $("#marketPrice").val(data['body']['resultList'][0]['actualPrice']);
+
+                    $("#goodsType").val(data['body']['resultList'][0]['goodsClassId']);
+                    $("#goodsCount").val(data['body']['resultList'][0]['stock']);
+
+                    ticketIds = data['body']['resultList'][0]['fileId'];
+
+                    if(data['body']['resultList'][0]['property'] == 0){
+                        $("#has").attr("checked",true);
+                    }else{
+                        $("#hasNot").attr("checked",true);
+                    }
+
+                    if(data['body']['resultList'][0]['status'] == 1){
+                        $("#status").attr("src","http://app.changfanz.net:3588/changfa_file/on.png");
+                    }else{
+                        $("#status").attr("src","http://app.changfanz.net:3588/changfa_file/off.png");
+                    }
+
+                    if(data['body']['resultList'][0]['isTop'] == 1){
+                        $("#isTop").attr("src","http://app.changfanz.net:3588/changfa_file/on.png");
+                    }else{
+                        $("#isTop").attr("src","http://app.changfanz.net:3588/changfa_file/off.png");
+                    }
+
+                    for(var i= 0;i<data['body']['resultList'][0]['filePath'].length;i++){
+                        $("#ticketList").append(
+                            "<td><div class='isImg'><img src='" + data['body']['resultList'][0]['filePath'][i] + "' onclick='javascript:ticketLarge(this)' style='height: 100%; width: 100%;' />" +
+                            "<button class='removeBtn' onclick='javascript:removeImg(this)'>x</button><input type='hidden' name='fileId' value='" + data['body']['resultList'][0]['fileId'][i] + "'></div></td>"
+                        );
+                    }
+                }
+            }
+        });
+    }
+
+    $("#file").change(function() {
+        window.parent.showLoading();
+        var img_list = $("#ticketList");
+        var filepath = $("input[name='file']").val();
+        for(var i = 0; i < this.files.length; i++) {
+            var objUrl = getObjectURL(this.files[i]);
+            var extStart = filepath.lastIndexOf(".");
+            var ext = filepath.substring(extStart, filepath.length).toUpperCase();
+            if(ext != ".BMP" && ext != ".PNG" && ext != ".GIF" && ext != ".JPG" && ext != ".JPEG") {
+                alert("图片限于bmp,png,gif,jpeg,jpg格式");
+                $(".img_div").html("");
+                window.parent.hideLoading();
+
+                return false;
+            } else {
+                var option = {
+                    url :ip_path+"/changfa_system/file/oneFileUpoload.do",
+                    type : "post",
+                    success : function (data) {
+                        window.parent.hideLoading();
+                        if(data['head']['code'] == 200){
+                            window.parent.hideLoading();
+                            ticketIds.push(data['body']['result']['fileId']);
+                            count ++;
+                            var img_html = "<td><div class='isImg'><img src='" + data['body']['result']['filePath'] + "' onclick='javascript:ticketLarge(this)' style='height: 100%; width: 100%;' />" +
+                                "<button class='removeBtn' onclick='javascript:removeImg(this)'>x</button><input type='hidden' name='fileId' value='" + data['body']['result']['fileId'] + "'></div></td>";
+                            img_list.append(img_html);
+
+                            $("#file").val("");
+                        }
+                    }
+                };
+                $("#form").ajaxSubmit(option);
+            }
+        }
+    });
+
+    function getObjectURL(file) {
+        var url = null;
+        if(window.createObjectURL != undefined) { // basic
+            url = window.createObjectURL(file);
+        } else if(window.URL != undefined) { // mozilla(firefox)
+            url = window.URL.createObjectURL(file);
+        } else if(window.webkitURL != undefined) { // webkit or chrome
+            url = window.webkitURL.createObjectURL(file);
+        }
+        //console.log(url);
+        return url;
+    }
+
+    function removeImg(r){
+        var index;
+        for(var item in ticketIds){
+            if(ticketIds[item] == r.parentNode.childNodes[2].value){
+                index = item;
+                ticketIds.splice(index,1);
+            }
+        }
+        $(r).parent().parent().remove();
+        count--;
+    }
+
+    function ticketLarge(event) {
+        window.parent.pic_makeLarge(event);
+    }
+
+    function fileClick() {
+        if(count >=5){
+            alert("最多上传5张商品图片！");
+        }else{
+            $("#file").click();
+        }
+    }
+</script>
+</html>

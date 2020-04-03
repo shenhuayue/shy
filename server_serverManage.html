@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>三包员三包业务管理</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/userCenter.js"></script>
+    <script src="js/dcommon.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+</head>
+<body class="reset" style="background: #F9F9F9;">
+<div>
+        <div class="rpt_detail1"style="display:inline-block;float:left;">
+                <div class="tit_msg2" >
+                    <img src="img/tit_pic.png" class="tit_pic">
+                    <span>报修产品&nbsp;&nbsp;</span>
+                    <select id="dgjselect" class="select_area">
+                        <option id="zhengji" value="1">整机</option>
+                        <option id="dongli" value="2">动力</option>
+                    </select>
+                </div>
+        </div>
+    <div class="dealer_title txt_center" id="zjmenu">
+        <!--<input type="button" id="waitDispatch" class="type" value="待派工" onclick="server_waitDispatch()">-->
+        <!--<input type="button" id="waitAccept" class="type" value="待接单" onclick="server_waitAccept()">-->
+        <!--<input type="button" id="finished" class="type" value="已完成" onclick="server_finished()">-->
+    </div>
+</div>
+<div>
+    <table style="border-collapse: collapse;width : 100%;">
+        <tr>
+            <td class="head_td txt_center" height="40px">报修人</td>
+            <td class="head_td txt_center">报修人电话</td>
+            <td class="head_td txt_center">产品线</td>
+            <td class="head_td txt_center">产品系列</td>
+            <td class="head_td txt_center">产品型号</td>
+            <td class="head_td txt_center">报修时间</td>
+            <td class="head_td txt_center">更多</td>
+        </tr>
+        <tbody id="adminTbody">
+
+        </tbody>
+    </table>
+    <div id="barcon" class="barcon" >
+        <div id="barcon1" class="barcon1"></div>
+        <div id="barcon2" class="barcon2">
+            <ul>
+                <li><button id="firstPage" class="page_btn">首页</button></li>
+                <li><button id="prePage" class="page_btn">上一页</button></li>
+                <li><button id="nextPage" class="page_btn">下一页</button></li>
+                <li><button id="lastPage" class="page_btn">尾页</button></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div style="margin-left: 20px;">
+
+</div>
+</body>
+<script>
+    window.onload = function () {
+        $('#zjmenu').append(
+                        '<input type="button" id="waitDispatch" class="type" value="待派工" onclick="server_waitDispatch()">'+
+                        '<input type="button" id="waitAccept" class="type" value="待接单" onclick="server_waitAccept()">'+
+                        '<input type="button" id="finished" class="type" value="已完成" onclick="server_finished()">'
+            );
+        jQuery.support.cors = true;
+        currentPage = 1;
+        $('#firstPage').attr('disabled',true);
+        $('#prePage').attr('disabled',true);
+        $("#firstPage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = 1;
+            $('#firstPage').attr('disabled',true);
+            $('#prePage').attr('disabled',true);
+            ajax_server_serverM();
+        });
+        $("#lastPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = totalPage;
+            $('#lastPage').attr('disabled',true);
+            $('#nextPage').attr('disabled',true);
+            ajax_server_serverM();
+        });
+        $("#nextPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = currentPage+1;
+            if(currentPage == totalPage){
+                $('#lastPage').attr('disabled',true);
+                $('#nextPage').attr('disabled',true);
+            }else{
+                $('#lastPage').removeAttr('disabled');
+                $('#nextPage').removeAttr('disabled');
+            }
+            ajax_server_serverM();
+        });
+        $("#prePage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = currentPage-1;
+            if(currentPage == 1){
+                $('#firstPage').attr('disabled',true);
+                $('#prePage').attr('disabled',true);
+            }else{
+                $('#firstPage').removeAttr('disabled');
+                $('#prePage').removeAttr('disabled');
+            }
+            ajax_server_serverM();
+        });
+
+
+
+        server_waitDispatch();
+        $('#dgjselect').change(function(){
+        var selectedValue = $(this).val();
+        if(selectedValue == 2){
+            $('#zjmenu').empty();
+            $('#zjmenu').append(
+                        '<input type="button" id="waitDispatch" class="type" value="待派工" onclick="server_waitDispatch1()">'+
+                        '<input type="button" id="waitAccept" class="type" value="待接单" onclick="server_waitAccept1()">'+
+                        '<input type="button" id="finished" class="type" value="已完成" onclick="server_finished1()">'
+            );
+        jQuery.support.cors = true;
+        currentPage = 1;
+        $('#firstPage').attr('disabled',true);
+        $('#prePage').attr('disabled',true);
+        $("#firstPage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = 1;
+            $('#firstPage').attr('disabled',true);
+            $('#prePage').attr('disabled',true);
+            ajax_server_serverM1();
+        });
+        $("#lastPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = totalPage;
+            $('#lastPage').attr('disabled',true);
+            $('#nextPage').attr('disabled',true);
+            ajax_server_serverM1();
+        });
+        $("#nextPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = currentPage+1;
+            if(currentPage == totalPage){
+                $('#lastPage').attr('disabled',true);
+                $('#nextPage').attr('disabled',true);
+            }else{
+                $('#lastPage').removeAttr('disabled');
+                $('#nextPage').removeAttr('disabled');
+            }
+            ajax_server_serverM1();
+        });
+        $("#prePage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = currentPage-1;
+            if(currentPage == 1){
+                $('#firstPage').attr('disabled',true);
+                $('#prePage').attr('disabled',true);
+            }else{
+                $('#firstPage').removeAttr('disabled');
+                $('#prePage').removeAttr('disabled');
+            }
+            ajax_server_serverM1();
+        });
+
+        server_waitDispatch1();
+        }
+        else{
+            $('#zjmenu').empty();
+            $('#zjmenu').append(
+                        '<input type="button" id="waitDispatch" class="type" value="待派工" onclick="server_waitDispatch()">'+
+                        '<input type="button" id="waitAccept" class="type" value="待接单" onclick="server_waitAccept()">'+
+                        '<input type="button" id="finished" class="type" value="已完成" onclick="server_finished()">'
+            );
+            jQuery.support.cors = true;
+        currentPage = 1;
+        $('#firstPage').attr('disabled',true);
+        $('#prePage').attr('disabled',true);
+        $("#firstPage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = 1;
+            $('#firstPage').attr('disabled',true);
+            $('#prePage').attr('disabled',true);
+            ajax_server_serverM();
+        });
+        $("#lastPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = totalPage;
+            $('#lastPage').attr('disabled',true);
+            $('#nextPage').attr('disabled',true);
+            ajax_server_serverM();
+        });
+        $("#nextPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = currentPage+1;
+            if(currentPage == totalPage){
+                $('#lastPage').attr('disabled',true);
+                $('#nextPage').attr('disabled',true);
+            }else{
+                $('#lastPage').removeAttr('disabled');
+                $('#nextPage').removeAttr('disabled');
+            }
+            ajax_server_serverM();
+        });
+        $("#prePage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = currentPage-1;
+            if(currentPage == 1){
+                $('#firstPage').attr('disabled',true);
+                $('#prePage').attr('disabled',true);
+            }else{
+                $('#firstPage').removeAttr('disabled');
+                $('#prePage').removeAttr('disabled');
+            }
+            ajax_server_serverM();
+        });
+
+        server_waitDispatch();
+
+        }
+        })
+    }
+</script>
+</html>

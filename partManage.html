@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>部门管理</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/userCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+</head>
+<body class="reset">
+<div id="addPartment" class="addTopic outShadow" style="display: none;">
+    <div class="dealer_title">
+        <span>填写部门信息</span>
+        <img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeAddPartment()">
+    </div>
+    <div style="width: 100%;height: auto;border: 1px solid #E4E4E4;border-top: none;">
+        <div class="tit_normal">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>创建类型：</span>
+            <input type="radio" id="company" class="choose_select mg_l30 vert_mid" checked="checked" name="createType" onclick="changePartType()"><label for="company" class="describ">分公司</label>
+            <input type="radio" id="level_part" class="choose_select mg_l30 vert_mid" name="createType" onclick="changePartType()"><label for="level_part" class="describ">部门</label>
+        </div>
+        <div id="for_createPart" style="display: none;">
+            <div class="tit_normal">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>选择公司：</span>
+                <select id="companyName" style="width: 50%;height: 33px;margin-left: 30px;">
+
+                </select>
+            </div>
+        </div>
+        <div class="tit_normal">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>部门名称：</span>
+            <input type="text" id="partName" style="width: 50%;height: 30px;margin-left: 30px;">
+        </div>
+        <!--<div class="tit_normal">-->
+            <!--<img src="img/tit_pic.png" class="tit_pic">-->
+            <!--<span>职能描述：</span>-->
+            <!--<textarea id="partDescribe" style="width: 50%;height: 60px;margin-left: 30px;vertical-align: middle;resize: none"></textarea>-->
+        <!--</div>-->
+        <div class="btn_part mg-t30 mg_b30">
+            <input type="button" class="submit_btn" value="提交" onclick="createPartment()">
+        </div>
+    </div>
+</div>
+<div id="editPartment" class="addTopic outShadow" style="display: none;">
+    <div class="dealer_title">
+        <span>编辑部门信息</span>
+        <img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeEditPartment()">
+    </div>
+    <div style="width: 100%;height: auto;border: 1px solid #E4E4E4;border-top: none;">
+        <div class="tit_normal">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>选择公司：</span>
+            <select id="edit_companyName" style="width: 50%;height: 33px;margin-left: 30px;">
+
+            </select>
+        </div>
+        <div class="tit_normal">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>部门名称：</span>
+            <input type="text" id="edit_partName" style="width: 50%;height: 30px;margin-left: 30px;">
+        </div>
+        <div class="btn_part mg-t30 mg_b30">
+            <input type="button" class="submit_btn" value="提交" onclick="updatePartment()">
+        </div>
+    </div>
+</div>
+<div class="mg-t50">
+    <div class="tit">
+        <span class="flt_l">筛选查询</span>
+        <input type="button" class="add_btn flt_r" value="清空" onclick="clearDate()">
+        <!--<input type="button" class="add_btn flt_r" value="查询" onclick="queryDealer()">-->
+    </div>
+    <div class="account_cont2">
+        <span class="describ mg_l50">等级：</span>
+        <select id="level" class="area_choose">
+        <option value="">全部</option>
+        <option value="1">一级</option>
+        <option value="2">二级</option>
+        <option value="3">三级</option>
+        </select>
+        <span class="describ mg_l30">状态：</span>
+        <select id="status" class="area_choose">
+        <option value="">全部</option>
+        <option value="0">禁用中</option>
+        <option value="1">启用中</option>
+        </select>
+    </div>
+</div>
+<div>
+    <div class="tit mg-t50">
+        <span class="flt_l">部门管理</span>
+        <input type="button" class="add_btn flt_r" value="添加" onclick="addPart()">
+    </div>
+    <div class="account_cont">
+        <table width="100%" cellpadding="0" cellspacing="0" class="table2" align="center">
+            <thead>
+            <tr align="center">
+                <th height="33" class="th2">部门名称</th>
+                <th class="th2">部门等级</th>
+                <th class="th2">成员数量</th>
+                <th class="th2">添加时间</th>
+                <th class="th2">禁用/启用</th>
+                <th class="th2">更多</th>
+            </tr>
+            </thead>
+            <tbody id="adminTbody">
+
+            </tbody>
+        </table>
+        <div id="barcon" class="barcon" >
+            <div id="barcon1" class="barcon1"></div>
+            <div id="barcon2" class="barcon2">
+                <ul>
+                    <li><button id="firstPage" class="page_btn">首页</button></li>
+                    <li><button id="prePage" class="page_btn">上一页</button></li>
+                    <li><button id="nextPage" class="page_btn">下一页</button></li>
+                    <li><button id="lastPage" class="page_btn">尾页</button></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+
+        currentPage = 1;
+        $('#firstPage').attr('disabled',true);
+        $('#prePage').attr('disabled',true);
+        $("#firstPage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = 1;
+            $('#firstPage').attr('disabled',true);
+            $('#prePage').attr('disabled',true);
+            ajax_partM();
+        });
+        $("#lastPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = totalPage;
+            $('#lastPage').attr('disabled',true);
+            $('#nextPage').attr('disabled',true);
+            ajax_partM();
+        });
+        $("#nextPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = currentPage+1;
+            if(currentPage == totalPage){
+                $('#lastPage').attr('disabled',true);
+                $('#nextPage').attr('disabled',true);
+            }else{
+                $('#lastPage').removeAttr('disabled');
+                $('#nextPage').removeAttr('disabled');
+            }
+            ajax_partM();
+        });
+        $("#prePage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = currentPage-1;
+            if(currentPage == 1){
+                $('#firstPage').attr('disabled',true);
+                $('#prePage').attr('disabled',true);
+            }else{
+                $('#firstPage').removeAttr('disabled');
+                $('#prePage').removeAttr('disabled');
+            }
+            ajax_partM();
+        });
+        //初始化
+        ajax_partM();
+
+        $("#status").change(function () {
+            currentPage = 1;
+            ajax_partM();
+        });
+
+        $("#level").change(function () {
+            currentPage = 1;
+            ajax_partM();
+        });
+    }
+</script>
+</html>

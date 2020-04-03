@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户管理</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/userCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+
+</head>
+<body class="reset">
+    <div class="mg-t50">
+        <div class="tit">
+            <span class="flt_l">筛选查询</span>
+            <input type="button" class="add_btn flt_r" value="清空" onclick="clearDate()">
+            <!--<input type="button" class="add_btn flt_r" value="查询" onclick="queryDealer()">-->
+        </div>
+        <div class="account_cont2">
+            <select id="user_item" class="rep_guy_info">
+                <option value="name">姓名</option>
+                <option value="mobile">电话</option>
+            </select>
+            <input type="text" id="user_info" placeholder="输入搜索的信息" class="product_line" style="border-left: none;">
+            <button class="query_btn_big" style="margin-left: -4%;margin-right: 4%" onclick="queryUser()"></button>
+            <span class="describ mg_l30">用户类型：</span>
+            <select id="owner" class="area_choose">
+                <option value="0">全部</option>
+                <option value="1">机主</option>
+                <option value="2">非机主</option>
+            </select>
+            <span class="describ mg_l50">开通账号与否：</span>
+            <select id="type" class="area_choose">
+                <option value="0">全部</option>
+                <option value="1">已开通</option>
+                <option value="2">未开通</option>
+            </select>
+        </div>
+    </div>
+    <div>
+        <div class="tit mg-t50">
+            <span class="flt_l">用户管理</span>
+            <!--<input type="button" class="add_btn flt_r" value="创建" onclick="addDealer()">-->
+        </div>
+        <div class="account_cont">
+            <table width="100%" cellpadding="0" cellspacing="0" class="table2" align="center">
+                <thead>
+                <tr text-align="center">
+                    <th height="33" class="th2">姓名</th>
+                    <th class="th2">电话</th>
+                    <th class="th2">地址</th>
+                    <th class="th2">类型</th>
+                    <th class="th2">开通账号与否</th>
+                    <th class="th2">更多</th>
+                </tr>
+                </thead>
+                <tbody id="adminTbody">
+                <!--<tr align="center">-->
+                    <!--<td class="td2" height="33" width="150">windir</td>-->
+                    <!--<td class="td2" >100001</td>-->
+                    <!--<td class="td2" >aaa</td>-->
+                    <!--<td class="td2" >12345678987</td>-->
+                    <!--<td class="td2" >xxx</td>-->
+                    <!--<td class="td2" >-->
+                        <!--<div id="div1" class="close1">-->
+                            <!--<div id="div2" class="close2" onclick="toogleStatus()"></div>-->
+                        <!--</div>-->
+                    <!--</td>-->
+                    <!--<td class="td2" ><a href="###" onclick="editDealer()">编辑</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="###" onclick="showDealerDetails()">查看详情</a></td>-->
+                <!--</tr>-->
+                </tbody>
+            </table>
+            <div id="barcon" class="barcon" >
+                <div id="barcon1" class="barcon1"></div>
+                <div id="barcon2" class="barcon2">
+                    <ul>
+                        <li><button id="firstPage" class="page_btn">首页</button></li>
+                        <li><button id="prePage" class="page_btn">上一页</button></li>
+                        <li><button id="nextPage" class="page_btn">下一页</button></li>
+                        <li><button id="lastPage" class="page_btn">尾页</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+        currentPage = 1;
+        $('#firstPage').attr('disabled',true);
+        $('#prePage').attr('disabled',true);
+        $("#firstPage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = 1;
+            $('#firstPage').attr('disabled',true);
+            $('#prePage').attr('disabled',true);
+            ajax_userM();
+        });
+        $("#lastPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = totalPage;
+            $('#lastPage').attr('disabled',true);
+            $('#nextPage').attr('disabled',true);
+            ajax_userM();
+        });
+        $("#nextPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = currentPage+1;
+            if(currentPage == totalPage){
+                $('#lastPage').attr('disabled',true);
+                $('#nextPage').attr('disabled',true);
+            }else{
+                $('#lastPage').removeAttr('disabled');
+                $('#nextPage').removeAttr('disabled');
+            }
+            ajax_userM();
+        });
+        $("#prePage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = currentPage-1;
+            if(currentPage == 1){
+                $('#firstPage').attr('disabled',true);
+                $('#prePage').attr('disabled',true);
+            }else{
+                $('#firstPage').removeAttr('disabled');
+                $('#prePage').removeAttr('disabled');
+            }
+            ajax_userM();
+        });
+        //初始化
+        ajax_userM();
+
+        $("#type").change(function () {
+            currentPage = 1;
+            ajax_userM();
+        });
+
+        $("#owner").change(function () {
+            currentPage = 1;
+            ajax_userM();
+        });
+
+        $("#user_item").change(function () {
+            $("#user_info").val("");
+        });
+    }
+</script>
+</html>

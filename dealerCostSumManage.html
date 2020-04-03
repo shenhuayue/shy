@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>维修单结算管理</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/closeAccount.js"></script>
+    <script src="js/saleCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/index.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <!--<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">-->
+    <!--<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>-->
+    <!--<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
+</head>
+<body class="reset">
+<div class="mg-t50">
+    <div class="tit">
+        <span class="flt_l">筛选查询</span>
+        <input type="button" class="add_btn flt_r" value="清空" onclick="clearDate()">
+    </div>
+    <div class="account_cont2">
+        <select id="dealer_item" class="rep_guy_info">
+            <option value="company">企业名称</option>
+            <option value="workNum">企业编号</option>
+        </select>
+        <input type="text" id="dealer_info" class="product_line" style="border-left: none;">
+        <button class="query_btn_big" style="margin-left: -4%;" onclick="queryDealerCostSum9()"></button>
+
+        <!-- <span class="describ mg_l50">企业类型：</span>
+        <select id="type" class="area_choose">
+            <option value="">全部</option>
+            <option value="9">经销商</option>
+            <option value="10">服务站</option>
+        </select> -->
+
+        <span class="describ mg_l30">省：</span>
+        <select id="province" class="area_choose"></select>
+
+        <span class="describ mg_l50">维修单待付：</span>
+        <select id="isJudgeRepair" class="area_choose">
+            <option value="">全部</option>
+            <option value="1">有</option>
+            <option value="0">无</option>
+        </select>
+
+        <span class="describ mg_l50">待付费用：</span>
+        <select id="isJudge" class="area_choose">
+            <option value="">全部</option>
+            <option value="1">有</option>
+            <option value="0">无</option>
+        </select>
+
+        <span class="describ mg_l50">状态：</span>
+        <select id="status" class="area_choose">
+            <option value="">全部</option>
+            <option value="1">启用</option>
+            <option value="0">禁用</option>
+        </select>
+
+    </br>
+    <span class="describ mg_l50">驳回：</span>
+    <select id="isJudgeRebut" class="area_choose">
+        <option value="">全部</option>
+        <option value="1">有驳回</option>
+        <option value="0">无驳回</option>
+    </select>
+    </div>
+</div>
+<div>
+    <div class="tit mg-t50">
+        <span class="flt_l">经销商服务站结算列表</span>
+    </div>
+    <div class="account_cont" style="font-size: 0.9em">
+        <table width="100%" cellpadding="0" cellspacing="0" class="table2" align="center">
+            <thead>
+            <tr align="center">
+                <th class="th2" height="33">企业名称</th>
+                <th class="th2">企业编号</th>
+                <th class="th2">企业类型</th>
+                <th class="th2">省</th>
+                <th class="th2">待付费用（￥）</th>
+                <th class="th2">已付费用（￥）</th>
+                <th class="th2">是否存在驳回</th>
+                <th class="th2">结算操作</th>
+                <th class="th2">付款操作</th>
+                
+            </tr>
+            </thead>
+            <tbody id="adminTbody">
+
+            </tbody>
+        </table>
+        <div id="barcon" class="barcon" >
+            <div id="barcon1" class="barcon1"></div>
+            <div id="barcon2" class="barcon2">
+                <ul>
+                    <li><button id="firstPage" class="page_btn">首页</button></li>
+                    <li><button id="prePage" class="page_btn">上一页</button></li>
+                    <li><button id="nextPage" class="page_btn">下一页</button></li>
+                    <li><button id="lastPage" class="page_btn">尾页</button></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/place/getProvince.do",
+            dataType : "json",
+            success : function (data) {
+                $("#province").append("<option value='"+ 0 +"'>全部</option>");
+                for(var i=0;i<data['body']['resultList']['length'];i++){
+                    $("#province").append("<option value='"+ data['body']['resultList'][i]['id'] +"'>"+data['body']['resultList'][i]['name']+"</option>");
+                }
+                $("#province").unbind();
+            }
+        });
+
+        currentPage = 1;
+        $('#firstPage').attr('disabled',true);
+        $('#prePage').attr('disabled',true);
+        $("#firstPage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = 1;
+            $('#firstPage').attr('disabled',true);
+            $('#prePage').attr('disabled',true);
+            ajax_costDealer9();
+        });
+        $("#lastPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = totalPage;
+            $('#lastPage').attr('disabled',true);
+            $('#nextPage').attr('disabled',true);
+            ajax_costDealer9();
+        });
+        $("#nextPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = currentPage+1;
+            if(currentPage == totalPage){
+                $('#lastPage').attr('disabled',true);
+                $('#nextPage').attr('disabled',true);
+            }else{
+                $('#lastPage').removeAttr('disabled');
+                $('#nextPage').removeAttr('disabled');
+            }
+            ajax_costDealer9();
+        });
+        $("#prePage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = currentPage-1;
+            if(currentPage == 1){
+                $('#firstPage').attr('disabled',true);
+                $('#prePage').attr('disabled',true);
+            }else{
+                $('#firstPage').removeAttr('disabled');
+                $('#prePage').removeAttr('disabled');
+            }
+            ajax_costDealer9();
+        });
+
+        //初始化
+        ajax_costDealer9();
+
+        $("#province").change(function () {
+            currentPage = 1;
+            ajax_costDealer9();
+        });
+
+        $("#type").change(function () {
+            currentPage = 1;
+            ajax_costDealer9();
+        });
+
+        $("#isJudge").change(function () {
+            currentPage = 1;
+            ajax_costDealer9();
+        });
+
+        $("#isJudgeRebut").change(function () {
+            currentPage = 1;
+            ajax_costDealer9();
+        });
+
+        $("#isJudgeRepair").change(function () {
+            currentPage = 1;
+            ajax_costDealer9();
+        });
+
+        $("#status").change(function () {
+            currentPage = 1;
+            ajax_costDealer9();
+        });
+
+        $("#dealer_item").change(function () {
+            $("#dealer_info").val("");
+        });
+    }
+</script>
+</html>

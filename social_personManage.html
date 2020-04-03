@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>员工管理</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/userCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+</head>
+<body class="reset" style="background: #F9F9F9;">
+<div>
+    <div class="dealer_title"></div>
+</div>
+<div>
+    <table style="border-collapse: collapse;width : 100%;">
+        <tr>
+            <td class="head_td txt_center" height="40px">头像</td>
+            <td class="head_td txt_center">姓名</td>
+            <td class="head_td txt_center">电话</td>
+            <td class="head_td txt_center">业务范围</td>
+            <td class="head_td txt_center">更多</td>
+        </tr>
+        <tbody id="adminTbody">
+
+        </tbody>
+    </table>
+    <div id="barcon" class="barcon" >
+        <div id="barcon1" class="barcon1"></div>
+        <div id="barcon2" class="barcon2">
+            <ul>
+                <li><button id="firstPage" class="page_btn">首页</button></li>
+                <li><button id="prePage" class="page_btn">上一页</button></li>
+                <li><button id="nextPage" class="page_btn">下一页</button></li>
+                <li><button id="lastPage" class="page_btn">尾页</button></li>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        currentPage = 1;
+        $('#firstPage').attr('disabled',true);
+        $('#prePage').attr('disabled',true);
+        $("#firstPage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = 1;
+            $('#firstPage').attr('disabled',true);
+            $('#prePage').attr('disabled',true);
+            ajax_socialServer_personM();
+        });
+        $("#lastPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = totalPage;
+            $('#lastPage').attr('disabled',true);
+            $('#nextPage').attr('disabled',true);
+            ajax_socialServer_personM();
+        });
+        $("#nextPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = currentPage+1;
+            if(currentPage == totalPage){
+                $('#lastPage').attr('disabled',true);
+                $('#nextPage').attr('disabled',true);
+            }else{
+                $('#lastPage').removeAttr('disabled');
+                $('#nextPage').removeAttr('disabled');
+            }
+            ajax_socialServer_personM();
+        });
+        $("#prePage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = currentPage-1;
+            if(currentPage == 1){
+                $('#firstPage').attr('disabled',true);
+                $('#prePage').attr('disabled',true);
+            }else{
+                $('#firstPage').removeAttr('disabled');
+                $('#prePage').removeAttr('disabled');
+            }
+            ajax_socialServer_personM();
+        });
+        //初始化列表
+        ajax_socialServer_personM();
+    }
+</script>
+</html>

@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>报修管理</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/saleCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/index.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <script src="jquery-ui-1.12.1/jquery-ui.min.js"></script>
+    <link href="jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet" />
+    <script src="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.js"></script>
+    <script type="text/javascript" src="jQuery-Timepicker/dist/i18n/jquery-ui-timepicker-zh-CN.js"></script>
+    <link href="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.css" rel="stylesheet" />
+</head>
+<body class="reset">
+    <div class="mg-t50">
+        <div style="width: 90%;margin-left:5%;text-align: left;margin-top: -30px;">
+                <img src="" id="autoDispatchingStatus" style="float:left;margin-right:10px;">
+                <span id="autoDisTime" class="color_cf vert_mid" style="display:inline-block;height:50px;line-height:55px;"></span>
+        </div>
+        <div class="tit">
+            <span class="flt_l">筛选查询</span>
+            <input type="button" class="add_btn flt_r" value="清空" onclick="clearDate()">
+            <!--<input type="button" class="clearDate" value="清空" onclick="clearDate()">-->
+            <!--<input type="button" class="add_btn flt_r" value="查询" onclick="queryRepairNeed()">-->
+        </div>
+        <div class="account_cont2">
+                <select id="rep_guy_rnm" class="rep_guy_info">
+                    <option>姓名</option>
+                    <option>电话</option>
+                    <option>出厂编号</option>
+                    <option>派工单号</option>
+                </select>
+                <input type="text" id="rep_info_rnm" class="product_line" style="border-left: none">
+                <button class="query_btn_big" style="margin-left: -4%;margin-right: 4%" onclick="queryRepairNeed()"></button>
+                <span class="describ">产&nbsp;品&nbsp;线&nbsp;：</span>
+                <select id="product_rnm" class="product_line">
+                    
+                </select>
+
+                <span class="describ">报修日期：</span>
+                <input id="date_start_rnm" class="timeChoose" placeholder="起始">
+                <span>-</span>
+                <input id="date_end_rnm" class="timeChoose" placeholder="截止">
+
+                <span class="describ mg_l30">进度：</span>
+                <select id="process_rnm" class="product_line">
+                    <option value="0">全部</option>
+                    <option value="1">待派工</option>
+                    <option value="9">报修驳回</option>
+                    <option value="2">待接单</option>
+                    <option value="3">维修中</option>
+                    <option value="11">待初审</option>
+                    <option value="12">初审驳回</option>
+                    <option value="4">待终审</option>
+                    <option value="10">终审驳回</option>
+                    <option value="6">已完成</option>
+                    <!--<option value="7">派工关闭</option>-->
+                    <option value="8">已关闭</option>
+                </select>
+            <br/>
+                <select id="rpt_item_rnm" class="rep_guy_info">
+                    <option value="disName">派单人姓名</option>
+                    <option value="disWorkNum">派单人工号</option>
+                    <option value="repairName">接单人姓名</option>
+                    <option value="company">接单人公司</option>
+                </select>
+                <input type="text" id="rpt_info_rnm" class="product_line" style="border-left: none">
+                <button class="query_btn_big" style="margin-left: -4%;margin-right: 4%" onclick="queryRepairNeed()"></button>
+                <span class="describ">回访情况：</span>
+                <select id="visitStatus_rnm" class="product_line">
+                    <option value="9">全部</option>
+                    <option value="0">未回访</option>
+                    <option value="1">已完成</option>
+                    <option value="2">未完成</option>
+                    <option value="3">违规</option>
+                    <option value="4">默认完工</option>
+                </select>
+
+                <span class="describ">维修日期：</span>
+                <input id="repair_start_rnm" class="timeChoose" placeholder="起始">
+                <span>-</span>
+                <input id="repair_end_rnm" class="timeChoose" placeholder="截止">
+
+                <span class="describ mg_l30" style="display:none">三包员：</span>
+                <select id="dealerType" class="product_line" style="display:none">
+                    <option value="">全部</option>
+                    <option value="1">常发三包员</option>
+                    <option value="0">非常发三包员</option>
+                </select>
+        </div>
+    </div>
+    <div>
+        <div class="tit mg-t50">
+            <span class="flt_l">报修管理</span>
+            <input type="button" class="add_btn flt_r" id="chuangjian" value="创建" onclick="addRepairNeed()">
+        </div>
+        <div class="account_cont" style="font-size: 0.9em;">
+            <table width="auto" cellpadding="0" cellspacing="0" class="table2" align="center">
+                <thead>
+                <tr align="center">
+                    <th height="33" class="th2">用户姓名</th>
+                    <th class="th2">用户电话</th>
+                    <th class="th2">产品线</th>
+                    <th class="th2">产品型号</th>
+                    <th class="th2">出厂编号</th>
+                    <th class="th2">报修时间</th>
+                    <th class="th2" style="width: 300px;word-warp:break-word;word-break:break-all">故障描述</th>
+                    <th class="th2">派单人</th>
+                    <th class="th2">接单人</th>
+                    <th class="th2">进度</th>
+                    <th class="th2">回访</th>
+                    <th class="th2">警示</th>
+                    <th class="th2">更多</th>
+                </tr>
+                </thead>
+                <tbody id="adminTbody">
+
+                </tbody>
+            </table>
+            <div id="barcon" class="barcon" >
+                <div id="barcon1" class="barcon1"></div>
+                <div id="barcon2" class="barcon2">
+                    <ul>
+                        <li><button id="firstPage" class="page_btn">首页</button></li>
+                        <li><button id="prePage" class="page_btn">上一页</button></li>
+                        <li><button id="nextPage" class="page_btn">下一页</button></li>
+                        <li><button id="lastPage" class="page_btn">尾页</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+
+    //判断经销商
+                if(appRoleList.indexOf($(window.parent.parent.document).find("input[name='roleId']").val()) != -1){
+                    $('#chuangjian').hide();
+        }
+
+        //判断经销商
+        if(threeGuar.indexOf($(window.parent.document).find("input[name='roleId']").val()) != -1){
+            $("#dealerType").prev().show();
+            $("#dealerType").show();
+            
+        }
+
+        $.datepicker.regional['zh-CN'] = {
+            changeMonth: true,
+            changeYear: true,
+            clearText: '清除',
+            clearStatus: '清除已选日期',
+            closeText: '关闭',
+            closeStatus: '不改变当前选择',
+            prevText: '<上月',
+            prevStatus: '显示上月',
+            prevBigText: '<<',
+            prevBigStatus: '显示上一年',
+            nextText: '下月>',
+            nextStatus: '显示下月',
+            nextBigText: '>>',
+            nextBigStatus: '显示下一年',
+            currentText: '今天',
+            currentStatus: '显示本月',
+            monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            monthNamesShort: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+            monthStatus: '选择月份',
+            yearStatus: '选择年份',
+            weekHeader: '周',
+            weekStatus: '年内周次',
+            dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+            dayNamesShort: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+            dayNamesMin: ['日', '一', '二', '三', '四', '五', '六'],
+            dayStatus: '设置 DD 为一周起始',
+            dateStatus: '选择 m月 d日, DD',
+            dateFormat: 'yy-mm-dd',
+            firstDay: 1,
+            initStatus: '请选择日期',
+            isRTL: false
+        };
+
+        $.datepicker.setDefaults($.datepicker.regional['zh-CN']);
+        $("#date_start_rnm").datepicker({maxDate:new Date()});
+        $("#date_end_rnm").datepicker({maxDate:new Date()});
+        $("#defult").datetimepicker();
+        $("#date_start_rnm").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            clear : "qingkong",
+            onClose: function(selectedDate) {
+                $("#date_end_rnm").datepicker("option", "minDate", selectedDate);
+            }
+        });
+
+        $("#date_end_rnm").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            onClose: function(selectedDate) {
+                $("#date_start_rnm").datepicker("option", "maxDate", selectedDate);
+                $("#date_end_rnm").val($(this).val());
+            }
+        });
+
+        $("#repair_start_rnm").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            clear : "qingkong",
+            onClose: function(selectedDate) {
+                $("#repair_end_rnm").datepicker("option", "minDate", selectedDate);
+            }
+        });
+
+        $("#repair_end_rnm").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            onClose: function(selectedDate) {
+                $("#repair_start_rnm").datepicker("option", "maxDate", selectedDate);
+                $("#repair_end_rnm").val($(this).val());
+            }
+        });
+
+        currentPage = 1;
+        $('#firstPage').attr('disabled',true);
+        $('#prePage').attr('disabled',true);
+        $("#firstPage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = 1;
+            $('#firstPage').attr('disabled',true);
+            $('#prePage').attr('disabled',true);
+            ajax_rptM();
+        });
+        $("#lastPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = totalPage;
+            $('#lastPage').attr('disabled',true);
+            $('#nextPage').attr('disabled',true);
+            ajax_rptM();
+        });
+        $("#nextPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = currentPage+1;
+            if(currentPage == totalPage){
+                $('#lastPage').attr('disabled',true);
+                $('#nextPage').attr('disabled',true);
+            }else{
+                $('#lastPage').removeAttr('disabled');
+                $('#nextPage').removeAttr('disabled');
+            }
+            ajax_rptM();
+        });
+        $("#prePage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = currentPage-1;
+            if(currentPage == 1){
+                $('#firstPage').attr('disabled',true);
+                $('#prePage').attr('disabled',true);
+            }else{
+                $('#firstPage').removeAttr('disabled');
+                $('#prePage').removeAttr('disabled');
+            }
+            ajax_rptM();
+        });
+
+        $.ajax({
+            type : "post",
+            url : ip_path+"/changfa_system/machineModel/getMachineModels.do",
+            dataType : "json",
+            success : function (data) {
+                $("#product_rnm").append("<option value=''>全部</option>");
+                for(var i=0;i<data['body']['resultList']['length'];i++){
+                    $("#product_rnm").append("<option value='"+ data['body']['resultList'][i]['number'] +"'>"+data['body']['resultList'][i]['name']+"</option>");
+                }
+                // $("#product_rnm").unbind();
+                if(sessionStorage.length >=1 ){
+                    $("#rep_guy_rnm").val(sessionStorage.getItem("rep_guy_rnm"));
+                    $("#rep_info_rnm").val(sessionStorage.getItem("rep_info_rnm"));
+                    $("#product_rnm").val(sessionStorage.getItem("product_rnm"));
+                    $("#date_start_rnm").val(sessionStorage.getItem("date_start_rnm"));
+                    $("#date_end_rnm").val(sessionStorage.getItem("date_end_rnm"));
+                    $("#process_rnm").val(sessionStorage.getItem("process_rnm"));
+                    $("#rpt_item_rnm").val(sessionStorage.getItem("rpt_item_rnm"));
+                    $("#rpt_info_rnm").val(sessionStorage.getItem("rpt_info_rnm"));
+                    $("#visitStatus_rnm").val(sessionStorage.getItem("visitStatus_rnm"));
+                    $("#repair_start_rnm").val(sessionStorage.getItem("repair_start_rnm"));
+                    $("#repair_end_rnm").val(sessionStorage.getItem("repair_end_rnm"));
+                    ajax_rptM();
+                }
+            }
+        });
+
+        //初始化报修列表
+        ajax_rptM();
+
+        //产品线
+        $("#product_rnm").change(function () {
+            // $("#rep_info_rnm").val("");
+            // $("#process_rnm").html(
+            //     '<option value="0">全部</option>' +
+            //     '<option value="1">待派工</option>' +
+            //     '<option value="2">已派工</option>' +
+            //     '<option value="3">维修中</option>' +
+            //     '<option value="4">待审核</option>' +
+            //     '<option value="5">待评价</option>' +
+            //     '<option value="6">已完成</option>' +
+            //     '<option value="7">已关闭</option>'
+            // );
+            // $("#date_start").val("");
+            // $("#date_end").val("");
+            currentPage = 1;
+            var key = $(this).attr('id');
+            var value = $(this).val();
+            sessionStorage.setItem(key,value);
+            ajax_rptM();
+        });
+        //进度
+        $("#process_rnm").change(function () {
+            // $("#rep_info_rnm").val("");
+            // $("#product_rnm").html(
+            //     '<option value="">全部</option>' +
+            //     '<option value="601">轮式拖拉机</option>' +
+            //     '<option value="61101">手扶插秧机</option>' +
+            //     '<option value="61102">高速插秧机</option>' +
+            //     '<option value="612">履带收割机</option>' +
+            //     '<option value="615">轮式收割机</option>'+
+            //     '<option value="622">轮式玉米收</option>'+
+            //     '<option value="628">花生收获机</option>'
+            // );
+            // $("#date_start").val("");
+            // $("#date_end").val("");
+            currentPage = 1;
+            var key = $(this).attr('id');
+            var value = $(this).val();
+            sessionStorage.setItem(key,value);
+            ajax_rptM();
+        });
+        //时间
+        $("#date_start_rnm").change(function () {
+            var key = $(this).attr('id');
+                var value = $(this).val();
+                sessionStorage.setItem(key,value);
+            if($("#date_start").val() != "" && $("#date_end").val() != ""){
+                currentPage = 1;
+                ajax_rptM();
+            }
+        });
+        $("#date_end_rnm").change(function () {
+            var key = $(this).attr('id');
+                var value = $(this).val();
+                sessionStorage.setItem(key,value);
+            if($("#date_start").val() != "" && $("#date_end").val() != ""){
+                currentPage = 1;
+                ajax_rptM();
+            }
+        });
+
+        $("#repair_start_rnm").change(function () {
+            var key = $(this).attr('id');
+                var value = $(this).val();
+                sessionStorage.setItem(key,value);
+            if($("#repair_start").val() != "" && $("#repair_end").val() != ""){
+                currentPage = 1;
+                ajax_rptM();
+            }
+        });
+        $("#repair_end_rnm").change(function () {
+            var key = $(this).attr('id');
+                var value = $(this).val();
+                sessionStorage.setItem(key,value);
+            if($("#repair_start").val() != "" && $("#repair_end").val() != ""){
+                currentPage = 1;
+                ajax_rptM();
+            }
+        });
+
+        
+        $("#dealerType").change(function () {
+            currentPage = 1;
+            ajax_rptM();
+        });
+
+        $("#visitStatus_rnm").change(function () {
+            currentPage = 1;
+            var key = $(this).attr('id');
+            var value = $(this).val();
+            sessionStorage.setItem(key,value);
+            ajax_rptM();
+        });
+
+        $("#rep_guy_rnm").change(function () {
+            $("#rep_info_rnm").val("");
+        });
+
+        $("#rpt_item_rnm").change(function () {
+            $("#rpt_info_rnm").val("");
+        });
+    }
+
+</script>
+</html>

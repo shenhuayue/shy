@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户回访</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/saleCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+</head>
+<body class="reset">
+<div>
+    <div id="visit_add" style="display: none;">
+        <div class="addTopic outShadow" style="margin-top: 300px;">
+            <div class="dealer_title">
+                <span class="">添加明细</span>
+                <img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeAdd()">
+            </div>
+            <div style="width: 100%;height: auto;border: 1px solid #E4E4E4;border-top: none;">
+                <div style="height: 20px;"></div>
+                <div>
+                    <table class="table2">
+                        <tr>
+                            <td class="head_td txt_center" width="167px" height="40px">回访人姓名</td>
+                            <td class="body_td" width="600px">
+                                <input type="text" id="visitName" style="width: 100%;height: 40px;">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="head_td txt_center" height="40px">坐席号</td>
+                            <td class="body_td">
+                                <input type="text" id="seatNum" style="width: 100%;height: 40px;">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="head_td txt_center" height="40px">回访描述</td>
+                            <td class="body_td">
+                                <input type="text" id="visitDescribe" style="width: 100%;height: 40px;">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="mg_b50 mg-t20" style="width: 100%;text-align: center">
+                    <img src="img/yes.png" onclick="addVisitHistory()">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="title_box">
+            <img src="img/status_warning.png" class="status_warning">
+            <span id="status_describe" class="status_info">当前状态：回访</span>
+        </div>
+        <div class="dis_detail">
+            <div class="tit_msg">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>报修信息</span>
+            </div>
+            <div class="mg_b30">
+                <table class="rpt_detail_tab txt_center">
+                    <tr>
+                        <td class="head_td" height="46px">用户姓名</td>
+                        <td class="head_td">报修电话</td>
+                        <td class="head_td">报修时间</td>
+                        <td class="head_td">农机型号</td>
+                        <td class="head_td">故障描述</td>
+                        <td class="head_td">状态</td>
+                        <td class="head_td">预估里程</td>
+                        <td class="head_td">维修类型</td>
+                        <td class="head_td">所属公司</td>
+                    </tr>
+                    <tbody id="adminTbody">
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="tit_msg">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>回访结果</span>
+            </div>
+            <div>
+                <select id="visitStatus" class="product_line" style="margin-left: 5%;">
+                    <option value="4">默认完工</option>
+                    <option value="1">已完成</option>
+                    <option value="2">未完工</option>
+                    <option value="3">违规</option>
+                </select>
+            </div>
+
+            <div class="tit_msg">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>回访记录</span>
+                <input type="button" id="addDetails" class="addVisit flt_r mg-r30" value="添加明细" onclick="addVisit()">
+            </div>
+            <div>
+                <table class="rpt_detail_tab txt_center">
+                    <tr>
+                        <td class="head_td" height="46px">回访人姓名</td>
+                        <td class="head_td">坐席号</td>
+                        <td class="head_td">回访时间</td>
+                        <td class="head_td">回访描述</td>
+                    </tr>
+                    <tbody id="visitHistory">
+
+                    </tbody>
+                </table>
+            </div>
+            <!--<div id="userInfo">-->
+                <!--<div class="tit_msg">-->
+                    <!--<img src="img/tit_pic.png" class="tit_pic">-->
+                    <!--<span>用户评价</span>-->
+                <!--</div>-->
+                <!--<div class="rep_detail">-->
+                    <!--<table id="user_tab" class="rep_detail_tab txt_center">-->
+                        <!--<tr>-->
+                            <!--<td class="head_td" width="167px" height="60px;">满意度</td>-->
+                            <!--<td class="body_td txt_left">-->
+                                <!--<img id="star1" src="http://app.changfanz.net:3588/changfa_file/star_empty.png" class="star">-->
+                                <!--<img id="star2" src="http://app.changfanz.net:3588/changfa_file/star_empty.png" class="star">-->
+                                <!--<img id="star3" src="http://app.changfanz.net:3588/changfa_file/star_empty.png" class="star">-->
+                                <!--<img id="star4" src="http://app.changfanz.net:3588/changfa_file/star_empty.png" class="star">-->
+                                <!--<img id="star5" src="http://app.changfanz.net:3588/changfa_file/star_empty.png" class="star">-->
+                                <!--<span id="userIdeal" class="mg_l50"></span>&nbsp;&nbsp;分-->
+                            <!--</td>-->
+                        <!--</tr>-->
+                        <!--<tr>-->
+                            <!--<td class="head_td" width="167px" height="60px;">用户意见</td>-->
+                            <!--<td id="cont" class="body_td txt_left"></td>-->
+                        <!--</tr>-->
+                        <!--&lt;!&ndash;<tr>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<td class="head_td" width="167px" height="80px;">维修图片</td>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<td id="pic" class="body_td txt_left">&ndash;&gt;-->
+
+                            <!--&lt;!&ndash;</td>&ndash;&gt;-->
+                        <!--&lt;!&ndash;</tr>&ndash;&gt;-->
+                    <!--</table>-->
+                <!--</div>-->
+            <!--</div>-->
+            <div class="tit_msg">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>回访明细</span>
+            </div>
+            <div class="visit_detail">
+                <!--未完成可编辑-->
+                <table id="editable" class="rep_detail_tab txt_center" style="display: none;">
+                    <tr>
+                        <td class="head_td" width="167px" height="60px;">服务满意度</td>
+                        <td class="body_td txt_left">
+                            <img id="review1" src="http://app.changfanz.net:3588/changfa_file/star_empty.png" class="star" onclick="reviewArgument(this)">
+                            <img id="review2" src="http://app.changfanz.net:3588/changfa_file/star_empty.png" class="star" onclick="reviewArgument(this)">
+                            <img id="review3" src="http://app.changfanz.net:3588/changfa_file/star_empty.png" class="star" onclick="reviewArgument(this)">
+                            <img id="review4" src="http://app.changfanz.net:3588/changfa_file/star_empty.png" class="star" onclick="reviewArgument(this)">
+                            <img id="review5" src="http://app.changfanz.net:3588/changfa_file/star_empty.png" class="star" onclick="reviewArgument(this)">
+                            <span id="visitLevel" class="mg_l50"></span>&nbsp;&nbsp;分
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="head_td" width="167px" height="60px;">服务态度满意度</td>
+                        <td class="body_td txt_left">
+                            <img id="service1" src="http://app.changfanz.net:3588/changfa_file/star_empty.png" class="star" onclick="serviceArgument(this)">
+                            <img id="service2" src="http://app.changfanz.net:3588/changfa_file/star_empty.png" class="star" onclick="serviceArgument(this)">
+                            <img id="service3" src="http://app.changfanz.net:3588/changfa_file/star_empty.png" class="star" onclick="serviceArgument(this)">
+                            <img id="service4" src="http://app.changfanz.net:3588/changfa_file/star_empty.png" class="star" onclick="serviceArgument(this)">
+                            <img id="service5" src="http://app.changfanz.net:3588/changfa_file/star_empty.png" class="star" onclick="serviceArgument(this)">
+                            <span id="serverLevel" class="mg_l50"></span>&nbsp;&nbsp;分
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="head_td" width="167px" height="60px;">机器质量性能满意度</td>
+                        <td class="body_td txt_left">
+                            <img id="product1" src="http://app.changfanz.net:3588/changfa_file/star_empty.png" class="star" onclick="productArgument(this)">
+                            <img id="product2" src="http://app.changfanz.net:3588/changfa_file/star_empty.png" class="star" onclick="productArgument(this)">
+                            <img id="product3" src="http://app.changfanz.net:3588/changfa_file/star_empty.png" class="star" onclick="productArgument(this)">
+                            <img id="product4" src="http://app.changfanz.net:3588/changfa_file/star_empty.png" class="star" onclick="productArgument(this)">
+                            <img id="product5" src="http://app.changfanz.net:3588/changfa_file/star_empty.png" class="star" onclick="productArgument(this)">
+                            <span id="goodsLevel" class="mg_l50"></span>&nbsp;&nbsp;分
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="head_td" width="167px" height="126px;">用户反映意见</td>
+                        <td class="body_td txt_left">
+                            <input type="text" id="visitView" class="full_td">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="head_td" width="167px" height="60px;">里程</td>
+                        <td class="body_td txt_left">
+                            <input type="text" id="distance" class="full_td_2">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="head_td" width="167px" height="60px;">维修类型</td>
+                        <td class="body_td txt_left">
+                            <select id="repairType" style="width: 160px;height: 30px;">
+                                <option value="1">外出(本地用户)</option>
+                                <option value="2">到店(本地用户)</option>
+                                <option value="3">库存车维修</option>
+                                <option value="4">外出(跨区用户)</option>
+                                <option value="5">到店(跨域用户)</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="head_td" width="167px" height="60px;">是否收费</td>
+                        <td class="body_td txt_left">
+                            <input type="radio" id="yes" class="cos" name="cost" checked="checked" onclick="toogleRadio()"><label for="yes">是</label>
+                            <input type="radio" id="no" class="cos" name="cost" onclick="toogleRadio()"><label for="no">否</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="head_td" width="167px" height="60px;">收费金额</td>
+                        <td class="body_td txt_left">
+                            <input type="text" id="money" class="full_td_2">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="head_td" width="167px" height="126px;">收费原因</td>
+                        <td class="body_td txt_left">
+                            <input type="text" id="moneyReason" class="full_td">
+                        </td>
+                    </tr>
+                </table>
+                <!--已完成或违规或默认完工，不可编辑-->
+                <table id="editUnable" class="rep_detail_tab txt_center" style="display: none;">
+                    <tr>
+                        <td class="head_td" width="167px" height="60px;">服务满意度</td>
+                        <td class="body_td txt_left">
+                            <img id="review_unable1" src="http://app.changfanz.net:3588/changfa_file/star_empty.png" class="star">
+                            <img id="review_unable2" src="http://app.changfanz.net:3588/changfa_file/star_empty.png" class="star">
+                            <img id="review_unable3" src="http://app.changfanz.net:3588/changfa_file/star_empty.png" class="star">
+                            <img id="review_unable4" src="http://app.changfanz.net:3588/changfa_file/star_empty.png" class="star">
+                            <img id="review_unable5" src="http://app.changfanz.net:3588/changfa_file/star_empty.png" class="star">
+                            <span id="visitLevel_unable" class="mg_l50"></span>&nbsp;&nbsp;分
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="head_td" width="167px" height="60px;">服务态度满意度</td>
+                        <td class="body_td txt_left">
+                            <img id="service_unable1" src="http://app.changfanz.net:3588/changfa_file/star_empty.png" class="star">
+                            <img id="service_unable2" src="http://app.changfanz.net:3588/changfa_file/star_empty.png" class="star">
+                            <img id="service_unable3" src="http://app.changfanz.net:3588/changfa_file/star_empty.png" class="star">
+                            <img id="service_unable4" src="http://app.changfanz.net:3588/changfa_file/star_empty.png" class="star">
+                            <img id="service_unable5" src="http://app.changfanz.net:3588/changfa_file/star_empty.png" class="star">
+                            <span id="serverLevel_unable" class="mg_l50"></span>&nbsp;&nbsp;分
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="head_td" width="167px" height="60px;">机器质量性能满意度</td>
+                        <td class="body_td txt_left">
+                            <img id="product_unable1" src="http://app.changfanz.net:3588/changfa_file/star_empty.png" class="star">
+                            <img id="product_unable2" src="http://app.changfanz.net:3588/changfa_file/star_empty.png" class="star">
+                            <img id="product_unable3" src="http://app.changfanz.net:3588/changfa_file/star_empty.png" class="star">
+                            <img id="product_unable4" src="http://app.changfanz.net:3588/changfa_file/star_empty.png" class="star">
+                            <img id="product_unable5" src="http://app.changfanz.net:3588/changfa_file/star_empty.png" class="star">
+                            <span id="goodsLevel_unable" class="mg_l50"></span>&nbsp;&nbsp;分
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="head_td" width="167px" height="126px;">用户反映意见</td>
+                        <td id="visitView_unable" class="body_td_2 txt_left">
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="head_td" width="167px" height="60px;">里程（公里）</td>
+                        <td id="distance_unable" class="body_td_2 txt_left">
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="head_td" width="167px" height="60px;">维修类型</td>
+                        <td id="repairType_unable" class="body_td_2 txt_left">
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="head_td" width="167px" height="60px;">是否收费</td>
+                        <td id="fee" class="body_td_2 txt_left">
+
+                        </td>
+                    </tr>
+                    <tr id="money_tr">
+                        <td class="head_td" width="167px" height="60px;">收费金额</td>
+                        <td id="money_unable" class="body_td_2 txt_left">
+
+                        </td>
+                    </tr>
+                    <tr id="moneyReason_tr">
+                        <td class="head_td" width="167px" height="126px;">收费原因</td>
+                        <td id="moneyReason_unable" class="body_td_2 txt_left">
+
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div id="rep_next" class="next">
+            <img src="img/yes.png" id="rep_unpass" class="mg-t20" onclick="visitOver()">
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/reportRepair/getReportInfoById.do",
+            data : {
+                reportId : $(window.parent.parent.document).find("input[name='reportId']").val()
+            },
+            dataType : "json",
+            success : function (data) {
+                if(data['head']['code'] == 200){
+                    var repairType;
+                    if(data['body']['result']['repairType'] == 1){
+                        repairType = "外出(本地用户)";
+                    }else if(data['body']['result']['repairType'] == 2){
+                        repairType = "到店(本地用户)";
+                    }else if(data['body']['result']['repairType'] == 3){
+                        repairType = "库存车维修";
+                    }else if(data['body']['result']['repairType'] == 4){
+                        repairType = "外出(跨区用户)";
+                    }else if(data['body']['result']['repairType'] == 5){
+                        repairType = "到店(跨区用户)";
+                    }
+                    var status;
+                    switch (data['body']['result']['status']) {
+                        case 1:
+                            status = "待派工";
+                            break;
+                        case 2:
+                            status = "待接单";
+                            break;
+                        case 3:
+                            status = "已接单";
+                            break;
+                        case 4:
+                            status = "维修中";
+                            break;
+                        case 5:
+                            status = "待回访";
+                            break;
+                        case 6:
+                            status = "已完成";
+                            break;
+                    }
+                    $("#adminTbody").append(
+                        "<tr>" +
+                        '<td class="body_td txt_center" height="60px">'+data['body']['result']['userName']+'</td>' +
+                        '<td class="body_td txt_center">'+data['body']['result']['mobile']+'</td>' +
+                        '<td class="body_td txt_center">'+data['body']['result']['createTime']+'</td>' +
+                        '<td class="body_td txt_center">'+data['body']['result']['machineModel']+'</td>' +
+                        '<td class="body_td txt_center">'+data['body']['result']['discription']+'</td>' +
+                        '<td class="body_td txt_center" >' + status + '</td>' +
+                        '<td class="body_td txt_center">'+data['body']['result']['expectedMileage']+'</td>' +
+                        '<td class="body_td txt_center">'+repairType+'</td>' +
+                        '<td class="body_td txt_center" >' + data['body']['result']['creatorCompany'] + '</td>' +
+                        '</tr>'
+                    );
+                }
+            }
+        });
+
+        $.ajax({
+            type: "post",
+            async: false,
+            url: ip_path + "/changfa_system/examineFlow/examineSelectByDisId.do",
+            data: {
+                reportId : $(window.parent.parent.document).find("input[name='reportId']").val()
+            },
+            dataType: "json",
+            success: function (data) {
+                if(data['head']['isSuccess']){
+                    // if(data['body']['result']['reportType'] == 0){
+                    $("#visitStatus").val(data['body']['result']['examineType']);
+                    if(data['body']['result']['examineType'] == 1 ){
+                        $("#visitStatus").attr("disabled",true);
+                        $("#editUnable").show();
+                        $("#visitHistory").empty();
+                        if(data['body']['result']['examineFlowList'].length == 0){
+                            $("#visitHistory").append(
+                                '<tr>' +
+                                    '<td class="td2 txt_center" height="33" colspan="4">未查到回访记录</td>' +
+                                '</tr>'
+                            );
+                        }else{
+                            for(var i = 0;i<data['body']['result']['examineFlowList'].length;i++){
+                                $("#visitHistory").append(
+                                    '<tr>' +
+                                    '<td class="td2 txt_center" height="33">' + data['body']['result']['examineFlowList'][i]['teleName'] + '</td>' +
+                                    '<td class="td2 txt_center" >' + data['body']['result']['examineFlowList'][i]['teleNo'] + '</td>' +
+                                    '<td class="td2 txt_center" >' + data['body']['result']['examineFlowList'][i]['createTime'] + '</td>' +
+                                    '<td class="td2 txt_center" >' + data['body']['result']['examineFlowList'][i]['description'] + '</td>' +
+                                    '</tr>'
+                                );
+                            }
+                        }
+                        //不可编辑
+                        var newUserId;
+                        // for(var i=1;i<=data['body']['result']['level'];i++){
+                        //     newId = "star" + i;
+                        //     $("#"+newId).attr("src","http://app.changfanz.net:3588/changfa_file/star_full.png");
+                        // }
+                        // $("#userIdeal").text(data['body']['result']['level']);
+                        // $("#cont").html(data['body']['result']['content']);
+
+                        for(var i=1;i<=data['body']['result']['visitLevel'];i++){
+                            newUserId = "review_unable" + i;
+                            $("#"+newUserId).attr("src","http://app.changfanz.net:3588/changfa_file/star_full.png");
+                        }
+                        $("#visitLevel_unable").text(data['body']['result']['visitLevel']);
+
+                        for(var i=1;i<=data['body']['result']['serverLevel'];i++){
+                            newUserId = "service_unable" + i;
+                            $("#"+newUserId).attr("src","http://app.changfanz.net:3588/changfa_file/star_full.png");
+                        }
+                        $("#serverLevel_unable").text(data['body']['result']['serverLevel']);
+
+                        for(var i=1;i<=data['body']['result']['goodsLevel'];i++){
+                            newUserId = "product_unable" + i;
+                            $("#"+newUserId).attr("src","http://app.changfanz.net:3588/changfa_file/star_full.png");
+                        }
+                        $("#goodsLevel_unable").text(data['body']['result']['goodsLevel']);
+
+                        $("#visitView_unable").html(data['body']['result']['visitView']);
+
+                        //
+                        if(data['body']['result']['fee'] == 0){
+                            $("#fee").html("是");
+                            $("#money_unable").html(data['body']['result']['money']+"&nbsp;&nbsp;元");
+                            $("#moneyReason_unable").html(data['body']['result']['moneyReason']);
+                        }else{
+                            $("#fee").html("否");
+                            $("#money_tr").html("");
+                            $("#moneyReason_tr").html("");
+                            // $("#money").attr("disabled",true);
+                            // $("#moneyReason").attr("disabled",true);
+                        }
+                        var repairType;
+                        if(data['body']['result']['repairType'] == 1){
+                            repairType = "外出(本地用户)";
+                        }else if(data['body']['result']['repairType'] == 2){
+                            repairType = "到店(本地用户)";
+                        }else if(data['body']['result']['repairType'] == 3){
+                            repairType = "库存车维修";
+                        }else if(data['body']['result']['repairType'] == 4){
+                            repairType = "外出(跨区用户)";
+                        }else if(data['body']['result']['repairType'] == 5){
+                            repairType = "到店(跨区用户)";
+                        }
+                        $("#distance_unable").html(data['body']['result']['distance']);
+                        $("#repairType_unable").html(repairType);
+                        $("#addDetails").attr("disabled",true);
+                        $("#rep_next").html("");
+                    }else if(data['body']['result']['examineType'] == 2 || data['body']['result']['examineType'] == 3 || data['body']['result']['examineType'] == 4){
+                        $("#editable").show();
+                        if(data['body']['result']['examineFlowList'].length == 0){
+                            $("#visitHistory").append(
+                                '<tr>' +
+                                '<td class="td2 txt_center" height="33" colspan="4">未查到回访记录</td>' +
+                                '</tr>'
+                            );
+                        }else{
+                            for(var i = 0;i<data['body']['result']['examineFlowList'].length;i++){
+                                $("#visitHistory").append(
+                                    '<tr>' +
+                                    '<td class="td2 txt_center" height="33">' + data['body']['result']['examineFlowList'][i]['teleName'] + '</td>' +
+                                    '<td class="td2 txt_center" >' + data['body']['result']['examineFlowList'][i]['teleNo'] + '</td>' +
+                                    '<td class="td2 txt_center" >' + data['body']['result']['examineFlowList'][i]['createTime'] + '</td>' +
+                                    '<td class="td2 txt_center" >' + data['body']['result']['examineFlowList'][i]['description'] + '</td>' +
+                                    '</tr>'
+                                );
+                            }
+                        }
+                        //可编辑
+                        var newUserId;
+                        // for(var i=1;i<=data['body']['result']['level'];i++){
+                        //     newId = "star" + i;
+                        //     $("#"+newId).attr("src","http://app.changfanz.net:3588/changfa_file/star_full.png");
+                        // }
+                        // $("#userIdeal").text(data['body']['result']['level']);
+                        // $("#cont").html(data['body']['result']['content']);
+
+                        for(var i=1;i<=data['body']['result']['visitLevel'];i++){
+                            newUserId = "review" + i;
+                            $("#"+newUserId).attr("src","http://app.changfanz.net:3588/changfa_file/star_full.png");
+                        }
+                        $("#visitLevel").text(data['body']['result']['visitLevel']);
+
+                        for(var i=1;i<=data['body']['result']['serverLevel'];i++){
+                            newUserId = "service" + i;
+                            $("#"+newUserId).attr("src","http://app.changfanz.net:3588/changfa_file/star_full.png");
+                        }
+                        $("#serverLevel").text(data['body']['result']['serverLevel']);
+
+                        for(var i=1;i<=data['body']['result']['goodsLevel'];i++){
+                            newUserId = "product" + i;
+                            $("#"+newUserId).attr("src","http://app.changfanz.net:3588/changfa_file/star_full.png");
+                        }
+                        $("#goodsLevel").text(data['body']['result']['goodsLevel']);
+
+                        $("#visitView").val(data['body']['result']['visitView']);
+                        $("#distance").val(data['body']['result']['distance']);
+                        $("#repairType").val(data['body']['result']['repairType']);
+
+                        //
+                        if(data['body']['result']['fee'] == 0){
+                            $("#yes").attr("checked",true);
+                            $("#money").val(data['body']['result']['money']);
+                            $("#moneyReason").val(data['body']['result']['moneyReason']);
+                        }else{
+                            $("#no").attr("checked",true);
+                            // $("#money_tr").html("");
+                            // $("#moneyReason_tr").html("");
+                            $("#money").attr("disabled",true);
+                            $("#moneyReason").attr("disabled",true);
+                        }
+                    }else if(data['body']['result']['examineType'] == "") {
+                        $("#editable").show();
+                        if(data['body']['result']['examineFlowList'].length == 0){
+                            $("#visitHistory").append(
+                                '<tr>' +
+                                '<td class="td2 txt_center" height="33" colspan="4">未查到回访记录</td>' +
+                                '</tr>'
+                            );
+                        }else{
+                            for(var i = 0;i<data['body']['result']['examineFlowList'].length;i++){
+                                $("#visitHistory").append(
+                                    '<tr>' +
+                                    '<td class="td2 txt_center" height="33">' + data['body']['result']['examineFlowList'][i]['teleName'] + '</td>' +
+                                    '<td class="td2 txt_center" >' + data['body']['result']['examineFlowList'][i]['teleNo'] + '</td>' +
+                                    '<td class="td2 txt_center" >' + data['body']['result']['examineFlowList'][i]['createTime'] + '</td>' +
+                                    '<td class="td2 txt_center" >' + data['body']['result']['examineFlowList'][i]['description'] + '</td>' +
+                                    '</tr>'
+                                );
+                            }
+                        }
+                    }
+
+                    // }else{
+                    //     document.getElementById("userInfo").style.display = "none";
+                    // }
+                }
+            }
+        });
+
+        if($(window.parent.parent.document).find("input[name='history_mark']").val() == ""){
+            if($(window.parent.parent.document).find("input[name='history_400_mark']").val() != ""){
+                $("#rep_next").html('<img src="img/yes.png" onclick="to_lastReport_400()">');
+            }
+        }else{
+            $("#rep_next").html('<img src="img/yes.png" onclick="to_lastReport()">');
+        }
+    }
+</script>
+</html>

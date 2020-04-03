@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,width=device-width,initial-scale=1.0,user-scalable=no" />
+	<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+	<title>三包配件维护</title>
+	<link rel="stylesheet" type="text/css" href="css/cf_web.css" />
+    <link rel="stylesheet" type="text/css" href="css/public.css" />
+	<script type="text/javascript" src="js/dcommon.js"></script>
+	<script type="text/javascript" src="js/dsaleCenter.js?t=45"></script>
+    <script type="text/javascript" src="js/jquery-1.8.2.min.js"></script>
+	<script type="text/javascript" src="layer/layer.js"></script>
+    <script type="text/javascript" src="layer/mobile/need/layer.css"></script>
+    <script src="js/jquery_form.js"></script>
+</head>
+<body>
+
+    <!--点击添加弹框-->
+    <div id="addModel" class="addTopic outShadow" style="display: none;position: fixed">
+        <div class="dealer_title">
+            <span>添加产品型号</span>
+            <img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeAddModel()">
+        </div>
+        <div style="width: 100%;height: auto;border: 1px solid #E4E4E4;border-top: none;">
+            <div class="tit_msg">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>产品型号信息</span>
+            </div>
+            <div>
+                <div id="levelChoose" class="rpt_detail_tab">
+                    
+                </div>
+
+                <table class="rpt_detail_tab txt_center" style="margin-top: 20px">
+
+                    <tr>
+                        <td class='head_td' width='136px' height='46px'>产品编号</td>
+                        <td class='body_td txt_left' width='383px'>
+                            <input type="text" id="number" class="userInfo">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class='head_td' width='136px' height='46px'>产品名称</td>
+                        <td class='body_td txt_left' width='383px'>
+                            <input type="text" id="createModelName" class="userInfo">
+                        </td>
+                    </tr>
+                    
+                </table>
+            </div>
+            <div class="mg_b50" style="width: 100%;text-align: center">
+                <button class="waves submit_btn mg-t30" onclick="createModelocg1()">提交</button>
+            </div>
+        </div>
+    </div>
+
+    <!--右侧删除-->
+    <div id="delConfigtable">
+
+    </div>
+
+<!--点右侧新增出现弹框-->
+
+        <div id="addConfigtable" class="addTopic outShadow" style="display: none;position: fixed">
+                <div class="dealer_title">
+                    <span>新增产品</span>
+                    <img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeaddConfigtable()">
+                </div>
+                <div style="width: 100%;height: auto;border: 1px solid #E4E4E4;border-top: none;">
+                    <div class="tit_msg">
+                        <img src="img/tit_pic.png" class="tit_pic">
+                        <span>配件信息</span>
+                    </div>
+                    <div>
+                        <table class="rpt_detail_tab txt_center" style="margin-top: 20px">
+                            <tr>
+                                <td class='head_td' width='136px' height='46px'>配件编号</td>
+                                <td class='body_td txt_left' width='383px'>
+                                    <input type="text" class="userInfo number1" id="number1" >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class='head_td' width='136px' height='46px'>配件名称</td>
+                                <td class='body_td txt_left' width='383px'>
+                                    <input type="text" class="userInfo createModelName1" id="createModelName1">
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="mg_b50" style="width: 100%;text-align: center">
+                        <button class="waves submit_btn mg-t30" onclick="createModelocg2()">确定</button>
+                    </div>
+                </div>
+            </div>
+
+
+    <!--点右侧编辑弹框-->
+     <div id="editSeries" class="addTopic outShadow" style="display: none;position: fixed">
+        <div class="dealer_title">
+            <span>编辑</span>
+            <img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeEditSeries()">
+        </div>
+        <div style="width: 100%;height: auto;border: 1px solid #E4E4E4;border-top: none;">
+            <div class="tit_msg">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>产品信息</span>
+            </div>
+            <div>
+                 <table class="rpt_detail_tab txt_center">
+                    <tr>
+                        <td class='head_td' width='136px' height='46px'>产品编号</td>
+                        <td class='body_td txt_left' width='383px'>
+                            <input type="text" id="editSeriesNum" class="userInfo" disabled="disabled">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class='head_td' width='136px' height='46px'>产品名称</td>
+                        <td class='body_td txt_left' width='383px'>
+                            <input type="text" id="editSeriesName" class="userInfo">
+                            <input type="hidden" id="editid" class="userInfo">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="mg_b50" style="width: 100%;text-align: center">
+                <button class="waves submit_btn mg-t30" onclick="updateSeriesocg1()">提交</button>
+            </div>
+        </div>
+    </div>
+
+
+<!--产品修改弹框-->
+
+    <div id="editConfig" class="addTopic outShadow" style="display: none;position: fixed">
+            <div class="dealer_title">
+                <span>编辑</span>
+                <img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeEditConfig()">
+            </div>
+            <div style="width: 100%;height: auto;border: 1px solid #E4E4E4;border-top: none;">
+                <div class="tit_msg">
+                    <img src="img/tit_pic.png" class="tit_pic">
+                    <span>产品信息</span>
+                </div>
+                <div>
+                    <table class="rpt_detail_tab txt_center">
+                        <tr>
+                            <td class='head_td' width='136px' height='46px'>编号</td>
+                            <td class='body_td txt_left' width='383px'>
+                                <input type="text" id="editnumber" class="userInfo" disabled="disabled">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class='head_td' width='136px' height='46px'>名称</td>
+                            <td class='body_td txt_left' width='383px'>
+                                <input type="text" id="editname" class="userInfo">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="mg_b50" style="width: 100%;text-align: center">
+                    <button class="waves submit_btn mg-t30" onclick="updateConfig()">提交</button>
+                </div>
+            </div>
+    </div>
+
+<!--主页面-->
+<div class="layout-container">
+    <div style="height: 30px;"></div>
+	<div class="layout-cont">
+        <h3 class="layout-cont-title">订单配置维护</h3>
+        <div class="layout-cont-control">
+            <div class="layout-cont-add" style="display: block;">
+                <!-- <img src="img/icon_add.png"  onclick="addModel()" /> -->
+                <!--<input type="button" class="output_btn" style="margin-right: 0" value="添加" onclick="addModelocg1()">-->
+            </div>
+            <div class="layout-cont-edit" style="display: none;">
+                <!-- <img src="img/icon_edit.png" onclick="editSeries()" /> -->
+                <input type="button" class="output_btn" style="margin-right: 0" value="编辑" onclick="editSeries()">
+            </div>
+            <!--<input type="button" id="aliasSet" class=" output_btn" value="型号配置" style="display: none;margin-left: 10px;" onclick="openConfigurationClass()">-->
+        </div>
+        <div class="layout-cont-main" style="height:800px">
+            <!--左侧列表-->
+			<div class="add-newclass" style="width: 20%;height: auto;margin-left:4%;">
+				<form action="">
+                        <div id="lineList" class="category-cont" style="width: 90%;height: 771px;overflow: scroll;">
+                        
+					</div>
+				</form>
+            </div>
+            <!--右侧列表-->
+			<div style="position: absolute;left: 28%;top: 150px;width: 65%;height: 800px;border: 1px solid #E4E4E4;overflow-y:scroll;">
+				
+                    <div style="width: 100%;height: 50px;">
+                        <div style=margin-top:20px;>
+                        <span class="describ" style="margin-left:38px;">查询：</span>
+                        <!--<input type="text" id="productNum" class="product_line" style="width:15%">-->
+                        <select id="product_num" class="product_line" style="width:7%;margin-right:0;padding-left:5px;padding-right:1px;">
+                        <option value="0">名称</option>
+                        <option value="1">编号</option>   
+                    </select>
+                    <input type="text" id="productNum" class="product_line" style="width:10%;margin-left:0;">
+                    
+                    <button class="query_btn_big" style="margin-left: -4%;margin-right: 4%" onclick="queryModelConfigList()"></button>
+                        
+                
+                        <span>
+                                <form id="form2" action="" method="post" style="margin-right:45px;">
+                                    <input type="button" class="output_btn" id="outputExcel" style="margin:0 0 0 10px ;float: right;margin-top:-29px;"  value="下载模板">
+                            </form>
+                            <form id="form11">
+                                    <!--<input type="hidden" id="token" name="token">-->
+                                <input type="file" name="file" id="file" style="display: none;">
+                            </form>
+                            
+                            <input type="button" id="inputArchives" class="output_btn" style="margin:0 0 0 10px ;float: right;margin-top:-29px;" value="导入">
+                            <!--<input type="button" class="output_btn" value="导入" style="margin:0 0 0 10px ;float: right;" onclick="daochu()">-->
+                            <input type="button" class="output_btn" value="删除" style="margin:0 0 0 10px ;float: right;margin-top:-29px;" onclick="delConfigtable()">
+                            <input type="button" class="output_btn" value="编辑" style="margin:0 0 0 10px ;float: right;margin-top:-29px;" onclick="editConfig()">
+                            <input type="button" class="output_btn" value="新增" style="margin:0 0 0 10px ;float: right;margin-top:-29px;" onclick="addConfig()">
+                            </span>
+                            </div>
+				
+				<div style="width: 92%;margin-left: 4%;">
+                    <table cellpadding="0" cellspacing="0" class="table_scroll" text-align="left" style="width: 100%;">
+                        <thead>
+						<tr text-align="center">
+                            <th height="33" class="th2" style="width:40px;">
+                                <input type="checkbox" name="saleType" id='checkboxall' onclick="checkboxall()"/>
+                            </th>
+                            <th height="33" class="th2" style="text-align:left;text-indent:60px;">产品编号</th>
+                            <th height="33" class="th2" style="text-align:left;text-indent:60px;">产品名称</th>
+							<!--<th class="th2" style="width: auto;word-break: break-all">配置描述</th>-->
+						</tr>
+						</thead>
+						<tbody id="adminTbody">
+                                
+
+						</tbody>
+					</table>
+                </div>
+                
+				<div id="barcon" class="barcon" >
+                    <div id="barcon1" class="barcon1"></div>
+                    <div id="barcon1" class="barcon3"></div>
+					<div id="barcon2" class="barcon2">
+						<ul>
+							<li><button id="firstPage" class="page_btn">首页</button></li>
+							<li><button id="prePage" class="page_btn">上一页</button></li>
+							<li><button id="nextPage" class="page_btn">下一页</button></li>
+                            <li><button id="lastPage" class="page_btn">尾页</button></li>
+                            <!--<input type="hidden" class="dqym" value="1" />-->
+						</ul>
+					</div>
+                </div>
+                <div id="barconsousuo" class="barcon" style="display:none;">
+                        <div id="barcon1sousuo" class="barcon1"></div>
+                        <div id="barcon2sousuo" class="barcon2">
+                            <ul>
+                                <li><button id="firstPagesousuo" class="page_btn">首页</button></li>
+                                <li><button id="prePagesousuo" class="page_btn">上一页</button></li>
+                                <li><button id="nextPagesousuo" class="page_btn">下一页</button></li>
+                                <li><button id="lastPagesousuo" class="page_btn">尾页</button></li>
+                                <!--<input type="hidden" class="dqym" value="1" />-->
+                            </ul>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+</div>
+
+<script type="text/javascript">
+	window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+//搜索下拉
+//        $.ajax({
+//            type:"post",
+//            async:false,
+            //url:ip_path+"/changfa_system/powerPart/selectByNameAndNumber.do",
+//            dataType:"json",
+//            data:{
+//            },
+//            success:function(data) {
+//                console.log(data)
+//            }
+
+//        });
+
+        $.ajax({
+            type : "post",
+            async : false,
+            //url : ip_path+"/changfa_system/productCatalog/selectByParentNumAndLevel.do",
+            url : ip_path+"/changfa_system/machineModel/getMachineModels.do",//单缸机（新修改）
+            dataType : "json",
+            data: {
+                machineType: 1,
+            },
+            success : function (data) {
+                //console.log(data)
+                for(var i=0;i< data['body']['resultList']['length']; i++ ){
+                    var proid = data['body']['resultList'][i];
+                    //console.log(proid.color)
+                   $('#lineList').append(
+
+                       //'<li id="dgjli" class="dgjli">' +
+                       // '<span id="dgjclick" class="dgjclick" onclick="dgjclick(this,"+ data["body"]["resultList"][i]["name"]+","+ data["body"]["resultList"][i]["number"]+")">' + 
+                       //     data["body"]["resultList"][i]["name"] + '</span>'+
+                       // '<span  style="line-height:30px">-----</span>' + '<span class="dgbianhao">'+ data["body"]["resultList"][i]["number"] +'</span>'+
+                       //'</li>'
+                    '<li id="dgjli" class="dgjli">' +
+                        '<span id="dgjclick" data-name="'+data["body"]["resultList"][i]["name"]+'" data-number="'+data["body"]["resultList"][i]["number"]+'" onclick="dgjclick(this)">' + data["body"]["resultList"][i]["name"] + 
+                        '<span style="line-height:30px">-----</span>' + data["body"]["resultList"][i]["number"] +
+                        '</span>'+
+                    '</li>'
+                   )
+                   
+                }
+            }
+        });
+        $("#outputExcel").click(function () {
+            $("#form2").attr("action",ip_path + "/changfa_system/powerPart/saleExcelDownload.do");
+            $("#form2").submit();
+        });
+        //daoru 
+
+        $("#inputArchives").click(function () {
+            $("#file").click();
+        });
+        $("#file").on("change",function(){
+            var filepath = $("#file").val();
+            var extStart = filepath.lastIndexOf(".");
+            var ext = filepath.substring(extStart, filepath.length).toUpperCase();
+            console.log(ext);
+            console.log(filepath);
+            console.log(extStart);
+            if(ext != ".XLSX" && ext != ".XLS") {
+                alert("文件限于xls,xlsx！");
+                return false;
+            } else {
+                
+                var option = {
+                    url :ip_path+"/changfa_system/powerPart/batchPutinPowerPart.do",
+                    type : "post",
+                    success : function (data) {
+                        window.location.reload();
+                        if(data['head']['code'] != 200){
+                            
+                            if(window.confirm("是否下载导入异常报告？")){
+                                downloadErrorExcel(data['body']['result']['path']);
+                            }
+                        }else{
+                            alert(data['head']['message']);
+                        }
+                    }
+                };
+                $("#form11").ajaxSubmit(option);
+            }
+        });
+        
+        currentPage = 1;
+        $('#firstPage').attr('disabled',true);
+        $('#prePage').attr('disabled',true);
+        $("#firstPage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = 1;
+            $('#firstPage').attr('disabled',true);
+            $('#prePage').attr('disabled',true);
+            ajax_sbpjfw();
+        });
+        $("#lastPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = totalPage;
+            $('#lastPage').attr('disabled',true);
+            $('#nextPage').attr('disabled',true);
+            ajax_sbpjfw();
+        });
+        $("#nextPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = currentPage+1;
+            if(currentPage == totalPage){
+                $('#lastPage').attr('disabled',true);
+                $('#nextPage').attr('disabled',true);
+            }else{
+                $('#lastPage').removeAttr('disabled');
+                $('#nextPage').removeAttr('disabled');
+            }
+            ajax_sbpjfw();
+        });
+        $("#prePage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = currentPage-1;
+            if(currentPage == 1){
+                $('#firstPage').attr('disabled',true);
+                $('#prePage').attr('disabled',true);
+            }else{
+                $('#firstPage').removeAttr('disabled');
+                $('#prePage').removeAttr('disabled');
+            }
+            ajax_sbpjfw();
+        });
+
+
+        currentPage = 1;
+        $('#firstPagesousuo').attr('disabled',true);
+        $('#prePagesousuo').attr('disabled',true);
+        $("#firstPagesousuo").click(function () {
+            $('#lastPagesousuo').removeAttr('disabled');
+            $('#nextPagesousuo').removeAttr('disabled');
+            currentPage = 1;
+            $('#firstPagesousuo').attr('disabled',true);
+            $('#prePagesousuo').attr('disabled',true);
+            queryModelConfigList();
+            
+        });
+        $("#lastPagesousuo").click(function () {
+            $('#firstPagesousuo').removeAttr('disabled');
+            $('#prePagesousuo').removeAttr('disabled');
+            currentPage = totalPage;
+            $('#lastPagesousuo').attr('disabled',true);
+            $('#nextPagesousuo').attr('disabled',true);
+            queryModelConfigList();
+            
+        });
+        $("#nextPagesousuo").click(function () {
+            $('#firstPagesousuo').removeAttr('disabled');
+            $('#prePagesousuo').removeAttr('disabled');
+            currentPage = currentPage+1;
+            if(currentPage == totalPage){
+                $('#lastPagesousuo').attr('disabled',true);
+                $('#nextPagesousuo').attr('disabled',true);
+            }else{
+                $('#lastPagesousuo').removeAttr('disabled');
+                $('#nextPagesousuo').removeAttr('disabled');
+            }
+            queryModelConfigList();
+            
+        });
+        $("#prePagesousuo").click(function () {
+            $('#lastPagesousuo').removeAttr('disabled');
+            $('#nextPagesousuo').removeAttr('disabled');
+            currentPage = currentPage-1;
+            if(currentPage == 1){
+                $('#firstPagesousuo').attr('disabled',true);
+                $('#prePagesousuo').attr('disabled',true);
+            }else{
+                $('#firstPagesousuo').removeAttr('disabled');
+                $('#prePagesousuo').removeAttr('disabled');
+            }
+            queryModelConfigList();
+            
+        });
+
+     }
+
+
+   
+</script>
+</body>
+</html>

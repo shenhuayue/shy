@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no;" />
+    <title>营销管理后台</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/dindex.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <script src='js/jquery.mousewheel.min.js'></script>
+    <script src="layer/layer.js"></script>
+    <script src="js/saleCenter.js"></script>
+    <script src="js/userCenter.js"></script>
+    <script src="js/runningCenter.js"></script>
+    <script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
+    <script  href="http://www.jb51.net/" target="_blank>javascript</A>"></script>
+</head>
+<body class="reset" style="overflow-x: scroll;">
+<div id="sysMsgBox" class="msgBox" style="display: none;">
+    <!--<div class="msgBox_child" onclick="newRpt()">报修单新增</div>-->
+    <!--<div class="msgBox_child" onclick="newProductMenu()">产品目录维护</div>-->
+    <!--<div class="msgBox_child" onclick="newServicePrice()">星级单价维护</div>-->
+    <!--<div class="msgBox_child" onclick="newTfd()">退、返、调申请</div>-->
+    <!--<div class="msgBox_child" onclick="newSale()">销售申请</div>-->
+    <!--<div class="msgBox_child_none" onclick="newDealer()">经销商维护</div>-->
+</div>
+<div id="loading" class="loading" style="display: none;">
+    <div style="height: 400px;"></div>
+    <div class="spinner">
+        <div class="spinner-container container1">
+            <div class="circle1"></div>
+            <div class="circle2"></div>
+            <div class="circle3"></div>
+            <div class="circle4"></div>
+        </div>
+        <div class="spinner-container container2">
+            <div class="circle1"></div>
+            <div class="circle2"></div>
+            <div class="circle3"></div>
+            <div class="circle4"></div>
+        </div>
+        <div class="spinner-container container3">
+            <div class="circle1"></div>
+            <div class="circle2"></div>
+            <div class="circle3"></div>
+            <div class="circle4"></div>
+        </div>
+    </div>
+</div>
+<div id="pic_box" style="display: none;" onclick="pic_makeSmall()">
+    <div id="pic_large" class="shadow"></div>
+    <div class="out_pci" >
+        <img id="largePic" class="pci" src="" >
+        <img id="rotate" class="rotate" src="img/rotate.png" >
+    </div>
+</div>
+    <div class="totalPage">
+        <div class="menu1">
+            <div class="searchBar_left flt_l">
+                <img class="logo" src="img/logo-1.png">
+                <span class="logo_cont">营销管理后台</span>
+            </div>
+            <div id="firstFloor">
+
+            </div>
+
+            <div class="searchBar_right flt_r">
+                <span class="describ mg_l30" style="margin-right: 0;">角色切换：</span>
+                <select id="switchRoles" class="area_choose">
+                    
+                </select>
+                    <div id="rptWaiting" href="###" style="display:none;float:left;margin-top:10px;" >
+                            <div onclick="newRpt()" style=" display: inline-block;">
+                                <img id="zhengji1"  src="img/zhengji.png" style="width:30px;float:left;margin-right:0px;">
+                                <input id="rptNumWaiting"  style="margin-right:15px;float:left;width: 22px;height:17px;background:red;border:none;border-radius:50%;margin-left: 0px;color: #ffffff;font-size: 12px;" disabled="disabled">
+                            <!--<input id="rptNumWaiting"  style="width: 21px;height:17px;background:red;border:none;border-radius:50%;margin-left: -10px;top: -20px;color: #ffffff;font-size: 12px;" disabled="disabled">-->
+                            </div>
+                            <!--<img id="homeBtn" class="home_btn" src="img/disWarning.png">-->
+                            <div onclick="newRpt1()" style=" display: inline-block;">
+                                <img id="dangangji1" src="img/dangangji.png" style="width:35px;float:left;margin-right:0px;">
+                            <input id="rptNumWaiting1" style="float:left;width: 22px;height:17px;background:red;border:none;border-radius:50%;margin-left: 0px;color: #ffffff;font-size: 12px;" disabled="disabled">
+                            </div>
+                        </div>
+                <img id="user2" class="user2" src="img/user_shouye.png">
+                <input type="text" id="username" class="user_get" value="" disabled="true">
+                <img src="img/gun.png" class="home_btn">
+                <a href="###"><img id="homeBtn" class="home_btn" src="img/home.png" title="系统首页" onclick="to_home()"></a>
+                <img id="singleForSpecial1" src="img/gun.png" class="home_btn" style="display : none">
+                <a id="singleForSpecial2" href="###" style="display : none"><img id="msgBtn" class="ms_btn" src="img/msg.png"></a>
+                <img src="img/gun.png" class="home_btn">
+                <a href="###"><img id="logoutBtn" class="logout_btn" src="img/logout.png" title="退出登录" onclick="quit()"></a>
+            </div>
+        </div>
+        <div>
+            <div id="secondFloorList" class="menu3 flt_l">
+
+            </div>
+            <div class="innerDiv flt_l">
+                <div>
+                    <div class="innerDiv_title">
+                        <!--登录人权限-->
+                        <input type="hidden" id="hidden0" name="limitList" value="">
+                        <!--登录人部门Id-->
+                        <input type="hidden" id="hidden00" name="partId" value="">
+                        <!--角色Id赋权限-->
+                        <input type="hidden" id="hidden01" name="roleId_forLimit" value="">
+                        <!--登陆人账号-->
+                        <input type="hidden" id="hidden02" name="account" value="">
+                        <!--成员userId-->
+                        <input type="hidden" id="hidden03" name="mebUserId" value="">
+                        <!--登录身份token-->
+                        <input type="hidden" id="hidden1" name="token" value="">
+                        <!--报修单号-->
+                        <input type="hidden" id="hidden2" name="reportId" value="">
+                        <!--维修单号-->
+                        <input type="hidden" id="hidden3" name="repairId" value="">
+                        <!--维修类型-->
+                        <input type="hidden" id="hidden3" name="repairType" value="">
+                        <!--关闭报修单原因描述-->
+                        <input type="hidden" id="hidden4" name="closeReason" value="">
+                        <!--报修农机位置-->
+                        <input type="hidden" id="hidden5" name="machineAddress" value="">
+                        <!--创建人Id-->
+                        <input type="hidden" id="hidden6" name="creatorId" value="">
+                        <!--登录人角色-->
+                        <input type="hidden" id="hidden7" name="roleId" value="">
+                        <!--头像-->
+                        <input type="hidden" id="hidden8" name="head_file" value="">
+                        <!--报修人角色 0用户 1三包员-->
+                        <input type="hidden" id="hidden9" name="reportType" value="">
+                        <!--登录人Id-->
+                        <input type="hidden" id="hidden10" name="userId" value="">
+                        <!--头像地址-->
+                        <input type="hidden" id="hidden11" name="headUrl" value="">
+                        <!--status-->
+                        <input type="hidden" id="hidden12" name="status" value="">
+                        <!--省ID-->
+                        <input type="hidden" id="hidden13" name="proId" value="">
+                        <!--市ID-->
+                        <input type="hidden" id="hidden14" name="cityId" value="">
+                        <!--历史记录标记-->
+                        <input type="hidden" id="hidden15" name="history_mark" value="">
+                        <!--400历史记录标记-->
+                        <input type="hidden" id="hidden16" name="history_400_mark" value="">
+                        <!--查看历史前报修Id-->
+                        <input type="hidden" id="hidden17" name="old_rptId" value="">
+                        <!--查看历史前400报修Id-->
+                        <input type="hidden" id="hidden18" name="old_rptId_400" value="">
+                        <!--经销商Id-->
+                        <input type="hidden" id="hidden19" name="dealerId" value="">
+                        <!--三包员-->
+                        <input type="hidden" id="hidden20" name="serverId" value="">
+                        <!--经销商企业编号-->
+                        <input type="hidden" id="hidden21" name="dealerNum" value="">
+                        <!--用户Id-->
+                        <input type="hidden" id="hidden22" name="userArchivesId" value="">
+                        <!--农机流水编号-->
+                        <input type="hidden" id="hidden23" name="machineFlowId" value="">
+                        <!--申请类型-->
+                        <input type="hidden" id="hidden24" name="type" value="">
+                        <!--修改农机购买时间-->
+                        <input type="hidden" id="hidden25" name="checkBuyTime" value="">
+                        <!--审核里程-->
+                        <input type="hidden" id="hidden26" name="check_dis" value="">
+                        <!--审核工时-->
+                        <input type="hidden" id="hidden27" name="check_hour" value="">
+                        <!--里程费-->
+                        <input type="hidden" id="hidden28" name="dis_cost" value="">
+                        <!--工时费-->
+                        <input type="hidden" id="hidden29" name="hour_cost" value="">
+                        <!--质量等级-->
+                        <input type="hidden" id="hidden30" name="quality_level" value="">
+                        <!--其他费用-->
+                        <input type="hidden" id="hidden31" name="other_cost" value="">
+                        <!--农机编号-->
+                        <input type="hidden" id="hidden32" name="machineId" value="">
+                        <!--费用维护编号-->
+                        <input type="hidden" id="hidden33" name="costId" value="">
+                        <!--添加产品目录父节点Id-->
+                        <input type="hidden" id="hidden34" name="productParentId" value="">
+                        <!--新经销商名称-->
+                        <input type="hidden" id="hidden35" name="newDealerName" value="">
+                        <!--新经销商编号-->
+                        <input type="hidden" id="hidden36" name="newDealerNum" value="">
+                        <!--新lineNum-->
+                        <input type="hidden" id="hidden37" name="newLineNum" value="">
+                        <!--新lineName-->
+                        <input type="hidden" id="hidden38" name="newLineName" value="">
+                        <!--新星级-->
+                        <input type="hidden" id="hidden39" name="newLevel" value="">
+                        <!--业务员ID-->
+                        <input type="hidden" id="hidden40" name="salerId" value="">
+                        <!--通知ID-->
+                        <input type="hidden" id="hidden41" name="noticeId" value="">
+                        <!--话题ID-->
+                        <input type="hidden" id="hidden42" name="topicId" value="">
+                        <!--发帖ID-->
+                        <input type="hidden" id="hidden43" name="postId" value="">
+                        <!--结算单ID-->
+                        <input type="hidden" id="hidden44" name="costSumId" value="">
+                        <!--付款单ID-->
+                        <input type="hidden" id="hidden45" name="costPayId" value="">
+                        <!--回复ID-->
+                        <input type="hidden" id="hidden46" name="replyId" value="">
+                        <!--barCode-->
+                        <input type="hidden" id="hidden47" name="barCode" value="">
+                        <!--题目Id-->
+                        <input type="hidden" id="hidden48" name="questionId" value="">
+                        <!--问卷Id-->
+                        <input type="hidden" id="hidden49" name="questionNaireId" value="">
+                        <!--活动Id-->
+                        <input type="hidden" id="hidden50" name="activityId" value="">
+                        <!--商品Id-->
+                        <input type="hidden" id="hidden51" name="goodsId" value="">
+                        <!--订单Id-->
+                        <input type="hidden" id="hidden52" name="ordersId" value="">
+                        <!--发运单Id-->
+                        <input type="hidden" id="hidden53" name="invoiceId" value="">
+                        <!--部门编号-->
+                        <input type="hidden" id="hidden54" name="partId" value="">
+                        <!--成员编号-->
+                        <input type="hidden" id="hidden55" name="mebId" value="">
+                        <!--仓库Id-->
+                        <input type="hidden" id="hidden56" name="depotId" value="">
+                        <!--调拨经销商编号-->
+                        <input type="hidden" id="hidden58" name="changeNum" value="">
+                        <!--快速查询进度-->
+                        <input type="hidden" id="hidden59" name="fastRptProcess" value="">
+                        <!--快速查询进度-->
+                        <input type="hidden" id="hidden60" name="reportTypeForUnpass" value="">
+                        <!--资讯id-->
+                        <input type="hidden" id="hidden61" name="informationId" value="">
+                        <!--标记管理员-->
+                        <input type="hidden" id="hidden62" name="isManage" value="">
+                        <!--配置型号编号-->
+                        <input type="hidden" id="hidden63" name="modelNumForConfig" value="">
+                        <!--计划id-->
+                        <input type="hidden" id="hidden64" name="salePlanId" value="">
+                        <!--订单id-->
+                        <input type="hidden" id="hidden65" name="saleOrderId" value="">
+                        <!--竞标单id-->
+                        <input type="hidden" id="hidden66" name="logisticsBiddingId" value="">
+                        <!--物流公司id-->
+                        <input type="hidden" id="hidden67" name="logisticsCompanyId" value="">
+                        <!-- 档案状态 -->
+                        <input type="hidden" id="hidden68" name="approvalStage" value="">
+                        <!-- 超出围栏时间 -->
+                        <input type="hidden" id="hidden69" name="outRange" value="">
+                        <!-- 初步标记 -->
+                        <input type="hidden" id="hidden70" name="firstStatus" value="">
+                        <!-- 最终标记 -->
+                        <input type="hidden" id="hidden71" name="finalStatus" value="">
+                        <!-- 初步时间 -->
+                        <input type="hidden" id="hidden72" name="firstTime" value="">
+                        <!-- 最终时间 -->
+                        <input type="hidden" id="hidden73" name="finalTime" value="">
+                        <!-- 车辆报警id-->
+                        <input type="hidden" id="hidden74" name="alertId" value="">
+                        <!-- 车辆报警状态-->
+                        <input type="hidden" id="hidden75" name="alarm" value="">
+                        <!-- 审核流程状态-->
+                        <input type="hidden" id="hidden76" name="documentsState" value="">
+                        <!-- 轨迹日期-->
+                        <input type="hidden" id="hidden77" name="carTrack" value="">
+                        <!-- 当日日期-->
+                        <input type="hidden" id="hidden78" name="nowDate" value="">
+                        <!-- 计划预览-->
+                        <input type="hidden" id="hidden79" name="yulan" value="">
+                        <!-- 计划详情查看详情-->
+                        <input type="hidden" id="hidden80" name="jihuasaw" value="">
+                        <!-- 农机状态-->
+                        <input type="hidden" id="hidden81" name="statusnj" value="">
+                        <!--补贴费-->
+                       <input type="hidden" id="hidden82" name="butie_cost" value="">
+                       <!--补贴天数-->
+                       <input type="hidden" id="hidden83" name="checkTime" value="">
+                       <!--报警-->
+                       <input type="hidden" id="hidden84" name="baojing" value="">
+
+                        <!-- 存储数字调用方法-->
+                        <input type="hidden" id="hidden85" name="modelNum" value=""> 
+                        <!-- 存储长文html-->
+                        <input type="hidden" id="hidden86" name="longText" value="">
+                        <!-- 存储长文标题-->
+                        <input type="hidden" id="hidden87" name="longTitle" value="">
+                        <!-- 存储长文id-->
+                        <input type="hidden" id="hidden88" name="longTextId" value="">
+                        <!-- 存储id-->
+                        <input type="hidden" id="hidden89" name="dealerIdzhen" value="">
+                        <!-- 意见反馈用户id-->
+                        <input type="hidden" id="hidden90" name="feedbackid" value=""> 
+                        <!-- 特殊政策id-->
+                        <input type="hidden" id="hidden91" name="getxqid" value=""> 
+                        <!-- 常规政策启用或禁用-->
+                        <input type="hidden" id="hidden92" name="tootltkg" value=""> 
+                        <!-- 特殊政策里操作流水id-->
+                        <input type="hidden" id="hidden92" name="hisid" value=""> 
+                        <!-- 保存页数-->
+                        <input type="hidden" id="hidden93" name="pages" value="14">
+                        <input type="hidden" id="hidden94" name="hisid1" value=""> 
+                        <input type="hidden" id="hidden95" name="getxqid1" value=""> 
+                        <!--公司维护-->
+                        <input type="hidden" id="hidden96" name="getcompany" value="">
+                        <!--产品维护id-->
+                        <input type="hidden" id="hidden97" name="subproID" value="">
+                        <!--补贴数据维护id-->
+                        <input type="hidden" id="hidden98" name="subprobutie" value="">
+                          
+                    </div>
+                    <div id="inner" class="innerDiv_cont">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--<div id="currentWarning" style="width: 335px;height: auto;position: absolute;right: 0;bottom: 0;display: none;">-->
+            <!--<div style="width: 35px;height: auto;" class="flt_l">-->
+                <!--<img src="img/warning_hide.png" id="right" onclick="go_right()">-->
+                <!--<img src="img/warning_show.png" id="left" onclick="go_left()" style="display: none;">-->
+            <!--</div>-->
+            <!--<div id="itemList" class="flt_l itembox">-->
+
+            <!--</div>-->
+        <!--</div>-->
+    </div>
+</body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>企业定位管理</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/userCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <script src="js/ajaxfileupload.js" type="text/javascript"></script>
+    <script src="js/jquery_form.js" type="text/javascript"></script>
+</head>
+<body class="reset">
+    <div class="mg-t50">
+        <div class="tit">
+            <span class="flt_l">筛选查询</span>
+            <input type="button" class="add_btn flt_r" value="清空" onclick="clearDate()">
+        </div>
+        <div class="account_cont2">
+            <select id="dealer_item" class="rep_guy_info">
+                <option value="company">企业名称</option>
+                <option value="workNum">企业编号</option>
+            </select>
+            <input type="text" id="dealer_info" class="product_line" style="border-left: none;">
+            <button class="query_btn_big" style="margin-left: -4%;margin-right: 4%" onclick="queryCompanyLocation()"></button>
+        </div>
+    </div>
+    <div>
+        <div class="tit mg-t50">
+            <span class="flt_l">企业定位管理</span>
+
+            <form id="form1" action="" method="post">
+                <input type="hidden" id="workNum" name="workNum">
+                <input type="hidden" id="dealerName" name="dealerName">
+                <input type="button" id="outputLocation" class="output_btn flt_r" value="导出">
+            </form>
+
+            <form id="form">
+                <input type="hidden" id="token" name="token">
+                <input type="file" name="file" id="file" style="display: none;">
+            </form>
+            <input type="button" id="outputStore" class="output_btn flt_r" value="导入">
+
+            <form id="form2" action="" method="post">
+                <input type="button" id="outputExcel" class="output_btn flt_r" value="下载模板">
+            </form>
+
+        </div>
+        <div class="account_cont">
+            <table width="100%" cellpadding="0" cellspacing="0" class="table2" align="center">
+                <thead>
+                <tr align="center">
+                    <th height="33" class="th2">企业编号</th>
+                    <th class="th2">企业名称</th>
+                    <th class="th2">属性</th>
+                    <th class="th2">名称</th>
+                    <th class="th2">经纬度</th>
+                    <th class="th2">地址</th>
+                    <th class="th2">创建时间</th>
+                    <th class="th2">工号</th>
+                    <th class="th2">创建人姓名</th>
+                </tr>
+                </thead>
+                <tbody id="adminTbody">
+
+                </tbody>
+            </table>
+            <div id="barcon" class="barcon" >
+                <div id="barcon1" class="barcon1"></div>
+                <div id="barcon2" class="barcon2">
+                    <ul>
+                        <li><button id="firstPage" class="page_btn">首页</button></li>
+                        <li><button id="prePage" class="page_btn">上一页</button></li>
+                        <li><button id="nextPage" class="page_btn">下一页</button></li>
+                        <li><button id="lastPage" class="page_btn">尾页</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+        currentPage = 1;
+        $('#firstPage').attr('disabled',true);
+        $('#prePage').attr('disabled',true);
+        $("#firstPage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = 1;
+            $('#firstPage').attr('disabled',true);
+            $('#prePage').attr('disabled',true);
+            ajax_companyLocationM();
+        });
+        $("#lastPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = totalPage;
+            $('#lastPage').attr('disabled',true);
+            $('#nextPage').attr('disabled',true);
+            ajax_companyLocationM();
+        });
+        $("#nextPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = currentPage+1;
+            if(currentPage == totalPage){
+                $('#lastPage').attr('disabled',true);
+                $('#nextPage').attr('disabled',true);
+            }else{
+                $('#lastPage').removeAttr('disabled');
+                $('#nextPage').removeAttr('disabled');
+            }
+            ajax_companyLocationM();
+        });
+        $("#prePage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = currentPage-1;
+            if(currentPage == 1){
+                $('#firstPage').attr('disabled',true);
+                $('#prePage').attr('disabled',true);
+            }else{
+                $('#firstPage').removeAttr('disabled');
+                $('#prePage').removeAttr('disabled');
+            }
+            ajax_companyLocationM();
+        });
+        //初始化
+        ajax_companyLocationM();
+
+        $("#dealer_item").change(function () {
+            $("#dealer_info").val("");
+        });
+
+        $("#outputStore").click(function () {
+            $("#file").click();
+        });
+
+        $("#file").on("change",function(){
+            var filepath = $("#file").val();
+            var extStart = filepath.lastIndexOf(".");
+
+            var ext = filepath.substring(extStart, filepath.length).toUpperCase();
+            if(ext != ".XLSX " && ext != ".XLS") {
+                alert("文件限于xls,xlsx！");
+                return false;
+            } else {
+                $("#token").val($(window.parent.document).find("input[name='token']").val());
+                var option = {
+                    url :ip_path+"/changfa_system/locationRecord/batchDepotInfo.do",
+                    type : "post",
+                    success : function (data) {
+                        alert(data['head']['message']);
+                        window.location.reload();
+                        // if(data['head']['code'] == 200){
+                        //     window.location.reload();
+                        // }
+                    }
+                };
+                $("#form").ajaxSubmit(option);
+            }
+        });
+
+        $("#outputExcel").click(function () {
+            $("#form2").attr("action",ip_path + "/changfa_system/locationRecord/excelExportDownload.do");
+            $("#form2").submit();
+        });
+
+        $("#outputLocation").click(function () {
+            if($("#dealer_item option:selected").val() == "workNum"){
+                $("#workNum").val($("#dealer_info").val());
+                $("#dealerName").val("");
+            }else{
+                $("#dealerName").val($("#dealer_info").val());
+                $("#workNum").val("");
+            }
+            $("#form1").attr("action",ip_path + "/changfa_system/locationRecord/excelExport.do");
+            $("#form1").submit();
+        });
+    }
+</script>
+</html>

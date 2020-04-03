@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>车辆报警信息</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/dsaleCenter.js"></script>
+    <script src="js/dcommon.js"></script>
+    <script src="js/index.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <script src="jquery-ui-1.12.1/jquery-ui.min.js"></script>
+    <link href="jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet" />
+    <script src="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.js"></script>
+    <script type="text/javascript" src="jQuery-Timepicker/dist/i18n/jquery-ui-timepicker-zh-CN.js"></script>
+    <link href="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.css" rel="stylesheet" />
+
+</head>
+<body class="reset">
+    <div class="mg-t50">
+        <div class="tit">
+            <span class="flt_l">筛选查询</span>
+            <input type="button" class="add_btn flt_r" value="清空" onclick="clearDate()">
+        </div>
+        <div class="account_cont2">
+            <select id="meb_item" class="rep_guy_info">
+                <option value="company">经销商名称</option>
+                <option value="workNum">经销商编号</option>
+                <option value="factoryNum">出厂编号</option>
+            </select>
+            <input type="text" id="meb_info" class="product_line" style="border-left: none">
+            <button class="query_btn_big" style="margin-left: -4%;margin-right: 4%" onclick="queryRskCheck()"></button>
+            <span class="describ">产&nbsp;品&nbsp;线&nbsp;：</span>
+            <select id="product" class="product_line">
+                
+            </select>
+            <!-- <span class="describ">类型：</span>
+            <select id="type" class="product_line">
+                <option value="2">全部</option>
+                <option value="10">外出参展</option>
+                <option value="11">锁车</option>
+                <option value="12">解锁</option>
+                <option value="6">出售</option>
+            </select> -->
+            <span class="describ">状态：</span>
+            <select id="status" class="product_line">
+                <option value="">全部</option>
+                <option value="0">未标记</option>
+                <option value="1">已标记</option>
+            </select>
+            <span class="describ mg_l30">报警日期：</span>
+            <input id="date_start" class="timeChoose" placeholder="起始">
+            <span>-</span>
+            <input id="date_end" class="timeChoose" placeholder="截止">
+        </br>
+            <span class="describ" style="margin-left:43px;">农机状态：</span>
+            <select id="statusnj" class="product_line">
+                <option value="">全部</option>
+                <option value="1">发往中</option>
+                <option value="2">在库中</option>
+                <option value="6">已销售</option>
+            </select>
+            <span class="describ" style="margin-left: 2%;">省份：</span>
+            <input type="text" id="rep_info_shenfen" class="product_line">
+            <button class="query_btn_big" style="margin-left: -4%;margin-right: 4%" onclick="queryRskCheck()"></button>
+        </div>
+    </div>
+    <div>
+        <div class="tit mg-t50">
+            <span class="flt_l">报修单报表导出</span>
+
+            <form id="form" action="" method="get">
+                <input type="hidden" name="dealer_name" value="">
+                <input type="hidden" name="dealer_num" value="">
+                <input type="hidden" name="factory_num" value="">
+                <input type="hidden" name="bar_code" value="">
+
+                <input type="hidden" name="machineStatus" value="">
+                <input type="hidden" name="alert_status" value="">
+                <input type="hidden" name="line_num" value="">
+                <input type="hidden" name="status" value="">
+                <input type="hidden" name="start_time" value="">
+                <input type="hidden" name="end_time" value="">
+                <input type="hidden" name="token" value="">
+                <input type="hidden" name="date_end" value="">
+                <input type="hidden" name="province" value="">
+                
+                <input type="button" id="vehicleOutput" class="output_btn flt_r" value="导出">
+            </form>
+
+        </div>
+        <div class="account_cont">
+            <table width="100%" cellpadding="0" cellspacing="0" class="table2" align="center">
+                <thead>
+                <tr align="center">
+                    <th class="th2" height="33">出厂编号</th>
+                    <th class="th2">产品线</th>
+                    <th class="th2">型号</th>
+                    <th class="th2">经销商名称</th>
+                    <th class="th2">经销商编号</th>
+                    <th class="th2">农机省份</th>
+                    <th class="th2">初步标记</th>
+                    <th class="th2">最终标记</th>
+                    <th class="th2">农机状态</th>
+                    <th class="th2">报警状态</th>
+                    <th class="th2">报警日期</th>
+                    <th class="th2">更多</th>
+                </tr>
+                </thead>
+                <tbody id="adminTbody">
+
+                </tbody>
+            </table>
+            <div id="barcon" class="barcon" >
+                <div id="barcon1" class="barcon1"></div>
+                <div id="barcon2" class="barcon2">
+                    <ul>
+                        <li><button id="firstPage" class="page_btn">首页</button></li>
+                        <li><button id="prePage" class="page_btn">上一页</button></li>
+                        <li><button id="nextPage" class="page_btn">下一页</button></li>
+                        <li><button id="lastPage" class="page_btn">尾页</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+
+        $.datepicker.regional['zh-CN'] = {
+            changeMonth: true,
+            changeYear: true,
+            clearText: '清除',
+            clearStatus: '清除已选日期',
+            closeText: '关闭',
+            closeStatus: '不改变当前选择',
+            prevText: '<上月',
+            prevStatus: '显示上月',
+            prevBigText: '<<',
+            prevBigStatus: '显示上一年',
+            nextText: '下月>',
+            nextStatus: '显示下月',
+            nextBigText: '>>',
+            nextBigStatus: '显示下一年',
+            currentText: '今天',
+            currentStatus: '显示本月',
+            monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            monthNamesShort: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+            monthStatus: '选择月份',
+            yearStatus: '选择年份',
+            weekHeader: '周',
+            weekStatus: '年内周次',
+            dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+            dayNamesShort: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+            dayNamesMin: ['日', '一', '二', '三', '四', '五', '六'],
+            dayStatus: '设置 DD 为一周起始',
+            dateStatus: '选择 m月 d日, DD',
+            dateFormat: 'yy-mm-dd',
+            firstDay: 1,
+            initStatus: '请选择日期',
+            isRTL: false
+        };
+        
+
+        $.datepicker.setDefaults($.datepicker.regional['zh-CN']);
+        $("#date_start").datepicker({maxDate: new Date()});
+        $("#date_end").datepicker({maxDate: new Date()});
+        $("#defult").datetimepicker();
+        $("#date_start").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            onClose: function (selectedDate) {
+                $("#date_end").datepicker("option", "minDate", selectedDate);
+            }
+        });
+
+        $("#date_end").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            onClose: function (selectedDate) {
+                $("#date_start").datepicker("option", "maxDate", selectedDate);
+                $("#date_end").val($(this).val());
+            }
+        });
+
+        currentPage = 1;
+        $('#firstPage').attr('disabled',true);
+        $('#prePage').attr('disabled',true);
+        $("#firstPage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = 1;
+            $('#firstPage').attr('disabled',true);
+            $('#prePage').attr('disabled',true);
+            ajax_RskCheck();
+        });
+        $("#lastPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = totalPage;
+            $('#lastPage').attr('disabled',true);
+            $('#nextPage').attr('disabled',true);
+            ajax_RskCheck();
+        });
+        $("#nextPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = currentPage+1;
+            if(currentPage == totalPage){
+                $('#lastPage').attr('disabled',true);
+                $('#nextPage').attr('disabled',true);
+            }else{
+                $('#lastPage').removeAttr('disabled');
+                $('#nextPage').removeAttr('disabled');
+            }
+            ajax_RskCheck();
+        });
+        $("#prePage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = currentPage-1;
+            if(currentPage == 1){
+                $('#firstPage').attr('disabled',true);
+                $('#prePage').attr('disabled',true);
+            }else{
+                $('#firstPage').removeAttr('disabled');
+                $('#prePage').removeAttr('disabled');
+            }
+            ajax_RskCheck();
+        });
+
+        $.ajax({
+            type : "post",
+            url : ip_path+"/changfa_system/machineModel/getMachineModels.do",
+            dataType : "json",
+            success : function (data) {
+                $("#product").append("<option value=''>全部</option>");
+                for(var i=0;i<data['body']['resultList']['length'];i++){
+                    $("#product").append("<option value='"+ data['body']['resultList'][i]['number'] +"'>"+data['body']['resultList'][i]['name']+"</option>");
+                }
+                // $("#product").unbind();
+            }
+        });
+        //初始化列表
+        ajax_RskCheck();
+
+        $("#product").change(function () {
+            // $("#factoryNum").val("");
+            // $("#status").html(
+            //     '<option value="">全部</option>' +
+            //     '<option value="0">待审核</option>' +
+            //     '<option value="1">已完成</option>' +
+            //     '<option value="-1">已关闭</option>'
+            // );
+            currentPage = 1;
+            ajax_RskCheck();
+        });
+        
+        $("#date_start").change(function () {
+            if($("#date_start").val() != "" && $("#date_end").val() != ""){
+                currentPage = 1;
+                ajax_RskCheck();
+            }
+        });
+        $("#date_end").change(function () {
+            if($("#date_start").val() != "" && $("#date_end").val() != ""){
+                currentPage = 1;
+                ajax_RskCheck();
+            }
+        });
+        //类型
+        $("#type").change(function () {
+            // $("#factoryNum").val("");
+            // $("#status").html(
+            //     '<option value="">全部</option>' +
+            //     '<option value="0">待审核</option>' +
+            //     '<option value="1">已完成</option>' +
+            //     '<option value="-1">已关闭</option>'
+            // );
+            currentPage = 1;
+            ajax_RskCheck();
+        });
+        //状态
+        $("#status").change(function () {
+            // $("#factoryNum").val("");
+            // $("#type").html(
+            //     '<option value="">全部</option>' +
+            //     '<option value="3">调拨</option>' +
+            //     '<option value="4">退货</option>' +
+            //     '<option value="5">返厂</option>' +
+            //     '<option value="6">销售</option>'
+            // );
+            currentPage = 1;
+            ajax_RskCheck();
+        });
+
+        $("#statusnj").change(function () {
+            // $("#factoryNum").val("");
+            // $("#type").html(
+            //     '<option value="">全部</option>' +
+            //     '<option value="3">调拨</option>' +
+            //     '<option value="4">退货</option>' +
+            //     '<option value="5">返厂</option>' +
+            //     '<option value="6">销售</option>'
+            // );
+            currentPage = 1;
+            ajax_RskCheck();
+        });
+
+        
+        $("#meb_item").change(function () {
+            $("#meb_info").val("");
+        });
+
+        $("#vehicleOutput").click(function () {
+
+              //判断经销商
+              var url;
+            if(appRoleList.indexOf($(window.parent.document).find("input[name='roleId']").val()) != -1){
+                url = "/changfa_system/machineFlow/getAlertListExcelForDealer.do";
+            }else{
+                url = "/changfa_system/machineFlow/getAlertListExcel.do";
+            }
+
+            $("input[name='dealer_name']").val(dealer_name);
+            $("input[name='dealer_num']").val(dealer_num);
+            $("input[name='factory_num']").val(factory_num);
+            $("input[name='bar_code']").val(bar_code);
+            $("input[name='start_time']").val($("#date_start").val());
+            $("input[name='end_time']").val($("#date_end").val());
+            $("input[name='line_num']").val($("#product").val());
+            $("input[name='status']").val($("#status").val());
+            $("input[name='machineStatus']").val($("#statusnj").val());
+            $("input[name='province']").val($("#rep_info_shenfen").val());
+            $("input[name='alert_status']").val(0);
+            
+            $("input[name='token']").val($(window.parent.document).find("input[name='token']").val());
+            $("#form").attr("action",ip_path+url);
+            $("#form").submit();
+        });
+    }
+</script>
+</html>

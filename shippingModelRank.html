@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>发货机型排名</title>
+        <link href="css/bigScreen.css" type="text/css" rel="stylesheet"/>
+        <script src="js/bigScreen.js"></script>
+        <script src="js/jquery-2.1.1.min.js"></script>
+        <script src="js/echarts.min.js"></script>
+        <script src="js/common.js"></script>
+    </head>
+<body>
+    <div class="outModel">
+        <div class="headerLitle">
+            <div class="leftLitle"><span style="margin-left: 5px;">发货机型排名</span></div>
+            <div class="rightLitle">
+                <select id="line">
+
+                </select>
+            </div>
+            <div style="clear: both;"></div>
+            <div id="main" style="width: 100%;"></div>
+        </div>
+    </div>
+</body>
+<script>
+window.onload = function () {
+
+    jQuery.support.cors = true
+
+    $('#main').height(Number($(window.parent.parent.document).find("input[name='height']").val())*0.45.toFixed(2));
+
+    $.ajax({
+            type : "post",
+            url : ip_path+"/changfa_system/machineModel/getMachineModels.do",
+            dataType : "json",
+            success : function (data) {
+                $("#line").append("<option value=''>全部</option>");
+                for(var i=0;i<data['body']['resultList']['length'];i++){
+                    $("#line").append("<option value='"+ data['body']['resultList'][i]['number'] +"'>"+data['body']['resultList'][i]['name']+"</option>");
+                }
+                // $("#product").unbind();
+            }
+        });
+        
+
+        var option;
+
+        getlinkRatioInfo();
+
+        $('#line').change(function(){
+            getlinkRatioInfo();
+        })
+
+}
+
+function getlinkRatioInfo(){
+
+    var myChart = echarts.init(document.getElementById('main'));
+
+    $.ajax({
+            type : "post",
+            url : ip_path+"/changfa_system/screen/queryDevilerModel.do",
+            dataType : "json",
+            data:{
+                type:1,
+                lineNum:$('#line').val()
+            },
+            success : function (data) {
+                if(data.head.code == 200){
+
+                    option = {
+                        title: {
+                            //text: '发货机型排名',
+                            //subtext: '数据来自网络'
+                        },
+                        tooltip: {
+                            trigger: 'axis',
+                            position: ['10%', '30%'],
+                            axisPointer: {
+                                type: 'shadow'
+                            }
+                        },
+                        grid: {
+                            left: '4%',
+                            right: '4%',
+                            //bottom: '18%',
+                            //top: '5%',
+                            containLabel: true
+                        },
+                        legend: {
+                            data: ['数量']
+                        },
+                        xAxis: {
+                            type: 'value',
+
+                            splitLine:{
+                            show:false
+                            }
+                        },
+
+                        itemStyle:{
+                        barBorderRadius: [0,5,5,0],
+                    },
+
+                        yAxis: {
+                            type: 'category',
+                            data: data.body.result.modelNameArray,
+                            
+                            splitLine:{
+                            show:false
+                            },
+                            axisLabel:{
+                                formatter: function (value, index) {
+                                    
+                                    return value.slice(0,6) + '....';
+                                }
+                            }
+                        },
+                        series: [
+                        {
+                            name:'数量',
+                            type:'bar',
+                            data:data.body.result.numberArray,
+                            barWidth:'40%',
+                            itemStyle:{
+                                normal: {
+                                        barBorderRadius: 7,
+                                        color: new echarts.graphic.LinearGradient(
+                                            0, 0, 1, 0,
+                                            [
+                                                {offset: 0, color: '#F9FEA5'},
+                                                {offset: 1, color: '#20E2D7'}
+
+                                            ]
+                                        )
+                                    }
+                                },
+                        },
+                        ]
+                    };
+
+                myChart.setOption(option);
+                }else{
+                    alert(data.head.message);
+                }
+
+
+            }
+        }); 
+
+}
+
+</script>
+</html>

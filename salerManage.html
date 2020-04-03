@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>销售员管理</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/userCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+
+</head>
+<body class="reset">
+    <div class="mg-t50">
+        <div class="tit">
+            <span class="flt_l">筛选查询</span>
+            <input type="button" class="add_btn flt_r" value="清空" onclick="clearDate()">
+            <!--<input type="button" class="add_btn flt_r" value="查询" onclick="querySaler()">-->
+        </div>
+        <div class="account_cont2">
+            <select id="saler_type" class="rep_guy_info">
+                <option value="name">姓名</option>
+                <option value="workNo">工号</option>
+                <option value="mobile">电话</option>
+            </select>
+            <input type="text" id="saler_info" class="product_line" style="border-left: none">
+            <button class="query_btn_big" style="margin-left: -4%;margin-right: 4%" onclick="querySaler()"></button>
+
+            <span class="describ mg_l30">状态：</span>
+            <select id="status" class="area_choose">
+                <option value="">全部</option>
+                <option value="0">禁用中</option>
+                <option value="1">启用中</option>
+            </select>
+            <!--<select name="city" id="city" class="area_choose"></select>-->
+        </div>
+    </div>
+    <div>
+        <div class="tit mg-t50">
+            <span class="flt_l">销售员管理</span>
+            <!--<input type="button" class="add_btn flt_r" value="创建" onclick="addSaler()">-->
+        </div>
+        <div class="account_cont">
+            <table width="100%" cellpadding="0" cellspacing="0" class="table2" align="center">
+                <thead>
+                <tr align="center">
+                    <th width="120" height="33" class="th2">姓名</th>
+                    <th width="200" class="th2">工号</th>
+                    <th width="200" class="th2">电话</th>
+                    <th width="200" class="th2">角色</th>
+                    <th width="200" class="th2">业务范围</th>
+                    <th width="100" class="th2">禁用/启用</th>
+                    <th width="200" class="th2">更多</th>
+                </tr>
+                </thead>
+                <tbody id="adminTbody">
+                <!--<tr align="center">-->
+                    <!--<td class="td2" height="33" width="150">windir</td>-->
+                    <!--<td class="td2" >100001</td>-->
+                    <!--<td class="td2" >12345678987</td>-->
+                    <!--<td class="td2" >-->
+                        <!--<div id="div1" class="close1">-->
+                            <!--<div id="div2" class="close2" onclick="toogleStatus()"></div>-->
+                        <!--</div>-->
+                    <!--</td>-->
+                    <!--<td class="td2" ><a href="###" onclick="editSaler()">编辑</a></td>-->
+                    <!--<td class="td2" ><a href="###" onclick="showSalerDetails()">查看详情</a></td>-->
+                <!--</tr>-->
+                </tbody>
+            </table>
+            <div id="barcon" class="barcon" >
+                <div id="barcon1" class="barcon1"></div>
+                <div id="barcon2" class="barcon2">
+                    <ul>
+                        <li><button id="firstPage" class="page_btn">首页</button></li>
+                        <li><button id="prePage" class="page_btn">上一页</button></li>
+                        <li><button id="nextPage" class="page_btn">下一页</button></li>
+                        <li><button id="lastPage" class="page_btn">尾页</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+        currentPage = 1;
+        $('#firstPage').attr('disabled',true);
+        $('#prePage').attr('disabled',true);
+        $("#firstPage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = 1;
+            $('#firstPage').attr('disabled',true);
+            $('#prePage').attr('disabled',true);
+            ajax_salerM();
+        });
+        $("#lastPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = totalPage;
+            $('#lastPage').attr('disabled',true);
+            $('#nextPage').attr('disabled',true);
+            ajax_salerM();
+        });
+        $("#nextPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = currentPage+1;
+            if(currentPage == totalPage){
+                $('#lastPage').attr('disabled',true);
+                $('#nextPage').attr('disabled',true);
+            }else{
+                $('#lastPage').removeAttr('disabled');
+                $('#nextPage').removeAttr('disabled');
+            }
+            ajax_salerM();
+        });
+        $("#prePage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = currentPage-1;
+            if(currentPage == 1){
+                $('#firstPage').attr('disabled',true);
+                $('#prePage').attr('disabled',true);
+            }else{
+                $('#firstPage').removeAttr('disabled');
+                $('#prePage').removeAttr('disabled');
+            }
+            ajax_salerM();
+        });
+        //初始化
+        ajax_salerM();
+
+        //选择省
+        // $.ajax({
+        //     type : "post",
+        //     async : false,
+        //     url : ip_path+"/changfa_system/place/getProvince.do",
+        //     dataType : "json",
+        //     success : function (data) {
+        //         $("#province").append("<option value='"+ 0 +"'>全部</option>");
+        //         for(var i=0;i<data['body']['resultList']['length'];i++){
+        //             $("#province").append("<option value='"+ data['body']['resultList'][i]['id'] +"'>"+data['body']['resultList'][i]['name']+"</option>");
+        //         }
+        //         $("#province").unbind();
+        //     }
+        // });
+        // //选择市
+        // if($("#province").val() != ""){
+        //     $("#saler_info").val("");
+        //     $("#city").empty();
+        //     if($("#province option:selected").val() == 0){
+        //         $("#city").append("<option value='"+ 0 +"'>全部</option>");
+        //     }else {
+        //         $.ajax({
+        //             type : "post",
+        //             async : false,
+        //             url : ip_path+"/changfa_system/place/getCity.do",
+        //             data : {
+        //                 parentId : $("#province option:selected").val(),
+        //             },
+        //             dataType : "json",
+        //             success : function (data) {
+        //                 $("#city").append("<option value=''>全部</option>");
+        //                 for(var i=0;i<data['body']['resultList']['length'];i++){
+        //                     $("#city").append("<option value='"+ data['body']['resultList'][i]['id'] +"'>"+data['body']['resultList'][i]['name']+"</option>");
+        //                 }
+        //                 $("#city").unbind();
+        //             }
+        //         });
+        //     }
+        // }
+        // $("#province").change(function () {
+        //     // $("#saler_info").val("");
+        //     currentPage = 1;
+        //     ajax_salerM();
+            // $("#city").empty();
+            // if($("#province option:selected").val() == 0){
+            //     $("#city").append("<option value='"+ 0 +"'>全部</option>");
+            // }else {
+            //     $.ajax({
+            //         type : "post",
+            //         async : false,
+            //         url : ip_path+"/changfa_system/place/getCity.do",
+            //         data : {
+            //             parentId : $("#province option:selected").val(),
+            //         },
+            //         dataType : "json",
+            //         success : function (data) {
+            //             $("#city").append("<option value=''>全部</option>");
+            //             for(var i=0;i<data['body']['resultList']['length'];i++){
+            //                 $("#city").append("<option value='"+ data['body']['resultList'][i]['id'] +"'>"+data['body']['resultList'][i]['name']+"</option>");
+            //             }
+            //             $("#city").unbind();
+            //         }
+            //     });
+            // }
+
+            //显示三包员
+            // if($("#city").val() != ""){
+            //     $("#saler_info").val("");
+            //     currentPage = 1;
+            //     ajax_salerM();
+            // }
+            // $("#city").change(function () {
+            //     $("#saler_info").val("");
+            //     currentPage = 1;
+            //     ajax_salerM();
+            // });
+
+        // });
+        $("#status").change(function () {
+            currentPage = 1;
+            ajax_salerM();
+        });
+
+        $("#saler_type").change(function () {
+            $("#saler_info").val("");
+        });
+    }
+</script>
+</html>

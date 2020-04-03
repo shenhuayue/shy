@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>工时里程单价管理</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/saleCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+</head>
+<body class="reset">
+<div id="editServicePrice" class="addEditProductMenu" style="display: none;">
+    <div class="dealer_title">
+        <span>编辑基础费用信息</span>
+        <img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeServicePriceEdit()">
+    </div>
+    <div style="width: 100%;height: auto;border: 1px solid #E4E4E4;border-top: none;">
+        <div class="tit_msg">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>信息</span>
+        </div>
+        <div>
+            <table id="reporterSocialInfo" class="rpt_detail_tab txt_center">
+                <tr>
+                    <td class='head_td' width='136px' height='46px'>产品线编号</td>
+                    <td class='body_td txt_left' width='383px'>
+                        <input type="text" id="createLineNum" class="userInfo" disabled="disabled">
+                    </td>
+                </tr>
+                <tr>
+                    <td class='head_td' width='136px' height='46px'>产品线名称</td>
+                    <td class='body_td txt_left' width='383px'>
+                        <input type="text" id="createLineName" class="userInfo">
+                    </td>
+                </tr>
+                <tr>
+                    <td class='head_td' width='136px' height='46px'>产品线星级</td>
+                    <td class='body_td txt_left' width='383px'>
+                        <select id="createLevel" class="addressInfo">
+                            <option value="1">一星级</option>
+                            <option value="2">二星级</option>
+                            <option value="3">三星级</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class='head_td' width='136px' height='46px'>工时单价</td>
+                    <td class='body_td txt_left' width='383px'>
+                        <input type="text" id="createHourPrice" class="userInfo">
+                    </td>
+                </tr>
+                <tr>
+                    <td class='head_td' width='136px' height='46px'>里程单价</td>
+                    <td class='body_td txt_left' width='383px'>
+                        <input type="text" id="createDistancePrice" class="userInfo">
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="mg_b50" style="width: 100%;text-align: center">
+            <button class="waves submit_btn mg-t30" onclick="updateServicePrice()">提交</button>
+        </div>
+    </div>
+</div>
+
+    <div class="mg-t50">
+        <div class="tit">
+            <span class="flt_l">筛选查询</span>
+            <input type="button" class="add_btn flt_r" value="清空" onclick="clearDate()">
+        </div>
+        <div class="account_cont2">
+            <!--<select id="dealer_item" class="rep_guy_info">-->
+                <!--<option value="company">公司名称</option>-->
+                <!--<option value="workNum">企业编号</option>-->
+            <!--</select>-->
+            <!--<input type="text" id="dealer_info" class="product_line" style="border-left: none;">-->
+            <!--<button class="query_btn_big" style="margin-left: -4%;margin-right: 4%" onclick="queryDealer()"></button>-->
+            <span class="describ mg_l30">产品线：</span>
+            <select id="product" class="product_line">
+                <option value="">全部</option>
+                <option value="601">轮式拖拉机</option>
+                <option value="61101">手扶插秧机</option>
+                <option value="61102">高速插秧机</option>
+                <option value="612">履带收割机</option>
+                <option value="615">轮式收割机</option>
+                <option value="622">轮式玉米收</option>
+                <option value="628">花生收获机</option>
+                <option value="606">单缸柴油机</option>
+                <option value="607">风冷柴油机</option>
+                <option value="602">手扶拖拉机</option>
+                <option value="603">发电机组</option>
+                <option value="605">多缸柴油机</option>
+            </select>
+            <span class="describ mg_l30">星级：</span>
+            <select id="level" class="area_choose">
+                <option value="">全部</option>
+                <option value="1">一星级</option>
+                <option value="2">二星级</option>
+                <option value="3">三星级</option>
+            </select>
+        </div>
+    </div>
+    <div>
+        <div class="tit mg-t50">
+            <span class="flt_l">工时里程单价维护</span>
+            <input type="button" class="add_btn flt_r" value="创建" onclick="addServicePrice()">
+        </div>
+        <div class="account_cont">
+            <table width="100%" cellpadding="0" cellspacing="0" class="table2" align="center">
+                <thead>
+                <tr align="center">
+                    <th height="33" class="th2">产品线</th>
+                    <th class="th2">产品线名称</th>
+                    <th class="th2">星级</th>
+                    <th class="th2">里程单价</th>
+                    <th class="th2">工时单价</th>
+                    <th class="th2">操作人</th>
+                    <th class="th2">操作时间</th>
+                    <th class="th2">更多</th>
+                </tr>
+                </thead>
+                <tbody id="adminTbody">
+                <!--<tr align="center">-->
+                    <!--<td class="td2" height="33" width="150">windir</td>-->
+                    <!--<td class="td2" >100001</td>-->
+                    <!--<td class="td2" >aaa</td>-->
+                    <!--<td class="td2" >12345678987</td>-->
+                    <!--<td class="td2" >xxx</td>-->
+                    <!--<td class="td2" >-->
+                        <!--<div id="div1" class="close1">-->
+                            <!--<div id="div2" class="close2" onclick="toogleStatus()"></div>-->
+                        <!--</div>-->
+                    <!--</td>-->
+                    <!--<td class="td2" ><a href="###" onclick="editDealer()">编辑</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="###" onclick="showDealerDetails()">查看详情</a></td>-->
+                <!--</tr>-->
+                </tbody>
+            </table>
+            <div id="barcon" class="barcon" >
+                <div id="barcon1" class="barcon1"></div>
+                <div id="barcon2" class="barcon2">
+                    <ul>
+                        <li><button id="firstPage" class="page_btn">首页</button></li>
+                        <li><button id="prePage" class="page_btn">上一页</button></li>
+                        <li><button id="nextPage" class="page_btn">下一页</button></li>
+                        <li><button id="lastPage" class="page_btn">尾页</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+        currentPage = 1;
+        $('#firstPage').attr('disabled',true);
+        $('#prePage').attr('disabled',true);
+        $("#firstPage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = 1;
+            $('#firstPage').attr('disabled',true);
+            $('#prePage').attr('disabled',true);
+            ajax_servicePriceM();
+        });
+        $("#lastPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = totalPage;
+            $('#lastPage').attr('disabled',true);
+            $('#nextPage').attr('disabled',true);
+            ajax_servicePriceM();
+        });
+        $("#nextPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = currentPage+1;
+            if(currentPage == totalPage){
+                $('#lastPage').attr('disabled',true);
+                $('#nextPage').attr('disabled',true);
+            }else{
+                $('#lastPage').removeAttr('disabled');
+                $('#nextPage').removeAttr('disabled');
+            }
+            ajax_servicePriceM();
+        });
+        $("#prePage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = currentPage-1;
+            if(currentPage == 1){
+                $('#firstPage').attr('disabled',true);
+                $('#prePage').attr('disabled',true);
+            }else{
+                $('#firstPage').removeAttr('disabled');
+                $('#prePage').removeAttr('disabled');
+            }
+            ajax_servicePriceM();
+        });
+        //初始化
+        ajax_servicePriceM();
+
+        $("#product").change(function () {
+            currentPage = 1;
+            ajax_servicePriceM();
+        });
+
+        $("#level").change(function () {
+            currentPage = 1;
+            ajax_servicePriceM();
+        });
+    }
+</script>
+</html>

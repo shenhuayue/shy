@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>经验规则</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/runningCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+</head>
+<body class="reset">
+<div id="addIntegralRule" class="addTopic outShadow" style="display: none;">
+    <div class="dealer_title">
+        <span>创建经验规则</span>
+        <img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeAddRule()">
+    </div>
+    <div style="width: 100%;height: auto;border: 1px solid #E4E4E4;border-top: none;">
+        <div class="tit_msg">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>信息</span>
+        </div>
+        <div>
+            <table id="reporterSocialInfo" class="rpt_detail_tab txt_center">
+                <tr>
+                    <td class='head_td' width='136px' height='46px'>规则名</td>
+                    <td class='body_td txt_left' width='383px'>
+                        <input type="text" id="createRuleName" class="userInfo">
+                    </td>
+                </tr>
+                <tr>
+                    <td class='head_td' width='136px' height='46px'>经验</td>
+                    <td class='body_td txt_left' width='383px'>
+                        <input type="text" id="createIntegral" class="userInfo">
+                    </td>
+                </tr>
+                <tr>
+                    <td class='head_td' width='136px' height='46px'>备注</td>
+                    <td class='body_td txt_left' width='383px'>
+                        <input type="text" id="createRemark" class="userInfo">
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="mg_b50" style="width: 100%;text-align: center">
+            <button class="waves submit_btn mg-t30" onclick="createExperienceRule()">提交</button>
+        </div>
+    </div>
+</div>
+<div id="editIntegralRule" class="addTopic outShadow" style="display: none;">
+    <div class="dealer_title">
+        <span>编辑经验规则</span>
+        <img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeEditRule()">
+    </div>
+    <div style="width: 100%;height: auto;border: 1px solid #E4E4E4;border-top: none;">
+        <div class="tit_msg">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>信息</span>
+        </div>
+        <div>
+            <table class="rpt_detail_tab txt_center">
+                <tr>
+                    <td class='head_td' width='136px' height='46px'>规则名</td>
+                    <td class='body_td txt_left' width='383px'>
+                        <input type="text" id="editRuleName" class="userInfo" disabled="disabled">
+                    </td>
+                </tr>
+                <tr>
+                    <td class='head_td' width='136px' height='46px'>积分</td>
+                    <td class='body_td txt_left' width='383px'>
+                        <input type="text" id="editIntegral" class="userInfo">
+                    </td>
+                </tr>
+                <tr>
+                    <td class='head_td' width='136px' height='46px'>备注</td>
+                    <td class='body_td txt_left' width='383px'>
+                        <input type="text" id="editRemark" class="userInfo">
+                    </td>
+                </tr>
+                <input type="hidden" id="ruleId">
+            </table>
+        </div>
+        <div class="mg_b50" style="width: 100%;text-align: center">
+            <button class="waves submit_btn mg-t30" onclick="updateExperienceRule()">提交</button>
+        </div>
+    </div>
+</div>
+<div id="addExperienceAndLevel" class="addTopic outShadow" style="display: none;">
+    <div class="dealer_title">
+        <span>编辑经验等级</span>
+        <img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeExperienceAndLevel()">
+    </div>
+    <div style="width: 100%;height: auto;border: 1px solid #E4E4E4;border-top: none;">
+        <div class="tit_msg">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>经验等级</span>
+        </div>
+        <div>
+            <table class="rpt_detail_tab txt_center">
+                <tr>
+                    <th class='head_td' width='136px' height='46px'>等级</th>
+                    <th class='body_td txt_left' width='383px'>所需经验值</th>
+                </tr>
+                <tr>
+                    <td class='head_td' width='136px' height='46px'>1级</td>
+                    <td class='body_td txt_left' width='383px'>
+                        <input type="text" id="level1" class="userInfo">
+                    </td>
+                </tr>
+                <tr>
+                    <td class='head_td' width='136px' height='46px'>2级</td>
+                    <td class='body_td txt_left' width='383px'>
+                        <input type="text" id="level2" class="userInfo">
+                    </td>
+                </tr>
+                <tr>
+                    <td class='head_td' width='136px' height='46px'>3级</td>
+                    <td class='body_td txt_left' width='383px'>
+                        <input type="text" id="level3" class="userInfo">
+                    </td>
+                </tr>
+                <tr>
+                    <td class='head_td' width='136px' height='46px'>4级</td>
+                    <td class='body_td txt_left' width='383px'>
+                        <input type="text" id="level4" class="userInfo">
+                    </td>
+                </tr>
+                <tr>
+                    <td class='head_td' width='136px' height='46px'>5级</td>
+                    <td class='body_td txt_left' width='383px'>
+                        <input type="text" id="level5" class="userInfo">
+                    </td>
+                </tr>
+                <tr>
+                    <td class='head_td' width='136px' height='46px'>6级</td>
+                    <td class='body_td txt_left' width='383px'>
+                        <input type="text" id="level6" class="userInfo">
+                    </td>
+                </tr>
+                <tr>
+                    <td class='head_td' width='136px' height='46px'>7级</td>
+                    <td class='body_td txt_left' width='383px'>
+                        <input type="text" id="level7" class="userInfo">
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="mg_b50" style="width: 100%;text-align: center">
+            <button class="waves submit_btn mg-t30" onclick="updateExperienceLevel()">提交</button>
+        </div>
+    </div>
+</div>
+    <!--<div class="mg-t50">-->
+        <!--<div class="tit">-->
+            <!--<span class="flt_l">筛选查询</span>-->
+            <!--<input type="button" class="add_btn flt_r" value="清空" onclick="clearDate()">-->
+            <!--&lt;!&ndash;<input type="button" class="add_btn flt_r" value="查询" onclick="queryDealer()">&ndash;&gt;-->
+        <!--</div>-->
+        <!--<div class="account_cont2">-->
+            <!--<select id="dealer_item" class="rep_guy_info">-->
+                <!--<option value="company">公司名称</option>-->
+                <!--<option value="workNum">企业编号</option>-->
+            <!--</select>-->
+            <!--<input type="text" id="dealer_info" class="product_line" style="border-left: none;">-->
+            <!--<button class="query_btn_big" style="margin-left: -4%;margin-right: 4%" onclick="queryDealer()"></button>-->
+            <!--<span class="describ mg_l30">状态：</span>-->
+            <!--<select id="status" class="area_choose">-->
+                <!--<option value="">全部</option>-->
+                <!--<option value="0">禁用中</option>-->
+                <!--<option value="1">启用中</option>-->
+            <!--</select>-->
+        <!--</div>-->
+    <!--</div>-->
+    <div>
+        <div class="tit mg-t50">
+            <span class="flt_l">经验规则</span>
+            <input type="button" class="add_btn flt_r" value="经验等级" onclick="experienceAndLevel()">
+            <input type="button" class="add_btn flt_r" value="创建" onclick="addIntegralRule()">
+        </div>
+        <div class="account_cont">
+            <table width="100%" cellpadding="0" cellspacing="0" class="table2 mg_b50" align="center">
+                <thead>
+                <tr align="center">
+                    <th height="33" class="th2">规则名</th>
+                    <th class="th2">经验</th>
+                    <th class="th2">创建人</th>
+                    <th class="th2">创建时间</th>
+                    <th class="th2">更新时间</th>
+                    <th class="th2">备注</th>
+                    <th class="th2">状态</th>
+                    <th class="th2">更多</th>
+                </tr>
+                </thead>
+                <tbody id="adminTbody">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+        //初始化
+        ajax_experienceRules();
+    }
+</script>
+</html>

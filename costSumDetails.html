@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>结算单详情页</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/closeAccount.js"></script>
+    <script src="js/saleCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/index.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <!--<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">-->
+    <!--<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>-->
+    <!--<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
+</head>
+<body class="reset">
+<div id="editRepair" class="addTopic outShadow" style="display: none;">
+    <div class="dealer_title">
+        <span>费用核准</span>
+        <img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeEditRepair()">
+    </div>
+    <div class="txt_center" style="width: 100%;height: auto;border: 1px solid #E4E4E4;border-top: none;">
+        <div class="mg-t20 mg_b20">
+            <span class="describ">核准单程：</span><input id="examineDistance" style="width: 200px;height: 30px;">
+        </div>
+        <div class="mg_b20">
+            <span class="describ">核准工时：</span><input id="examineTime"  style="width: 200px;height: 30px;">
+        </div>
+        <div class="mg_b20">
+            <span class="describ" style="margin-left: -28px;">核准其他费用：</span><input id="examineOtherFee"  style="width: 200px;height: 30px;">
+        </div>
+        <div class="mg_b20">
+            <span class="describ">考核费用：</span><input id="check"  style="width: 200px;height: 30px;">
+        </div>
+        <div class="mg_b20">
+            <span class="describ" style="vertical-align: top">考核原因：</span><textarea id="checkReason" class="normal_font" style="resize: none;width: 198px;height: 70px;"></textarea>
+        </div>
+        <input type="hidden" id="repairId">
+        <div class="mg_b50" style="width: 100%;text-align: center">
+            <button class="waves submit_btn mg-t30" onclick="updateRepair_check()">提交</button>
+        </div>
+    </div>
+</div>
+
+<div>
+
+    <div class="mg-t50">
+        <div class="tit">
+            <span class="flt_l">企业信息</span>
+        </div>
+        <div class="account_cont2">
+    
+                <div style="float: left;margin-top: 60px;margin-left: 20px;">
+                        <div style="width: 100px;height: 70px;" align="center">
+                            <img src="./img/cangku.png" alt="" id="headPath" style="width: 70px;height: 70px;border-radius: 50%;">
+                        </div>
+                        <!-- <div style="text-align: center;line-height:20px">   
+                                <span>结算方式</span><span id="roleId" class="describ"></span>
+                        </div> -->
+    
+                    </div>
+                <div style="float: left;width: 90%;">
+                        <div>
+                                <span class="describ mg_l30">企业编号：</span>
+                                <span id="dealerNum" class="describ"></span>
+                        </br>
+                                <span class="describ mg_l30">企业名称：</span>
+                                <span id="dealerName" class="describ"></span>
+                        </div>
+                
+                
+                        <span class="describ mg_l30">星级：</span>
+                        <span id="level" class="describ"></span>
+                        <span class="describ mg_l30">|</span>
+                        <span class="describ mg_l30">里程单价：</span>
+                        <span id="distabcePrice" class="describ"></span>
+                        <span class="describ mg_l30">|</span>
+                        <span class="describ mg_l30">工时单价：</span>
+                        <span id="timePrice" class="describ"></span>
+                </div>
+    
+        </div>
+    </div>
+
+    <div class="tit mg-t50">
+        <span>结算单详情</span>
+        <div style="display: inline-block;float: right;margin-right: 50px;">
+            <span class="describ mg_l30">时间：</span>
+            <span id="time" class="describ"></span>
+            <span class="describ mg_l30">|</span>
+            <span class="describ mg_l30">产品线：</span>
+            <span id="product" class="describ"></span>
+        </div>
+    </div>
+    <div class="account_cont">
+        <!-- <div class="mg-t30 txt_left mg_b20">
+            <span class="describ" style="margin-left: 3%;">企业编号：</span>
+            <span id="dealerNum" class="describ"></span>
+
+            <span class="describ mg_l30">企业名称：</span>
+            <span id="dealerName" class="describ"></span>
+
+            <span class="describ mg_l30">产品线：</span>
+            <span id="product" class="describ"></span>
+
+            <span class="describ mg_l30">时间：</span>
+            <span id="time" class="describ"></span>
+
+            <span class="describ mg_l30">星级：</span>
+            <span id="level" class="describ"></span>
+
+            <span class="describ mg_l30">里程单价：</span>
+            <span id="distabcePrice" class="describ"></span>
+
+            <span class="describ mg_l30">工时单价：</span>
+            <span id="timePrice" class="describ"></span>
+        </div> -->
+
+        <div id="scrollDiv">
+            <table cellpadding="0" cellspacing="0" class="table2" align="center"  style="font-size: 0.9em">
+                <thead>
+                <tr align="center">
+                    <th class="th2" height="33">型号</th>
+                    <th class="th2">单程（km）</th>
+                    <th class="th2">核准单程（km）</th>
+                    <th class="th2">里程费用（￥）</th>
+                    <th class="th2">工时（h）</th>
+                    <th class="th2">核准工时（h）</th>
+                    <th class="th2">工时费用（￥）</th>
+                    <th class="th2">其他费用（￥）</th>
+                    <th class="th2">核准其他费用（￥）</th>
+                    <th class="th2">考核（￥）</th>
+                    <th class="th2">考核原因</th>
+                    <th class="th2">合计（￥）</th>
+                </tr>
+                </thead>
+                <tbody id="adminTbody" style="width: 100%;">
+
+                </tbody>
+            </table>
+        </div>
+        <div class="txt_left mg-t20 mg_b20" style="margin-left: 5%">
+            <span class="describ fontGreen">总计金额：</span><span id="costTotal" class="describ fontGreen"></span>
+        </div>
+        <div class="txt_left">
+            <div class="tit_msg">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>操作记录</span>
+            </div>
+            <div>
+                <table class="rpt_detail_tab txt_center mg_b50" style="font-size: 0.9em">
+                    <tr>
+                        <td class="head_td" height="40px">操作人</td>
+                        <td class="head_td">操作内容</td>
+                        <td class="head_td">原因描述</td>
+                        <td class="head_td">操作时间</td>
+                    </tr>
+                    <tbody id="opetationLog">
+
+                    </tbody>
+
+                </table>
+            </div>
+            <div id="submitAgain" class="btn_part mg_b50" style="display: none;">
+                <input type="button" class="submit_btn" value="提交" onclick="submitAgain()">
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+
+        currentPage = 1;
+        $('#firstPage').attr('disabled',true);
+        $('#prePage').attr('disabled',true);
+        $("#firstPage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = 1;
+            $('#firstPage').attr('disabled',true);
+            $('#prePage').attr('disabled',true);
+            ajax_costSumRepair_detail();
+        });
+        $("#lastPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = totalPage;
+            $('#lastPage').attr('disabled',true);
+            $('#nextPage').attr('disabled',true);
+            ajax_costSumRepair_detail();
+        });
+        $("#nextPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = currentPage+1;
+            if(currentPage == totalPage){
+                $('#lastPage').attr('disabled',true);
+                $('#nextPage').attr('disabled',true);
+            }else{
+                $('#lastPage').removeAttr('disabled');
+                $('#nextPage').removeAttr('disabled');
+            }
+            ajax_costSumRepair_detail();
+        });
+        $("#prePage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = currentPage-1;
+            if(currentPage == 1){
+                $('#firstPage').attr('disabled',true);
+                $('#prePage').attr('disabled',true);
+            }else{
+                $('#firstPage').removeAttr('disabled');
+                $('#prePage').removeAttr('disabled');
+            }
+            ajax_costSumRepair_detail();
+        });
+
+        //初始化
+        ajax_costSumRepair_detail();
+
+
+    }
+</script>
+</html>

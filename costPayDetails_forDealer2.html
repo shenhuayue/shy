@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>付款单详情</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+        <script src="js/closeAccount.js"></script>
+    <script src="js/saleCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/index.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <!--<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">-->
+    <!--<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>-->
+    <!--<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
+    <style type="text/css">
+        .img_div{min-height: 100px; min-width: 100px;}
+        .isImg{width: 120px; height: 120px; position: relative; float: left; margin-left: 10px;}
+        .removeBtn{position: absolute; top: 0; right: 0; z-index: 11; border: 0px; border-radius: 50px; background: red; width: 22px; height: 22px; color: white;}
+    </style>
+</head>
+<body class="reset">
+
+<div>
+    <div class="tit mg-t50">
+        <span>付款单详情</span>
+    </div>
+    <div class="account_cont" style="font-size: 0.9em;">
+        <div id="scrollDiv">
+            <table cellpadding="0" cellspacing="0" class="table2" align="center">
+                <thead>
+                <tr align="center">
+                    <th class="th2" height="33">企业名称</th>
+                    <th class="th2">企业编号</th>
+                    <th class="th2">产品线</th>
+                    <th class="th2">日期</th>
+                    <th class="th2">费用（￥）</th>
+                    <th class="th2">状态</th>
+                </tr>
+                </thead>
+                <tbody id="adminTbody" style="width: 100%;">
+
+                </tbody>
+            </table>
+        </div>
+        <div class="txt_left mg-t20 mg_b30" style="margin-left: 5%">
+            <span class="describ">结算方式：</span><span class="describ" id="payType"></span>
+        </div>
+        <div id="ticketArea" class="mg_b30">
+            <div style="border: 1px solid #E4E4E4;width: 98%;margin-left: 1%"></div>
+            <div style="height: 210px;width: 98%;">
+                <div class="flt_l mg_l30" style="width: 15%;height: 210px;line-height: 210px;border-right: 1px solid #E4E4E4;">
+                    <span class="describ">结算单对应发票</span>
+                </div>
+                <div class="flt_l" style="width: 82%;">
+                    <div style="width: 100%;height: 35px;line-height: 35px;">
+                        <span class="describ fontGreen flt_l mg_l30">本次结算金额（元）：</span><span class="describ fontGreen flt_l" id="payTotal"></span>
+                    </div>
+
+                    <div>
+                        <table>
+                            <tr id="ticketList"></tr>
+                        </table>
+                    </div>
+                    <div class="txt_left mg-t10">
+                        <span class="describ mg_l30">备注：</span><span id="remarks" class="describ"></span>
+                    </div>
+                </div>
+            </div>
+            <div style="border: 1px solid #E4E4E4;width: 98%;margin-left: 1%"></div>
+
+        </div>
+        <div class="txt_left">
+            <div class="tit_msg">
+                <img src="img/tit_pic.png" class="tit_pic">
+                <span>操作记录</span>
+            </div>
+            <div>
+                <table class="rpt_detail_tab txt_center mg_b50" style="font-size: 0.9em">
+                    <tr>
+                        <td class="head_td" height="40px">操作人</td>
+                        <td class="head_td">操作内容</td>
+                        <td class="head_td">操作时间</td>
+                    </tr>
+                    <tbody id="opetationLog">
+
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+        //初始化
+        ajax_costPayDetail();
+    }
+
+    function ticketLarge(event) {
+        window.parent.pic_makeLarge(event);
+    }
+
+</script>
+</html>

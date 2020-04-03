@@ -1,0 +1,144 @@
+    .th_title{
+        height:30px;
+        width:100%;
+        line-height:30px;
+        border-bottom:1px solid #eee;
+        background:rgba(242,242,242,1);
+    }
+    .th_title span{
+        font-size: 0.6em;
+        color:#666;
+        padding-left:10px;
+    }
+    .th_content{
+        width:70%;margin:auto;height:148px;margin-top:36px;
+    }
+    .th_content li{
+        width:90px;height:100px;float:left;border:2px solid #D0d0d0;border-radius:5px;margin-left:20px;
+        background : url("../img/cg1.png") no-repeat center 21px;
+        font-size: 0.6em;
+        color:#666;
+    }
+    .product_linea {
+        width: 10%;
+        height: 30px;
+        padding-left: 10px;
+        padding-right: 10px;
+        background: #FFFFFF;
+        border: 1px solid #E4E4E4;
+        margin-right: 4%;
+        vertical-align: middle;
+        margin-left: -5px;
+        border-radius: 5px;
+    }
+    .th_content li img{
+        float:left;
+        padding-top:17px;
+        padding-left:23px;
+        
+    }
+    .th_content li p{
+        text-align:center;
+        float:left;
+        width:100%;
+        margin-top:74px;
+    }
+    .choseactive{
+        color:#1ABC9C !important; 
+        border: 2px solid #1ABC9C !important;
+        background : url("../img/cg.png") no-repeat center 21px !important;
+        
+    }
+
+    #skiptk{
+        width:100%;
+        height:220px;
+        position:absolute;left:0px;top:0;top:74px;
+        box-shadow: rgb(238, 238, 238) 0px 1px 15px;
+
+    }
+    #skiptkadd{
+        width:100%;
+        height:141px;
+
+    }
+    #list i{
+        display:block;
+        height:30px;
+        line-height:25px;
+        text-align:left;
+        font-style: normal;
+        font-size:.6em;
+        border-bottom:1px dashed #999;
+
+    }
+    #list{
+        display: inline-block;
+        width: 80%;
+        margin-left: 5%;
+        margin-top: 10px;
+    }
+
+    #skiptk1{
+        width:100%;
+        height:220px;
+        position:absolute;left:0px;top:74px;
+        box-shadow: rgb(238, 238, 238) 0px 1px 15px;
+
+    }
+    #skiptkadd1{
+        width:100%;
+        height:141px;
+
+    }
+    #list1 i{
+        display:block;
+        height:30px;
+        line-height:25px;
+        text-align:left;
+        font-style: normal;
+        font-size:.6em;
+        border-bottom:1px dashed #999;
+
+    }
+    #list1{
+        display: inline-block;
+        width: 80%;
+        margin-left: 5%;
+        margin-top: 10px;
+    }
+
+    #skiptk2{
+        width:100%;
+        height:220px;
+        position:absolute;left:0px;top:74px;
+        box-shadow: rgb(238, 238, 238) 0px 1px 15px;
+
+    }
+    #skiptkadd2{
+        width:100%;
+        height:141px;
+
+    }
+    #list2 i{
+        display:block;
+        height:30px;
+        line-height:25px;
+        text-align:left;
+        font-style: normal;
+        font-size:.6em;
+        border-bottom:1px dashed #999;
+
+    }
+    #list2{
+        display: inline-block;
+        width: 80%;
+        margin-left: 5%;
+        margin-top: 10px;
+    }
+    .subselect{
+        display:none;
+    }
+    .tankuang{
+        overflow:hidden;
+    }

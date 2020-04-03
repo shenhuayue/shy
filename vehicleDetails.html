@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>发运详情</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/saleCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/index.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+</head>
+<body class="reset">
+    <div>
+        <div class="tit mg-t50">
+            <span class="flt_l">发运详情</span>
+        </div>
+        <div class="account_cont">
+            <div class="txt_left mg-t30 mg_b30">
+                <span class="describ mg_l50">经销商名称：</span><span id="dealerName" class="describ"></span>
+                <span class="describ mg_l30">经销商编号：</span><span id="dealerNo" class="describ"></span>
+                <span class="describ mg_l30">发货时间：</span><span id="invoiceTime" class="describ"></span>
+                <span class="describ mg_l30">发货备注：</span><span id="invoiceDes" class="describ"></span><input type="hidden" id="invoiceNo">
+            </div>
+
+            <table id="accept" width="100%" cellpadding="0" cellspacing="0" class="table_sp mg_b30" align="center">
+                <thead>
+                <tr align="center">
+                    <th class="th2" height="33px">接车记录</th>
+                    <th class="th2">图片</th>
+                    <th class="th2">备注</th>
+                    <th class="th2">时间</th>
+                </tr>
+                </thead>
+                <tbody id="acceptList">
+
+                </tbody>
+            </table>
+
+            <div id="scrollDiv" class="scrollDiv" style="height: 900px;">
+                <table cellpadding="0" cellspacing="0" class="table2" align="center">
+                    <thead>
+                    <tr align="center">
+                        <th class="th2" height="33px">产品线</th>
+                        <th class="th2">产品系列</th>
+                        <th class="th2">产品型号</th>
+                        <th class="th2">出厂编号</th>
+                        <th class="th2">条码号</th>
+                        <th class="th2">车辆状态</th>
+                        <th class="th2">更多</th>
+                        <th class="th2"><input type="checkbox" id="checkAll" class="choose_select" onclick="chooseAllOrNullMachine()"></th>
+                    </tr>
+                    </thead>
+                    <tbody id="adminTbody">
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="mg-t30 mg_b30">
+                <span class="describ mg_l50">选择仓库：</span><select id="store" style="width: 250px;height: 35px;"></select>
+            </div>
+            <div class="btn_part mg-t30 mg_b50">
+                <input type="button" id="instore" class="submit_btn" value="接车" onclick="multipleInStore()" style="display: none;">
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+
+        //初始化报修列表
+        ajax_invoiceMachineM();
+
+        $.ajax({
+            type: "post",
+            async : false,
+            url: ip_path + "/changfa_system/locationRecord/selectStore.do",
+            data: {
+                pageNum: 1,
+                pageSize: 1000000,
+                workNum: $("#dealerNo").text(),
+            },
+            dataType: "json",
+            success: function (data) {
+                $("#store").empty();
+                for(var i=0;i<data['body']['result']['data']['length'];i++){
+                    $("#store").append("<option value='"+ data['body']['result']['data'][i]['depotId'] +"'>"+data['body']['result']['data'][i]['storeRoomName']+"</option>");
+                }
+            }
+        });
+    }
+
+</script>
+</html>

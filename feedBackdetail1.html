@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>质量反馈详情</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <link href="css/threePackspolicy.css" type="text/css" rel="stylesheet"/>
+    <script src="js/index.js"></script>
+    <script src="js/userCenter.js"></script>
+    <script src="js/dcommon.js"></script>
+    <script src="js/feedback.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <script src="jquery-ui-1.12.1/jquery-ui.min.js"></script>
+    <link href="jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet" />
+    <script src="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.js"></script>
+    <script type="text/javascript" src="jQuery-Timepicker/dist/i18n/jquery-ui-timepicker-zh-CN.js"></script>
+    <link href="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.css" rel="stylesheet" />
+    <script src="js/voice-2.0.js"></script>
+    <script src="js/audio.min.js"></script>
+</head>
+<body class="reset">
+        <style>
+            .textarea-numberbar{ position:absolute; right:20px; bottom:5px; z-index:1; margin-bottom:0}
+        </style>
+    <div>
+        <div class="tit mg-t50" style="width:64%;margin-left: 18%;border-bottom:none;">
+            <span class="flt_l" style="border-radius:0px;">反馈类型：<span id="lxfankui" style="color:#1ABC9C"></span></span>
+        </div>
+        <div class="dealerInfo1" style="width:66%;margin-left: 18%;margin-top:0px;">
+            <div class="flt_l" style="float:left;" id="touxiang">
+                <!--<img id="dealer_head" class="dealer_head" src="img/touxiang.png" style="margin-top: 30px;">-->
+            </div>
+            <div class="flt_lright" style="float:left;">
+                <p class="color_5e heavy">反馈人角色：<span id="feedjuese" class="color_66 size_14" style="color: #1ABC9C;"></span></p>
+                <p class="color_5e heavy">反馈人姓名：<span id="feedname" class="color_66 size_14"></span></p>
+                <p class="color_5e heavy" style="letter-spacing: 4px;">联系电话：<span id="feedphone" style="letter-spacing: 0px;" class="color_66 size_14"></span></p>
+                <p class="color_5e heavy" style="margin-top:40px;"><img  src="img/dizhi.png" style="margin-top:1px;float:left;margin-right:10px;width:19px;">所在区域：<span id="feedarea" style="letter-spacing: 0px;" class="color_66 size_14"></span></p>
+                <p class="color_5e heavy" ><img  src="img/beizhu.png" style="margin-top:1px;float:left;margin-right:10px;width:19px;">备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注：<span id="feedbeizhu" class="color_66 size_14"></span></p>
+            </div>
+        </div>
+
+        <div class="tit mg-t50" style="width:64%;margin-left: 18%;border-bottom:none;">
+                <span class="flt_l" style="border-radius:0px;"></span>
+        </div>
+        <div class="dealerInfo1" id="dealerInfoxm" style="display:none;border-bottom: none;width:66%;margin-left: 18%;margin-top:0px;height:475px;overflow-y:scroll;"></div>
+        <div class="dealerInfo1" style="border-top: none;width:66%;margin-left: 18%;margin-top:0px;">
+            <div class="content" style="width:90%;margin-left:5%;float:left;">
+                    <p style="color:#666666;margin-top:50px;">回复：</p>
+                    <textarea id="describeyijian" class="checke_discribeyijian"  placeholder="输入回复内容···"  maxlength="300"></textarea>
+                    <span style="position: fixed;margin-top: 101px;margin-left: -78px;color: #999;"><span id="textNum">0</span>/300</span>
+                    
+                    <div id="next_status" class="next" style="padding-bottom:50px;">
+                    <a href="#1"><img src="img/yes.png" id="next" onclick="huifu()"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+</body>
+<!--编辑弹框-->
+<div class="byskip" style="display:none;" >
+    <div class="byskip_content1" id="maodian" style="width:465px;height:210px;margin-top:40%;">
+        <p class="th_title"><span>类型选择</span><img src="img/byclose.png" style="float:right;padding:10px;cursor:pointer;" onclick="byclose()"></p>
+        <div class="th_content" style="height:70px;">
+            <span class="describ mg_l30">反馈类型：</span>
+            <input type="hidden" id="zlfkid" name="zlfkid" value="">
+            <select id="type" class="area_choose" style="width:150px;">
+            </select>
+        </div>
+        <img src="img/yes.png" onclick="tijiao()" style="width:37px;margin-left:46%;">
+    </div>
+</div>
+<script>
+    
+    window.onload = function () {
+
+
+        var sightHeight =  $(window).height(); 
+        var top = sightHeight;
+        $(".byskip").css({
+                height:top+"px"
+        });
+
+
+
+        /*字数限制*/
+        $("#describeyijian").on("input propertychange", function() {
+            var $this = $(this),
+            _val = $this.val(),
+            count = "";
+            if (_val.length > 300) {
+                $this.val(_val.substring(0, 300));
+            }
+            count = $this.val().length;
+            $("#textNum").text(count);
+        });
+
+        //反馈类型
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/feedBackClass/selectAllClass.do",
+            dataType : "json",
+            success : function (data) {
+                //console.log(data)
+                if(data['head']['isSuccess']){
+                    $("#type").empty();
+                   // $("#type").append("<option value=''>全部</option>");
+                    for(var i=0;i<data['body']['resultList']['length'];i++){
+                        $("#type").append("<option data-id='"+ data['body']['resultList'][i]['id'] +"' value='"+ data['body']['resultList'][i]['id'] +"'>"+data['body']['resultList'][i]['name']+"</option>");
+                    }
+                }else{
+                    alert(data['head']['message']);
+                }
+            }
+        });
+
+    //alert($(window.parent.document).find("input[name='feedbackid']").val())
+    $.ajax({
+        type: "post",
+        async: false,
+        url: ip_path + "/changfa_system/feedback/getFeedbackById.do",
+        data: {
+            id:$(window.parent.document).find("input[name='feedbackid']").val()
+        },
+        dataType: "json",
+        success: function (data) {
+            if (data['head']['code'] == 200) {
+                //console.log(data)
+                
+                //alert(data['body']['result']['userMobile'])
+                $('#touxiang').append(
+                    '<img id="dealer_head" class="dealer_head" src="'+ data['body']['result']['headPath']+'" style="margin-top: 30px;">'
+                )
+                $('#lxfankui').html(data['body']['result']['feedbackClassName'])
+                $('#feedjuese').html(data['body']['result']['roleName']);
+                $('#feedname').html(data['body']['result']['userName']);
+                $('#feedphone').html(data['body']['result']['userMobile']);
+                $('#feedarea').html(data['body']['result']['province']+'-'+data['body']['result']['city']);
+                $('#feedbeizhu').html(data['body']['result']['content']);
+                if(data['body']['result']['remark']!=''){
+                    $('#describeyijian').text(data['body']['result']['remark'])
+                }
+                if(data['body']['result']['feedbackClassName']=='质量反馈' && data['body']['result']['qualityFeedbacks']!=''){
+                    $('#dealerInfoxm').show();
+                    for(i=0;i<data['body']['result']['qualityFeedbacks'].length;i++){
+                        //$('#zlfkid').val(data['body']['result']['qualityFeedbacks'][i]['qualityId'])
+                        let sz = i+1;
+                        let daxiesz;
+                        switch (sz){
+                            case 1:
+                            daxiesz = '一';
+                            break;
+                            case 2:
+                            daxiesz = '二';
+                            break;
+                            case 3:
+                            daxiesz = '三';
+                            break;
+                            case 4:
+                            daxiesz = '四'; 
+                            break;
+                            case 5:
+                            daxiesz = '五';
+                            break;
+                            case 6:
+                            daxiesz = '六';
+                            break;
+                            case 7:
+                            daxiesz = '七';
+                            break;
+                            case 8:
+                            daxiesz = '八';
+                            break;
+                            case 9:
+                            daxiesz = '九';
+                            break;
+                            case 10:
+                            daxiesz = '十';
+                            break;
+                        }
+                        if(data['body']['result']['qualityFeedbacks'][i]['qualityStatus']==0){
+                            qualityStatus='未处理'
+
+                        }else{
+                            qualityStatus='已处理'
+                        }
+                        $('#dealerInfoxm').append(
+                        '<div class="content" style="width:90%;margin-left:5%;float:left;">'+
+                            '<p style="color:#1ABC9C;margin-top:35px;">'+
+                                '<img src="img/juxing.png" style="margin-top:4px;float:left;margin-right:10px;">'+'项目'+daxiesz+
+                            '</p>'+
+                            '<input type="hidden" class="zlfkid '+i+' " name="zlfkid" value="'+data['body']['result']['qualityFeedbacks'][i]['qualityId']+'">'+
+                            '<div style="float:right;margin-right:30%;">'+
+                                '<span class="mg-r20" style="color:#A3A3A3;" >编辑</span>'+
+                                '<a href="javascript: setWindowScrollTop (top,document.getElementById("maodian").offsetTop+ 50);">'+'<img src="img/edit.png" id="scroll" style="vertical-align: middle" onclick="editDealerInfo(this)">'+'</a>'+
+                            '</div>'+
+                            
+                            '<p style="color:#A3A3A3;">'+'产品信息：'+'<span>'+data['body']['result']['qualityFeedbacks'][i]['lineName']+'-'+data['body']['result']['qualityFeedbacks'][i]['productName']+'-'+data['body']['result']['qualityFeedbacks'][i]['modelName']+'</span>'+'</p>'+
+                            '<p style="color:#A3A3A3;">'+'问题描述：'+'<span>'+data['body']['result']['qualityFeedbacks'][i]['qualityContent']+'</span>'+'</p>'+
+                            '<p style="color:#A3A3A3;">'+'出厂编号：'+'<span>'+data['body']['result']['qualityFeedbacks'][i]['factoryNum']+'</span>'+'</p>'+
+                            '<p style="color:#A3A3A3;">'+'处理状态：'+'<span>'+qualityStatus+'</span>'+'</p>'+
+                            '<ul class="pic'+i+'" style="width:100%;float:left;padding-left:0px;">'+'</ul>'+
+                            '<ul class="ship'+i+'" style="width:100%;float:left;padding-left:0px;margin-top:50px;">'+'</ul>'+
+                        '</div>'
+                        );
+                        var pic = data['body']['result']['qualityFeedbacks'][i]['qFilePath'];
+                        if(pic!=''){
+                            for(j=0;j<pic.length;j++){
+                                $('.pic'+i).append(
+                                    '<li style="float:left;margin-right:30px;">'+'<img src="'+pic[j]+'" onclick="makeLarger(this)" style="width:130px;height:100px;border-radius:5px;">'+'</li>'
+                                )
+                            }
+                        }
+                        //console.log(data['body']['result']['qualityFeedbacks'][i]['videoPath']);
+                        if(data['body']['result']['qualityFeedbacks'][i]['videoPath']!=''){ 
+                            $('.ship'+i).append(
+                                '<video controls="controls" style="height:224px;width:370px;margin-right:10px;" class="video">'+ 
+                                '<source src="'+data['body']['result']['qualityFeedbacks'][i]['videoPath']+'" type="video/mov" controls="controls" webkit-playsinline="true" playsinline="true" x5-playsinline="true" x-webkit-airplay="allow"  >'+
+                                '<source src="'+data['body']['result']['qualityFeedbacks'][i]['videoPath']+'" type="video/ogg" codecs="theora,vorbis" controls="controls" webkit-playsinline="true" playsinline="true" x5-playsinline="true" x-webkit-airplay="allow"  >'+
+                                '<source src="'+data['body']['result']['qualityFeedbacks'][i]['videoPath']+'" type="video/mp4" codecs="avc1.42E01E,mp4a.40.2" controls="controls" webkit-playsinline="true" playsinline="true" x5-playsinline="true" x-webkit-airplay="allow"  >'+ 
+                                '</video>'
+                            )
+                        }
+                        
+                    };
+                    
+                }else{
+                    //$('#dealerInfoxm').show();
+                    $('#dealerInfoxm').append(
+                        '<div class="content" style="width:90%;margin-left:5%;float:left;">'+
+                            '<ul class="pic" style="width:100%;float:left;padding-left:0px;margin-top:30px;">'+'</ul>'+
+                            '<ul class="ship" style="width:100%;float:left;padding-left:0px;margin-top:50px;">'+'</ul>'+
+                        '</div>'
+                    );
+                    var pic = data['body']['result']['filePath'];
+                    if(pic!=''){
+                        for(j=0;j<pic.length;j++){
+                            $('.pic').append(
+                                '<li style="float:left;margin-right:30px;">'+'<img src="'+pic[j]+'" onclick="makeLarger(this)" style="width:130px;height:100px;border-radius:5px;">'+'</li>'
+                            )
+                        }
+                    };
+                    if(data['body']['result']['fVideoPath']!=''){
+                        
+                        $('.ship').append(
+                            '<video  controls="controls" style="height:224px;width:370px;margin-right:10px;" class="video">'+ 
+                            '<source src="'+data['body']['result']['fVideoPath']+'" type="video/mov" controls="controls" webkit-playsinline="true" playsinline="true" x5-playsinline="true" x-webkit-airplay="allow"  >'+
+                            '<source src="'+data['body']['result']['fVideoPath']+'" type="video/ogg" codecs="theora,vorbis" controls="controls" webkit-playsinline="true" playsinline="true" x5-playsinline="true" x-webkit-airplay="allow"  >'+
+                            '<source src="'+data['body']['result']['fVideoPath']+'" type="video/mp4" codecs="avc1.42E01E,mp4a.40.2" controls="controls" webkit-playsinline="true" playsinline="true" x5-playsinline="true" x-webkit-airplay="allow"  >'+ 
+                            '</video>'
+                        )
+                    }
+
+                }
+            }
+        }
+    })
+    
+    
+}
+
+
+
+
+
+
+
+</script>
+</html>

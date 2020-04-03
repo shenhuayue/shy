@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>三包员初审业务管理</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/userCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+</head>
+<body class="reset" style="background: #F9F9F9;">
+<div id="addServerDealer" class="addTopic outShadow" style="display: none;">
+    <div class="dealer_title">
+        <span>绑定经销商</span>
+        <img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeAddServerDealer()">
+    </div>
+    <div style="padding-bottom: 30px;">
+        <div class="tit_normal">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>查询：</span>
+            <select id="dealer_item" style="width: 20%;height: 36px;vertical-align: middle;">
+                <option value="company">公司名称</option>
+                <option value="workNum">企业编号</option>
+            </select>
+            <input type="text" id="dealer_info" style="width: 40%;height: 30px;">
+            <button class="query_btn_big" style="" onclick="querySingleDealer()"></button>
+        </div>
+        <div id="dealers" class="mg-t20" style="display: none;height: 200px;overflow-y: scroll;">
+            <table cellpadding="0" cellspacing="0" class="table2" align="center">
+                <thead>
+                <tr align="center">
+                    <th height="33" class="th2">经销商名称</th>
+                    <th class="th2">企业编号</th>
+                    <th class="th2">更多</th>
+                </tr>
+                </thead>
+                <tbody id="dealerList">
+
+                </tbody>
+            </table>
+        </div>
+        <div id="dealers_btn" class="btn_part mg-t20" style="display: none;">
+            <input type="button" class="submit_btn" value="提交" onclick="addDealerToServer()">
+        </div>
+    </div>
+</div>
+<div>
+    <div class="dealer_title txt_center">
+        <input type="button" class="add_btn flt_r" value="添加" onclick="addServerDealer()">
+    </div>
+</div>
+<div>
+    <table style="border-collapse: collapse;width : 100%;">
+        <tr>
+            <td class="head_td txt_center" height="40px">企业编号</td>
+            <td class="head_td txt_center">企业名称</td>
+            <td class="head_td txt_center">联系人</td>
+            <td class="head_td txt_center">联系电话</td>
+            <td class="head_td txt_center">更多</td>
+        </tr>
+        <tbody id="adminTbody">
+
+        </tbody>
+    </table>
+    <div id="barcon" class="barcon" >
+        <div id="barcon1" class="barcon1"></div>
+        <div id="barcon2" class="barcon2">
+            <ul>
+                <li><button id="firstPage" class="page_btn">首页</button></li>
+                <li><button id="prePage" class="page_btn">上一页</button></li>
+                <li><button id="nextPage" class="page_btn">下一页</button></li>
+                <li><button id="lastPage" class="page_btn">尾页</button></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div style="margin-left: 20px;">
+
+</div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        currentPage = 1;
+        $('#firstPage').attr('disabled',true);
+        $('#prePage').attr('disabled',true);
+        $("#firstPage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = 1;
+            $('#firstPage').attr('disabled',true);
+            $('#prePage').attr('disabled',true);
+            ajax_server_dealerM();
+        });
+        $("#lastPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = totalPage;
+            $('#lastPage').attr('disabled',true);
+            $('#nextPage').attr('disabled',true);
+            ajax_server_dealerM();
+        });
+        $("#nextPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = currentPage+1;
+            if(currentPage == totalPage){
+                $('#lastPage').attr('disabled',true);
+                $('#nextPage').attr('disabled',true);
+            }else{
+                $('#lastPage').removeAttr('disabled');
+                $('#nextPage').removeAttr('disabled');
+            }
+            ajax_server_dealerM();
+        });
+        $("#prePage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = currentPage-1;
+            if(currentPage == 1){
+                $('#firstPage').attr('disabled',true);
+                $('#prePage').attr('disabled',true);
+            }else{
+                $('#firstPage').removeAttr('disabled');
+                $('#prePage').removeAttr('disabled');
+            }
+            ajax_server_dealerM();
+        });
+
+        ajax_server_dealerM();
+    }
+</script>
+</html>

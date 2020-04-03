@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>维修审核不通过详情</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/dsaleCenter.js"></script>
+    <script src="js/dcommon.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+
+</head>
+
+<body class="reset">
+        <div>
+            <div class="title_box">
+                <img src="img/status_warning.png" class="status_warning">
+                <span id="status_describe" class="status_info">当前状态：驳回</span>
+            </div>
+            <div class="rpt_detail">
+                <div class="tit_msg">
+                    <img src="img/tit_pic.png" class="tit_pic">
+                    <span>驳回原因</span>
+                </div>
+                <div>
+                    <table id="reasonInfo" class="rpt_detail_tab">
+                        <tr>
+                            <td id="unpass_reason" class="body_td_2"  height="50px;" style="font-size: 15px;"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="tit_msg">
+                    <img src="img/tit_pic.png" class="tit_pic">
+                    <span>驳回描述</span>
+                </div>
+                <div>
+                    <table id="describeInfo" class="rpt_detail_tab mg_b50">
+                        <tr>
+                            <td id="unpass_describe" class="body_td_2"  height="169px;"></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div id="next_status" class="next">
+
+            </div>
+        </div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+        $.ajax({
+            type: "post",
+            async: false,
+            //url: ip_path + "/changfa_system/repair/getRepairApproveReason.do",
+            url: ip_path + "/changfa_system/powerRepair/getPowerRepairApproveReason.do",
+            data: {
+                repairId: $(window.parent.parent.document).find("input[name='repairId']").val()
+            },
+            dataType: "json",
+            success: function (data) {
+                if(data['head']['isSuccess']){
+                    $("#unpass_reason").html(data['body']['result']['reasonType']);
+                    $("#unpass_describe").html(data['body']['result']['reasonRemark']);
+                }
+            }
+        });
+        if($(window.parent.parent.document).find("input[name='history_mark']").val() == ""){
+            if($(window.parent.parent.document).find("input[name='history_400_mark']").val() != ""){
+                $("#next_status").html('<img src="img/front.png" onclick="to_lastReport_400()">');
+            }
+        }else{
+            $("#next_status").html('<img src="img/front.png" onclick="to_lastReport()">');
+        }
+    }
+</script>
+</html>

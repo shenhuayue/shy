@@ -1,0 +1,158 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,width=device-width,initial-scale=1.0,user-scalable=no" />
+	<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+	<title>故障系统维护</title>
+	<link rel="stylesheet" type="text/css" href="css/cf_web.css" />
+	<link rel="stylesheet" type="text/css" href="css/public.css" />
+	<script type="text/javascript" src="js/common.js"></script>
+	<script type="text/javascript" src="js/saleCenter.js"></script>
+	<script type="text/javascript" src="js/jquery-1.8.2.min.js"></script>
+</head>
+<body>
+
+<div class="layout-container">
+	<div id="addFaultSystem" class="addTopic outShadow" style="display: none;">
+		<div class="dealer_title">
+			<span>添加故障系统</span>
+			<img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeAddFaultSystem()">
+		</div>
+		<div style="width: 100%;height: auto;border: 1px solid #E4E4E4;border-top: none;">
+			<div class="tit_normal">
+				<img src="img/tit_pic.png" class="tit_pic">
+				<span>故障系统名：</span>
+				<input type="text" id="faultSysName" style="width: 50%;height: 30px;">
+			</div>
+			<div class="mg_b50" style="width: 100%;text-align: center">
+				<button class="waves submit_btn mg-t30" onclick="createFaultSystem()">提交</button>
+			</div>
+		</div>
+	</div>
+	<div id="editFaultSystem" class="addTopic outShadow" style="display: none;">
+		<div class="dealer_title">
+			<span>编辑故障系统</span>
+			<img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeEditFaultSystem()">
+		</div>
+		<div style="width: 100%;height: auto;border: 1px solid #E4E4E4;border-top: none;">
+			<div class="tit_normal">
+				<img src="img/tit_pic.png" class="tit_pic">
+				<span>故障系统编号：</span>
+				<input type="text" id="edit_faultSysId" style="width: 50%;height: 30px;" disabled="disabled">
+			</div>
+			<div class="tit_normal">
+				<img src="img/tit_pic.png" class="tit_pic">
+				<span>故障系统名称：</span>
+				<input type="text" id="edit_faultSysName" style="width: 50%;height: 30px;">
+			</div>
+			<div class="mg_b50" style="width: 100%;text-align: center">
+				<button class="waves submit_btn mg-t30" onclick="updateFaultSystem()">提交</button>
+			</div>
+		</div>
+	</div>
+	<div id="addFaultModel" class="addTopic outShadow" style="display: none;">
+		<div class="dealer_title">
+			<span>添加故障模式</span>
+			<img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeAddFaultModel()">
+		</div>
+		<div style="width: 100%;height: auto;border: 1px solid #E4E4E4;border-top: none;">
+			<div class="tit_normal">
+				<img src="img/tit_pic.png" class="tit_pic">
+				<span>故障模式名：</span>
+				<input type="text" id="faultModelName" style="width: 50%;height: 30px;">
+			</div>
+			<div class="mg_b50" style="width: 100%;text-align: center">
+				<button class="waves submit_btn mg-t30" onclick="createFaultModel()">提交</button>
+			</div>
+		</div>
+	</div>
+	<div id="editFaultModel" class="addTopic outShadow" style="display: none;">
+		<div class="dealer_title">
+			<span>编辑故障模式</span>
+			<img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeEditFaultModel()">
+		</div>
+		<div style="width: 100%;height: auto;border: 1px solid #E4E4E4;border-top: none;">
+			<div class="tit_normal">
+				<img src="img/tit_pic.png" class="tit_pic">
+				<span>故障系统编号：</span>
+				<input type="text" id="edit_faultModelId" style="width: 50%;height: 30px;" disabled="disabled">
+			</div>
+			<div class="tit_normal">
+				<img src="img/tit_pic.png" class="tit_pic">
+				<span>故障系统名称：</span>
+				<input type="text" id="edit_faultModelName" style="width: 50%;height: 30px;">
+			</div>
+			<div class="mg_b50" style="width: 100%;text-align: center">
+				<button class="waves submit_btn mg-t30" onclick="updateFaultModel()">提交</button>
+			</div>
+		</div>
+	</div>
+	<div style="height: 30px;"></div>
+	<div class="layout-cont">
+		<h3 class="layout-cont-title">故障系统&模式维护</h3>
+		<div class="layout-cont-main">
+			<div id="lineList" style="width: 20%;margin-left : 2%;height: 700px;margin-top: 20px;">
+
+			</div>
+			<div class="add-newclass" style="position: absolute;top: 120px;left: 25%;width: 30%;">
+				<h3 class="txt_center mg_b10">故障系统</h3>
+				<form action="">
+					<div id="sysList" class="category-cont" style="width: 90%;height: 620px;overflow-y: scroll;">
+
+					</div>
+				</form>
+				<div class="operation-btns">
+					<a class="layout-btn" onclick="addFaultSystem()">+ 添加故障系统</a>
+				</div>
+			</div>
+
+			<div class="add-newclass" style="position: absolute;top: 120px;left: 60%;width: 30%;">
+				<h3 class="txt_center mg_b10">故障模式</h3>
+				<form action="">
+					<div id="modelList" class="category-cont" style="width: 90%;height: 620px;overflow-y: scroll;">
+
+					</div>
+				</form>
+				<div class="operation-btns">
+					<a class="layout-btn" onclick="addFaultModel()">+ 添加故障模式</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/machineModel/getMachineModels.do",
+			dataType : "json",
+			data:{
+				saleStatus: 1,
+                machineType: 2,
+			},
+            success : function (data) {
+                $("#lineList").empty();
+                for(var i=0;i<data['body']['resultList']['length'];i++){
+                    $("#lineList").append(
+						'<div class="mg_l10 mg-t10 mg_b20">' +
+                        '<input type="radio" id="' + data['body']['resultList'][i]['number'] + '" class="choose_select vert_mid" name="line" onclick="chooseFaultLine()"><label for="' + data['body']['resultList'][i]['number'] + '" style="user-select: none">' + data['body']['resultList'][i]['name'] + '</label>' +
+                        '</div>'
+					);
+                }
+            }
+        });
+
+        $(window.document).find("input[type='radio']").eq(0).attr("checked","checked");
+
+        ajax_faultSys();
+        ajax_faultModel();
+    }
+
+</script>
+</body>
+</html>

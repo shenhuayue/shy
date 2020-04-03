@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>退、返、调管理</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/userCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+</head>
+<body class="reset" style="background: #F9F9F9;">
+<div>
+    <div class="dealer_title txt_center">
+        <input type="button" id="returnChange" class="type" value="退货" onclick="returnChange()">
+        <input type="button" id="returnSend" class="type" value="调拨" onclick="returnSend()">
+        <input type="button" id="returnFactory" class="type" value="返厂" onclick="returnFactory()">
+    </div>
+</div>
+<div>
+    <table style="border-collapse: collapse;width : 100%;">
+        <tr>
+            <td class="head_td txt_center" height="40px">产品线</td>
+            <td class="head_td txt_center">产品系列</td>
+            <td class="head_td txt_center">产品型号</td>
+            <td class="head_td txt_center">条码</td>
+            <td class="head_td txt_center">出厂编号</td>
+            <td class="head_td txt_center">IMEI号</td>
+            <td class="head_td txt_center">状态</td>
+            <td class="head_td txt_center">更多</td>
+        </tr>
+        <tbody id="adminTbody">
+
+        </tbody>
+    </table>
+    <div id="barcon" class="barcon" >
+        <div id="barcon1" class="barcon1"></div>
+        <div id="barcon2" class="barcon2">
+            <ul>
+                <li><button id="firstPage" class="page_btn">首页</button></li>
+                <li><button id="prePage" class="page_btn">上一页</button></li>
+                <li><button id="nextPage" class="page_btn">下一页</button></li>
+                <li><button id="lastPage" class="page_btn">尾页</button></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div id="reSendDetail" style="margin-left: 30px;display: none">
+    <div class="manage_detail_title">调拨详情</div>
+    <div class="manage_detail_cont">
+        <div class="tit_msg">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>农机信息</span>
+        </div>
+        <div>
+            <table class="tab txt_center">
+                <tbody id="machine_info_reSend">
+                    <tr>
+                        <td class="body_td" rowspan="3" width="150px"><img src="" class="dealer_head_M"></td>
+                        <td class="head_td" width="136px" height="33px">产品线</td>
+                        <td class="body_td" width="256px"></td>
+                        <td class="head_td" width="136px">条码</td>
+                        <td class="body_td" width="256px"></td>
+                    </tr>
+                    <tr>
+                        <td class="head_td" height="33px">产品系列</td>
+                        <td class="body_td"></td>
+                        <td class="head_td">IMEI号</td>
+                        <td class="body_td"></td>
+                    </tr>
+                    <tr>
+                        <td class="head_td" height="33px">产品型号</td>
+                        <td class="body_td"></td>
+                        <td class="head_td">出厂编号</td>
+                        <td class="body_td"></td>
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+        <div class="tit_msg">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>经销商信息</span>
+        </div>
+        <div>
+            <table class="tab txt_center mg_b50">
+                <tbody id="dealer_info">
+                <tr>
+                    <td class="body_td" rowspan="3" width="150px"><img src="" class="dealer_head_M"></td>
+                    <td class="head_td" width="136px" height="33px">名称</td>
+                    <td class="body_td" width="256px"></td>
+                    <td class="head_td" width="136px">联系电话</td>
+                    <td class="body_td" width="256px"></td>
+                </tr>
+                <tr>
+                    <td class="head_td" height="33px">地址</td>
+                    <td class="body_td"></td>
+                    <td class="head_td">业务范围</td>
+                    <td class="body_td"></td>
+                </tr>
+                <tr>
+                    <td class="head_td" height="33px">联系人</td>
+                    <td class="body_td"></td>
+                    <td class="head_td"></td>
+                    <td class="body_td"></td>
+                </tr>
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="reChangeDetail" style="margin-left: 30px;display: none">
+    <div class="manage_detail_title">退换详情</div>
+    <div class="manage_detail_cont">
+        <div class="tit_msg">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>农机信息</span>
+        </div>
+        <div>
+            <table class="tab txt_center">
+                <tbody id="machine_info_reChange">
+                <tr>
+                    <td class="body_td" rowspan="3" width="150px"><img src="" class="dealer_head_M"></td>
+                    <td class="head_td" width="136px" height="33px">产品线</td>
+                    <td class="body_td" width="256px"></td>
+                    <td class="head_td" width="136px">条码</td>
+                    <td class="body_td" width="256px"></td>
+                </tr>
+                <tr>
+                    <td class="head_td" height="33px">产品系列</td>
+                    <td class="body_td"></td>
+                    <td class="head_td">IMEI号</td>
+                    <td class="body_td"></td>
+                </tr>
+                <tr>
+                    <td class="head_td" height="33px">产品型号</td>
+                    <td class="body_td"></td>
+                    <td class="head_td">出厂编号</td>
+                    <td class="body_td"></td>
+                </tr>
+                </tbody>
+
+            </table>
+        </div>
+        <div class="tit_msg">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>退货原因</span>
+        </div>
+        <div>
+            <input type="text" id="change_reason" class="reason_input" readonly="readonly">
+        </div>
+    </div>
+</div>
+
+<div id="reFactoryDetail" style="margin-left: 30px;display: none">
+    <div class="manage_detail_title">返厂详情</div>
+    <div class="manage_detail_cont">
+        <div class="tit_msg">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>农机信息</span>
+        </div>
+        <div>
+            <table class="tab txt_center">
+                <tbody id="machine_info_reFactory">
+                <tr>
+                    <td class="body_td" rowspan="3" width="150px"><img src="" class="dealer_head_M"></td>
+                    <td class="head_td" width="136px" height="33px">产品线</td>
+                    <td class="body_td" width="256px"></td>
+                    <td class="head_td" width="136px">条码</td>
+                    <td class="body_td" width="256px"></td>
+                </tr>
+                <tr>
+                    <td class="head_td" height="33px">产品系列</td>
+                    <td class="body_td"></td>
+                    <td class="head_td">IMEI号</td>
+                    <td class="body_td"></td>
+                </tr>
+                <tr>
+                    <td class="head_td" height="33px">产品型号</td>
+                    <td class="body_td"></td>
+                    <td class="head_td">出厂编号</td>
+                    <td class="body_td"></td>
+                </tr>
+                </tbody>
+
+            </table>
+        </div>
+        <div class="tit_msg">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>返厂原因</span>
+        </div>
+        <div>
+            <input type="text" id="factory_reason" class="reason_input" readonly="readonly">
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        currentPage = 1;
+        $('#firstPage').attr('disabled',true);
+        $('#prePage').attr('disabled',true);
+        $("#firstPage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = 1;
+            $('#firstPage').attr('disabled',true);
+            $('#prePage').attr('disabled',true);
+            ajax_dealer_machineM();
+        });
+        $("#lastPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = totalPage;
+            $('#lastPage').attr('disabled',true);
+            $('#nextPage').attr('disabled',true);
+            ajax_dealer_machineM();
+        });
+        $("#nextPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = currentPage+1;
+            if(currentPage == totalPage){
+                $('#lastPage').attr('disabled',true);
+                $('#nextPage').attr('disabled',true);
+            }else{
+                $('#lastPage').removeAttr('disabled');
+                $('#nextPage').removeAttr('disabled');
+            }
+            ajax_dealer_machineM();
+        });
+        $("#prePage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = currentPage-1;
+            if(currentPage == 1){
+                $('#firstPage').attr('disabled',true);
+                $('#prePage').attr('disabled',true);
+            }else{
+                $('#firstPage').removeAttr('disabled');
+                $('#prePage').removeAttr('disabled');
+            }
+            ajax_dealer_machineM();
+        });
+
+        returnChange();
+    }
+</script>
+</html>

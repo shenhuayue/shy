@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>物流公司详情</title>
+    <!-- 这里要配置参数key,将其值设置为高德官网开发者获取的key -->
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/userCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <script src="layer/layer.js"></script>
+    <style>
+        .layer_input{
+            width : 300px;height: 35px;
+        }
+    </style>
+</head>
+<body class="reset">
+<div style="width: 90%;margin-left: 5%">
+    <div class="dealerInfo2">
+        <div class="flt_l">
+            <img id="dealer_head" class="dealer_head" src="" style="margin-top: 50px;">
+        </div>
+        <div class="flt_l" style="width: 40%;">
+            <p class="color_5e heavy">类&nbsp;&nbsp;&nbsp;&nbsp;型&nbsp;&nbsp;&nbsp;：<span class="color_66 size_14" id="type">物流公司</span></p>
+            <p class="color_5e heavy">企业编号：<span class="color_66 size_14" id="companyNum"></span></p>
+            <p class="color_5e heavy">企业名称：<span class="color_66 size_14" id="companyName"></span></p>
+            <p class="color_5e heavy">联&nbsp;系&nbsp;人&nbsp;：<span class="color_66 size_14" id="contactName"></span></p>
+            <p class="color_5e heavy">联系电话：<span class="color_66 size_14" id="contactMobile"></span></p>
+        </div>
+       
+        <div class="flt_r mg-r50 mg-t20">
+            <div class="flt_r">
+                <span class="mg-r20">状态</span><img id="status" src="" style="vertical-align: middle" onclick="toogle_logisticsStatusInDetail(this)">
+            </div>
+            <br><br><br><br><br><br><br>
+            <div class="flt_r" style="margin-top: 5px;">
+                <span class="mg-r20">编辑</span><img src="img/edit.png" style="vertical-align: middle" onclick="editLogisticsCompanyInfo()">
+            </div>
+        </div>
+        <div style="clear: both;"></div>
+    </div>
+    <div style="height: 20px;"></div>
+    
+    <div class="relativeInfo">
+        <!-- <div class="manageChooose">
+            <div class="dealer_title">选择模块</div>
+            <div style="width: 100%;height: 46px; border-collapse: collapse">
+                <div id="storageM" style="width: 19.8%;" class="unchoosed flt_l" onclick="storageM(this)">地址管理</div>
+                <div id="storeM" style="width: 19.9%;" class="unchoosed flt_l" onclick="storeM(this)">库存管理</div>
+                <div id="serverM" style="width: 19.8%;" class="unchoosed flt_l" onclick="serverM(this)">三包管理</div>
+                <div id="machineM" style="width: 19.9%;" class="unchoosed flt_l" onclick="machineM(this)">退、返、调管理</div>
+                <div id="personM" style="width: 19.8%;" class="unchoosed flt_l" onclick="personM(this)">员工管理</div>
+            </div>
+            <div style="border: 3px solid #1ABC9C;"></div>
+        </div> -->
+        <div style="margin-top: 10px;">
+            <div id="dealer_inner">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/user/getUsersByUserId.do",
+            data : {
+                userId : $(window.parent.document).find("input[name='logisticsCompanyId']").val()
+            },
+            dataType : "json",
+            success : function (data) {
+                if(data['head']['code'] == 200){
+
+                    if(data['body']['result']['headUrl'] != ""){
+                        $("#dealer_head").attr("src",data['body']['result']['headUrl']);
+                    }else {
+                        $("#dealer_head").attr("src","http://app.changfanz.net:3588/changfa_file/head.png");
+                    }
+                    if(data['body']['result']['status'] == 1){
+                        $("#status").attr("src","http://app.changfanz.net:3588/changfa_file/on.png");
+                    }else{
+                        $("#status").attr("src","http://app.changfanz.net:3588/changfa_file/off.png");
+                    }
+
+                    $("#companyName").text(data['body']['result']['company']);
+                    $("#companyNum").text(data['body']['result']['workNum']);
+                    
+                    $("#contactName").text(data['body']['result']['userName']);
+                    $("#contactMobile").text(data['body']['result']['mobile']);
+
+
+                    var content = "<iframe id='ifm' src='company_personManage.html' frameborder='0' scrolling='no' width='100%' height='1000px'></iframe>"
+                    $("#dealer_inner").html(content);
+
+                }else{
+                    alert(data['head']['message']);
+                }
+            }
+        });
+
+    }
+
+    function editLogisticsCompanyInfo() {  
+        layer.open({
+            id:1,
+            type: 1,
+            title:'编辑物流公司',
+            skin:'layui-layer-rim',
+            offset:['300px','480px'],
+            area:['450px', 'auto'],
+            content: '<div class="row" style="width: 420px;  margin-left:7px; margin-top:10px;">'
+
+                    // +'<div class="mg_l20">'
+                    // +'<div>'
+                    // +'<span class="">企业编号:</span>'
+                    // +'<input id="dealerNum" type="text" class="layer_input mg_l10">'
+                    // +'</div>'
+                    // +'</div>'
+
+                    +'<div class="mg_l20" style="margin-top: 10px">'
+                    +'<div>'
+                    +'<span class="">企业名称:</span>'
+                    +'<input id="dealerName" type="text" class="layer_input mg_l10" value="'+ $("#companyName").text() +'">'
+                    +'</div>'
+                    +'</div>'
+
+                    +'<div class="mg_l20" style="margin-top: 10px">'
+                    +'<div>'
+                    +'<span class="">联系人名:</span>'
+                    +'<input id="name" type="text" class="layer_input mg_l10" value="'+ $("#contactName").text() +'">'
+                    +'</div>'
+                    +'</div>'
+
+                    +'<div class="mg_l20" style="margin-top: 10px">'
+                    +'<div>'
+                    +'<span class="">联系电话:</span>'
+                    +'<input id="mobile" type="text" class="layer_input mg_l10" value="'+ $("#contactMobile").text() +'">'
+                    +'<input id="userId" type="hidden" value="'+ $(window.parent.document).find("input[name='logisticsCompanyId']").val() +'">'
+                    +'</div>'
+                    +'</div>'
+                        
+                    +'</div>'
+                ,
+            btn:['更新','取消'],
+            btn1: function (index,layero) {
+                $.ajax({
+                    type: "post",
+                    async: false,
+                    url: ip_path + "/changfa_system/account/updateLogisticsPerson.do",
+                    data: {
+                        mobile : $("#mobile").val(),
+                        userName : $("#name").val(),
+                        company : $("#dealerName").val(),
+                        userId : $("#userId").val()
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        if(data['head']['code'] == 200){
+                            window.location.reload();
+                        }else{
+                            alert(data['head']['message']);
+                        }
+                    }
+                });
+            },
+            btn2:function (index,layero) {
+                layer.close(index);
+            }
+        
+        });
+    }
+</script>
+</html>

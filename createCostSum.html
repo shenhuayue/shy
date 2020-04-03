@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>生成结算单</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+        <script src="js/closeAccount.js"></script>
+    <script src="js/saleCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/index.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <!--<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">-->
+    <!--<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>-->
+    <!--<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
+    <script src="jquery-ui-1.12.1/jquery-ui.min.js"></script>
+    <link href="jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet" />
+    <script src="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.js"></script>
+    <script type="text/javascript" src="jQuery-Timepicker/dist/i18n/jquery-ui-timepicker-zh-CN.js"></script>
+    <link href="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.css" rel="stylesheet" />
+</head>
+<body class="reset">
+<div id="editRepair" class="addTopic outShadow" style="display: none;">
+    <div class="dealer_title">
+        <span>费用核准</span>
+        <img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeEditRepair()">
+    </div>
+    <div class="txt_center" style="width: 100%;height: auto;border: 1px solid #E4E4E4;">
+        <div class="mg-t20 mg_b20">
+            <span class="describ">核准单程：</span><input id="examineDistance" style="width: 200px;height: 30px;">
+        </div>
+        <div class="mg_b20">
+            <span class="describ">核准工时：</span><input id="examineTime"  style="width: 200px;height: 30px;">
+        </div>
+        <div class="mg_b20">
+            <span class="describ" style="margin-left: -28px;">核准其他费用：</span><input id="examineOtherFee"  style="width: 200px;height: 30px;">
+        </div>
+        <div class="mg_b20">
+            <span class="describ">考核费用：</span><input id="check"  style="width: 200px;height: 30px;">
+        </div>
+        <div class="mg_b20">
+            <span class="describ" style="vertical-align: top">考核原因：</span><textarea id="checkReason" class="normal_font" style="resize: none;width: 198px;height: 70px;"></textarea>
+        </div>
+        <input type="hidden" id="repairId">
+        <div class="mg_b50" style="width: 100%;text-align: center">
+            <button class="waves submit_btn mg-t30" onclick="updateRepair()">提交</button>
+        </div>
+    </div>
+</div>
+
+<div class="mg-t50">
+    <div class="tit">
+        <span class="flt_l">企业信息</span>
+    </div>
+    <div class="account_cont2">
+
+            <div style="float: left;margin-top: 60px;margin-left: 20px;">
+                    <div style="width: 100px;height: 70px;" align="center">
+                        <img src="./img/cangku.png" alt="" id="headPath" style="width: 70px;height: 70px;border-radius: 50%;">
+                    </div>
+                    <!-- <div style="text-align: center;line-height:20px">   
+                            <span>结算方式</span><span id="roleId" class="describ"></span>
+                    </div> -->
+
+                </div>
+            <div style="float: left;width: 70%;">
+                    <div>
+                            <span class="describ mg_l30">企业编号：</span>
+                            <span id="dealerNum" class="describ"></span>
+                    </br>
+                            <span class="describ mg_l30">企业名称：</span>
+                            <span id="dealerName" class="describ"></span>
+                    </div>
+            
+            
+                    <span class="describ mg_l30">星级：</span>
+                    <span id="level" class="describ"></span>
+                    <span class="describ mg_l30">|</span>
+                    <span class="describ mg_l30">里程单价：</span>
+                    <span id="distancePrice" class="describ"></span>
+                    <span class="describ mg_l30">|</span>
+                    <span class="describ mg_l30">工时单价：</span>
+                    <span id="timePrice" class="describ"></span>
+            </div>
+
+    </div>
+</div>
+<div>
+    <div class="tit mg-t50">
+        <span class="describ mg_l30">产品线：</span>
+        <select id="product" class="product_line mg-r30"></select>
+
+        <!-- <span class="describ mg_l30">年：</span>
+        <select id="year" class="area_choose mg-r30"></select>
+
+        <span class="describ mg_l30">月：</span>
+        <select id="month" class="area_choose"></select> -->
+         <span class="describ">审核日期：</span>
+        <input id="date_start" class="timeChoose" placeholder="起始">
+        <span>-</span>
+        <input id="date_end" class="timeChoose" placeholder="截止">
+
+        <input type="button" id="createCostSum" class="add_btn flt_r" value="生成结算单" onclick="createAddCostSum()">
+    </div>
+    <div class="account_cont" style="font-size: 0.9em;">
+        <table cellpadding="0" cellspacing="0" class="table2" align="center">
+            <thead>
+            <tr align="center">
+                <th class="th2" height="33">型号</th>
+                <th class="th2">单程（km）</th>
+                <th class="th2">核准单程（km）</th>
+                <th class="th2">里程费用（￥）</th>
+                <th class="th2">工时（h）</th>
+                <th class="th2">核准工时（h）</th>
+                <th class="th2">工时费用（￥）</th>
+                <th class="th2">其他费用（￥）</th>
+                <th class="th2">核准其他费用（￥）</th>
+                <th class="th2">考核（￥）</th>
+                <th class="th2">考核原因</th>
+                <th class="th2">合计（￥）</th>
+            </tr>
+            <!-- <tr align="center">
+                <th class="th2" height="33">产品线</th>
+                <th class="th2">日期</th>
+                <th class="th2">待结算费用（￥）</th>
+                <th class="th2">状态</th>
+                <th class="th2">选择</th>
+            </tr> -->
+            </thead>
+            <tbody id="adminTbody" style="width: 100%;">
+
+            </tbody>
+        </table>
+        <div class="txt_left mg-t20" style="margin-left: 5%">
+            <span class="describ fontGreen">总计金额（￥）：</span><span id="costTotal" class="fontGreen"></span>
+        </div>
+        <div id="barcon" class="barcon" >
+            <div id="barcon1" class="barcon1"></div>
+            <div id="barcon2" class="barcon2">
+                <ul>
+                    <li><button id="firstPage" class="page_btn">首页</button></li>
+                    <li><button id="prePage" class="page_btn">上一页</button></li>
+                    <li><button id="nextPage" class="page_btn">下一页</button></li>
+                    <li><button id="lastPage" class="page_btn">尾页</button></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+
+        $.datepicker.regional['zh-CN'] = {
+            changeMonth: true,
+            changeYear: true,
+            clearText: '清除',
+            clearStatus: '清除已选日期',
+            closeText: '关闭',
+            closeStatus: '不改变当前选择',
+            prevText: '<上月',
+            prevStatus: '显示上月',
+            prevBigText: '<<',
+            prevBigStatus: '显示上一年',
+            nextText: '下月>',
+            nextStatus: '显示下月',
+            nextBigText: '>>',
+            nextBigStatus: '显示下一年',
+            currentText: '今天',
+            currentStatus: '显示本月',
+            monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            monthNamesShort: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+            monthStatus: '选择月份',
+            yearStatus: '选择年份',
+            weekHeader: '周',
+            weekStatus: '年内周次',
+            dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+            dayNamesShort: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+            dayNamesMin: ['日', '一', '二', '三', '四', '五', '六'],
+            dayStatus: '设置 DD 为一周起始',
+            dateStatus: '选择 m月 d日, DD',
+            dateFormat: 'yy-mm-dd',
+            firstDay: 1,
+            initStatus: '请选择日期',
+            isRTL: false
+        };
+
+        $.datepicker.setDefaults($.datepicker.regional['zh-CN']);
+        //$("#date_start").datepicker({maxDate:new Date()});
+        // $("#date_end").datepicker({maxDate:new Date()});
+        $("#defult").datetimepicker();
+        $("#date_start").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            clear : "qingkong",
+            onClose: function(selectedDate) {
+                //$("#date_end").datepicker("option", "minDate", selectedDate);
+                $("#date_start").val($(this).val());
+            }
+        });
+
+
+
+        $("#date_end").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            onClose: function(selectedDate) {
+                //$("#date_start").datepicker("option", "maxDate", selectedDate);
+                $("#date_end").val($(this).val());
+            }
+        });
+
+        $("#date_start").val(getTime(new Date()));
+        $("#date_end").val(getTime(new Date()));
+
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/user/getServiceLineAndLevel.do",
+            data : {
+                workNum : $(window.parent.document).find("input[name='dealerId']").val()
+            },
+            dataType : "json",
+            success : function (data) {
+                $("#dealerNum").text($(window.parent.document).find("input[name='dealerId']").val());
+                $("#dealerName").text(data['body']['result']['company']);
+                for(var i=0;i<data['body']['result']['array']['length'];i++){
+                    $("#product").append("<option value='"+ data['body']['result']['array'][i]['lineNo'] +"'>"+data['body']['result']['array'][i]['lineName']+"</option>");
+                }
+                // $("#product").unbind();
+            }
+        });
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/user/getServiceLevel.do",
+            data : {
+                workNum : $(window.parent.document).find("input[name='dealerId']").val(),
+                lineNum : $("#product option:selected").val()
+            },
+            dataType : "json",
+            success : function (data) {
+                $("#level").text(data['body']['resultList'][0]['levelName']);
+            }
+        });
+
+        var date=new Date;
+        var year=date.getFullYear();
+        var month=date.getMonth()+1;
+        for(var i=2018;i<=year;i++){
+            $("#year").append("<option value='"+ i +"'>"+ i +"</option>");
+        }
+        $("#year").val(year);
+
+        if($("#year option:selected").val() != year){
+            $("#month").empty();
+            for(var i=1;i<=12;i++){
+                $("#month").append("<option value='"+ i +"'>"+ i +"</option>");
+            }
+            $("#month").val(date.getMonth());
+        }else{
+            $("#month").empty();
+            for(var i=1;i<month;i++){
+                $("#month").append("<option value='"+ i +"'>"+ i +"</option>");
+            }
+            $("#month").val(date.getMonth());
+        }
+
+        currentPage = 1;
+        $('#firstPage').attr('disabled',true);
+        $('#prePage').attr('disabled',true);
+        $("#firstPage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = 1;
+            $('#firstPage').attr('disabled',true);
+            $('#prePage').attr('disabled',true);
+            ajax_createCostSum_detail();
+        });
+        $("#lastPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = totalPage;
+            $('#lastPage').attr('disabled',true);
+            $('#nextPage').attr('disabled',true);
+            ajax_createCostSum_detail();
+        });
+        $("#nextPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = currentPage+1;
+            if(currentPage == totalPage){
+                $('#lastPage').attr('disabled',true);
+                $('#nextPage').attr('disabled',true);
+            }else{
+                $('#lastPage').removeAttr('disabled');
+                $('#nextPage').removeAttr('disabled');
+            }
+            ajax_createCostSum_detail();
+        });
+        $("#prePage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = currentPage-1;
+            if(currentPage == 1){
+                $('#firstPage').attr('disabled',true);
+                $('#prePage').attr('disabled',true);
+            }else{
+                $('#firstPage').removeAttr('disabled');
+                $('#prePage').removeAttr('disabled');
+            }
+            ajax_createCostSum_detail();
+        });
+
+        //初始化
+        ajax_createCostSum_detail();
+
+        $("#date_start").change(function(){
+            currentPage = 1;
+            ajax_createCostSum_detail();
+        })
+
+        $("#date_end").change(function(){
+            currentPage = 1;
+            ajax_createCostSum_detail();
+        })
+
+        $("#year").change(function () {
+            if($("#year option:selected").val() != ""){
+                if($("#year option:selected").val() != year){
+                    $("#month").empty();
+                    for(var i=1;i<=12;i++){
+                        $("#month").append("<option value='"+ i +"'>"+ i +"</option>");
+                    }
+                }else{
+                    $("#month").empty();
+                    for(var i=1;i<month;i++){
+                        $("#month").append("<option value='"+ i +"'>"+ i +"</option>");
+                    }
+                }
+            }else{
+                $("#month").html("<option value=''>全部</option>");
+            }
+            currentPage = 1;
+            ajax_createCostSum_detail();
+        });
+
+        $("#month").change(function () {
+            currentPage = 1;
+            ajax_createCostSum_detail();
+        });
+
+        $("#product").change(function () {
+            $.ajax({
+                type : "post",
+                url : ip_path+"/changfa_system/user/getServiceLevel.do",
+                data : {
+                    workNum : $(window.parent.document).find("input[name='dealerId']").val(),
+                    lineNum : $("#product option:selected").val()
+                },
+                dataType : "json",
+                success : function (data) {
+
+                }
+            });
+            currentPage = 1;
+            ajax_createCostSum_detail();
+        });
+    }
+
+    function getTime(date) {  
+    var y = date.getFullYear();  
+    var m = date.getMonth() + 1;  
+    m = m < 10 ? '0' + m : m;  
+    var d = date.getDate();  
+    d = d < 10 ? ('0' + d) : d;  
+    return y + '-' + m + '-' + d;  
+    };  
+</script>
+</html>

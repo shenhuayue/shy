@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>保养计划详情</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/userCenter.js"></script>
+    <script src="js/dcommon.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <script src="js/maintainby.js"></script>
+    <script src="js/dsaleCenter.js"></script>
+
+</head>
+<body class="reset">
+    <div>
+        <div class="tit mg-t50">
+            <span class="flt_l">筛选查询</span>
+            <!--<input type="button" class="add_btn flt_r" value="创建" onclick="addThreeServer()">-->
+        </div>
+        <div class="account_cont">
+            <table width="100%" cellpadding="0" cellspacing="0" class="table2" align="center">
+                <thead>
+                <tr text-align="center">
+                    <th height="33" class="th2">保养计划名称</th>
+                    <th class="th2">创建时间</th>
+                    <th class="th2">修改时间</th>
+                    <th class="th2">操作</th>
+                </tr>
+                
+                </thead>
+                <tbody id="adminTbody">
+                    <!--
+                        <tr id ="">
+                            <td class="td2" height="33">二零一九年第一次保养计划（零件保养）</td>
+                            <td class="td2">2019-11-06</td>
+                            <td class="td2" >2019-11-06</td>
+                            <td class="td2" style="color:#76E9D2"><span style="
+                                display: inline-block;
+                                vertical-align: middle;
+                            ">查看详情&nbsp;&nbsp;</span><img src="img/on.png" onclick="toogle_cfServerStatus(this)" style="width:30px;vertical-align: middle;"></td>
+                        </tr>
+                        <tr id ="">
+                            <td class="td2" height="33">二零一九年第一次保养计划（零件保养）</td>
+                            <td class="td2">2019-11-06</td>
+                            <td class="td2" >2019-11-06</td>
+                            <td class="td2" style="color:#76E9D2"><span style="
+                                display: inline-block;
+                                vertical-align: middle;
+                            ">查看详情&nbsp;&nbsp;</span><img src="img/on.png" onclick="toogle_cfServerStatus(this)" style="width:30px;vertical-align: middle;"></td>
+                        </tr>
+                        -->
+                </tbody>
+            </table>
+            <div id="barcon" class="barcon" >
+                <div id="barcon1" class="barcon1"></div>
+                <div id="barcon2" class="barcon2">
+                    <ul>
+                        <li><button id="firstPage" class="page_btn">首页</button></li>
+                        <li><button id="prePage" class="page_btn">上一页</button></li>
+                        <li><button id="nextPage" class="page_btn">下一页</button></li>
+                        <li><button id="lastPage" class="page_btn">尾页</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+        currentPage = 1;
+        $('#firstPage').attr('disabled',true);
+        $('#prePage').attr('disabled',true);
+        ajax_cf_serverMdetail();
+        $("#firstPage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = 1;
+            $('#firstPage').attr('disabled',true);
+            $('#prePage').attr('disabled',true);
+            ajax_cf_serverMdetail();
+        });
+        $("#lastPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = totalPage;
+            $('#lastPage').attr('disabled',true);
+            $('#nextPage').attr('disabled',true);
+            ajax_cf_serverMdetail();
+        });
+        $("#nextPage").click(function () {
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = currentPage+1;
+            if(currentPage == totalPage){
+                $('#lastPage').attr('disabled',true);
+                $('#nextPage').attr('disabled',true);
+            }else{
+                $('#lastPage').removeAttr('disabled');
+                $('#nextPage').removeAttr('disabled');
+            }
+            ajax_cf_serverMdetail();
+        });
+        $("#prePage").click(function () {
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = currentPage-1;
+            if(currentPage == 1){
+                $('#firstPage').attr('disabled',true);
+                $('#prePage').attr('disabled',true);
+            }else{
+                $('#firstPage').removeAttr('disabled');
+                $('#prePage').removeAttr('disabled');
+            }
+            ajax_cf_serverMdetail();
+        });
+
+
+    }
+</script>
+</html>

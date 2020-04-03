@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>生成付款单</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+        <script src="js/closeAccount.js"></script>
+    <script src="js/saleCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/index.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <script src="js/jquery_form.js" type="text/javascript"></script>
+    <script src="js/ajaxfileupload.js" type="text/javascript"></script>
+    <script src="js/jquery_form.js" type="text/javascript"></script>
+    <script src="jquery-ui-1.12.1/jquery-ui.min.js"></script>
+    <link href="jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet" />
+    <script src="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.js"></script>
+    <script type="text/javascript" src="jQuery-Timepicker/dist/i18n/jquery-ui-timepicker-zh-CN.js"></script>
+    <link href="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.css" rel="stylesheet" />
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    <link href="css/fSelect.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="css/demo.css">
+    <link rel="stylesheet" type="text/css" href="css/cf_web.css">
+    <script src="js/fSelect.js"></script>
+    <!--<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">-->
+    <!--<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>-->
+    <!--<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
+    <style type="text/css">
+        .img_div{min-height: 100px; min-width: 100px;}
+        .isImg{width: 120px; height: 120px; position: relative; float: left; margin-left: 10px;}
+        .removeBtn{position: absolute; top: 0px; right: 0; z-index: 11; border: 0px; border-radius: 50px; background: red; width: 22px; height: 22px; color: white;}
+
+        /* .ui-datepicker-calendar {
+            display: none;
+        } */
+    </style>
+
+</head>
+<body class="reset">
+<div class="mg-t50">
+    <div class="tit">
+        <span class="flt_l">查询条件</span>
+        <input type="button" class="add_btn flt_r" value="清空" onclick="clearDate()">
+    </div>
+    <div class="account_cont2">
+        <span class="describ mg_l30">企业编号：</span>
+        <span id="dealerNum" class="describ"></span>
+        <span class="describ mg_l30">企业名称：</span>
+        <span id="dealerName" class="describ"></span>
+        <span class="describ mg_l30">产品线：</span>
+        <!--<select id="product" class="product_line mg-r30"></select>-->
+        <select id="product" class="demo" multiple="multiple" style="height: 30px;top: 10px;">
+            <optgroup id="group">
+
+            </optgroup>
+        </select>
+
+
+        <span class="describ">选择时间：</span>
+        <input id="date_start" class="timeChoose" placeholder="起始">
+        <span>-</span>
+        <input id="date_end" class="timeChoose" placeholder="截止">
+    </div>
+</div>
+<div>
+    <div class="tit mg-t50">
+        <span>选择结算单</span>
+    </div>
+    <div class="account_cont" style="font-size: 0.9em;">
+        <div id="scrollDiv">
+            <table cellpadding="0" cellspacing="0" class="table2" align="center">
+                <thead>
+                <tr align="center">
+                    <th class="th2" height="33">企业名称</th>
+                    <th class="th2">企业编号</th>
+                    <th class="th2">产品线</th>
+                    <th class="th2">日期</th>
+                    <th class="th2">费用（￥）</th>
+                    <th class="th2">状态</th>
+                    <th class="th2"><input type="checkbox" id="checkAll" class="choose_select" onclick="chooseAllOrNullCostSum()"></th>
+                </tr>
+                </thead>
+                <tbody id="adminTbody" style="width: 100%;">
+
+                </tbody>
+            </table>
+        </div>
+        <!-- <div class="txt_left mg-t20 mg_b30" style="margin-left: 5%">
+            <span class="describ">结算方式：</span>
+            <select id="payType" class="area_choose">
+                <option value="1">发票结算</option>
+                <option value="2">返利结算</option>
+            </select>
+        </div>
+        <div id="ticketArea" class="mg_b30">
+            <div style="border: 1px solid #E4E4E4;width: 98%;margin-left: 1%"></div>
+            <div style="height: 210px;width: 98%;">
+                <div class="flt_l mg_l30" style="width: 15%;height: 210px;line-height: 210px;border-right: 1px solid #E4E4E4;">
+                    <span class="describ">结算单对应发票</span>
+                </div>
+                <div class="flt_l" style="width: 82%;">
+                    <div style="width: 100%;height: 35px;line-height: 35px;">
+                        <span class="describ fontGreen flt_l mg_l30">本次结算金额（元）：</span><span class="describ fontGreen flt_l" id="payTotal"></span>
+                        <form id="form"><input type="button" class="add_btn flt_r" value="添加发票" onclick="fileClick()"><input type="file" name="file" id="file" style="display: none;"></form>
+                    </div>
+
+                    <div>
+                        <table>
+                            <tr id="ticketList"></tr>
+                        </table>
+                    </div>
+                    <div class="txt_left mg-t10">
+                        <span class="describ mg_l30">备注：</span><input type="text" id="remarks" placeholder="请输入备注信息" style="width: 70%;height: 30px;border: none;">
+                    </div>
+
+                    <!--<div id="ticketList">-->
+                        <!--<div class="flt_l txt_left mg_l30">-->
+                            <!--<span class="describ">发票号：</span><span class="describ"></span><br>-->
+                            <!--<span class="describ">日期：</span><span class="describ"></span><br>-->
+                            <!--<img src="" class="mg-t10" style="width: 140px;height: 100px;" onclick="ticketLarge(this)">-->
+                        <!--</div>-->
+                    <!--</div>-->
+                </div>
+            </div>
+            <div style="border: 1px solid #E4E4E4;width: 98%;margin-left: 1%"></div>
+        </div> -->
+        <div class="btn_part mg_b50">
+            <img src="img/yes.png" id="rep_unpass" class="mg-t20" onclick="createCostPay()">
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+
+        $.datepicker.regional['zh-CN'] = {
+            changeMonth: true,
+            changeYear: true,
+            clearText: '清除',
+            clearStatus: '清除已选日期',
+            closeText: '关闭',
+            closeStatus: '不改变当前选择',
+            prevText: '<上月',
+            prevStatus: '显示上月',
+            prevBigText: '<<',
+            prevBigStatus: '显示上一年',
+            nextText: '下月>',
+            nextStatus: '显示下月',
+            nextBigText: '>>',
+            nextBigStatus: '显示下一年',
+            currentText: '今天',
+            currentStatus: '显示本月',
+            monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            monthNamesShort: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+            monthStatus: '选择月份',
+            yearStatus: '选择年份',
+            weekHeader: '周',
+            weekStatus: '年内周次',
+            dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+            dayNamesShort: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+            dayNamesMin: ['日', '一', '二', '三', '四', '五', '六'],
+            dayStatus: '设置 DD 为一周起始',
+            dateStatus: '选择 m月 d日, DD',
+            dateFormat: 'yy-mm-dd',
+            firstDay: 1,
+            initStatus: '请选择日期',
+            isRTL: false
+        };
+
+        $.datepicker.setDefaults($.datepicker.regional['zh-CN']);
+        $("#date_start").datepicker({maxDate:new Date()});
+        $("#date_end").datepicker({maxDate:new Date()});
+        $("#defult").datetimepicker();
+        $("#date_start").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            clear : "qingkong",
+            onClose: function(selectedDate) {
+                $("#date_end").datepicker("option", "minDate", selectedDate);
+            }
+        });
+
+        $("#date_end").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            onClose: function(selectedDate) {
+                $("#date_start").datepicker("option", "maxDate", selectedDate);
+                $("#date_end").val($(this).val());
+            }
+        });
+
+        // $("#dateStart").datepicker({
+        //     maxDate:new Date(),
+        //     monthNamesShort: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
+        //     prevText: '上月',			// 前选按钮提示
+        //     nextText: '下月',			// 后选按钮提示
+        //     changeYear: true, 			// 年下拉菜单
+        //     changeMonth: true, 			// 月下拉菜单
+        //     showButtonPanel: true, 		// 显示按钮面板
+        //     showMonthAfterYear: true, 	// 月份显示在年后面
+        //     currentText: "本月", 		// 当前日期按钮提示文字
+        //     closeText: "确认", 			// 关闭按钮提示文字
+        //     dateFormat: "yy-mm",		// 日期格式
+        //     onClose: function(dateText, inst) {// 关闭事件
+        //         var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+        //         var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+        //         $(this).datepicker('setDate', new Date(year, month, 1));
+        //         if($("#dateStart").val() != "" && $("#dateEnd").val() != ""){
+        //             var startTime = $("#dateStart").val().split("-")[0]+$("#dateStart").val().split("-")[1];
+        //             var endTime = $("#dateEnd").val().split("-")[0]+$("#dateEnd").val().split("-")[1];
+        //             if(parseInt(startTime) > parseInt(endTime)){
+        //                 alert("起始时间应早于截止时间！");
+        //             }else{
+        //                 currentPage = 1;
+        //                 ajax_costSumForPay();
+        //             }
+        //         }
+        //     }
+        // });
+        // $("#dateEnd").datepicker({
+        //     maxDate:new Date(),
+        //     monthNamesShort: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
+        //     prevText: '上月',			// 前选按钮提示
+        //     nextText: '下月',			// 后选按钮提示
+        //     changeYear: true, 			// 年下拉菜单
+        //     changeMonth: true, 			// 月下拉菜单
+        //     showButtonPanel: true, 		// 显示按钮面板
+        //     showMonthAfterYear: true, 	// 月份显示在年后面
+        //     currentText: "本月", 		// 当前日期按钮提示文字
+        //     closeText: "确认", 			// 关闭按钮提示文字
+        //     dateFormat: "yy-mm",		// 日期格式
+        //     onClose: function(dateText, inst) {// 关闭事件
+        //         var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+        //         var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+        //         $(this).datepicker('setDate', new Date(year, month, 1));
+        //         if($("#dateStart").val() != "" && $("#dateEnd").val() != ""){
+        //             var startTime = $("#dateStart").val().split("-")[0]+$("#dateStart").val().split("-")[1];
+        //             var endTime = $("#dateEnd").val().split("-")[0]+$("#dateEnd").val().split("-")[1];
+        //             if(parseInt(startTime) > parseInt(endTime)){
+        //                 alert("起始时间应早于截止时间！");
+        //             }else{
+        //                 currentPage = 1;
+        //                 ajax_costSumForPay();
+        //             }
+        //         }
+        //     }
+        // });
+
+        ticketIds = [];
+        costSumIds = [];
+
+        // $.ajax({
+        //     type : "post",
+        //     async : false,
+        //     url : "http://192.168.1.104:8080/changfa_system/machineModel/getMachineModels.do",
+        //     dataType : "json",
+        //     success : function (data) {
+        //         $("#group").empty();
+        //         for(var i=0;i<data['body']['resultList']['length'];i++){
+        //             $("#group").append("<option value='"+ data['body']['resultList'][i]['number'] +"'>"+data['body']['resultList'][i]['name']+"</option>");
+        //         }
+        //     }
+        // });
+        $.ajax({
+            type : "post",
+            async : false,
+            url : ip_path+"/changfa_system/user/getServiceLineAndLevel.do",
+            data : {
+                workNum : $(window.parent.document).find("input[name='dealerId']").val()
+            },
+            dataType : "json",
+            success : function (data) {
+                $("#dealerNum").text($(window.parent.document).find("input[name='dealerId']").val());
+                $("#dealerName").text(data['body']['result']['company']);
+                for(var i=0;i<data['body']['result']['array']['length'];i++){
+                    $("#group").append("<option value='"+ data['body']['result']['array'][i]['lineNo'] +"'>"+data['body']['result']['array'][i]['lineName']+"</option>");
+                }
+                // $("#product").unbind();
+            }
+        });
+        $('.demo').fSelect();
+        $("#product").change(function () {
+            currentPage = 1;
+            ajax_costSumForPay();
+        });
+
+        //初始化
+        currentPage = 1;
+        ajax_costSumForPay();
+
+
+        $("#date_start").change(function(){
+            currentPage = 1;
+            ajax_costSumForPay();
+        })
+
+        $("#date_end").change(function(){
+            currentPage = 1;
+            ajax_costSumForPay();
+        })
+
+        $("#dealer_item").change(function () {
+            $("#dealer_info").val("");
+        });
+
+        $("#product").change(function () {
+            $.ajax({
+                type : "post",
+                url : ip_path+"/changfa_system/user/getServiceLevel.do",
+                data : {
+                    workNum : $(window.parent.document).find("input[name='dealerId']").val(),
+                    lineNum : $("#product option:selected").val()
+                },
+                dataType : "json",
+                success : function (data) {
+
+                }
+            });
+            currentPage = 1;
+            ajax_costSumForPay();
+        });
+
+        $("#payType").change(function () {
+            if($("#payType option:selected").val() == 2){
+                $("#ticketArea").hide();
+            }else{
+                $("#ticketArea").show();
+            }
+        });
+
+        $("#file").change(function() {
+            window.parent.showLoading();
+            var img_list = $("#ticketList");
+            var filepath = $("input[name='file']").val();
+            for(var i = 0; i < this.files.length; i++) {
+                var objUrl = getObjectURL(this.files[i]);
+                var extStart = filepath.lastIndexOf(".");
+                var ext = filepath.substring(extStart, filepath.length).toUpperCase();
+                if(ext != ".BMP" && ext != ".PNG" && ext != ".GIF" && ext != ".JPG" && ext != ".JPEG") {
+                    alert("图片限于bmp,png,gif,jpeg,jpg格式");
+                    $(".img_div").html("");
+                    window.parent.hideLoading();
+
+                    return false;
+                } else {
+                    var option = {
+                        url :ip_path+"/changfa_system/file/oneFileUpoload.do",
+                        type : "post",
+                        success : function (data) {
+                            window.parent.hideLoading();
+                            if(data['head']['code'] == 200){
+                                window.parent.hideLoading();
+                                ticketIds.push(data['body']['result']['fileId']);
+                                var img_html = "<td><div class='isImg'><img src='" + data['body']['result']['filePath'] + "' onclick='javascript:ticketLarge(this)' style='height: 100%; width: 100%;' />" +
+                                    "<button class='removeBtn' onclick='javascript:removeImg(this)'>x</button><input type='hidden' name='fileId' value='" + data['body']['result']['fileId'] + "'></div></td>";
+                                img_list.append(img_html);
+
+                                $("#file").val("");
+                            }
+                        }
+                    };
+                    $("#form").ajaxSubmit(option);
+                }
+            }
+        });
+
+        function getObjectURL(file) {
+            var url = null;
+            if(window.createObjectURL != undefined) { // basic
+                url = window.createObjectURL(file);
+            } else if(window.URL != undefined) { // mozilla(firefox)
+                url = window.URL.createObjectURL(file);
+            } else if(window.webkitURL != undefined) { // webkit or chrome
+                url = window.webkitURL.createObjectURL(file);
+            }
+            //console.log(url);
+            return url;
+        }
+    }
+
+    function removeImg(r){
+        var index;
+        for(var item in ticketIds){
+            if(ticketIds[item] == r.parentNode.childNodes[2].value){
+                index = item;
+                ticketIds.splice(index,1);
+            }
+        }
+        $(r).parent().parent().remove();
+    }
+
+    function ticketLarge(event) {
+        window.parent.pic_makeLarge(event);
+    }
+
+    function fileClick() {
+        $("#file").click();
+
+    }
+</script>
+</html>

@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>公司维护详细</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <link href="css/threePackspolicy.css" type="text/css" rel="stylesheet"/>
+    <script src="js/jquery-1.9.1.js"></script>
+    <script src="jquery-ui-1.12.1/jquery-ui.min.js"></script>
+    <link href="jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet" />
+    <script src="js/subsidy.js"></script>
+    <script src="js/dcommon.js"></script>
+    <script src="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.js"></script>
+    <script type="text/javascript" src="jQuery-Timepicker/dist/i18n/jquery-ui-timepicker-zh-CN.js"></script>
+    <link href="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.css" rel="stylesheet" />
+</head>
+<body class="reset">
+    <style>
+        .radio_type{
+            width: 20px;
+            height: 20px;
+            appearance: none;
+            position: relative;
+        }
+        .radio_type:before{
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: 1px solid #cfcfcf;
+            background:#cfcfcf;
+            display: inline-block;
+            border-radius: 50%;   
+            vertical-align: middle;
+        }
+        .radio_type:after{
+            content: '';
+            width: 10px;
+            height:5px;
+            border: 2px solid white;
+            border-top: transparent;
+            border-right: transparent;
+            text-align: center;
+            display: block;
+            position: absolute;
+            top: 6px;
+            left:5px;
+            vertical-align: middle;
+            transform: rotate(-45deg);
+        }
+        .radio_type.radio_types:before{
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: 1px solid #1ABC9C;
+            background:#1ABC9C;
+            display: inline-block;
+            border-radius: 50%;
+            vertical-align: middle;
+        }
+        .radio_type:checked:after{
+            content: '';
+            width: 10px;
+            height:5px;
+            border: 2px solid white;
+            border-top: transparent;
+            border-right: transparent;
+            text-align: center;
+            display: block;
+            position: absolute;
+            top: 6px;
+            left:5px;
+            vertical-align: middle;
+            transform: rotate(-45deg);
+        }
+        
+        </style>
+    <div>
+        <div class="tit mg-t50">
+            <span class="flt_l">公司维护</span>
+            
+        </div>
+        <div class="account_cont">
+        </div>
+        
+        <div class="account_cont">
+            <div class="tit_msg" style="text-align:left;padding-top:27px;">
+                <span style="margin-left:45px;">公司名称：</span>
+                <input type="text" id="mingcheng" class="product_line" value="" style="color:#666;width:350px;">
+                
+                <!--<button class="query_btn_big" style="margin-left: -4%;" onclick="ajax_seachcompany()"></button>-->
+                <span style="margin-left:30px;">简称：</span>
+                <input type="text" id="jiancheng" class="product_line" value="" style="color:#666;">
+                <!--<button class="query_btn_big" style="margin-left: -4%;" onclick="ajax_seachcompany()"></button>-->
+                <!--
+                <span style="font-size:16px;color:#666;display: inline-block;margin-left:20px;">创建日期：</span>
+                <input id="date_start" class="product_line" placeholder="选择日期" readonly="" style="color:#666;margin-right:6px;width:140px;">
+                -->
+            </div>
+            
+            <div class="tit_msg" style="height:40px;text-align:left;padding-top:20px;">
+                <img src="img/tit_pic.png" class="tit_pic" style="margin-left:45px;">
+                <span>分公司查询：</span>
+                <!--<input type="button" class="add_btn flt_r" value="添加" onclick="editCreate()">-->
+                <input type="text" id="companyName" class="product_line">
+                <button class="query_btn_big" style="margin-left: -4%;margin-right: 4%" onclick="searchgsName()"></button>
+            </div>
+            <div >
+                <table width="100%" cellpadding="0" cellspacing="0" class="table2" align="center" style="margin-top:0px;">
+                    <thead>
+                    <tr align="center">
+                        <th height="33" class="th2">公司名称</th>
+                        <th class="th2"><span id="selectall" onclick="selectallliebiao()" style="color:#1ABC9C;cursor:pointer;">&nbsp;全选</span></th>
+                    </tr>
+                    </thead>
+                    <tbody id="tablelb">
+                        
+                    </tbody>
+                </table>
+                
+            </div>
+            <div id="barcon" class="barcon" >
+                <div id="barcon1" class="barcon1"></div>
+                <div id="barcon2" class="barcon2">
+                    <ul>
+                        <li><button id="firstPage" class="page_btn">首页</button></li>
+                        <li><button id="prePage" class="page_btn">上一页</button></li>
+                        <li><button id="nextPage" class="page_btn">下一页</button></li>
+                        <li><button id="lastPage" class="page_btn">尾页</button></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="tit_msg" style="text-align:left;height:40px;padding-top:0px;">
+                <img src="img/tit_pic.png" class="tit_pic" style="margin-left:45px;">
+                <span>绑定分公司：</span>
+                <span>名称：</span>
+                <input type="text" id="saleM_infoqd" class="product_line" style="width: 150px;">
+                <button class="query_btn_big" style="margin-left: -4%;" onclick="ajax_seachqd()"></button>
+                <input type="button" class="add_btn flt_r" value="添加" onclick="addsubsidy()">
+                <input type="button" class="add_btn flt_r" value="删除" onclick="delCreate()" style="margin-right:41px;height:33px;border:1px solid #F34B4B;background:#F34B4B">
+            </div>
+            <table width="100%" cellpadding="0" cellspacing="0" class="table2" align="center">
+                <thead>
+                    <tr align="center">
+                        <th height="33" class="th2">公司名称</th>
+                        <th class="th2"><span id="selectallqd" onclick="selectallqd()" style="color:#1ABC9C;cursor:pointer;">&nbsp;全选</span></th>
+                    </tr>
+                </thead>
+                <tbody id="qingdanbody">
+                </tbody>
+                
+            </table>
+            <div id="barcon_qd" class="barcon" >
+                <div id="barcon1_qd" class="barcon1"></div>
+                <div id="barcon2_qd" class="barcon2">
+                    <ul>
+                        <li><button id="firstPage_qd" class="page_btn">首页</button></li>
+                        <li><button id="prePage_qd" class="page_btn">上一页</button></li>
+                        <li><button id="nextPage_qd" class="page_btn">下一页</button></li>
+                        <li><button id="lastPage_qd" class="page_btn">尾页</button></li>
+                    </ul>
+                </div>
+            </div>
+            <input type="hidden" id="getid" value="" />
+            <p style="text-align:center;padding-top:50px;padding-bottom:50px;"><img src="img/yes.png" onclick="tijiaoteshu()" style="width:50px;"></p>
+        </div>
+    </div>
+</body>
+
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+        $.datepicker.regional['zh-CN'] = {
+            changeMonth: true,
+            changeYear: true,
+            clearText: '清除',
+            clearStatus: '清除已选日期',
+            closeText: '关闭',
+            closeStatus: '不改变当前选择',
+            prevText: '<上月',
+            prevStatus: '显示上月',
+            prevBigText: '<<',
+            prevBigStatus: '显示上一年',
+            nextText: '下月>',
+            nextStatus: '显示下月',
+            nextBigText: '>>',
+            nextBigStatus: '显示下一年',
+            currentText: '今天',
+            currentStatus: '显示本月',
+            monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            monthNamesShort: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+            monthStatus: '选择月份',
+            yearStatus: '选择年份',
+            weekHeader: '周',
+            weekStatus: '年内周次',
+            dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+            dayNamesShort: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+            dayNamesMin: ['日', '一', '二', '三', '四', '五', '六'],
+            dayStatus: '设置 DD 为一周起始',
+            dateStatus: '选择 m月 d日, DD',
+            dateFormat: 'yy-mm-dd',
+            firstDay: 1,
+            initStatus: '请选择日期',
+            isRTL: false
+        };
+        $.datepicker.setDefaults($.datepicker.regional['zh-CN']);
+        $("#date_start_ve").datepicker({maxDate:new Date()});
+        $("#date_start").datepicker({maxDate:new Date()});
+        $("#date_start_uam").datepicker({maxDate: new Date()});
+        $("#date_end_uam").datepicker({maxDate: new Date()});
+        $("#defult").datetimepicker();
+        $("#date_start_uam").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            onClose: function (selectedDate) {
+                $("#date_end_uam").datepicker("option", "minDate", selectedDate);
+            }
+        });
+
+        $("#date_end_uam").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            onClose: function (selectedDate) {
+                $("#date_start_uam").datepicker("option", "maxDate", selectedDate);
+                $("#date_end_uam").val($(this).val());
+            }
+        });
+        $("#date_start_ve").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            onClose: function(selectedDate) {
+                $("#date_end_ve").datepicker("option", "minDate", selectedDate);
+            }
+        });
+        $("#date_start").prop("readonly", true).datepicker({
+            changeMonth: true,
+            dateFormat: "yy-mm-dd",
+            clear : "qingkong",
+            onClose: function(selectedDate) {
+                $("#date_start").datepicker("option", "minDate", selectedDate);
+            }
+        });
+        $('#jxshang').change(function(){
+            $('#saleM_infojxs').val('')
+        })
+        $("#saleM_item1").change(function () {
+            $("#saleM_info1").val("");
+        });
+        //获取临时id
+        ajax_getid();
+        ajax_getbianji();
+        //初始化
+        ajax_bangding();
+        currentPage = 1;
+        ajax_bangding();
+        $('#firstPage').attr('disabled',true);
+        $('#prePage').attr('disabled',true);
+        $("#firstPage").click(function () {
+            
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = 1;
+            $('#firstPage').attr('disabled',true);
+            $('#prePage').attr('disabled',true);
+            ajax_bangding();
+        });
+        $("#lastPage").click(function () {
+            
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = totalPage;
+            $('#lastPage').attr('disabled',true);
+            $('#nextPage').attr('disabled',true);
+            ajax_bangding();
+        });
+        $("#nextPage").click(function () {
+            
+            $('#firstPage').removeAttr('disabled');
+            $('#prePage').removeAttr('disabled');
+            currentPage = currentPage+1;
+            if(currentPage == totalPage){
+                $('#lastPage').attr('disabled',true);
+                $('#nextPage').attr('disabled',true);
+            }else{
+                $('#lastPage').removeAttr('disabled');
+                $('#nextPage').removeAttr('disabled');
+            }
+            ajax_bangding();
+        });
+        $("#prePage").click(function () {
+            $("#tablelb tr td .radio_type").each(function(){
+                $(this).attr("checked",true);
+                $(this).addClass("radio_types");
+            })
+            $('#lastPage').removeAttr('disabled');
+            $('#nextPage').removeAttr('disabled');
+            currentPage = currentPage-1;
+            if(currentPage == 1){
+                $('#firstPage').attr('disabled',true);
+                $('#prePage').attr('disabled',true);
+            }else{
+                $('#firstPage').removeAttr('disabled');
+                $('#prePage').removeAttr('disabled');
+            }
+            ajax_bangding();
+        });
+
+        //清单列表分页
+        currentPage_qd = 1;
+        ajax_getqingd();
+        $('#firstPage_qd').attr('disabled',true);
+        $('#prePage_qd').attr('disabled',true);
+        $("#firstPage_qd").click(function () {
+            $('#lastPage_qd').removeAttr('disabled');
+            $('#nextPage_qd').removeAttr('disabled');
+            currentPage_qd = 1;
+            $('#firstPage_qd').attr('disabled',true);
+            $('#prePage_qd').attr('disabled',true);
+            ajax_getqingd();
+        });
+        $("#lastPage_qd").click(function () {
+            $('#firstPage_qd').removeAttr('disabled');
+            $('#prePage_qd').removeAttr('disabled');
+            currentPage_qd = totalPage_qd;
+            $('#lastPage_qd').attr('disabled',true);
+            $('#nextPage_qd').attr('disabled',true);
+            ajax_getqingd();
+        });
+        $("#nextPage_qd").click(function () {
+            $('#firstPage_qd').removeAttr('disabled');
+            $('#prePage_qd').removeAttr('disabled');
+            currentPage_qd = currentPage_qd+1;
+            if(currentPage_qd == totalPage_qd){
+                $('#lastPage_qd').attr('disabled',true);
+                $('#nextPage_qd').attr('disabled',true);
+            }else{
+                $('#lastPage_qd').removeAttr('disabled');
+                $('#nextPage_qd').removeAttr('disabled');
+            }
+            ajax_getqingd();
+        });
+        $("#prePage_qd").click(function () {
+            $('#lastPage_qd').removeAttr('disabled');
+            $('#nextPage_qd').removeAttr('disabled');
+            currentPage_qd = currentPage_qd-1;
+            if(currentPage_qd == 1){
+                $('#firstPage_qd').attr('disabled',true);
+                $('#prePage_qd').attr('disabled',true);
+            }else{
+                $('#firstPage_qd').removeAttr('disabled');
+                $('#prePage_qd').removeAttr('disabled');
+            }
+            ajax_getqingd();
+        });
+        
+        
+        $("#status").change(function () {
+            currentPage = 1;
+            ajax_bangding();
+        });
+        $('#saleM_info1').change(function(){
+            currentPage = 1;
+            ajax_bangding();
+        })
+        $('#jxshang').change(function(){
+            currentPage = 1;
+            ajax_bangding();
+        })
+        $('#date_start_uam').change(function(){
+            currentPage = 1;
+            ajax_bangding();
+        })
+
+        ajax_bangding();
+        ajax_getLineNum();
+        $("#lineNum").change(function () {
+            //alert('123')
+            $("#seriesNum").empty();
+            $("#modelNum").empty();
+            ajax_getSeriesNum();
+            ajax_bangding();
+            $("#seriesNum").change(function () {
+                $("#modelNum").empty();
+                ajax_getModelNum();
+                ajax_bangding();
+                $("#modelNum").change(function () {
+                ajax_bangding();
+            })
+            });
+            
+            
+        });
+        
+        $("#seriesNum").change(function () {
+            $("#modelNum").empty();
+            ajax_getModelNum();
+            ajax_bangding();
+            if($("#modelNum").change()){
+                ajax_bangding();
+            }
+        });
+        $("#modelNum").change(function () {
+            ajax_bangding();
+        });
+
+        
+    }
+</script>
+</html>

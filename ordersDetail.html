@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>订单详情</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/runningCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <link href="layer/mobile/need/layer.css" type="text/css" rel="stylesheet"/>
+    <script src="layer/layer.js"></script>
+</head>
+<body class="reset">
+<div id="addLogistics" class="addTopic outShadow" style="display: none;">
+    <div class="dealer_title">
+        <span>填写物流信息</span>
+        <img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeAddLogistics()">
+    </div>
+    <div style="width: 100%;height: auto;border: 1px solid #E4E4E4;border-top: none;">
+        <div class="tit_normal">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>物流公司：</span>
+            <select id="logisticsCompany" style="width: 50%;height: 30px;margin-left: 30px;">
+                <option value="顺丰">顺丰</option>
+                <option value="中通">中通</option>
+                <option value="申通">申通</option>
+                <option value="圆通">圆通</option>
+                <option value="汇通">汇通</option>
+                <option value="韵达">韵达</option>
+                <option value="邮政包裹/平邮">邮政包裹/平邮</option>
+                <option value="EMS">EMS</option>
+                <option value="天天">天天</option>
+                <option value="德邦">德邦</option>
+                <option value="经销商自提">经销商自提</option>
+            </select>
+        </div>
+        <div class="tit_normal">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>物流单号：</span>
+            <input type="text" id="logisticsNum" style="width: 50%;height: 30px;margin-left: 30px;">
+        </div>
+        <div class="btn_part mg-t30 mg_b30">
+            <input type="button" class="submit_btn" value="提交" onclick="insertLogistics()">
+        </div>
+    </div>
+</div>
+
+<div id="confirm" class="addTopic outShadow" style="display: none;">
+    <div class="dealer_title">
+        <span>订单审核</span>
+        <img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeConfirm()">
+    </div>
+    <div style="width: 100%;height: auto;border: 1px solid #E4E4E4;border-top: none;">
+        <div class="tit_normal">
+            <img src="img/tit_pic.png" class="tit_pic">
+            <span>备注：</span>
+            <input type="text" id="remark" style="width: 70%;height: 30px;margin-left: 30px;">
+        </div>
+        <div class="btn_part mg-t30 mg_b30">
+            <input type="button" class="submit_btn" value="审核通过" onclick="checkOrderPass()">
+            <input type="button" class="submit_btn mg_l30" value="驳回" onclick="checkOrderUnpass()">
+        </div>
+    </div>
+</div>
+
+<div id="queryLogistics" class="addTopic outShadow" style="display: none;">
+    <div class="dealer_title">
+        <span>查询物流信息</span>
+        <img src="img/close_add.png" class="mg-t20 mg-r20 flt_r" onclick="closeQueryLogistics()">
+    </div>
+    <div style="width: 100%;height: 500px;overflow-y:scroll;border: 1px solid #E4E4E4;border-top: none;">
+        <div style="width: 90%;">
+            <ol id="list">
+
+            </ol>
+        </div>
+    </div>
+</div>
+<div class="mg-t30">
+    <div>
+        <div class="title_box">
+            <img src="img/status_warning.png" class="status_warning">
+            <span class="status_info" id="tit_stat">当前状态：</span>
+        </div>
+        <div class="dis_detail">
+            <div>
+                <input type="button" id="cancelOrders" class="add_btn flt_r mg-t30" value="取消订单" style="display: none;" onclick="cancelOrders()">
+            </div>
+            <div id="primaryInfo">
+                <div class="tit_msg">
+                    <img src="img/tit_pic.png" class="tit_pic">
+                    <span>基本信息</span>
+                </div>
+                <div>
+                    <table class="rpt_detail_tab txt_center">
+                        <tr>
+                            <td class="head_td" height="46px">订单编号</td>
+                            <td class="head_td">订单时间</td>
+                            <td class="head_td">用户账号</td>
+                            <td class="head_td">物流公司</td>
+                            <td class="head_td">物流单号</td>
+                        </tr>
+                        <tbody id="primaryList">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="acceptInfo">
+                <div class="tit_msg">
+                    <img src="img/tit_pic.png" class="tit_pic">
+                    <span>收货人信息</span>
+                </div>
+                <div>
+                    <table class="rpt_detail_tab txt_center">
+                        <tr>
+                            <td class="head_td" height="46px">姓名</td>
+                            <td class="head_td">电话</td>
+                            <td class="head_td">收货地址</td>
+                        </tr>
+                        <tbody id="accepterList">
+
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+            <div id="goodsInfo">
+                <div class="tit_msg">
+                    <img src="img/tit_pic.png" class="tit_pic">
+                    <span>商品信息</span>
+                </div>
+                <div>
+                    <table class="rpt_detail_tab txt_center">
+                        <tr>
+                            <td class="head_td" height="46px">商品编号</td>
+                            <td class="head_td">商品图片</td>
+                            <td class="head_td">商品名称</td>
+                            <td class="head_td">价格</td>
+                            <td class="head_td">数量</td>
+                            <td class="head_td">备注</td>
+                            <td class="head_td">小计</td>
+                        </tr>
+                        <tbody id="goodsList">
+
+                        </tbody>
+                        <tr>
+                            <td class="head_td" id="totalCost" height="46px" colspan="7" style="text-align: right;margin-right: 30px;">合计：&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div id="confirmRemark" style="display:none">
+                <div class="tit_msg">
+                    <img src="img/tit_pic.png" class="tit_pic">
+                    <span>备注信息</span>
+                </div>
+                <div>
+                    <table id="remarkInfo" class="rpt_detail_tab">
+    
+                    </table>
+                </div>
+            </div>
+
+            <div id="confirmStatus1" class="btn_part mg-t50 mg_b50">
+                <input type="button" id="insertBtn" class="submit_btn_long" value="输入物流单号" onclick="addLogistics()" style="display: none;">
+                <input type="button" id="confirmBtn" class="submit_btn_long" value="订单审核" onclick="confirmOrder()" style="display: none;">
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    window.onload = function () {
+        jQuery.support.cors = true;
+        toTop();
+        $.ajax({
+            type : "post",
+            url : ip_path + "/changfa_system/order/checkOrder.do",
+            data : {
+                orderId : $(window.parent.document).find("input[name='ordersId']").val()
+            },
+            dataType : "json",
+            success : function (data) {
+                if(data['head']['code'] == 200){
+                    if(data['body']['result']['payStatus'] == -1 && data['body']['result']['status'] == 1){
+                        $("#cancelOrders").show();
+                    }
+
+                    // if(data['body']['result']['invoiceStatus'] == 0 && data['body']['result']['payStatus'] == 1){
+                    //     $("#insertBtn").show();
+                    // }
+
+                    $("#remarkInfo").append(
+                        "<tr>" +
+                        "<td class='head_td txt_center' width='160px' height='80px'>备注：</td>" +
+                        "<td class='body_td_2' width='875px' style='word-break:break-all'>" + data['body']['result']['remark'] + "</td>" +
+                        "</tr>"
+                    );
+
+                    if(data['body']['result']['status'] == 1){
+                        var stat;
+                        switch(data['body']['result']['payStatus']){
+                            case -1:
+                                stat = "未付款";
+                                break;
+                            case 1:
+                                stat = "待审核";
+                                $("#confirmBtn").show();
+                                break;
+                            case 2:
+                                
+                                switch(data['body']['result']['invoiceStatus']){
+                                        case 0:
+                                        stat = "审核通过（未发货）";
+                                            break;
+                                        case 1:
+                                        stat = "审核通过（已发货）";
+                                            break;
+                                }
+                                $("#confirmRemark").show();
+                                $("#insertBtn").show();
+                                break;
+                            case 3:
+                                stat = "驳回";
+                                $("#confirmRemark").show();
+                                break;
+                        }
+                        // if(data['body']['result']['payStatus'] == 1){
+                        //     if(data['body']['result']['invoiceStatus'] == 1){
+                        //         stat = "已发货";
+                        //     }else{
+                        //         stat = "已付款";
+                        //     }
+                        // }else{
+                        //     stat = "未付款";
+                        // }
+
+                        $("#tit_stat").text("当前状态：（" + stat + "）");
+                    }else{
+                        $("#tit_stat").text("当前状态：（失效订单）");
+                        switch(data['body']['result']['payStatus']){
+                            case 2:
+                                $("#confirmRemark").show();
+                                break;
+                            case 3:
+                                $("#confirmRemark").show();
+                                break;
+                        }
+                    }
+
+                    $("#primaryList").html(
+                        '<tr>' +
+                        '<td class="td2" height="33">' + data['body']['result']['orderNum'] + '</td>' +
+                        '<td class="td2" >' + data['body']['result']['createTime'] + '</td>' +
+                        '<td class="td2" >' + data['body']['result']['account'] + '</td>' +
+                        '<td class="td2" >' + data['body']['result']['invoiceCompany'] + '</td>' +
+                        '<td class="td2" ><a href="###" id="' + data['body']['result']['invoiceNo'] + '">' + data['body']['result']['invoiceNo'] + '</a></td>' +
+                        '</tr>'
+                    );
+                    // onclick="openKDYB(this)"
+                    $("#accepterList").html(
+                        '<tr>' +
+                        '<td class="td2" height="33">' + data['body']['result']['tookAddressUserName'] + '</td>' +
+                        '<td class="td2" >' + data['body']['result']['tookAddressMobile'] + '</td>' +
+                        '<td class="td2" >' + data['body']['result']['address'] + '</td>' +
+                        '</tr>'
+                    );
+
+                    $("#goodsList").empty();
+                    for(var i = 0;i<data['body']['result']['goodsList'].length;i++){
+                        $("#goodsList").append(
+                            '<tr>' +
+                            '<td class="td2" height="33">' + data['body']['result']['goodsList'][i]['goodsNum'] + '</td>' +
+                            '<td class="td2" ><img src="' + data['body']['result']['goodsList'][i]['filesIdList'][0] + '" style="width: 40px;height: 40px;" onclick="makeLarger(this)"></td>' +
+                            '<td class="td2" >' + data['body']['result']['goodsList'][i]['name'] + '</td>' +
+                            '<td class="td2" >' + data['body']['result']['goodsList'][i]['singlePrice'] + '</td>' +
+                            '<td class="td2" >' + data['body']['result']['goodsList'][i]['count'] + '</td>' +
+                            '<td class="td2" >' + data['body']['result']['goodsList'][i]['remarks'] + '</td>' +
+                            '<td class="td2" >' + data['body']['result']['goodsList'][i]['totalPrice'] + '</td>' +
+                            '</tr>'
+                        );
+                    }
+                    $("#totalCost").html("合计：" + data['body']['result']['totalMoney'] + "&nbsp;&nbsp;&nbsp;&nbsp;");
+                }
+            }
+        });
+    }
+</script>
+</html>

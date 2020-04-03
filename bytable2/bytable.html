@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>保养手册</title>
+	<meta charset="utf-8" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="keywords" content="" />
+	<meta name="description" content="" />
+	<meta name="apple-touch-fullscreen" content="YES">
+	<meta name="format-detection" content="telephone=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta http-equiv="Expires" content="-1">
+	<meta http-equiv="pragram" content="no-cache">
+    <!--<meta name="viewport" content="width=750,user-scalable=no, target-densitydpi=device-dpi">-->
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="bytable.css" />
+    <link rel="stylesheet" href="js/bootstrap.min.css">  
+    <script src="js/bytable.js"></script>
+    <script src="js/jquery-2.1.1.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+</head>
+<style>
+
+</style>
+<body>
+	<div id="app">
+        <div class="books_box" style="width:95%;">
+            <p id="byname">&nbsp;&nbsp;</p>
+			<div class="table-responsive" style="position:relative;" id="tableDiv">    
+                <table class="table table-condensed text-nowrap table-bordered tableright" >
+                    <thead>
+                        <tr class="active" id="biaoti">
+                            <td rowspan="1">保养计划</td>
+                            <td>名称</td>
+                            <td id="td3">内容</td>
+                        </tr>
+                    </thead>
+                    <tbody id="shuju">
+                        <!--<tr><td>小保养</td><td>名称</td><td>内容</td></tr>
+                        <tr><td>中保养</td><td>名称</td><td>内容</td></tr>
+                        <tr><td>大保养</td><td>名称</td><td>内容</td></tr>-->
+                    </tbody>
+            </table>
+            
+            </div> 
+		</div>
+    </div>
+    <script>
+  // 本地用
+  //var ip_path = "http://192.168.1.119:8080";//潘阳
+  //var ip_path = "http://192.168.1.102:8080";
+  //var ip_path = "http://192.168.1.100:8080";
+  //var ip_path = "http://192.168.1.120:8082";
+  //阿里服务器用
+  //var ip_path = "http://app.changfanz.net:3589";
+  //测试服务器用
+  var ip_path = "http://test.app.changfanz.net:3589";
+  //var ip_path = "http://172.31.16.23:3591";
+  //var ip_path = "http://test.app.changfanz.net:3591";
+   
+
+  var app = "changfa_system";
+
+  var app_path = ip_path +"/"+ app;
+
+        function GetRequest(str) {
+            var url = str ? str : decodeURI(location.search); //获取url中"?"符后的字串
+            var theRequest = new Object();
+            if (url.indexOf('?') != -1) {
+                url = url.substr(url.indexOf('?')+1);
+            }
+            if (url) {
+                var strs = url.split('&');
+                //alert(JSON.stringify(strs));
+                for (var i = 0; i < strs.length; i++) {
+                    var srtArry = strs[i].split('=');
+                    var y = srtArry.shift();
+                    theRequest[y] = unescape(srtArry.join('='));
+                }
+            }
+            //alert(JSON.stringify(theRequest));//barcode
+            return url;
+            
+        }
+
+        window.onload = function () {
+            jQuery.support.cors = true;
+            $.ajax({
+                type : "get",
+                async : false,
+                //url : app_path+"/maintenanceManual/getRemindDetailByBarCode.do?barCode=701580361809806877",
+                //url : "http://test.app.changfanz.net:3589/changfa_system/maintenanceManual/getRemindDetailByBarCode.do?theRequest",
+                url:app_path+"/maintenanceManual/getRemindDetailByBarCode.do?"+GetRequest(window.location.href),
+                dataType : "json",
+                
+                success : function (data) {
+                    if(data['head']['code'] == 200){
+                        $('#byname').text(data['body']['result']['maintenance_name']);
+                        console.log(data)
+                        var shuzu ;
+                        var json;
+                        var td1;
+                        var td2;
+                        var html;
+                        var rows;
+                        var length;
+                        for(i=0;i<data['body']['result']['types'].length;i++){
+                            length = data['body']['result']['types'][i]['items'].length;
+                            td1 = '<td class="active" rowspan="'+length+'">'+data['body']['result']['types'][i]['type_name']+'</td>';
+                            //console.log(td1)
+                            for(j=0;j<data['body']['result']['types'][i]['items'].length;j++){
+                                if(j>0){
+                                    td1 ='';
+                                }
+                                shuzu = data['body']['result']['types'][i]['items']
+                                td2=
+                                '<td>'+ data['body']['result']['types'][i]['items'][j]['item_name']+'</td>'+
+                                '<td>'+ data['body']['result']['types'][i]['items'][j]['item_detail']+'</td>'
+                                html = '<tr >'+td1+td2+'</tr>'
+                                $('#shuju').append(html);
+                            }
+                        }
+
+                        
+                    }
+                }
+            })
+        }
+
+        //$("#tableDiv").scroll(function(){//给table外面的div滚动事件绑定一个函数
+        //var left=$("#tableDiv").scrollLeft();//获取滚动的距离
+        //var trs=$("#tableDiv table tr");//获取表格的所有tr
+        //trs.each(function(i){//对每一个tr（每一行）进行处理
+        //获得每一行下面的所有的td，然后选中下标为0的，即第一列，设置position为相对定位
+        //相对于父div左边的距离为滑动的距离，然后设置个背景颜色，覆盖住后面几列数据滑动到第一列下面的情况
+        //如果有必要也可以设置一个z-index属性 
+        //if(typeof($(this).children().attr("rowspan")) != "undefined"){
+        //    $(this).children().eq(0).css({"position":"relative","top":"0px","width":"100px;","left":left,"background-color":"#f5f5f5",});
+        //} 
+        
+        //});
+        //});
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href="css/cf_web.css" type="text/css" rel="stylesheet"/>
+    <script src="js/saleCenter.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/index.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <script src="jquery-ui-1.12.1/jquery-ui.min.js"></script>
+    <link href="jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet" />
+    <script src="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.js"></script>
+    <script type="text/javascript" src="jQuery-Timepicker/dist/i18n/jquery-ui-timepicker-zh-CN.js"></script>
+    <link href="jQuery-Timepicker/dist/jquery-ui-timepicker-addon.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="tit">
+        <span class="flt_l">筛选查询</span>
+        <!--<input type="button" class="clearDate" value="清空" onclick="clearDate()">-->
+        <!--<input type="button" class="add_btn flt_r" value="查询" onclick="queryRepairNeed()">-->
+    </div>
+    <div class="account_cont2">
+        <div class="filter-first">
+            <div class="fact-num">
+                <select id="rep_guy" class="fact-num-guy">
+                    <option>姓名</option>
+                    <option>电话</option>
+                    <option>出厂编号</option>
+                    <option>派工单号</option>
+                </select>
+                <input type="text" id="rep_info_rnm" class="fact-num-input" style="border-left: none">
+                <button class="query_btn_big" style="margin-left: -4%;" onclick=""></button>
+            </div>
+            <div class="fact-num">
+                <span class="describ mg_l30">产品线：</span>
+                <input type="text" id="rep_info_rnm" class="fact-num-input">
+                <button class="query_btn_big" style="margin-left: -4%;" onclick=""></button>
+            </div>
+            <div class="fact-num">
+                <span class="describ mg_l30">经销商编号：</span>
+                <input type="text" id="rep_info_rnm" class="fact-num-input">
+                <button class="query_btn_big" style="margin-left: -4%;" onclick=""></button>
+            </div>
+            <div class="fact-num">
+                <span class="describ mg_l30">经销商名称：</span>
+                <input type="text" id="rep_info_rnm" class="fact-num-input">
+                <button class="query_btn_big" style="margin-left: -4%;" onclick=""></button>
+            </div>
+        </div>
+        <div class="filter-first">
+            <div class="fact-num">
+                <span class="describ">条码号：</span>
+                <input type="text" id="rep_info_rnm" class="fact-num-input">
+                <button class="query_btn_big" style="margin-left: -4%;" onclick=""></button>
+            </div>
+                <div class="fact-num">
+                    <span class="describ mg_l30">报警日期：</span>
+                    <input id="repair_start_rnm" class="fact-num-input-time" placeholder="起始">
+                    <span>-</span>
+                    <input id="repair_end_rnm" class="fact-num-input-time" placeholder="截止">
+                </div>
+            </div>
+            <!-- <select id="rep_guy" class="rep_guy_info">
+                <option>姓名</option>
+                <option>电话</option>
+                <option>出厂编号</option>
+                <option>派工单号</option>
+            </select>
+            <input type="text" id="rep_info_rnm" class="product_line" style="border-left: none">
+            <button class="query_btn_big" style="margin-left: -4%;" onclick=""></button>
+            
+            
+            
+            
+
+            
+
+        <br/>
+        
+
+        <span class="describ mg_l30">单机类型：</span>
+        <select id="visitStatus_rnm" class="product_line">
+            <option value="9">全部</option>
+            <option value="0">未回访</option>
+            <option value="1">已完成</option>
+            <option value="2">未完成</option>
+            <option value="3">违规</option>
+            <option value="4">默认完工</option>
+        </select>
+            
+             -->
+    </div>
+    <div>
+        <div class="account_cont" style="margin-top: 50px;border-top: 1px solid rgba(228,228,228,1);">
+                <table width="100%" cellpadding="0" cellspacing="0" class="table2" align="center">
+                        <thead>
+                        <tr align="center">
+                            <th height="33" class="th2">出厂编号</th>
+                            <th class="th2">产品线</th>
+                            <th class="th2">型号</th>
+                            <th class="th2">经销商名称</th>
+                            <th class="th2">经销商编号</th>
+                            <th class="th2">超出围栏时间</th>
+                            <th class="th2">初步标记</th>
+                            <th class="th2">最终标记</th>
+                            <th class="th2">农机状态</th>
+                            <th class="th2">报警日期</th>
+                        </tr>
+                        </thead>
+                        <tbody id="adminTbody">
+                            
+                        </tbody>
+                    </table>
+                    <div id="barcon" class="barcon" >
+                        <div id="barcon1" class="barcon1"></div>
+                        <div id="barcon2" class="barcon2">
+                            <ul>
+                                <li><button id="firstPage" class="page_btn">首页</button></li>
+                                <li><button id="prePage" class="page_btn">上一页</button></li>
+                                <li><button id="nextPage" class="page_btn">下一页</button></li>
+                                <li><button id="lastPage" class="page_btn">尾页</button></li>
+                            </ul>
+                        </div>
+                    </div>
+        </div>
+    </div>
+</body>
+</html>
